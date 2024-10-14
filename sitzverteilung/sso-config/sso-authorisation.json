@@ -1,0 +1,72 @@
+{
+    "allowRemoteResourceManagement": false,
+    "policyEnforcementMode": "ENFORCING",
+    "resources": [
+        {
+            "name": "SITZVERTEILUNG_READ_THEENTITY",
+            "type": "sitzverteilung-sitzverteilung-service",
+            "scopes": []
+        },
+        {
+            "name": "SITZVERTEILUNG_WRITE_THEENTITY",
+            "type": "sitzverteilung-sitzverteilung-service",
+            "scopes": []
+        },
+        {
+            "name": "SITZVERTEILUNG_DELETE_THEENTITY",
+            "type": "sitzverteilung-sitzverteilung-service",
+            "scopes": []
+        }
+    ],
+    "policies": [
+        {
+            "name": "rolepolicy_admin",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+                "roles": "[{\"id\":\"sitzverteilung/clientrole_admin\",\"required\":false}]"
+            }
+        },
+        {
+            "name": "rolepolicy_readonly",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+                "roles": "[{\"id\":\"sitzverteilung/clientrole_readonly\",\"required\":false}]"
+            }
+        },
+        {
+            "name": "permission_SITZVERTEILUNG_DELETE_THEENTITY",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+                "resources": "[\"SITZVERTEILUNG_DELETE_THEENTITY\"]",
+                "applyPolicies": "[\"rolepolicy_admin\"]"
+            }
+        },
+        {
+            "name": "permission_SITZVERTEILUNG_WRITE_THEENTITY",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+                "resources": "[\"SITZVERTEILUNG_WRITE_THEENTITY\"]",
+                "applyPolicies": "[\"rolepolicy_admin\"]"
+            }
+        },
+        {
+            "name": "permission_SITZVERTEILUNG_READ_THEENTITY",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+                "resources": "[\"SITZVERTEILUNG_READ_THEENTITY\"]",
+                "applyPolicies": "[\"rolepolicy_admin\",\"rolepolicy_readonly\"]"
+            }
+        }
+    ],
+    "scopes": []
+}
