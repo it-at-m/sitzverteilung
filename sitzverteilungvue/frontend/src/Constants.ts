@@ -3,4 +3,5 @@ export const API_BASE: string | undefined = import.meta.env
 export const ROUTER_BASE: string = import.meta.env.BASE_URL;
 
 export const ROUTES_HOME = "home";
-export const ROUTES_GETSTARTED = "getstarted";
+export const ROUTES_BASISDATEN = "basisdaten";
+export const ROUTES_BERECHNUNG = "berechnung"

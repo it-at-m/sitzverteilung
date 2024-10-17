@@ -56,8 +56,11 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawer">
       <v-list>
-        <v-list-item :to="{ name: ROUTES_GETSTARTED }">
-          <v-list-item-title>Get started</v-list-item-title>
+        <v-list-item :to="{ name: ROUTES_BASISDATEN }">
+          <v-list-item-title>Basisdaten</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: ROUTES_BERECHNUNG }">
+          <v-list-item-title>Berechnung</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -82,7 +85,7 @@ import { onMounted, ref } from "vue";
 import InfoService from "@/api/InfoService";
 import UserService from "@/api/UserService";
 import TheSnackbar from "@/components/TheSnackbar.vue";
-import { ROUTES_GETSTARTED } from "@/Constants";
+import {ROUTES_BASISDATEN, ROUTES_BERECHNUNG} from "@/Constants";
 import { useSnackbarStore } from "@/stores/snackbar";
 import { useUserStore } from "@/stores/user";
 import User, { UserLocalDevelopment } from "@/types/User";

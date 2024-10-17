@@ -1,8 +1,9 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
 
-import { ROUTES_GETSTARTED, ROUTES_HOME } from "@/Constants";
-import GetStartedView from "@/views/GetStartedView.vue";
+import {ROUTES_BASISDATEN, ROUTES_BERECHNUNG, ROUTES_HOME} from "@/Constants";
+import BasisdatenView from "@/views/BasisdatenView.vue";
+import BerechnungView from "@/views/BerechnungView.vue";
 import HomeView from "@/views/HomeView.vue";
 
 const routes = [
@@ -13,9 +14,14 @@ const routes = [
     meta: {},
   },
   {
-    path: "/getstarted",
-    name: ROUTES_GETSTARTED,
-    component: GetStartedView,
+    path: "/basisdaten",
+    name: ROUTES_BASISDATEN,
+    component: BasisdatenView,
+  },
+  {
+    path: "/berechnung",
+    name: ROUTES_BERECHNUNG,
+    component: BerechnungView,
   },
   { path: "/:catchAll(.*)*", redirect: "/" }, // CatchAll route
 ];
