@@ -150,7 +150,7 @@
 
         <!-- Frontend Lib -->
         <dependency>
-            <groupId>de.muenchen.sitzverteilungvue.frontend</groupId>
+            <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
             <artifactId>sitzverteilungvue-frontend</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
