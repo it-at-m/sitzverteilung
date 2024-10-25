@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <groupId>de.muenchen.sitzverteilungvue.frontend</groupId>
+    <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
     <artifactId>sitzverteilungvue-frontend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
