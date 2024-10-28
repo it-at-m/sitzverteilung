@@ -2,9 +2,9 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilung-app.configuration;
+package de.muenchen.sitzverteilungapp.configuration;
 
-import de.muenchen.sitzverteilung-app.filter.CsrfTokenAppendingHelperFilter;
+import de.muenchen.sitzverteilungapp.filter.CsrfTokenAppendingHelperFilter;
 import java.net.URI;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;

@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilung-app.filter;
+package de.muenchen.sitzverteilungapp.filter;
 
 import io.micrometer.tracing.Tracer;
 import lombok.extern.slf4j.Slf4j;

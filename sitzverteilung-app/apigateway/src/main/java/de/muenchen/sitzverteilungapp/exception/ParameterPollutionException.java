@@ -2,9 +2,9 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilung-app.exception;
+package de.muenchen.sitzverteilungapp.exception;
 
-import de.muenchen.sitzverteilung-app.filter.GlobalRequestParameterPollutionFilter;
+import de.muenchen.sitzverteilungapp.filter.GlobalRequestParameterPollutionFilter;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
