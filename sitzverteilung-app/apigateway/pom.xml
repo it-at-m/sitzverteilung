@@ -6,7 +6,7 @@
 
 
     <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
-    <artifactId>sitzverteilung-app-apigateway</artifactId>
+    <artifactId>sitzverteilungapp-apigateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>sitzverteilung_app_apigateway</name>
@@ -151,7 +151,7 @@
         <!-- Frontend Lib -->
         <dependency>
             <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
-            <artifactId>sitzverteilung-app-frontend</artifactId>
+            <artifactId>sitzverteilungapp-frontend</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>

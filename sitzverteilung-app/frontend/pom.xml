@@ -4,7 +4,7 @@
 
 
     <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
-    <artifactId>sitzverteilung-app-frontend</artifactId>
+    <artifactId>sitzverteilungapp-frontend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>sitzverteilung_app_frontend</name>
