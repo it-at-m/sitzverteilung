@@ -2,9 +2,9 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilungvue.filter;
+package de.muenchen.sitzverteilung-app.filter;
 
-import de.muenchen.sitzverteilungvue.exception.ParameterPollutionException;
+import de.muenchen.sitzverteilung-app.exception.ParameterPollutionException;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;

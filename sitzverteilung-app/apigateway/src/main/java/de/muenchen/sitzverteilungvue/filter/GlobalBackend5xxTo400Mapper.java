@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilungvue.filter;
+package de.muenchen.sitzverteilung-app.filter;
 
 import com.hazelcast.org.apache.commons.codec.binary.StringUtils;
 import java.nio.charset.StandardCharsets;

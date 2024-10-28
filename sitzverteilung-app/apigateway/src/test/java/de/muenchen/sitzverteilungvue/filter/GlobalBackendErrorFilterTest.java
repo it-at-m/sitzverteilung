@@ -2,9 +2,9 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilungvue.filter;
+package de.muenchen.sitzverteilung-app.filter;
 
-import de.muenchen.sitzverteilungvue.ApiGatewayApplication;
+import de.muenchen.sitzverteilung-app.ApiGatewayApplication;
 import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static de.muenchen.sitzverteilungvue.TestConstants.SPRING_TEST_PROFILE;
+import static de.muenchen.sitzverteilung-app.TestConstants.SPRING_TEST_PROFILE;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;

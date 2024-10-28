@@ -2,9 +2,9 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilungvue.filter;
+package de.muenchen.sitzverteilung-app.filter;
 
-import de.muenchen.sitzverteilungvue.configuration.SecurityConfiguration;
+import de.muenchen.sitzverteilung-app.configuration.SecurityConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
