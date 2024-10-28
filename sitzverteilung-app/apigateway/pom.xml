@@ -6,10 +6,10 @@
 
 
     <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
-    <artifactId>sitzverteilungvue-apigateway</artifactId>
+    <artifactId>sitzverteilung-app-apigateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>sitzverteilungvue_apigateway</name>
+    <name>sitzverteilung_app_apigateway</name>
 
 
     <properties>

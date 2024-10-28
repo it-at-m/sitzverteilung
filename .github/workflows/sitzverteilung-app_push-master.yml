@@ -1,12 +1,12 @@
-name: build push master sitzverteilungvue
+name: build push master sitzverteilung-app
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'sitzverteilungvue/**'
-      - '.github/workflows/sitzverteilungvue_push-master.yml'
+      - '../../sitzverteilung-app/**'
+      - 'sitzverteilung-app_push-master.yml'
 
 jobs:
   build-github-container-image:
@@ -15,4 +15,4 @@ jobs:
     uses:
       ./.github/workflows/callable-create-github-container-image.yml
     with:
-      service: 'sitzverteilungvue'
+      service: 'sitzverteilung-app'

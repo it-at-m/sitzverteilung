@@ -4,10 +4,10 @@
 
 
     <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
-    <artifactId>sitzverteilungvue-frontend</artifactId>
+    <artifactId>sitzverteilung-app-frontend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>sitzverteilungvue_frontend</name>
+    <name>sitzverteilung_app_frontend</name>
 
 
     <properties>

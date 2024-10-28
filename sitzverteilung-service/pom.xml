@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <groupId>de.muenchen.wahl.sitzverteilung.backend</groupId>
-    <artifactId>sitzverteilung</artifactId>
+    <groupId>de.muenchen.wahl.sitzverteilung.services</groupId>
+    <artifactId>sitzverteilung-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sitzverteilung</name>
+    <name>sitzverteilung_service</name>
 
 
     <properties>

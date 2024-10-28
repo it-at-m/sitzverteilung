@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <groupId>de.muenchen.wahl.sitzverteilung.frontend</groupId>
-    <artifactId>sitzverteilungvue</artifactId>
+    <groupId>de.muenchen.wahl.sitzverteilung.app</groupId>
+    <artifactId>sitzverteilung-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>sitzverteilungvue</name>
+    <name>sitzverteilung_app</name>
 
 
     <properties>
