@@ -2,9 +2,9 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.sitzverteilung-app.controller;
+package de.muenchen.sitzverteilungapp.controller;
 
-import de.muenchen.sitzverteilung-app.ApiGatewayApplication;
+import de.muenchen.sitzverteilungapp.ApiGatewayApplication;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static de.muenchen.sitzverteilung-app.TestConstants.SPRING_TEST_PROFILE;
+import static de.muenchen.sitzverteilungapp.TestConstants.SPRING_TEST_PROFILE;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
