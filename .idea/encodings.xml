@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/sitzverteilung-app/apigateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung-app/apigateway/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung-app/frontend/dist" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung-app/frontend/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung-app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilung/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilungvue/apigateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilungvue/apigateway/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilungvue/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sitzverteilungvue/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
