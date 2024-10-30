@@ -11,7 +11,7 @@
     "fix": "prettier . --write && eslint . --fix"
   },
   "dependencies": {
-    "@mdi/font": "7.3.67",
+    "@mdi/font": "7.4.47",
     "@muenchen/appswitcher-vue": "^2.0.0",
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
