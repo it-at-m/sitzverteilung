@@ -1,0 +1,23 @@
+name: Build all
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app-path: sitzverteilung-frontend
+
+    steps:
+      - uses: it-at-m/lhm_actions/action-templates/actions/action-checkout@0f8ed45a5eb72bf1cc2fe1d3dbcbcfb852549c27 # v1.0.17
+      - if: ${{ hashFiles(format('./{0}/package.json', matrix.app-path))!=null }}
+        id: node
+        uses: it-at-m/lhm_actions/action-templates/actions/action-npm-build@0f8ed45a5eb72bf1cc2fe1d3dbcbcfb852549c27 # v1.0.17
+        with:
+          app-path: ${{ matrix.app-path }}
