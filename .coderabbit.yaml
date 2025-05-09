@@ -6,8 +6,6 @@ reviews:
     enabled: true
     auto_incremental_review: true
   tools:
-    pmd:
-      enabled: false
     eslint:
       enabled: false
   finishing_touches:
