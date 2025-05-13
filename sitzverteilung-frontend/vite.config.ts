@@ -4,10 +4,10 @@ import { fileURLToPath, URL } from "node:url";
 import vue from "@vitejs/plugin-vue";
 import UnpluginFonts from "unplugin-fonts/vite";
 import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 import vueDevTools from "vite-plugin-vue-devtools";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const isDevelopment = mode === "development";
   return {
@@ -28,6 +28,25 @@ export default defineConfig(({ mode }) => {
               subset: "latin",
             },
           ],
+        },
+      }),
+      VitePWA({
+        registerType: "autoUpdate",
+        manifest: {
+          name: "Sitzverteilung",
+          short_name: "Sitzverteilung",
+          description: "Application to calculate the seats for local elections",
+          theme_color: "#333333",
+        },
+        workbox: {
+          cleanupOutdatedCaches: true,
+          globPatterns: ["**/*.{js,css,html,png,ico}"],
+        },
+        devOptions: {
+          enabled: isDevelopment,
+        },
+        pwaAssets: {
+          image: "public/logo.png",
         },
       }),
       vueDevTools(),
