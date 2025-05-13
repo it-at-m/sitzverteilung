@@ -10,9 +10,6 @@
     },
     "allowSyntheticDefaultImports": true,
     "noUncheckedSideEffectImports": true,
-    "types": [
-      "unplugin-fonts/client",
-      "vite-plugin-pwa/vue"
-    ]
+    "types": ["unplugin-fonts/client", "vite-plugin-pwa/vue"]
   }
 }
