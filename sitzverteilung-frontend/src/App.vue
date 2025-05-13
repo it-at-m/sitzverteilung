@@ -34,7 +34,7 @@ import { mdiHome } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
 
 import TheSnackbar from "@/components/TheSnackbar.vue";
-import { usePWA } from "@/composables/usePWA.ts";
+import { usePWA } from "@/composables/usePWA";
 import { ROUTES_HOME } from "@/constants";
 
 const [drawer, toggleDrawer] = useToggle();

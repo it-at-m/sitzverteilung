@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: "Sitzverteilung",
           short_name: "Sitzverteilung",
-          description: "Application to calculate the seats for local elections",
+          description: "Anwendung zur Berechnung der Sitzverteilung für Wahlen",
           theme_color: "#333333",
         },
         workbox: {
