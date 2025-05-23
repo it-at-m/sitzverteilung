@@ -1,4 +1,13 @@
 // Utilities
 import { createPinia } from "pinia";
+import { createPersistedState } from "pinia-plugin-persistedstate";
 
-export default createPinia();
+const pinia = createPinia();
+pinia.use(
+  createPersistedState({
+    auto: true,
+    key: (id) => `sitzverteilung-${id}`,
+  })
+);
+
+export default pinia;
