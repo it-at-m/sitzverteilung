@@ -57,7 +57,7 @@ import type { NavigationItem } from "@/types/NavigationItem";
 import { mdiDatabase, mdiInformation } from "@mdi/js";
 import { useDisplay } from "vuetify";
 
-import { RouteNames } from "@/plugins/router.ts";
+import { RouteNames } from "@/plugins/router";
 
 const { mobile } = useDisplay();
 
