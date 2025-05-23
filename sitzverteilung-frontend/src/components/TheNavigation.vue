@@ -8,9 +8,7 @@
     <v-list>
       <v-list-item>
         <template #prepend>
-          <v-avatar
-            size="85"
-          >
+          <v-avatar size="85">
             <v-img src="@/assets/logo.png" />
           </v-avatar>
         </template>
