@@ -6,7 +6,7 @@ import { STATUS_INDICATORS } from "@/constants";
 export const useSnackbarStore = defineStore(
   "snackbar",
   () => {
-    const message = ref<string | undefined>("HELLO");
+    const message = ref<string | undefined>(undefined);
     const level = ref(STATUS_INDICATORS.INFO);
     const show = ref(false);
     function showMessage(messageI: {
@@ -26,7 +26,6 @@ export const useSnackbarStore = defineStore(
   { persist: false }
 );
 
-// make sure to pass the right store definition, `useAuth` in this case.
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useSnackbarStore, import.meta.hot));
 }
