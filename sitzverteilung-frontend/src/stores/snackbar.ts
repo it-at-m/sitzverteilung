@@ -30,5 +30,5 @@ export const useSnackbarStore = defineStore("snackbar", () => {
 
 // make sure to pass the right store definition, `useAuth` in this case.
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useSnackbarStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useSnackbarStore, import.meta.hot));
 }
