@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { acceptHMRUpdate, defineStore } from "pinia";
 import { ref } from "vue";
 
 import { STATUS_INDICATORS } from "@/constants";
@@ -27,3 +27,8 @@ export const useSnackbarStore = defineStore("snackbar", () => {
   }
   return { message, level, show, showMessage, updateShow };
 });
+
+// make sure to pass the right store definition, `useAuth` in this case.
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useSnackbarStore, import.meta.hot))
+}
