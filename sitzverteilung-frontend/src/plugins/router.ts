@@ -1,16 +1,26 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import { ROUTES_HOME } from "@/constants";
-import HomeView from "@/views/HomeView.vue";
+import AboutView from "@/views/AboutView.vue";
+import DataView from "@/views/DataView.vue";
+
+export const enum RouteNames {
+  ABOUT = "about",
+  DATA = "data",
+}
 
 const routes = [
   {
-    path: "/",
-    name: ROUTES_HOME,
-    component: HomeView,
+    path: "/data",
+    name: RouteNames.DATA,
+    component: DataView,
+  },
+  {
+    path: "/about",
+    name: RouteNames.ABOUT,
+    component: AboutView,
     meta: {},
   },
-  { path: "/:catchAll(.*)*", redirect: "/" }, // CatchAll route
+  { path: "/:catchAll(.*)*", redirect: "/data" }, // CatchAll route
 ];
 
 const router = createRouter({
