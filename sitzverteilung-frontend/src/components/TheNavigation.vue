@@ -22,8 +22,8 @@
       nav
     >
       <v-list-item
-        v-for="(navigationItem, index) in navigationItems"
-        :key="index"
+        v-for="navigationItem in navigationItems"
+        :key="navigationItem.routeName"
       >
         <div class="d-flex flex-column align-center">
           <v-btn
@@ -33,7 +33,7 @@
             color="primary"
             :to="{ name: navigationItem.routeName }"
           />
-          <p>{{ navigationItem.text }}</p>
+          <v-list-item-title>{{ navigationItem.text }}</v-list-item-title>
         </div>
       </v-list-item>
     </v-list>
@@ -44,8 +44,8 @@
     bg-color="primary"
   >
     <v-btn
-      v-for="(navigationItem, index) in navigationItems"
-      :key="index"
+      v-for="navigationItem in navigationItems"
+      :key="navigationItem.routeName"
       :prepend-icon="navigationItem.icon"
       :to="{ name: navigationItem.routeName }"
       :text="navigationItem.text"
@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NavigationItem } from "@/types/NavigationItem.ts";
+import type { NavigationItem } from "@/types/NavigationItem";
 
 import { mdiDatabase, mdiInformation } from "@mdi/js";
 import { useDisplay } from "vuetify";
