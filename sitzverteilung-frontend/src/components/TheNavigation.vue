@@ -9,7 +9,6 @@
       <v-list-item>
         <template #prepend>
           <v-avatar
-            color="surface-variant"
             size="85"
           >
             <v-img src="@/assets/logo.png" />
