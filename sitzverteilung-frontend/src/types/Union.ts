@@ -1,11 +1,11 @@
-type GroupName = string;
+export type GroupName = string;
 
 export enum UnionType {
-  COMMITTEE,
-  FRACTION,
+  COMMITTEE = "COMMITTEE",
+  FRACTION = "FRACTION",
 }
 
 export interface Union {
   unionType: UnionType;
-  groups: Set<GroupName>;
+  groups: GroupName[];
 }

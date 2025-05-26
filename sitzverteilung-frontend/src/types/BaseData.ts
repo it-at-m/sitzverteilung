@@ -1,9 +1,9 @@
-import type { Group } from "@/types/Group.ts";
-import type { Union } from "@/types/Union.ts";
+import type { Group } from "@/types/Group";
+import type { Union } from "@/types/Union";
 
 export interface BaseData {
   name: string;
   committeeSize: number;
-  groups: Set<Group>;
-  unions: Set<Union>;
+  groups: Group[];
+  unions: Union[];
 }
