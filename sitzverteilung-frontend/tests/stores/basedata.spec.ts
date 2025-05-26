@@ -25,6 +25,7 @@ describe("BaseData Store", () => {
 
     // then
     expect(store.baseDatas.length).toBe(1);
+    expect(store.baseDatas[0]).toEqual(testData);
   });
 
   test("Update BaseData", () => {
@@ -42,7 +43,7 @@ describe("BaseData Store", () => {
 
     // then
     expect(store.baseDatas.length).toBe(1);
-    expect(store.baseDatas[0].committeeSize).toBe(newTestData.committeeSize);
+    expect(store.baseDatas[0]).toEqual(newTestData);
   });
 
   test("Delete BaseData", () => {
@@ -60,7 +61,7 @@ describe("BaseData Store", () => {
 
     // then
     expect(store.baseDatas.length).toBe(1);
-    expect(store.baseDatas[0].name).toBe(testData2.name);
+    expect(store.baseDatas[0]).toEqual(testData2);
   });
 
   test("Delete all BaseData", () => {
