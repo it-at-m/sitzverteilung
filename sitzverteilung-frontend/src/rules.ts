@@ -3,7 +3,7 @@ export const FieldValidationRules = {
   Integer: (value: string) =>
     Number.isInteger(value) || "Das Feld muss eine Ganzzahl enthalten.",
   LargerThan: (num: number) => (value: string) =>
-    parseInt(value) > num || `Der Wert muss größer als ${num} sein.`,
+    Number.parseInt(value) > num || `Der Wert muss größer als ${num} sein.`,
   IsUnique: (arr: string[]) => (value: string) =>
     arr.filter((val) => val === value).length < 2 ||
     `Es gibt andere Einträge mit identischem Wert.`,
