@@ -1,5 +1,10 @@
 export const FieldValidationRules = {
-  Required: (value: string) => !!value || "Der Name muss ausgefüllt werden.",
-  Integer: (value: string) => Number.isInteger(value) || "Das Feld darf nur eine Ganzzahl enthalten.",
-  LargerThan: (num: number) => (value: string) => parseInt(value) > num || `Der Wert muss größer als ${num} sein.`
+  Required: (value: string) => !!value || "Das Feld ist ein Pflichtfeld.",
+  Integer: (value: string) =>
+    Number.isInteger(value) || "Das Feld muss eine Ganzzahl enthalten.",
+  LargerThan: (num: number) => (value: string) =>
+    parseInt(value) > num || `Der Wert muss größer als ${num} sein.`,
+  IsUnique: (arr: string[]) => (value: string) =>
+    arr.filter((val) => val === value).length < 2 ||
+    `Es gibt andere Einträge mit identischem Wert.`,
 };
