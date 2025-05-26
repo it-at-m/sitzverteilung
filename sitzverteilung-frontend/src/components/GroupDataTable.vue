@@ -83,8 +83,6 @@
         ]"
         hide-details="auto"
         validate-on="invalid-input"
-        single-line
-        label="Name"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -102,8 +100,6 @@
         hide-details="auto"
         validate-on="invalid-input"
         @keydown="checkNumberInput"
-        single-line
-        label="Sitze"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -121,8 +117,6 @@
         hide-details="auto"
         validate-on="invalid-input"
         @keydown="checkNumberInput"
-        single-line
-        label="Stimmen"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -141,8 +135,8 @@ import { FieldValidationRules } from "@/rules.ts";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
-  { title: "Sitze", key: "committeeSeats", width: 250 },
-  { title: "Stimmen", key: "votes", width: 250 },
+  { title: "Anzahl der Sitze im Gremium", key: "committeeSeats", width: 250 },
+  { title: "Anzahl der Stimmen", key: "votes", width: 250 },
 ] as const;
 
 const groups = defineModel<Group[]>({ required: true });
