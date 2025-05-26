@@ -1,7 +1,8 @@
 type GroupName = string;
 
 export enum UnionType {
-  COMMITTEE, FRACTION
+  COMMITTEE,
+  FRACTION,
 }
 
 export interface Union {
