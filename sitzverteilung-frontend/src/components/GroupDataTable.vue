@@ -71,6 +71,8 @@
           FieldValidationRules.Required,
           FieldValidationRules.IsUnique(groupNames),
         ]"
+        :ref="nameFieldsRef.set"
+        @keyup="validateNameFields"
         hide-details="auto"
         validate-on="invalid-input"
         variant="underlined"
@@ -132,6 +134,7 @@
       <group-data-table-add-row
         :group-names="groupNames"
         @addGroup="addNewGroup"
+        ref="groupDataTableAddRowRef"
       />
       <group-data-table-summary-row :groups="groups" />
     </template>
@@ -140,9 +143,11 @@
 
 <script setup lang="ts">
 import type { Group } from "@/types/Group";
+import type { VTextField } from "vuetify/components";
 
 import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
-import { computed, ref } from "vue";
+import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
+import { computed, ref, useTemplateRef } from "vue";
 
 import GroupDataTableAddRow from "@/components/GroupDataTableAddRow.vue";
 import GroupDataTableSummaryRow from "@/components/GroupDataTableSummaryRow.vue";
@@ -159,30 +164,38 @@ const headers = [
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
 
+function addNewGroup(group: Group) {
+  groups.value.push(group);
+}
+
+const nameFieldsRef = useTemplateRefsList<VTextField>();
+const groupDataTableAddRowRef = useTemplateRef<{
+  validateNameField: () => void;
+}>("groupDataTableAddRowRef");
+const validateNameFields = useDebounceFn(() => {
+  nameFieldsRef.value.forEach((field) => field.validate());
+  groupDataTableAddRowRef.value?.validateNameField();
+}, 1000);
+
+const selected = ref<(Group & { index: number })[]>([]);
+const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));
 const indexedGroups = computed(() =>
   groups.value.map((group, index) => ({
     index,
     ...group,
   }))
 );
-
-const selected = ref<(Group & { index: number })[]>([]);
-const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));
-
 const isDeletionPossible = computed(() => selected.value.length > 0);
-
 function deleteGroups() {
   groups.value = groups.value.filter(
     (_, index) => !selectedIndexes.value.includes(index)
   );
   selected.value = [];
+  validateNameFields();
 }
 
 function deleteGroup(index: number) {
   groups.value.splice(index, 1);
-}
-
-function addNewGroup(group: Group) {
-  groups.value.push(group);
+  validateNameFields();
 }
 </script>

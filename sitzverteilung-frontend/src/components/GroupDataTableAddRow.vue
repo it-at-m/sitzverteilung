@@ -99,6 +99,7 @@ defineProps<{
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
+
 const nameInputField = useTemplateRef<VTextField>("nameInputField");
 const committeeSeatsInputField = useTemplateRef<VTextField>(
   "committeeSeatsInputField"
@@ -119,7 +120,6 @@ const isEmpty = computed(
     !(newGroup.value.committeeSeats === 0 || !!newGroup.value.committeeSeats) &&
     !(newGroup.value.votes === 0 || !!newGroup.value.votes)
 );
-
 watch(isEmpty, (newValue) => {
   if (newValue) resetValidation();
 });
@@ -134,7 +134,6 @@ function addGroupEnter() {
     addGroup();
   }
 }
-
 function addGroup() {
   if (isValid.value) {
     resetValidation();
@@ -143,11 +142,17 @@ function addGroup() {
   }
 }
 
+function validateNameField() {
+  nameInputField.value?.validate();
+}
 function resetValidation() {
   nameInputField.value?.resetValidation();
   committeeSeatsInputField.value?.resetValidation();
   votesInputField.value?.resetValidation();
 }
+defineExpose({
+  validateNameField,
+});
 
 function getEmptyGroup(): Group {
   return {
