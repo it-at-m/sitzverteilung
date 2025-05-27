@@ -120,7 +120,7 @@ const isEmpty = computed(
     !(newGroup.value.votes === 0 || !!newGroup.value.votes)
 );
 
-watch(isEmpty, newValue => {
+watch(isEmpty, (newValue) => {
   if (newValue) resetValidation();
 });
 
