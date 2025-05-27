@@ -13,7 +13,7 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import type { Group } from "@/types/Group.ts";
+import type { Group } from "@/types/Group";
 
 import { ref } from "vue";
 
