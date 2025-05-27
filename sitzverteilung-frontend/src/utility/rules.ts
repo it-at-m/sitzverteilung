@@ -1,5 +1,7 @@
 export const FieldValidationRules = {
-  Required: (value: string) => !!value || "Das Feld ist ein Pflichtfeld.",
+  Required: (value: string) =>
+    (value !== null && value !== undefined && value !== "") ||
+    "Das Feld ist ein Pflichtfeld.",
   Integer: (value: number) =>
     Number.isInteger(value) || "Das Feld muss eine Ganzzahl enthalten.",
   LargerThan: (num: number) => (value: number) =>

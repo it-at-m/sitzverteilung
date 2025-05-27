@@ -84,6 +84,7 @@
         v-model.number="groups[index].committeeSeats"
         type="number"
         :rules="[
+          FieldValidationRules.Required,
           FieldValidationRules.Integer,
           FieldValidationRules.LargerThan(0),
         ]"
@@ -101,6 +102,7 @@
         v-model.number="groups[index].votes"
         type="number"
         :rules="[
+          FieldValidationRules.Required,
           FieldValidationRules.Integer,
           FieldValidationRules.LargerThan(0),
         ]"
@@ -149,7 +151,7 @@ import { FieldValidationRules } from "@/utility/rules";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
-  { title: "Anzahl der Sitze im Gremium", key: "committeeSeats", width: 250 },
+  { title: "Anzahl der Sitze", key: "committeeSeats", width: 250 },
   { title: "Anzahl der Stimmen", key: "votes", width: 250 },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ] as const;
@@ -170,7 +172,9 @@ const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));
 const isDeletionPossible = computed(() => selected.value.length > 0);
 
 function deleteGroups() {
-  selectedIndexes.value.forEach((index) => deleteGroup(index));
+  groups.value = groups.value.filter(
+    (_, index) => !selectedIndexes.value.includes(index)
+  );
   selected.value = [];
 }
 

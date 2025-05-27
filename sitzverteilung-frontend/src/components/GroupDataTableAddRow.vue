@@ -24,6 +24,7 @@
         ref="committeeSeatsInputField"
         type="number"
         :rules="[
+          FieldValidationRules.Required,
           FieldValidationRules.Integer,
           FieldValidationRules.LargerThan(0),
         ]"
@@ -42,6 +43,7 @@
         ref="votesInputField"
         type="number"
         :rules="[
+          FieldValidationRules.Required,
           FieldValidationRules.Integer,
           FieldValidationRules.LargerThan(0),
         ]"

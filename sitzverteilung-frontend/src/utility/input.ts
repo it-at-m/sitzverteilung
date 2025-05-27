@@ -1,5 +1,10 @@
 function preventInput(regex: RegExp, event: KeyboardEvent) {
-  if (event.ctrlKey || event.altKey || event.key.length !== 1) {
+  if (
+    event.ctrlKey ||
+    event.altKey ||
+    event.metaKey ||
+    event.key.length !== 1
+  ) {
     return;
   }
 
