@@ -1,5 +1,5 @@
 export interface Group {
   name: string;
-  committeeSeats: number;
-  votes: number;
+  committeeSeats?: number;
+  votes?: number;
 }

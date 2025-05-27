@@ -19,16 +19,6 @@
       >
         <template #prepend>
           <v-btn
-            @click="addNewGroup"
-            :prepend-icon="mdiPlus"
-            variant="tonal"
-            color="primary"
-            size="small"
-            class="mr-1"
-          >
-            Zeile hinzufügen
-          </v-btn>
-          <v-btn
             :disabled="!isDeletionPossible"
             @click="deleteGroups"
             :prepend-icon="mdiDelete"
@@ -122,21 +112,46 @@
         class="py-3"
       />
     </template>
+
+    <template #item.actions="{ index }">
+      <div class="d-flex justify-center">
+        <v-btn
+          @click="deleteGroup(index)"
+          :icon="mdiDelete"
+          size="small"
+          color="red"
+          variant="text"
+          aria-label="Zeile löschen"
+        />
+      </div>
+    </template>
+
+    <template #body.append>
+      <group-data-table-add-row
+        :group-names="groupNames"
+        @addGroup="addNewGroup"
+      />
+      <group-data-table-summary-row :groups="groups" />
+    </template>
   </v-data-table>
 </template>
 
 <script setup lang="ts">
 import type { Group } from "@/types/Group";
 
-import { mdiAccountGroup, mdiDelete, mdiPlus, mdiSeat, mdiVote } from "@mdi/js";
-import { computed, ref, watch } from "vue";
+import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
+import { computed, ref } from "vue";
 
-import { FieldValidationRules } from "@/rules.ts";
+import GroupDataTableAddRow from "@/components/GroupDataTableAddRow.vue";
+import GroupDataTableSummaryRow from "@/components/GroupDataTableSummaryRow.vue";
+import { checkNumberInput } from "@/utility/input";
+import { FieldValidationRules } from "@/utility/rules";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
   { title: "Anzahl der Sitze im Gremium", key: "committeeSeats", width: 250 },
   { title: "Anzahl der Stimmen", key: "votes", width: 250 },
+  { title: "Aktionen", key: "actions", width: 100 },
 ] as const;
 
 const groups = defineModel<Group[]>({ required: true });
@@ -155,41 +170,15 @@ const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));
 const isDeletionPossible = computed(() => selected.value.length > 0);
 
 function deleteGroups() {
-  groups.value = groups.value.filter(
-    (_, index) => !selectedIndexes.value.includes(index)
-  );
+  selectedIndexes.value.forEach((index) => deleteGroup(index));
   selected.value = [];
 }
 
-function addNewGroup() {
-  groups.value.push(getEmptyGroup());
+function deleteGroup(index: number) {
+  groups.value.splice(index, 1);
 }
 
-watch(
-  groups,
-  (newValue) => {
-    if (newValue.length == 0) {
-      groups.value = [getEmptyGroup()];
-    }
-  },
-  { immediate: true }
-);
-
-function getEmptyGroup(): Group {
-  return {
-    name: "",
-    committeeSeats: 0,
-    votes: 0,
-  };
-}
-
-function checkNumberInput(event: KeyboardEvent) {
-  if (event.ctrlKey || event.altKey || event.key.length !== 1) {
-    return;
-  }
-
-  if (!/^\d$/.test(event.key)) {
-    event.preventDefault();
-  }
+function addNewGroup(group: Group) {
+  groups.value.push(group);
 }
 </script>
