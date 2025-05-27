@@ -1,10 +1,8 @@
 <template>
   <v-container>
-    <v-row class="text-center">
+    <v-row>
       <v-col>
-        <h1 class="text-h3 font-weight-bold mb-3">
-          Willkommen bei der Sitzverteilung
-        </h1>
+        <h1>Über die Anwendung</h1>
       </v-col>
     </v-row>
   </v-container>

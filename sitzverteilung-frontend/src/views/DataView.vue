@@ -1,12 +1,23 @@
 <template>
   <v-container>
-    <v-row class="text-center">
+    <v-row>
       <v-col>
-        <h1 class="text-h3 font-weight-bold mb-3">
-          Basisdaten folgen in Kürze...
-        </h1>
+        <h1>Verwaltung der Basisdaten</h1>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="9">
+        <group-data-table v-model="groups" />
       </v-col>
     </v-row>
   </v-container>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Group } from "@/types/Group";
+
+import { ref } from "vue";
+
+import GroupDataTable from "@/components/GroupDataTable.vue";
+
+const groups = ref<Group[]>([]);
+</script>

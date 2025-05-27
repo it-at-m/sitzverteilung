@@ -27,6 +27,7 @@ export default defineConfigWithVueTs(
         "kebab-case",
         { registeredComponentsOnly: false },
       ],
+      "vue/valid-v-slot": ["error", { allowModifiers: true }],
     },
   },
   globalIgnores(["dev-dist", "dist", "target", "node_modules", "env.d.ts"])

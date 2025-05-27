@@ -1,4 +1,4 @@
-import type { BaseData } from "@/types/BaseData.ts";
+import type { BaseData } from "@/types/BaseData";
 
 import { acceptHMRUpdate, defineStore } from "pinia";
 import { ref } from "vue";
