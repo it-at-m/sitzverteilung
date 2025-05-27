@@ -151,7 +151,7 @@ const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
   { title: "Anzahl der Sitze im Gremium", key: "committeeSeats", width: 250 },
   { title: "Anzahl der Stimmen", key: "votes", width: 250 },
-  { title: "Aktionen", key: "actions", width: 100 },
+  { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ] as const;
 
 const groups = defineModel<Group[]>({ required: true });
