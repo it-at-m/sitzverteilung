@@ -1,7 +1,7 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { FieldValidationRules } from "../src/rules";
+import { FieldValidationRules } from "../../src/utility/rules";
 
 describe("FieldValidationRules tests", () => {
   beforeEach(() => {
@@ -100,5 +100,31 @@ describe("FieldValidationRules tests", () => {
 
     // then
     expect(result).toEqual("Es gibt andere Einträge mit identischem Wert.");
+  });
+
+  test("IsNonExistent positive", () => {
+    // given
+    const unitUnderTest = "Hello";
+    const array = ["Goodbye"];
+    const validationRule = FieldValidationRules.IsNonExistent(array);
+
+    // when
+    const result = validationRule(unitUnderTest);
+
+    // then
+    expect(result).toBe(true);
+  });
+
+  test("IsNonExistent negative", () => {
+    // given
+    const unitUnderTest = "Hello";
+    const array = ["Hello", "Goodbye"];
+    const validationRule = FieldValidationRules.IsNonExistent(array);
+
+    // when
+    const result = validationRule(unitUnderTest);
+
+    // then
+    expect(result).toBe("Es gibt bereits andere Einträge mit diesem Wert.");
   });
 });
