@@ -133,10 +133,11 @@
     <template #body.append>
       <group-data-table-add-row
         :group-names="groupNames"
+        :disabled="limitReached"
         @addGroup="addNewGroup"
         ref="groupDataTableAddRowRef"
       />
-      <group-data-table-summary-row :groups="groups" />
+      <group-data-table-summary-row :groups="groups" :max-groups="maxGroups"/>
     </template>
   </v-data-table>
 </template>
@@ -161,8 +162,13 @@ const headers = [
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ] as const;
 
+const props = defineProps<{
+  maxGroups: number
+}>();
+
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
+const limitReached = computed(() => groups.value.length >= props.maxGroups);
 
 function addNewGroup(group: Group) {
   groups.value.push(group);

@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col cols="9">
-        <group-data-table v-model="groups" />
+        <group-data-table v-model="groups" :max-groups="3"/>
       </v-col>
     </v-row>
   </v-container>

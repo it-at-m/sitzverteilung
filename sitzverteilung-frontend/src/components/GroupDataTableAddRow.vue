@@ -20,6 +20,7 @@
         density="compact"
         class="py-3"
         @keydown.enter="addGroupEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
@@ -43,6 +44,7 @@
         density="compact"
         class="py-3"
         @keydown.enter="addGroupEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
@@ -66,13 +68,14 @@
         density="compact"
         class="py-3"
         @keydown.enter="addGroupEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
       <div class="d-flex justify-center">
         <v-btn
           @click="addGroup"
-          :disabled="isEmpty || !isValid"
+          :disabled="disabled || isEmpty || !isValid"
           :icon="mdiPlus"
           size="small"
           color="primary"
@@ -96,6 +99,7 @@ import { FieldValidationRules } from "@/utility/rules";
 
 defineProps<{
   groupNames: string[];
+  disabled: boolean
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
