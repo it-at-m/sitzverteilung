@@ -97,7 +97,7 @@ import { computed, ref, useTemplateRef, watch } from "vue";
 import { checkNumberInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
-defineProps<{
+const props = defineProps<{
   groupNames: string[];
   disabled: boolean
 }>();
@@ -154,6 +154,14 @@ function resetValidation() {
   committeeSeatsInputField.value?.resetValidation();
   votesInputField.value?.resetValidation();
 }
+
+watch(() => props.disabled, (isDisabled) => {
+  if (isDisabled) {
+    newGroup.value = getEmptyGroup();
+    resetValidation();
+  }
+});
+
 defineExpose({
   validateNameField,
 });
