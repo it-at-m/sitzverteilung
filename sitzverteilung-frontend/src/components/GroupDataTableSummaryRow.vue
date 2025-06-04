@@ -2,7 +2,12 @@
   <tr class="bg-primary">
     <td />
     <td>
-      <p class="font-weight-bold">Gesamtanzahl: {{ amountOfGroups }}<span :class="{ 'text-red': tooManyGroups }"> (max. {{ maxGroups }})</span></p>
+      <p class="font-weight-bold">
+        Gesamtanzahl: {{ amountOfGroups
+        }}<span :class="{ 'text-red': tooManyGroups }">
+          (max. {{ maxGroups }})</span
+        >
+      </p>
     </td>
     <td>
       <p class="font-weight-bold">Gesamtanzahl: {{ groupSeatsSum }}</p>

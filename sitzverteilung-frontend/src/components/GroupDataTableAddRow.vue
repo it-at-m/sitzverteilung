@@ -99,7 +99,7 @@ import { FieldValidationRules } from "@/utility/rules";
 
 const props = defineProps<{
   groupNames: string[];
-  disabled: boolean
+  disabled: boolean;
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
@@ -155,12 +155,15 @@ function resetValidation() {
   votesInputField.value?.resetValidation();
 }
 
-watch(() => props.disabled, (isDisabled) => {
-  if (isDisabled) {
-    newGroup.value = getEmptyGroup();
-    resetValidation();
+watch(
+  () => props.disabled,
+  (isDisabled) => {
+    if (isDisabled) {
+      newGroup.value = getEmptyGroup();
+      resetValidation();
+    }
   }
-});
+);
 
 defineExpose({
   validateNameField,

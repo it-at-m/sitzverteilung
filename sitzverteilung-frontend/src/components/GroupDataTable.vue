@@ -137,7 +137,10 @@
         @addGroup="addNewGroup"
         ref="groupDataTableAddRowRef"
       />
-      <group-data-table-summary-row :groups="groups" :max-groups="maxGroups"/>
+      <group-data-table-summary-row
+        :groups="groups"
+        :max-groups="maxGroups"
+      />
     </template>
   </v-data-table>
 </template>
@@ -163,7 +166,7 @@ const headers = [
 ] as const;
 
 const props = defineProps<{
-  maxGroups: number
+  maxGroups: number;
 }>();
 
 const groups = defineModel<Group[]>({ required: true });
@@ -202,6 +205,7 @@ function deleteGroups() {
 
 function deleteGroup(index: number) {
   groups.value.splice(index, 1);
+  selected.value = [];
   validateNameFields();
 }
 </script>
