@@ -186,4 +186,7 @@ nbdist/
 *.sln
 *.sw?
 
+# Project specific directories and files
 dev-dist
+sitzverteilung-frontend/public
+!sitzverteilung-frontend/public/logo.png
