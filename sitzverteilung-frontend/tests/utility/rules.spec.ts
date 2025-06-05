@@ -71,6 +71,32 @@ describe("FieldValidationRules tests", () => {
     expect(result).toBe(`Der Wert muss größer als ${threshold} sein.`);
   });
 
+  test("LowerOrEqualThan positive", () => {
+    // given
+    const unitUnderTest = 4;
+    const threshold = 4;
+    const validationRule = FieldValidationRules.LowerOrEqualThan(threshold);
+
+    // when
+    const result = validationRule(unitUnderTest);
+
+    // then
+    expect(result).toBe(true);
+  });
+
+  test("LowerOrEqualThan negative", () => {
+    // given
+    const unitUnderTest = 4;
+    const threshold = 3;
+    const validationRule = FieldValidationRules.LowerOrEqualThan(threshold);
+
+    // when
+    const result = validationRule(unitUnderTest);
+
+    // then
+    expect(result).toBe(`Der Wert darf maximal ${threshold} sein.`);
+  });
+
   test("IsUnique positive", () => {
     // given
     const unitUnderTest = "Hello";

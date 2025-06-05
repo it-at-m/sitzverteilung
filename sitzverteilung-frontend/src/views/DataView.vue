@@ -9,7 +9,8 @@
       <v-col cols="9">
         <group-data-table
           v-model="groups"
-          :max-groups="80"
+          :expected-seats="80"
+          :limit-votes="100_000_000"
         />
       </v-col>
     </v-row>
