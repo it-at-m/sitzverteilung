@@ -158,7 +158,7 @@ const maxSeatsLength = computed(() => props.limitSeats.toString().length);
 function checkSeatField(event: KeyboardEvent) {
   checkNumberInput(event);
   checkInputLength(
-    newGroup.value.committeeSeats?.toString(),
+    newGroup.value.committeeSeats?.toString() ?? "",
     maxSeatsLength.value,
     event
   );
@@ -168,7 +168,7 @@ const maxVotesLength = computed(() => props.limitVotes.toString().length);
 function checkVoteField(event: KeyboardEvent) {
   checkNumberInput(event);
   checkInputLength(
-    newGroup.value.votes?.toString(),
+    newGroup.value.votes?.toString() ?? "",
     maxVotesLength.value,
     event
   );
