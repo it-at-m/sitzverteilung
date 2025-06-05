@@ -20,6 +20,7 @@
         density="compact"
         class="py-3"
         @keydown.enter="addGroupEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
@@ -43,6 +44,7 @@
         density="compact"
         class="py-3"
         @keydown.enter="addGroupEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
@@ -66,13 +68,14 @@
         density="compact"
         class="py-3"
         @keydown.enter="addGroupEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
       <div class="d-flex justify-center">
         <v-btn
           @click="addGroup"
-          :disabled="isEmpty || !isValid"
+          :disabled="disabled || isEmpty || !isValid"
           :icon="mdiPlus"
           size="small"
           color="primary"
@@ -94,8 +97,9 @@ import { computed, ref, useTemplateRef, watch } from "vue";
 import { checkNumberInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
-defineProps<{
+const props = defineProps<{
   groupNames: string[];
+  disabled: boolean;
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
@@ -150,6 +154,17 @@ function resetValidation() {
   committeeSeatsInputField.value?.resetValidation();
   votesInputField.value?.resetValidation();
 }
+
+watch(
+  () => props.disabled,
+  (isDisabled) => {
+    if (isDisabled) {
+      newGroup.value = getEmptyGroup();
+      resetValidation();
+    }
+  }
+);
+
 defineExpose({
   validateNameField,
 });
