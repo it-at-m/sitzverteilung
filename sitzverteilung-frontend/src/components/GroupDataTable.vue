@@ -74,7 +74,7 @@
         :ref="nameFieldsRef.set"
         @keyup="validateNameFields"
         hide-details="auto"
-        validate-on="invalid-input"
+        validate-on="input"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -89,10 +89,13 @@
           FieldValidationRules.Required,
           FieldValidationRules.Integer,
           FieldValidationRules.LargerThan(0),
+          FieldValidationRules.LowerOrEqualThan(expectedSeats),
         ]"
+        min="0"
+        :max="expectedSeats"
         hide-details="auto"
-        validate-on="invalid-input"
-        @keydown="checkNumberInput"
+        validate-on="input"
+        @keydown="(event: KeyboardEvent) => checkSeatField(index, event)"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -107,10 +110,13 @@
           FieldValidationRules.Required,
           FieldValidationRules.Integer,
           FieldValidationRules.LargerThan(0),
+          FieldValidationRules.LowerOrEqualThan(limitVotes),
         ]"
+        min="0"
+        :max="limitVotes"
         hide-details="auto"
-        validate-on="invalid-input"
-        @keydown="checkNumberInput"
+        validate-on="input"
+        @keydown="(event: KeyboardEvent) => checkVoteField(index, event)"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -133,13 +139,15 @@
     <template #body.append>
       <group-data-table-add-row
         :group-names="groupNames"
-        :disabled="limitReached"
+        :disabled="groupLimitReached"
+        :limit-seats="expectedSeats"
+        :limit-votes="limitVotes"
         @addGroup="addNewGroup"
         ref="groupDataTableAddRowRef"
       />
       <group-data-table-summary-row
         :groups="groups"
-        :max-groups="maxGroups"
+        :expected-seats="expectedSeats"
       />
     </template>
   </v-data-table>
@@ -155,7 +163,7 @@ import { computed, ref, useTemplateRef } from "vue";
 
 import GroupDataTableAddRow from "@/components/GroupDataTableAddRow.vue";
 import GroupDataTableSummaryRow from "@/components/GroupDataTableSummaryRow.vue";
-import { checkNumberInput } from "@/utility/input";
+import { checkInputLength, checkNumberInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const headers = [
@@ -166,12 +174,15 @@ const headers = [
 ] as const;
 
 const props = defineProps<{
-  maxGroups: number;
+  expectedSeats: number;
+  limitVotes: number;
 }>();
 
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
-const limitReached = computed(() => groups.value.length >= props.maxGroups);
+const groupLimitReached = computed(
+  () => groups.value.length >= props.expectedSeats
+);
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
@@ -185,6 +196,26 @@ const validateNameFields = useDebounceFn(() => {
   nameFieldsRef.value.forEach((field) => field.validate());
   groupDataTableAddRowRef.value?.validateNameField();
 }, 1000);
+
+const maxSeatsLength = computed(() => props.expectedSeats.toString().length);
+function checkSeatField(index: number, event: KeyboardEvent) {
+  checkNumberInput(event);
+  checkInputLength(
+    groups.value[index].committeeSeats?.toString(),
+    maxSeatsLength.value,
+    event
+  );
+}
+
+const maxVotesLength = computed(() => props.limitVotes.toString().length);
+function checkVoteField(index: number, event: KeyboardEvent) {
+  checkNumberInput(event);
+  checkInputLength(
+    groups.value[index].votes?.toString(),
+    maxVotesLength.value,
+    event
+  );
+}
 
 const selected = ref<(Group & { index: number })[]>([]);
 const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));

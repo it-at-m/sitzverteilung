@@ -35,11 +35,14 @@
                 FieldValidationRules.Required,
                 FieldValidationRules.Integer,
                 FieldValidationRules.LargerThan(0),
+                FieldValidationRules.LowerOrEqualThan(limitSeats),
               ]
         "
+        min="0"
+        :max="limitSeats"
         hide-details="auto"
         validate-on="input"
-        @keydown="checkNumberInput"
+        @keydown="checkSeatField"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -59,11 +62,14 @@
                 FieldValidationRules.Required,
                 FieldValidationRules.Integer,
                 FieldValidationRules.LargerThan(0),
+                FieldValidationRules.LowerOrEqualThan(limitVotes),
               ]
         "
+        min="0"
+        :max="limitVotes"
         hide-details="auto"
         validate-on="input"
-        @keydown="checkNumberInput"
+        @keydown="checkVoteField"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -94,12 +100,14 @@ import type { VTextField } from "vuetify/components";
 import { mdiPlus } from "@mdi/js";
 import { computed, ref, useTemplateRef, watch } from "vue";
 
-import { checkNumberInput } from "@/utility/input";
+import { checkInputLength, checkNumberInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const props = defineProps<{
   groupNames: string[];
   disabled: boolean;
+  limitSeats: number;
+  limitVotes: number;
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
@@ -144,6 +152,26 @@ function addGroup() {
     emit("addGroup", newGroup.value);
     newGroup.value = getEmptyGroup();
   }
+}
+
+const maxSeatsLength = computed(() => props.limitSeats.toString().length);
+function checkSeatField(event: KeyboardEvent) {
+  checkNumberInput(event);
+  checkInputLength(
+    newGroup.value.committeeSeats?.toString(),
+    maxSeatsLength.value,
+    event
+  );
+}
+
+const maxVotesLength = computed(() => props.limitVotes.toString().length);
+function checkVoteField(event: KeyboardEvent) {
+  checkNumberInput(event);
+  checkInputLength(
+    newGroup.value.votes?.toString(),
+    maxVotesLength.value,
+    event
+  );
 }
 
 function validateNameField() {
