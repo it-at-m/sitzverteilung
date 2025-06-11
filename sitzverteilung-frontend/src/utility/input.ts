@@ -4,13 +4,13 @@ function isIgnoreKey(event: KeyboardEvent) {
   );
 }
 
-export function checkNumberInput(event: KeyboardEvent) {
+export function preventNonNumericInput(event: KeyboardEvent) {
   if (!isIgnoreKey(event) && !/^\d$/.test(event.key)) {
     event.preventDefault();
   }
 }
 
-export function checkInputLength(
+export function preventTooLongInput(
   input: string | undefined,
   limit: number,
   event: KeyboardEvent

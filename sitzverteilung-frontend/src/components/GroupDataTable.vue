@@ -163,7 +163,7 @@ import { computed, ref, useTemplateRef } from "vue";
 
 import GroupDataTableAddRow from "@/components/GroupDataTableAddRow.vue";
 import GroupDataTableSummaryRow from "@/components/GroupDataTableSummaryRow.vue";
-import { checkInputLength, checkNumberInput } from "@/utility/input";
+import { preventTooLongInput, preventNonNumericInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const headers = [
@@ -199,8 +199,8 @@ const validateNameFields = useDebounceFn(() => {
 
 const maxSeatsLength = computed(() => props.expectedSeats.toString().length);
 function checkSeatField(index: number, event: KeyboardEvent) {
-  checkNumberInput(event);
-  checkInputLength(
+  preventNonNumericInput(event);
+  preventTooLongInput(
     groups.value[index].committeeSeats?.toString() ?? "",
     maxSeatsLength.value,
     event
@@ -209,8 +209,8 @@ function checkSeatField(index: number, event: KeyboardEvent) {
 
 const maxVotesLength = computed(() => props.limitVotes.toString().length);
 function checkVoteField(index: number, event: KeyboardEvent) {
-  checkNumberInput(event);
-  checkInputLength(
+  preventNonNumericInput(event);
+  preventTooLongInput(
     groups.value[index].votes?.toString() ?? "",
     maxVotesLength.value,
     event

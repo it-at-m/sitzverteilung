@@ -100,7 +100,7 @@ import type { VTextField } from "vuetify/components";
 import { mdiPlus } from "@mdi/js";
 import { computed, ref, useTemplateRef, watch } from "vue";
 
-import { checkInputLength, checkNumberInput } from "@/utility/input";
+import { preventTooLongInput, preventNonNumericInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const props = defineProps<{
@@ -156,8 +156,8 @@ function addGroup() {
 
 const maxSeatsLength = computed(() => props.limitSeats.toString().length);
 function checkSeatField(event: KeyboardEvent) {
-  checkNumberInput(event);
-  checkInputLength(
+  preventNonNumericInput(event);
+  preventTooLongInput(
     newGroup.value.committeeSeats?.toString() ?? "",
     maxSeatsLength.value,
     event
@@ -166,8 +166,8 @@ function checkSeatField(event: KeyboardEvent) {
 
 const maxVotesLength = computed(() => props.limitVotes.toString().length);
 function checkVoteField(event: KeyboardEvent) {
-  checkNumberInput(event);
-  checkInputLength(
+  preventNonNumericInput(event);
+  preventTooLongInput(
     newGroup.value.votes?.toString() ?? "",
     maxVotesLength.value,
     event
