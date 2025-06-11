@@ -85,14 +85,14 @@
 import type { Group } from "@/types/Group";
 import type { VTextField } from "vuetify/components";
 
-import {computed, nextTick, useTemplateRef, watch} from "vue";
+import { computed, nextTick, useTemplateRef, watch } from "vue";
 
 import { preventTooLongInput, preventNonNumericInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const { isValidatingOnEmpty = true, disabled = false, groupNames, limitSeats, limitVotes } = defineProps<{
-  isValidatingOnEmpty: boolean;
-  disabled: boolean;
+  isValidatingOnEmpty?: boolean;
+  disabled?: boolean;
   groupNames: string[];
   limitSeats: number;
   limitVotes: number;

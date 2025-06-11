@@ -27,8 +27,8 @@ import GroupDataTableRow from "@/components/GroupDataTableRow.vue";
 const groupDataTableRowRef = useTemplateRef("groupDataTableRowRef")
 
 const { disabled = false, groupNames, limitSeats, limitVotes } = defineProps<{
+  disabled?: boolean;
   groupNames: string[];
-  disabled: boolean;
   limitSeats: number;
   limitVotes: number;
 }>();
