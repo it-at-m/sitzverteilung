@@ -10,7 +10,5 @@ export const FieldValidationRules = {
     value <= num || `Der Wert darf maximal ${num} sein.`,
   IsUnique: (arr: string[]) => (value: string) =>
     arr.filter((val) => val === value).length < 2 ||
-    "Es gibt andere Einträge mit identischem Wert.",
-  IsNonExistent: (arr: string[]) => (value: string) =>
-    !arr.includes(value) || "Es gibt bereits andere Einträge mit diesem Wert.",
+    "Es gibt andere Einträge mit identischem Wert."
 };
