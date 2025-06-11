@@ -139,7 +139,7 @@
     <template #body.append>
       <group-data-table-add-row
         :group-names="groupNames"
-        :disabled="groupLimitReached"
+        :disabled="isGroupLimitReached"
         :limit-seats="expectedSeats"
         :limit-votes="limitVotes"
         @addGroup="addNewGroup"
@@ -180,7 +180,7 @@ const props = defineProps<{
 
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
-const groupLimitReached = computed(
+const isGroupLimitReached = computed(
   () => groups.value.length >= props.expectedSeats
 );
 

@@ -4,7 +4,7 @@
     <td>
       <p class="font-weight-bold">
         Gesamtanzahl: {{ amountOfGroups
-        }}<span :class="{ 'text-red': tooManyGroups }">
+        }}<span :class="{ 'text-red': isTooManyGroups }">
           (max. {{ expectedSeats }})</span
         >
       </p>
@@ -13,11 +13,11 @@
       <p class="font-weight-bold">
         Gesamtanzahl: {{ totalSeats }} von {{ expectedSeats }}
         <span
-          v-if="seatsTooHigh"
+          v-if="isSeatsToHigh"
           class="text-red"
           >(überschritten)</span
         ><span
-          v-else-if="seatsTooLow"
+          v-else-if="isSeatsTooLow"
           class="text-red"
           >(fehlend)</span
         >
@@ -41,11 +41,11 @@ const props = defineProps<{
 }>();
 
 const amountOfGroups = computed(() => props.groups.length);
-const tooManyGroups = computed(
+const isTooManyGroups = computed(
   () => amountOfGroups.value > props.expectedSeats
 );
-const seatsTooHigh = computed(() => totalSeats.value > props.expectedSeats);
-const seatsTooLow = computed(() => totalSeats.value < props.expectedSeats);
+const isSeatsToHigh = computed(() => totalSeats.value > props.expectedSeats);
+const isSeatsTooLow = computed(() => totalSeats.value < props.expectedSeats);
 
 const totalSeats = computed(() => {
   return props.groups.reduce(
