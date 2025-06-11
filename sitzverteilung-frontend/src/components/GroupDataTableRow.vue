@@ -3,10 +3,10 @@
     <td />
     <td>
       <v-text-field
-          v-model="group.name"
-          ref="nameInputField"
-          type="text"
-          :rules="
+        v-model="group.name"
+        ref="nameInputField"
+        type="text"
+        :rules="
           applyRules
             ? [
                 FieldValidationRules.Required,
@@ -14,21 +14,21 @@
               ]
             : []
         "
-          hide-details="auto"
-          validate-on="input"
-          variant="underlined"
-          density="compact"
-          class="py-3"
-          @keydown.enter="hitEnter"
-          :disabled="disabled"
+        hide-details="auto"
+        validate-on="input"
+        variant="underlined"
+        density="compact"
+        class="py-3"
+        @keydown.enter="hitEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
       <v-text-field
-          v-model.number="group.committeeSeats"
-          ref="committeeSeatsInputField"
-          type="number"
-          :rules="
+        v-model.number="group.committeeSeats"
+        ref="committeeSeatsInputField"
+        type="number"
+        :rules="
           applyRules
             ? [
                 FieldValidationRules.Required,
@@ -38,24 +38,24 @@
               ]
             : []
         "
-          min="0"
-          :max="limitSeats"
-          hide-details="auto"
-          validate-on="input"
-          @keydown="checkSeatField"
-          variant="underlined"
-          density="compact"
-          class="py-3"
-          @keydown.enter="hitEnter"
-          :disabled="disabled"
+        min="0"
+        :max="limitSeats"
+        hide-details="auto"
+        validate-on="input"
+        @keydown="checkSeatField"
+        variant="underlined"
+        density="compact"
+        class="py-3"
+        @keydown.enter="hitEnter"
+        :disabled="disabled"
       />
     </td>
     <td>
       <v-text-field
-          v-model.number="group.votes"
-          ref="votesInputField"
-          type="number"
-          :rules="
+        v-model.number="group.votes"
+        ref="votesInputField"
+        type="number"
+        :rules="
           applyRules
             ? [
                 FieldValidationRules.Required,
@@ -65,16 +65,16 @@
               ]
             : []
         "
-          min="0"
-          :max="limitVotes"
-          hide-details="auto"
-          validate-on="input"
-          @keydown="checkVoteField"
-          variant="underlined"
-          density="compact"
-          class="py-3"
-          @keydown.enter="hitEnter"
-          :disabled="disabled"
+        min="0"
+        :max="limitVotes"
+        hide-details="auto"
+        validate-on="input"
+        @keydown="checkVoteField"
+        variant="underlined"
+        density="compact"
+        class="py-3"
+        @keydown.enter="hitEnter"
+        :disabled="disabled"
       />
     </td>
     <slot :is-action-disabled="isActionDisabled" />
@@ -87,10 +87,16 @@ import type { VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
-import { preventTooLongInput, preventNonNumericInput } from "@/utility/input";
+import { preventNonNumericInput, preventTooLongInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
-const { isValidatingOnEmpty = true, disabled = false, groupNames, limitSeats, limitVotes } = defineProps<{
+const {
+  isValidatingOnEmpty = true,
+  disabled = false,
+  groupNames,
+  limitSeats,
+  limitVotes,
+} = defineProps<{
   isValidatingOnEmpty?: boolean;
   disabled?: boolean;
   groupNames: string[];
@@ -102,50 +108,58 @@ const group = defineModel<Group>({ required: true });
 
 const nameInputField = useTemplateRef<VTextField>("nameInputField");
 const committeeSeatsInputField = useTemplateRef<VTextField>(
-    "committeeSeatsInputField"
+  "committeeSeatsInputField"
 );
 const votesInputField = useTemplateRef<VTextField>("votesInputField");
 
 const isEmpty = computed(
-    () =>
-        !group.value.name &&
-        !(group.value.committeeSeats === 0 || !!group.value.committeeSeats) &&
-        !(group.value.votes === 0 || !!group.value.votes)
+  () =>
+    !group.value.name &&
+    !(group.value.committeeSeats === 0 || !!group.value.committeeSeats) &&
+    !(group.value.votes === 0 || !!group.value.votes)
 );
 
-watch(() => [isEmpty.value, isValidatingOnEmpty], ([newEmpty, newIsValidatingOnEmpty]) => {
-  if (!newIsValidatingOnEmpty && newEmpty) resetValidation();
-});
+watch(
+  () => [isEmpty.value, isValidatingOnEmpty],
+  ([newEmpty, newIsValidatingOnEmpty]) => {
+    if (!newIsValidatingOnEmpty && newEmpty) resetValidation();
+  }
+);
 
 const isValid = computed(
-    () =>
-        (nameInputField.value?.isValid &&
-            committeeSeatsInputField.value?.isValid &&
-            votesInputField.value?.isValid)
+  () =>
+    nameInputField.value?.isValid &&
+    committeeSeatsInputField.value?.isValid &&
+    votesInputField.value?.isValid
 );
-const isActionDisabled = computed(() => disabled || isEmpty.value || !isValid.value )
+const isActionDisabled = computed(
+  () => disabled || isEmpty.value || !isValid.value
+);
 
 const emit = defineEmits(["hitEnter"]);
 function hitEnter() {
   if (!isActionDisabled.value) {
-    emit("hitEnter")
+    emit("hitEnter");
   }
 }
 
 const applyRules = computed(() => {
   return isValidatingOnEmpty || !isEmpty.value;
 });
-watch(() => applyRules.value, () => {
-  validate();
-});
+watch(
+  () => applyRules.value,
+  () => {
+    validate();
+  }
+);
 
 const maxSeatsLength = computed(() => limitSeats.toString().length);
 function checkSeatField(event: KeyboardEvent) {
   preventNonNumericInput(event);
   preventTooLongInput(
-      group.value.committeeSeats?.toString() ?? "",
-      maxSeatsLength.value,
-      event
+    group.value.committeeSeats?.toString() ?? "",
+    maxSeatsLength.value,
+    event
   );
 }
 
@@ -153,9 +167,9 @@ const maxVotesLength = computed(() => limitVotes.toString().length);
 function checkVoteField(event: KeyboardEvent) {
   preventNonNumericInput(event);
   preventTooLongInput(
-      group.value.votes?.toString() ?? "",
-      maxVotesLength.value,
-      event
+    group.value.votes?.toString() ?? "",
+    maxVotesLength.value,
+    event
   );
 }
 
@@ -168,7 +182,7 @@ function validate() {
     nameInputField.value?.validate(true);
     committeeSeatsInputField.value?.validate(true);
     votesInputField.value?.validate(true);
-  })
+  });
 }
 
 function resetValidation() {
@@ -184,6 +198,6 @@ function focusNameField() {
 defineExpose({
   validateNameField,
   resetValidation,
-  focusNameField
+  focusNameField,
 });
 </script>

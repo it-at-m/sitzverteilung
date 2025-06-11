@@ -1,15 +1,25 @@
 <template>
-  <group-data-table-row ref="groupDataTableRowRef" v-model="newGroup" :group-names="groupNames" :is-validating-on-empty="false" :disabled="disabled" :limit-seats="limitSeats" :limit-votes="limitVotes" @hit-enter="addGroupEnter" v-slot="slotProps">
+  <group-data-table-row
+    ref="groupDataTableRowRef"
+    v-model="newGroup"
+    :group-names="groupNames"
+    :is-validating-on-empty="false"
+    :disabled="disabled"
+    :limit-seats="limitSeats"
+    :limit-votes="limitVotes"
+    @hit-enter="addGroupEnter"
+    v-slot="slotProps"
+  >
     <td>
       <div class="d-flex justify-center">
         <v-btn
-            @click="addGroup"
-            :disabled="slotProps.isActionDisabled"
-            :icon="mdiPlus"
-            size="small"
-            color="primary"
-            flat
-            aria-label="Hinzufügen"
+          @click="addGroup"
+          :disabled="slotProps.isActionDisabled"
+          :icon="mdiPlus"
+          size="small"
+          color="primary"
+          flat
+          aria-label="Hinzufügen"
         />
       </div>
     </td>
@@ -24,9 +34,14 @@ import { ref, useTemplateRef, watch } from "vue";
 
 import GroupDataTableRow from "@/components/GroupDataTableRow.vue";
 
-const groupDataTableRowRef = useTemplateRef("groupDataTableRowRef")
+const groupDataTableRowRef = useTemplateRef("groupDataTableRowRef");
 
-const { disabled = false, groupNames, limitSeats, limitVotes } = defineProps<{
+const {
+  disabled = false,
+  groupNames,
+  limitSeats,
+  limitVotes,
+} = defineProps<{
   disabled?: boolean;
   groupNames: string[];
   limitSeats: number;
@@ -40,13 +55,13 @@ const emit = defineEmits<{
 }>();
 
 function addGroupEnter() {
-    groupDataTableRowRef.value?.focusNameField();
-    addGroup();
+  groupDataTableRowRef.value?.focusNameField();
+  addGroup();
 }
 function addGroup() {
-    resetValidation();
-    emit("addGroup", newGroup.value);
-    newGroup.value = getEmptyGroup();
+  resetValidation();
+  emit("addGroup", newGroup.value);
+  newGroup.value = getEmptyGroup();
 }
 
 function validateNameField() {
