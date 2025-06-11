@@ -1,5 +1,5 @@
 <template>
-  <tr class="bg-grey-lighten-3">
+  <tr>
     <td />
     <td>
       <v-text-field
@@ -10,12 +10,13 @@
           applyRules
             ? [
                 FieldValidationRules.Required,
-                FieldValidationRules.IsNonExistent(groupNames),
+                FieldValidationRules.IsUnique(groupNames),
               ]
             : []
         "
         hide-details="auto"
         validate-on="input"
+        @keydown="editedName"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -136,11 +137,14 @@ const isActionDisabled = computed(
   () => disabled || isEmpty.value || !isValid.value
 );
 
-const emit = defineEmits(["hitEnter"]);
+const emit = defineEmits(["hitEnter", "editedName"]);
 function hitEnter() {
   if (!isActionDisabled.value) {
     emit("hitEnter");
   }
+}
+function editedName() {
+  emit("editedName");
 }
 
 const applyRules = computed(() => {
@@ -178,6 +182,7 @@ function validateNameField() {
 }
 
 function validate() {
+  // requires nextTick as dynamic update of rules will otherwise not be respected
   nextTick(() => {
     nameInputField.value?.validate(true);
     committeeSeatsInputField.value?.validate(true);

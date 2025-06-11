@@ -2,13 +2,14 @@
   <group-data-table-row
     ref="groupDataTableRowRef"
     v-model="newGroup"
-    :group-names="groupNames"
+    :group-names="allGroupNames"
     :is-validating-on-empty="false"
     :disabled="disabled"
     :limit-seats="limitSeats"
     :limit-votes="limitVotes"
     @hit-enter="addGroupEnter"
     v-slot="slotProps"
+    class="bg-grey-lighten-3"
   >
     <td>
       <div class="d-flex justify-center">
@@ -30,11 +31,13 @@
 import type { Group } from "@/types/Group";
 
 import { mdiPlus } from "@mdi/js";
-import { ref, useTemplateRef, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 
 import GroupDataTableRow from "@/components/GroupDataTableRow.vue";
 
-const groupDataTableRowRef = useTemplateRef("groupDataTableRowRef");
+const groupDataTableRowRef = useTemplateRef<typeof GroupDataTableRow>(
+  "groupDataTableRowRef"
+);
 
 const {
   disabled = false,
@@ -49,6 +52,10 @@ const {
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
+
+const allGroupNames = computed(() => {
+  return [...groupNames, newGroup.value.name];
+});
 
 const emit = defineEmits<{
   addGroup: [group: Group];

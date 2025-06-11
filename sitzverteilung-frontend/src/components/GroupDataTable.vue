@@ -63,77 +63,28 @@
       </div>
     </template>
 
-    <template #item.name="{ index }">
-      <v-text-field
-        v-model="groups[index].name"
-        type="text"
-        :rules="[
-          FieldValidationRules.Required,
-          FieldValidationRules.IsUnique(groupNames),
-        ]"
-        :ref="nameFieldsRef.set"
-        @keyup="validateNameFields"
-        hide-details="auto"
-        validate-on="input"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-      />
-    </template>
-
-    <template #item.committeeSeats="{ index }">
-      <v-text-field
-        v-model.number="groups[index].committeeSeats"
-        type="number"
-        :rules="[
-          FieldValidationRules.Required,
-          FieldValidationRules.Integer,
-          FieldValidationRules.LargerThan(0),
-          FieldValidationRules.LowerOrEqualThan(expectedSeats),
-        ]"
-        min="0"
-        :max="expectedSeats"
-        hide-details="auto"
-        validate-on="input"
-        @keydown="(event: KeyboardEvent) => checkSeatField(index, event)"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-      />
-    </template>
-
-    <template #item.votes="{ index }">
-      <v-text-field
-        v-model.number="groups[index].votes"
-        type="number"
-        :rules="[
-          FieldValidationRules.Required,
-          FieldValidationRules.Integer,
-          FieldValidationRules.LargerThan(0),
-          FieldValidationRules.LowerOrEqualThan(limitVotes),
-        ]"
-        min="0"
-        :max="limitVotes"
-        hide-details="auto"
-        validate-on="input"
-        @keydown="(event: KeyboardEvent) => checkVoteField(index, event)"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-      />
-    </template>
-
-    <template #item.actions="{ index }">
-      <div class="d-flex justify-center">
-        <v-btn
-          @click="deleteGroup(index)"
-          :icon="mdiDelete"
-          size="small"
-          color="red"
-          variant="text"
-          aria-label="Zeile löschen"
-        />
-      </div>
+    <template #item="{ index }">
+      <group-data-table-row
+        :ref="groupDataTableRowsRef.set"
+        v-model="groups[index]"
+        :group-names="groupNames"
+        :limit-seats="expectedSeats"
+        :limit-votes="limitVotes"
+        @edited-name="validateNameFields"
+      >
+        <td>
+          <div class="d-flex justify-center">
+            <v-btn
+              @click="deleteGroup(index)"
+              :icon="mdiDelete"
+              size="small"
+              color="red"
+              variant="text"
+              aria-label="Zeile löschen"
+            />
+          </div>
+        </td>
+      </group-data-table-row>
     </template>
 
     <template #body.append>
@@ -155,16 +106,14 @@
 
 <script setup lang="ts">
 import type { Group } from "@/types/Group";
-import type { VTextField } from "vuetify/components";
 
 import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
 import { computed, ref, useTemplateRef } from "vue";
 
 import GroupDataTableAddRow from "@/components/GroupDataTableAddRow.vue";
+import GroupDataTableRow from "@/components/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/GroupDataTableSummaryRow.vue";
-import { preventTooLongInput, preventNonNumericInput } from "@/utility/input";
-import { FieldValidationRules } from "@/utility/rules";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
@@ -188,34 +137,15 @@ function addNewGroup(group: Group) {
   groups.value.push(group);
 }
 
-const nameFieldsRef = useTemplateRefsList<VTextField>();
-const groupDataTableAddRowRef = useTemplateRef<{
-  validateNameField: () => void;
-}>("groupDataTableAddRowRef");
+const groupDataTableRowsRef = useTemplateRefsList<typeof GroupDataTableRow>();
+const groupDataTableAddRowRef = useTemplateRef<typeof GroupDataTableAddRow>(
+  "groupDataTableAddRowRef"
+);
+
 const validateNameFields = useDebounceFn(() => {
-  nameFieldsRef.value.forEach((field) => field.validate());
+  groupDataTableRowsRef.value.forEach((rowRef) => rowRef.validateNameField());
   groupDataTableAddRowRef.value?.validateNameField();
 }, 1000);
-
-const maxSeatsLength = computed(() => props.expectedSeats.toString().length);
-function checkSeatField(index: number, event: KeyboardEvent) {
-  preventNonNumericInput(event);
-  preventTooLongInput(
-    groups.value[index].committeeSeats?.toString() ?? "",
-    maxSeatsLength.value,
-    event
-  );
-}
-
-const maxVotesLength = computed(() => props.limitVotes.toString().length);
-function checkVoteField(index: number, event: KeyboardEvent) {
-  preventNonNumericInput(event);
-  preventTooLongInput(
-    groups.value[index].votes?.toString() ?? "",
-    maxVotesLength.value,
-    event
-  );
-}
 
 const selected = ref<(Group & { index: number })[]>([]);
 const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));
