@@ -16,6 +16,11 @@ export function preventTooLongInput(
   event: KeyboardEvent
 ) {
   if (input && !isIgnoreKey(event) && input.length >= limit) {
+    // Allow input if text is selected (will be replaced)
+    const target = event.target as HTMLInputElement;
+    if (target && target.selectionStart !== target.selectionEnd) {
+      return;
+    }
     event.preventDefault();
   }
 }

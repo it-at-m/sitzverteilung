@@ -13,7 +13,7 @@
       <p class="font-weight-bold">
         Gesamtanzahl: {{ totalSeats }} von {{ expectedSeats }}
         <span
-          v-if="isSeatsToHigh"
+          v-if="isSeatsTooHigh"
           class="text-red"
           >(überschritten)</span
         ><span
@@ -44,7 +44,7 @@ const amountOfGroups = computed(() => props.groups.length);
 const isTooManyGroups = computed(
   () => amountOfGroups.value > props.expectedSeats
 );
-const isSeatsToHigh = computed(() => totalSeats.value > props.expectedSeats);
+const isSeatsTooHigh = computed(() => totalSeats.value > props.expectedSeats);
 const isSeatsTooLow = computed(() => totalSeats.value < props.expectedSeats);
 
 const totalSeats = computed(() => {

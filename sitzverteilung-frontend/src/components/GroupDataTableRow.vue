@@ -28,7 +28,7 @@
       <v-text-field
         v-model.number="group.committeeSeats"
         ref="committeeSeatsInputField"
-        type="number"
+        type="text"
         :rules="
           applyRules
             ? [
@@ -39,8 +39,6 @@
               ]
             : []
         "
-        min="0"
-        :max="limitSeats"
         hide-details="auto"
         validate-on="input"
         @keydown="checkSeatField"
@@ -55,7 +53,7 @@
       <v-text-field
         v-model.number="group.votes"
         ref="votesInputField"
-        type="number"
+        type="text"
         :rules="
           applyRules
             ? [
@@ -66,8 +64,6 @@
               ]
             : []
         "
-        min="0"
-        :max="limitVotes"
         hide-details="auto"
         validate-on="input"
         @keydown="checkVoteField"
