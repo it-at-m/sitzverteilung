@@ -3,7 +3,7 @@ import type { Union } from "@/types/Union";
 
 export interface BaseData {
   name: string;
-  committeeSize: number;
+  committeeSize?: number;
   groups: Group[];
   unions: Union[];
 }
