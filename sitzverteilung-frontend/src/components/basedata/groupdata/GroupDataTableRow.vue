@@ -79,13 +79,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group";
+import type { Group } from "@/types/Group.ts";
 import type { VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
-import { preventNonNumericInput, preventTooLongInput } from "@/utility/input";
-import { FieldValidationRules } from "@/utility/rules";
+import {
+  preventNonNumericInput,
+  preventTooLongInput,
+} from "@/utility/input.ts";
+import { FieldValidationRules } from "@/utility/rules.ts";
 
 const {
   isValidatingOnEmpty = true,
@@ -177,6 +180,10 @@ function validateNameField() {
   nameInputField.value?.validate();
 }
 
+function validateSeatField() {
+  committeeSeatsInputField.value?.validate();
+}
+
 function validate() {
   // requires nextTick as dynamic update of rules will otherwise not be respected
   nextTick(() => {
@@ -198,6 +205,7 @@ function focusNameField() {
 
 defineExpose({
   validateNameField,
+  validateSeatField,
   resetValidation,
   focusNameField,
 });
