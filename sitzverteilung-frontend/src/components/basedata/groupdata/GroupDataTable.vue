@@ -105,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group.ts";
+import type { Group } from "@/types/Group";
 
 import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";

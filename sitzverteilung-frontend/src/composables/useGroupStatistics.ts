@@ -1,4 +1,4 @@
-import type { Group } from "@/types/Group.ts";
+import type { Group } from "@/types/Group";
 import type { Ref } from "vue";
 
 import { computed } from "vue";

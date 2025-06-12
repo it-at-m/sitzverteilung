@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group.ts";
+import type { Group } from "@/types/Group";
 import type { VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
@@ -87,8 +87,8 @@ import { computed, nextTick, useTemplateRef, watch } from "vue";
 import {
   preventNonNumericInput,
   preventTooLongInput,
-} from "@/utility/input.ts";
-import { FieldValidationRules } from "@/utility/rules.ts";
+} from "@/utility/input";
+import { FieldValidationRules } from "@/utility/rules";
 
 const {
   isValidatingOnEmpty = true,

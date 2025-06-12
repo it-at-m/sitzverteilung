@@ -31,11 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group.ts";
+import type { Group } from "@/types/Group";
 
 import { toRefs } from "vue";
 
-import { useGroupStatistics } from "@/composables/useGroupStatistics.ts";
+import { useGroupStatistics } from "@/composables/useGroupStatistics";
 
 const props = defineProps<{
   groups: Group[];

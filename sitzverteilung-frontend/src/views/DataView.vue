@@ -17,7 +17,7 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import type { BaseData } from "@/types/BaseData.ts";
+import type { BaseData } from "@/types/BaseData";
 
 import { ref } from "vue";
 

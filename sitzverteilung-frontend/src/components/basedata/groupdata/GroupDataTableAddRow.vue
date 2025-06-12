@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group.ts";
+import type { Group } from "@/types/Group";
 
 import { mdiPlus } from "@mdi/js";
 import { computed, ref, useTemplateRef, watch } from "vue";

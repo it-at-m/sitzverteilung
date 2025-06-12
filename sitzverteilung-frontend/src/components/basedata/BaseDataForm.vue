@@ -51,18 +51,18 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseData } from "@/types/BaseData.ts";
+import type { BaseData } from "@/types/BaseData";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
 import { computed, toRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
-import { useGroupStatistics } from "@/composables/useGroupStatistics.ts";
+import { useGroupStatistics } from "@/composables/useGroupStatistics";
 import {
   preventNonNumericInput,
   preventTooLongInput,
-} from "@/utility/input.ts";
-import { FieldValidationRules } from "@/utility/rules.ts";
+} from "@/utility/input";
+import { FieldValidationRules } from "@/utility/rules";
 
 const baseData = defineModel<BaseData>({ required: true });
 const groups = toRef(baseData.value.groups);
