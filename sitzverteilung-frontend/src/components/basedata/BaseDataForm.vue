@@ -1,51 +1,53 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-text-field
-          v-model.number="baseData.name"
-          type="text"
-          :rules="[
+  <v-form @update:modelValue="validChanged">
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-text-field
+              v-model.number="baseData.name"
+              type="text"
+              :rules="[
             FieldValidationRules.Required,
             FieldValidationRules.IsUnique(newBaseDataNames),
           ]"
-          hide-details="auto"
-          validate-on="input"
-          label="Name"
-          :prepend-inner-icon="mdiLabel"
-          glow
-        />
-      </v-col>
-      <v-col>
-        <v-text-field
-          v-model.number="baseData.committeeSize"
-          type="text"
-          :rules="[
+              hide-details="auto"
+              validate-on="input"
+              label="Name"
+              :prepend-inner-icon="mdiLabel"
+              glow
+          />
+        </v-col>
+        <v-col>
+          <v-text-field
+              v-model.number="baseData.committeeSize"
+              type="text"
+              :rules="[
             FieldValidationRules.Required,
             FieldValidationRules.Integer,
             FieldValidationRules.LargerThan(0),
             FieldValidationRules.LowerOrEqualThan(limitCommitteeSize),
           ]"
-          hide-details="auto"
-          validate-on="input"
-          :error-messages="seatFieldValidationError"
-          label="Größe des Hauptorgans"
-          :prepend-inner-icon="mdiAccountSwitch"
-          @keydown="checkCommitteeSizeField"
-          glow
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <group-data-table
-          v-model="baseData.groups"
-          :expected-seats="expectedSeats"
-          :limit-votes="limitVotes"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+              hide-details="auto"
+              validate-on="input"
+              :error-messages="seatFieldValidationError"
+              label="Größe des Hauptorgans"
+              :prepend-inner-icon="mdiAccountSwitch"
+              @keydown="checkCommitteeSizeField"
+              glow
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <group-data-table
+              v-model="baseData.groups"
+              :expected-seats="expectedSeats"
+              :limit-votes="limitVotes"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
 </template>
 
 <script setup lang="ts">
@@ -74,6 +76,13 @@ const {
   limitCommitteeSize?: number;
   baseDataNames?: string[];
 }>();
+
+const emit = defineEmits<{
+  "valid-changed": [isValid: boolean];
+}>();
+function validChanged(valid: boolean | null) {
+  emit("valid-changed", !!valid);
+}
 
 const maxCommitteeSizeLength = computed(
   () => limitCommitteeSize.toString().length
