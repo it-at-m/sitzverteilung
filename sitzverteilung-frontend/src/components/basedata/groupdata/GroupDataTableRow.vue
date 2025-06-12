@@ -84,10 +84,7 @@ import type { VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
-import {
-  preventNonNumericInput,
-  preventTooLongInput,
-} from "@/utility/input";
+import { preventNonNumericInput, preventTooLongInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const {
@@ -126,12 +123,13 @@ watch(
   }
 );
 
-const isValid = computed(
-  () => Boolean(
+const isValid = computed(() =>
+  Boolean(
     nameInputField.value?.isValid &&
-    committeeSeatsInputField.value?.isValid &&
-    votesInputField.value?.isValid
-));
+      committeeSeatsInputField.value?.isValid &&
+      votesInputField.value?.isValid
+  )
+);
 const isActionDisabled = computed(
   () => disabled || isEmpty.value || !isValid.value
 );
