@@ -31,30 +31,25 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group";
+import type { Group } from "@/types/Group.ts";
 
-import { computed } from "vue";
+import { toRefs } from "vue";
+
+import { useGroupStatistics } from "@/composables/useGroupStatistics.ts";
 
 const props = defineProps<{
   groups: Group[];
   expectedSeats: number;
 }>();
 
-const amountOfGroups = computed(() => props.groups.length);
-const isTooManyGroups = computed(
-  () => amountOfGroups.value > props.expectedSeats
-);
-const isSeatsTooHigh = computed(() => totalSeats.value > props.expectedSeats);
-const isSeatsTooLow = computed(() => totalSeats.value < props.expectedSeats);
+const { groups, expectedSeats } = toRefs(props);
 
-const totalSeats = computed(() => {
-  return props.groups.reduce(
-    (sum, group) => sum + (group.committeeSeats ? group.committeeSeats : 0),
-    0
-  );
-});
-
-const totalVotes = computed(() => {
-  return props.groups.reduce((sum, group) => sum + (group.votes ?? 0), 0);
-});
+const {
+  amountOfGroups,
+  isTooManyGroups,
+  isSeatsTooHigh,
+  isSeatsTooLow,
+  totalSeats,
+  totalVotes,
+} = useGroupStatistics(groups, expectedSeats);
 </script>
