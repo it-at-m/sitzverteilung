@@ -4,45 +4,45 @@
       <v-row>
         <v-col>
           <v-text-field
-              v-model.number="baseData.name"
-              type="text"
-              :rules="[
-            FieldValidationRules.Required,
-            FieldValidationRules.IsUnique(newBaseDataNames),
-          ]"
-              hide-details="auto"
-              validate-on="input"
-              label="Name"
-              :prepend-inner-icon="mdiLabel"
-              glow
+            v-model.number="baseData.name"
+            type="text"
+            :rules="[
+              FieldValidationRules.Required,
+              FieldValidationRules.IsUnique(newBaseDataNames),
+            ]"
+            hide-details="auto"
+            validate-on="input"
+            label="Name"
+            :prepend-inner-icon="mdiLabel"
+            glow
           />
         </v-col>
         <v-col>
           <v-text-field
-              v-model.number="baseData.committeeSize"
-              type="text"
-              :rules="[
-            FieldValidationRules.Required,
-            FieldValidationRules.Integer,
-            FieldValidationRules.LargerThan(0),
-            FieldValidationRules.LowerOrEqualThan(limitCommitteeSize),
-          ]"
-              hide-details="auto"
-              validate-on="input"
-              :error-messages="seatFieldValidationError"
-              label="Größe des Hauptorgans"
-              :prepend-inner-icon="mdiAccountSwitch"
-              @keydown="checkCommitteeSizeField"
-              glow
+            v-model.number="baseData.committeeSize"
+            type="text"
+            :rules="[
+              FieldValidationRules.Required,
+              FieldValidationRules.Integer,
+              FieldValidationRules.LargerThan(0),
+              FieldValidationRules.LowerOrEqualThan(limitCommitteeSize),
+            ]"
+            hide-details="auto"
+            validate-on="input"
+            :error-messages="seatFieldValidationError"
+            label="Größe des Hauptorgans"
+            :prepend-inner-icon="mdiAccountSwitch"
+            @keydown="checkCommitteeSizeField"
+            glow
           />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
           <group-data-table
-              v-model="baseData.groups"
-              :expected-seats="expectedSeats"
-              :limit-votes="limitVotes"
+            v-model="baseData.groups"
+            :expected-seats="expectedSeats"
+            :limit-votes="limitVotes"
           />
         </v-col>
       </v-row>
