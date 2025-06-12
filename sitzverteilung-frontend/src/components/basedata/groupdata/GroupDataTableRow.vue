@@ -42,6 +42,8 @@
         hide-details="auto"
         validate-on="input"
         @keydown="checkSeatField"
+        @paste="checkSeatField"
+        @drop.prevent
         variant="underlined"
         density="compact"
         class="py-3"
@@ -67,6 +69,8 @@
         hide-details="auto"
         validate-on="input"
         @keydown="checkVoteField"
+        @paste="checkVoteField"
+        @drop.prevent
         variant="underlined"
         density="compact"
         class="py-3"

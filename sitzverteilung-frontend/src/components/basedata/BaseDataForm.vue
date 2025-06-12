@@ -33,6 +33,8 @@
             label="Größe des Hauptorgans"
             :prepend-inner-icon="mdiAccountSwitch"
             @keydown="checkCommitteeSizeField"
+            @paste="checkCommitteeSizeField"
+            @drop.prevent
             glow
           />
         </v-col>
