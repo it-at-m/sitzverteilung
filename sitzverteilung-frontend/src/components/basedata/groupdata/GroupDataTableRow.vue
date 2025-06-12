@@ -127,11 +127,11 @@ watch(
 );
 
 const isValid = computed(
-  () =>
+  () => Boolean(
     nameInputField.value?.isValid &&
     committeeSeatsInputField.value?.isValid &&
     votesInputField.value?.isValid
-);
+));
 const isActionDisabled = computed(
   () => disabled || isEmpty.value || !isValid.value
 );

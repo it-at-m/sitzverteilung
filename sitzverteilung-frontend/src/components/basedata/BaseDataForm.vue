@@ -4,7 +4,7 @@
       <v-row>
         <v-col>
           <v-text-field
-            v-model.number="baseData.name"
+            v-model="baseData.name"
             type="text"
             :rules="[
               FieldValidationRules.Required,
@@ -65,7 +65,7 @@ import {
 import { FieldValidationRules } from "@/utility/rules";
 
 const baseData = defineModel<BaseData>({ required: true });
-const groups = toRef(baseData.value.groups);
+const groups = toRef(baseData.value, "groups");
 
 const {
   limitVotes = 100_000_000,
