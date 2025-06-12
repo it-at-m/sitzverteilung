@@ -16,7 +16,7 @@
         "
         hide-details="auto"
         validate-on="input"
-        @keydown="editedName"
+        @input="editedName"
         variant="underlined"
         density="compact"
         class="py-3"

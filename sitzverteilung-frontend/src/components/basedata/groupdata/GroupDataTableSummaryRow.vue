@@ -42,7 +42,7 @@ const props = defineProps<{
   expectedSeats: number;
 }>();
 
-const { groups, expectedSeats } = toRefs(props);
+const { groups: groupsRef, expectedSeats: expectedSeatsRef } = toRefs(props);
 
 const {
   amountOfGroups,
@@ -51,5 +51,5 @@ const {
   isSeatsTooLow,
   totalSeats,
   totalVotes,
-} = useGroupStatistics(groups, expectedSeats);
+} = useGroupStatistics(groupsRef, expectedSeatsRef);
 </script>
