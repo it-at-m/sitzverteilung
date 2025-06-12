@@ -1,18 +1,26 @@
-function preventInput(regex: RegExp, event: KeyboardEvent) {
-  if (
-    event.ctrlKey ||
-    event.altKey ||
-    event.metaKey ||
-    event.key.length !== 1
-  ) {
-    return;
-  }
+function isIgnoreKey(event: KeyboardEvent) {
+  return (
+    event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1
+  );
+}
 
-  if (!regex.test(event.key)) {
+export function preventNonNumericInput(event: KeyboardEvent) {
+  if (!isIgnoreKey(event) && !/^\d$/.test(event.key)) {
     event.preventDefault();
   }
 }
 
-export function checkNumberInput(event: KeyboardEvent) {
-  preventInput(/^\d$/, event);
+export function preventTooLongInput(
+  input: string | undefined,
+  limit: number,
+  event: KeyboardEvent
+) {
+  if (input && !isIgnoreKey(event) && input.length >= limit) {
+    // Allow input if text is selected (will be replaced)
+    const target = event.target as HTMLInputElement;
+    if (target && target.selectionStart !== target.selectionEnd) {
+      return;
+    }
+    event.preventDefault();
+  }
 }

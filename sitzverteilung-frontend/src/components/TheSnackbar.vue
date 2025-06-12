@@ -1,7 +1,7 @@
 <template>
   <v-snackbar
     id="snackbar"
-    v-model="show"
+    v-model="isShowing"
     :color="color"
     :timeout="timeout"
   >
@@ -25,7 +25,7 @@ import { useSnackbarStore } from "@/stores/snackbar";
 
 const snackbarStore = useSnackbarStore();
 
-const show = ref(false);
+const isShowing = ref(false);
 const timeout = ref(SNACKBAR_DEFAULT_TIMEOUT);
 const message = ref("");
 const color = ref(STATUS_INDICATORS.INFO);
@@ -53,9 +53,9 @@ watch(
   () => snackbarStore.show,
   () => {
     if (snackbarStore.show) {
-      show.value = false;
+      isShowing.value = false;
       setTimeout(() => {
-        show.value = true;
+        isShowing.value = true;
         snackbarStore.show = false;
       }, timeout.value);
     }
@@ -63,6 +63,6 @@ watch(
 );
 
 function hide(): void {
-  show.value = false;
+  isShowing.value = false;
 }
 </script>

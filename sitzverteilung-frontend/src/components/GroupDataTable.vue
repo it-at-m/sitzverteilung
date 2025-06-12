@@ -63,83 +63,42 @@
       </div>
     </template>
 
-    <template #item.name="{ index }">
-      <v-text-field
-        v-model="groups[index].name"
-        type="text"
-        :rules="[
-          FieldValidationRules.Required,
-          FieldValidationRules.IsUnique(groupNames),
-        ]"
-        :ref="nameFieldsRef.set"
-        @keyup="validateNameFields"
-        hide-details="auto"
-        validate-on="invalid-input"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-      />
-    </template>
-
-    <template #item.committeeSeats="{ index }">
-      <v-text-field
-        v-model.number="groups[index].committeeSeats"
-        type="number"
-        :rules="[
-          FieldValidationRules.Required,
-          FieldValidationRules.Integer,
-          FieldValidationRules.LargerThan(0),
-        ]"
-        hide-details="auto"
-        validate-on="invalid-input"
-        @keydown="checkNumberInput"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-      />
-    </template>
-
-    <template #item.votes="{ index }">
-      <v-text-field
-        v-model.number="groups[index].votes"
-        type="number"
-        :rules="[
-          FieldValidationRules.Required,
-          FieldValidationRules.Integer,
-          FieldValidationRules.LargerThan(0),
-        ]"
-        hide-details="auto"
-        validate-on="invalid-input"
-        @keydown="checkNumberInput"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-      />
-    </template>
-
-    <template #item.actions="{ index }">
-      <div class="d-flex justify-center">
-        <v-btn
-          @click="deleteGroup(index)"
-          :icon="mdiDelete"
-          size="small"
-          color="red"
-          variant="text"
-          aria-label="Zeile löschen"
-        />
-      </div>
+    <template #item="{ index }">
+      <group-data-table-row
+        :ref="groupDataTableRowsRef.set"
+        v-model="groups[index]"
+        :group-names="groupNames"
+        :limit-seats="expectedSeats"
+        :limit-votes="limitVotes"
+        @edited-name="validateNameFields"
+      >
+        <td>
+          <div class="d-flex justify-center">
+            <v-btn
+              @click="deleteGroup(index)"
+              :icon="mdiDelete"
+              size="small"
+              color="red"
+              variant="text"
+              aria-label="Zeile löschen"
+            />
+          </div>
+        </td>
+      </group-data-table-row>
     </template>
 
     <template #body.append>
       <group-data-table-add-row
         :group-names="groupNames"
-        :disabled="limitReached"
+        :disabled="isGroupLimitReached"
+        :limit-seats="expectedSeats"
+        :limit-votes="limitVotes"
         @addGroup="addNewGroup"
         ref="groupDataTableAddRowRef"
       />
       <group-data-table-summary-row
         :groups="groups"
-        :max-groups="maxGroups"
+        :expected-seats="expectedSeats"
       />
     </template>
   </v-data-table>
@@ -147,16 +106,14 @@
 
 <script setup lang="ts">
 import type { Group } from "@/types/Group";
-import type { VTextField } from "vuetify/components";
 
 import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
 import { computed, ref, useTemplateRef } from "vue";
 
 import GroupDataTableAddRow from "@/components/GroupDataTableAddRow.vue";
+import GroupDataTableRow from "@/components/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/GroupDataTableSummaryRow.vue";
-import { checkNumberInput } from "@/utility/input";
-import { FieldValidationRules } from "@/utility/rules";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
@@ -166,23 +123,27 @@ const headers = [
 ] as const;
 
 const props = defineProps<{
-  maxGroups: number;
+  expectedSeats: number;
+  limitVotes: number;
 }>();
 
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
-const limitReached = computed(() => groups.value.length >= props.maxGroups);
+const isGroupLimitReached = computed(
+  () => groups.value.length >= props.expectedSeats
+);
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
 }
 
-const nameFieldsRef = useTemplateRefsList<VTextField>();
-const groupDataTableAddRowRef = useTemplateRef<{
-  validateNameField: () => void;
-}>("groupDataTableAddRowRef");
+const groupDataTableRowsRef = useTemplateRefsList<typeof GroupDataTableRow>();
+const groupDataTableAddRowRef = useTemplateRef<typeof GroupDataTableAddRow>(
+  "groupDataTableAddRowRef"
+);
+
 const validateNameFields = useDebounceFn(() => {
-  nameFieldsRef.value.forEach((field) => field.validate());
+  groupDataTableRowsRef.value.forEach((rowRef) => rowRef.validateNameField());
   groupDataTableAddRowRef.value?.validateNameField();
 }, 1000);
 
