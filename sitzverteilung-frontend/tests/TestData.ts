@@ -56,8 +56,8 @@ export function getTestBaseDataTooManyGroups(): BaseData {
         votes: 200,
       },
     ],
-    unions: []
-  }
+    unions: [],
+  };
 }
 
 export function getTestBaseDataTooManySeats(): BaseData {
@@ -76,8 +76,8 @@ export function getTestBaseDataTooManySeats(): BaseData {
         votes: 200,
       },
     ],
-    unions: []
-  }
+    unions: [],
+  };
 }
 
 export function getTestBaseDataNotEnoughSeats(): BaseData {
@@ -96,6 +96,6 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
         votes: 200,
       },
     ],
-    unions: []
-  }
+    unions: [],
+  };
 }
