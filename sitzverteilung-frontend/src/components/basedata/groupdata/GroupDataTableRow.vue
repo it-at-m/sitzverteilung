@@ -7,7 +7,6 @@
       <v-text-field
         v-model="group.name"
         ref="nameInputField"
-        type="text"
         :rules="
           applyRules
             ? [
@@ -30,7 +29,6 @@
       <v-number-input
         v-model.number="group.committeeSeats"
         ref="committeeSeatsInputField"
-        type="text"
         :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
         :max="limitSeats"
@@ -47,7 +45,6 @@
       <v-number-input
         v-model.number="group.votes"
         ref="votesInputField"
-        type="text"
         :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
         :max="limitVotes"

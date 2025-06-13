@@ -5,7 +5,6 @@
         <v-col>
           <v-text-field
             v-model="baseData.name"
-            type="text"
             :rules="[
               FieldValidationRules.Required,
               FieldValidationRules.IsUnique(newBaseDataNames),
@@ -20,7 +19,6 @@
         <v-col>
           <v-number-input
             v-model.number="baseData.committeeSize"
-            type="text"
             :rules="[FieldValidationRules.Required]"
             :min="1"
             :max="limitCommitteeSize"
