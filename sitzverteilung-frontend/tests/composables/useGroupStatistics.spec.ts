@@ -1,10 +1,15 @@
 import { ref } from "vue";
 import { useGroupStatistics } from "../../src/composables/useGroupStatistics";
-import { describe, expect, it } from "vitest";
-import { getTestBaseData } from "../TestData";
+import { describe, expect, test } from "vitest";
+import {
+    getTestBaseData,
+    getTestBaseDataEmptyGroups, getTestBaseDataNotEnoughSeats,
+    getTestBaseDataTooManyGroups,
+    getTestBaseDataTooManySeats
+} from "../TestData";
 
 describe("useGroupStatistics composable", () => {
-    it("correctly calculates statistics", () => {
+    test("correctly calculates statistics", () => {
         const testBaseData = getTestBaseData();
         const groups = ref(testBaseData.groups);
         const expectedSeats = ref(testBaseData.committeeSize);
@@ -16,15 +21,21 @@ describe("useGroupStatistics composable", () => {
         expect(totalVotes.value).toBe(350);
     });
 
-    it("correctly calculates validation", () => {
-        const testBaseData = getTestBaseData();
+    test.each([
+        [getTestBaseData(), false, false, false],
+        [getTestBaseDataEmptyGroups(), false, false, false],
+        [getTestBaseDataTooManyGroups(), true, false, false],
+        [getTestBaseDataTooManySeats(), false, true, false],
+        [getTestBaseDataNotEnoughSeats(), false, false, true],
+    ])('correctly calculates validation', (testBaseData, expectedTooManyGroups, expectedSeatsTooHigh, expectedSeatsTooLow) => {
         const groups = ref(testBaseData.groups);
         const expectedSeats = ref(testBaseData.committeeSize);
 
         const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(groups, expectedSeats);
 
-        expect(isTooManyGroups.value).toBe(false);
-        expect(isSeatsTooLow.value).toBe(false);
-        expect(isSeatsTooHigh.value).toBe(true);
+        expect(isTooManyGroups.value).toBe(expectedTooManyGroups);
+        expect(isSeatsTooHigh.value).toBe(expectedSeatsTooHigh);
+        expect(isSeatsTooLow.value).toBe(expectedSeatsTooLow);
     });
+
 });

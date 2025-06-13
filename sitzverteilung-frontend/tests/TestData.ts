@@ -4,7 +4,7 @@ import { UnionType } from "../src/types/Union";
 export function getTestBaseData(): BaseData {
   return {
     name: "TestData 1",
-    committeeSize: 10,
+    committeeSize: 60,
     groups: [
       {
         name: "Testgroup 1",
@@ -29,4 +29,73 @@ export function getTestBaseData(): BaseData {
       },
     ],
   };
+}
+
+export function getTestBaseDataEmptyGroups(): BaseData {
+  return {
+    name: "TestData Empty Groups",
+    committeeSize: 0,
+    groups: [],
+    unions: [],
+  };
+}
+
+export function getTestBaseDataTooManyGroups(): BaseData {
+  return {
+    name: "TestData TooMany Groups",
+    committeeSize: 1,
+    groups: [
+      {
+        name: "Testgroup 1",
+        committeeSeats: 1,
+        votes: 100,
+      },
+      {
+        name: "Testgroup 2",
+        committeeSeats: 0,
+        votes: 200,
+      },
+    ],
+    unions: []
+  }
+}
+
+export function getTestBaseDataTooManySeats(): BaseData {
+  return {
+    name: "TestData TooMany Seats",
+    committeeSize: 5,
+    groups: [
+      {
+        name: "Testgroup 1",
+        committeeSeats: 3,
+        votes: 100,
+      },
+      {
+        name: "Testgroup 2",
+        committeeSeats: 3,
+        votes: 200,
+      },
+    ],
+    unions: []
+  }
+}
+
+export function getTestBaseDataNotEnoughSeats(): BaseData {
+  return {
+    name: "TestData NotEnough Seats",
+    committeeSize: 5,
+    groups: [
+      {
+        name: "Testgroup 1",
+        committeeSeats: 1,
+        votes: 100,
+      },
+      {
+        name: "Testgroup 2",
+        committeeSeats: 3,
+        votes: 200,
+      },
+    ],
+    unions: []
+  }
 }
