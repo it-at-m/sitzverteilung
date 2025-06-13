@@ -11,7 +11,7 @@ export const useGroupStatistics = (
   const amountOfGroups = computed(() => groups.value.length);
   const totalSeats = computed(() => {
     return groups.value.reduce(
-      (sum, group) => sum + (group.committeeSeats ? group.committeeSeats : 0),
+      (sum, group) => sum + (group.committeeSeats ?? 0),
       0
     );
   });

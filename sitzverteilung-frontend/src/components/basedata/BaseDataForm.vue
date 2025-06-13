@@ -91,11 +91,7 @@ const newBaseDataNames = computed(() => [
   baseData.value.name,
 ]);
 
-const expectedSeats = computed(() =>
-  !(baseData.value.committeeSize === 0 || !!baseData.value.committeeSize)
-    ? 0
-    : baseData.value.committeeSize
-);
+const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
   groups,
   expectedSeats
