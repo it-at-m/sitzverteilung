@@ -8,6 +8,7 @@ import {
   getTestBaseDataNotEnoughSeats,
   getTestBaseDataTooManyGroups,
   getTestBaseDataTooManySeats,
+  getTestBaseDataUndefinedTooManySeats,
 } from "../TestData";
 
 describe("useGroupStatistics composable", () => {
@@ -31,6 +32,7 @@ describe("useGroupStatistics composable", () => {
     [getTestBaseDataEmptyGroups(), false, false, false],
     [getTestBaseDataTooManyGroups(), true, false, false],
     [getTestBaseDataTooManySeats(), false, true, false],
+    [getTestBaseDataUndefinedTooManySeats(), true, true, false],
     [getTestBaseDataNotEnoughSeats(), false, false, true],
   ])(
     "correctly calculates validation",

@@ -80,6 +80,21 @@ export function getTestBaseDataTooManySeats(): BaseData {
   };
 }
 
+export function getTestBaseDataUndefinedTooManySeats(): BaseData {
+  return {
+    name: "TestData Undefined CommitteeSize",
+    committeeSize: undefined,
+    groups: [
+      {
+        name: "Testgroup 1",
+        committeeSeats: 1,
+        votes: 100,
+      },
+    ],
+    unions: [],
+  };
+}
+
 export function getTestBaseDataNotEnoughSeats(): BaseData {
   return {
     name: "TestData NotEnough Seats",

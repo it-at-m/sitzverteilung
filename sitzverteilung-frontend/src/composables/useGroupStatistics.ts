@@ -20,11 +20,16 @@ export const useGroupStatistics = (
   });
 
   // validations
+  const safeExpectedSeats = computed(() => expectedSeats.value ?? 0);
   const isTooManyGroups = computed(
-    () => amountOfGroups.value > expectedSeats.value
+    () => amountOfGroups.value > safeExpectedSeats.value
   );
-  const isSeatsTooHigh = computed(() => totalSeats.value > expectedSeats.value);
-  const isSeatsTooLow = computed(() => totalSeats.value < expectedSeats.value);
+  const isSeatsTooHigh = computed(
+    () => totalSeats.value > safeExpectedSeats.value
+  );
+  const isSeatsTooLow = computed(
+    () => totalSeats.value < safeExpectedSeats.value
+  );
 
   return {
     amountOfGroups,
