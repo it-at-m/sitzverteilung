@@ -115,11 +115,11 @@ import type { Group } from "@/types/Group";
 
 import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 
-import GroupDataTableAddRow from "@/components/GroupDataTableAddRow.vue";
-import GroupDataTableRow from "@/components/GroupDataTableRow.vue";
-import GroupDataTableSummaryRow from "@/components/GroupDataTableSummaryRow.vue";
+import GroupDataTableAddRow from "@/components/basedata/groupdata/GroupDataTableAddRow.vue";
+import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
+import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
@@ -152,6 +152,17 @@ const validateNameFields = useDebounceFn(() => {
   groupDataTableRowsRef.value.forEach((rowRef) => rowRef.validateNameField());
   groupDataTableAddRowRef.value?.validateNameField();
 }, 1000);
+
+watch(
+  () => props.expectedSeats,
+  () => {
+    validateSeatFields();
+  }
+);
+const validateSeatFields = useDebounceFn(() => {
+  groupDataTableRowsRef.value.forEach((rowRef) => rowRef.validateSeatField());
+  groupDataTableAddRowRef.value?.validateSeatField();
+}, 500);
 
 const selected = ref<(Group & { index: number })[]>([]);
 const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));

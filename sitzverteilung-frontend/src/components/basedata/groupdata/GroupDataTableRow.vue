@@ -18,7 +18,7 @@
         "
         hide-details="auto"
         validate-on="input"
-        @keydown="editedName"
+        @input="editedName"
         variant="underlined"
         density="compact"
         class="py-3"
@@ -44,6 +44,8 @@
         hide-details="auto"
         validate-on="input"
         @keydown="checkSeatField"
+        @paste="checkSeatField"
+        @drop.prevent
         variant="underlined"
         density="compact"
         class="py-3"
@@ -69,6 +71,8 @@
         hide-details="auto"
         validate-on="input"
         @keydown="checkVoteField"
+        @paste="checkVoteField"
+        @drop.prevent
         variant="underlined"
         density="compact"
         class="py-3"
@@ -130,11 +134,12 @@ watch(
   }
 );
 
-const isValid = computed(
-  () =>
+const isValid = computed(() =>
+  Boolean(
     nameInputField.value?.isValid &&
-    committeeSeatsInputField.value?.isValid &&
-    votesInputField.value?.isValid
+      committeeSeatsInputField.value?.isValid &&
+      votesInputField.value?.isValid
+  )
 );
 const isActionDisabled = computed(
   () => disabled || isEmpty.value || !isValid.value
@@ -184,6 +189,10 @@ function validateNameField() {
   nameInputField.value?.validate();
 }
 
+function validateSeatField() {
+  committeeSeatsInputField.value?.validate();
+}
+
 function validate() {
   // requires nextTick as dynamic update of rules will otherwise not be respected
   nextTick(() => {
@@ -205,6 +214,7 @@ function focusNameField() {
 
 defineExpose({
   validateNameField,
+  validateSeatField,
   resetValidation,
   focusNameField,
 });

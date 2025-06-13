@@ -32,7 +32,7 @@ import type { Group } from "@/types/Group";
 import { mdiPlus } from "@mdi/js";
 import { computed, ref, useTemplateRef, watch } from "vue";
 
-import GroupDataTableRow from "@/components/GroupDataTableRow.vue";
+import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
 
 const groupDataTableRowRef = useTemplateRef<typeof GroupDataTableRow>(
   "groupDataTableRowRef"
@@ -74,6 +74,10 @@ function validateNameField() {
   groupDataTableRowRef.value?.validateNameField();
 }
 
+function validateSeatField() {
+  groupDataTableRowRef.value?.validateSeatField();
+}
+
 function resetValidation() {
   groupDataTableRowRef.value?.resetValidation();
 }
@@ -90,6 +94,7 @@ watch(
 
 defineExpose({
   validateNameField,
+  validateSeatField,
 });
 
 function getEmptyGroup(): Group {
