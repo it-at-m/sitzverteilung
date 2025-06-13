@@ -100,8 +100,7 @@ const committeeSeatsInputField = useTemplateRef<VTextField>(
 const votesInputField = useTemplateRef<VTextField>("votesInputField");
 
 const isEmpty = computed(
-  () =>
-    !(group.value.name || group.value.committeeSeats || group.value.votes)
+  () => !(group.value.name || group.value.committeeSeats || group.value.votes)
 );
 
 watch(
