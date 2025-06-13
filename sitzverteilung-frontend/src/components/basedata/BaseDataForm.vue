@@ -18,23 +18,17 @@
           />
         </v-col>
         <v-col>
-          <v-text-field
+          <v-number-input
             v-model.number="baseData.committeeSize"
             type="text"
-            :rules="[
-              FieldValidationRules.Required,
-              FieldValidationRules.Integer,
-              FieldValidationRules.LargerThan(0),
-              FieldValidationRules.LowerOrEqualThan(limitCommitteeSize),
-            ]"
+            :rules="[FieldValidationRules.Required]"
+            :min="1"
+            :max="limitCommitteeSize"
             hide-details="auto"
             validate-on="input"
             :error-messages="seatFieldValidationError"
             label="Größe des Hauptorgans"
             :prepend-inner-icon="mdiAccountSwitch"
-            @keydown="checkCommitteeSizeField"
-            @paste="checkCommitteeSizeField"
-            @drop.prevent
             glow
           />
         </v-col>
@@ -60,7 +54,6 @@ import { computed, toRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
-import { preventNonNumericInput, preventTooLongInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const baseData = defineModel<BaseData>({ required: true });
@@ -81,18 +74,6 @@ const emit = defineEmits<{
 }>();
 function validChanged(valid: boolean | null) {
   emit("valid-changed", !!valid);
-}
-
-const maxCommitteeSizeLength = computed(
-  () => limitCommitteeSize.toString().length
-);
-function checkCommitteeSizeField(event: KeyboardEvent) {
-  preventNonNumericInput(event);
-  preventTooLongInput(
-    baseData.value.committeeSize?.toString() ?? "",
-    maxCommitteeSizeLength.value,
-    event
-  );
 }
 
 const seatFieldValidationError = computed(() => {

@@ -27,25 +27,15 @@
       />
     </td>
     <td>
-      <v-text-field
+      <v-number-input
         v-model.number="group.committeeSeats"
         ref="committeeSeatsInputField"
         type="text"
-        :rules="
-          applyRules
-            ? [
-                FieldValidationRules.Required,
-                FieldValidationRules.Integer,
-                FieldValidationRules.LargerThan(0),
-                FieldValidationRules.LowerOrEqualThan(limitSeats),
-              ]
-            : []
-        "
+        :rules="applyRules ? [FieldValidationRules.Required] : []"
+        :min="1"
+        :max="limitSeats"
         hide-details="auto"
         validate-on="input"
-        @keydown="checkSeatField"
-        @paste="checkSeatField"
-        @drop.prevent
         variant="underlined"
         density="compact"
         class="py-3"
@@ -54,25 +44,15 @@
       />
     </td>
     <td>
-      <v-text-field
+      <v-number-input
         v-model.number="group.votes"
         ref="votesInputField"
         type="text"
-        :rules="
-          applyRules
-            ? [
-                FieldValidationRules.Required,
-                FieldValidationRules.Integer,
-                FieldValidationRules.LargerThan(0),
-                FieldValidationRules.LowerOrEqualThan(limitVotes),
-              ]
-            : []
-        "
+        :rules="applyRules ? [FieldValidationRules.Required] : []"
+        :min="1"
+        :max="limitVotes"
         hide-details="auto"
         validate-on="input"
-        @keydown="checkVoteField"
-        @paste="checkVoteField"
-        @drop.prevent
         variant="underlined"
         density="compact"
         class="py-3"
@@ -95,7 +75,6 @@ import type { VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
-import { preventNonNumericInput, preventTooLongInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const {
@@ -164,26 +143,6 @@ watch(
     validate();
   }
 );
-
-const maxSeatsLength = computed(() => limitSeats.toString().length);
-function checkSeatField(event: KeyboardEvent) {
-  preventNonNumericInput(event);
-  preventTooLongInput(
-    group.value.committeeSeats?.toString() ?? "",
-    maxSeatsLength.value,
-    event
-  );
-}
-
-const maxVotesLength = computed(() => limitVotes.toString().length);
-function checkVoteField(event: KeyboardEvent) {
-  preventNonNumericInput(event);
-  preventTooLongInput(
-    group.value.votes?.toString() ?? "",
-    maxVotesLength.value,
-    event
-  );
-}
 
 function validateNameField() {
   nameInputField.value?.validate();
