@@ -5,7 +5,6 @@
         <v-col>
           <v-text-field
             v-model="baseData.name"
-            type="text"
             :rules="[
               FieldValidationRules.Required,
               FieldValidationRules.IsUnique(newBaseDataNames),
@@ -18,23 +17,16 @@
           />
         </v-col>
         <v-col>
-          <v-text-field
+          <v-number-input
             v-model.number="baseData.committeeSize"
-            type="text"
-            :rules="[
-              FieldValidationRules.Required,
-              FieldValidationRules.Integer,
-              FieldValidationRules.LargerThan(0),
-              FieldValidationRules.LowerOrEqualThan(limitCommitteeSize),
-            ]"
+            :rules="[FieldValidationRules.Required]"
+            :min="1"
+            :max="limitCommitteeSize"
             hide-details="auto"
             validate-on="input"
             :error-messages="seatFieldValidationError"
             label="Größe des Hauptorgans"
             :prepend-inner-icon="mdiAccountSwitch"
-            @keydown="checkCommitteeSizeField"
-            @paste="checkCommitteeSizeField"
-            @drop.prevent
             glow
           />
         </v-col>
@@ -60,7 +52,6 @@ import { computed, toRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
-import { preventNonNumericInput, preventTooLongInput } from "@/utility/input";
 import { FieldValidationRules } from "@/utility/rules";
 
 const baseData = defineModel<BaseData>({ required: true });
@@ -83,18 +74,6 @@ function validChanged(valid: boolean | null) {
   emit("valid-changed", !!valid);
 }
 
-const maxCommitteeSizeLength = computed(
-  () => limitCommitteeSize.toString().length
-);
-function checkCommitteeSizeField(event: KeyboardEvent) {
-  preventNonNumericInput(event);
-  preventTooLongInput(
-    baseData.value.committeeSize?.toString() ?? "",
-    maxCommitteeSizeLength.value,
-    event
-  );
-}
-
 const seatFieldValidationError = computed(() => {
   if (isSeatsTooLow.value)
     return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
@@ -110,11 +89,7 @@ const newBaseDataNames = computed(() => [
   baseData.value.name,
 ]);
 
-const expectedSeats = computed(() =>
-  !(baseData.value.committeeSize === 0 || !!baseData.value.committeeSize)
-    ? 0
-    : baseData.value.committeeSize
-);
+const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
   groups,
   expectedSeats
