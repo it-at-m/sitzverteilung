@@ -1,6 +1,8 @@
 <template>
   <tr>
-    <td />
+    <td class="px-2">
+      <slot name="prepend" />
+    </td>
     <td>
       <v-text-field
         v-model="group.name"
@@ -78,7 +80,12 @@
         :disabled="disabled"
       />
     </td>
-    <slot :is-action-disabled="isActionDisabled" />
+    <td>
+      <slot
+        name="append"
+        :is-action-disabled="isActionDisabled"
+      />
+    </td>
   </tr>
 </template>
 
