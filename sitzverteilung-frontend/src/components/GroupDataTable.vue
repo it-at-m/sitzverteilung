@@ -63,7 +63,7 @@
       </div>
     </template>
 
-    <template #item="{ index }">
+    <template #item="{ index, toggleSelect, internalItem }">
       <group-data-table-row
         :ref="groupDataTableRowsRef.set"
         v-model="groups[index]"
@@ -72,7 +72,13 @@
         :limit-votes="limitVotes"
         @edited-name="validateNameFields"
       >
-        <td>
+        <template #prepend>
+          <v-checkbox-btn
+            :model-value="selectedIndexes.includes(index)"
+            @update:model-value="toggleSelect(internalItem, index)"
+          />
+        </template>
+        <template #append>
           <div class="d-flex justify-center">
             <v-btn
               @click="deleteGroup(index)"
@@ -83,7 +89,7 @@
               aria-label="Zeile löschen"
             />
           </div>
-        </td>
+        </template>
       </group-data-table-row>
     </template>
 

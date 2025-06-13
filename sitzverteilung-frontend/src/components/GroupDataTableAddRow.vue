@@ -8,14 +8,13 @@
     :limit-seats="limitSeats"
     :limit-votes="limitVotes"
     @hit-enter="addGroupEnter"
-    v-slot="slotProps"
     class="bg-grey-lighten-3"
   >
-    <td>
+    <template #append="{ isActionDisabled }">
       <div class="d-flex justify-center">
         <v-btn
           @click="addGroup"
-          :disabled="slotProps.isActionDisabled"
+          :disabled="isActionDisabled"
           :icon="mdiPlus"
           size="small"
           color="primary"
@@ -23,7 +22,7 @@
           aria-label="Hinzufügen"
         />
       </div>
-    </td>
+    </template>
   </group-data-table-row>
 </template>
 
