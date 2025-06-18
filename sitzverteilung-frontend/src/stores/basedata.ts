@@ -4,7 +4,25 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useBaseDataStore = defineStore("basedata", () => {
-  const baseDatas = ref<BaseData[]>([]);
+  const baseDatas = ref<BaseData[]>([
+    {
+      name: "Testbasisdaten",
+      committeeSize: 100,
+      groups: [
+        {
+          name: "Testpartei",
+          committeeSeats: 80,
+          votes: 1231,
+        },
+        {
+          name: "Toastpartei",
+          committeeSeats: 20,
+          votes: 124141,
+        },
+      ],
+      unions: [],
+    },
+  ]);
 
   function addOrUpdateBaseData(baseData: BaseData) {
     const index = baseDatas.value.findIndex(
