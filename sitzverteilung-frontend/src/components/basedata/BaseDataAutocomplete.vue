@@ -38,7 +38,14 @@
         </v-list-item-title>
       </v-list-item>
     </template>
-    <template #no-data> </template>
+    <template #no-data>
+      <v-list-item v-if="isBaseDataListEmpty && !searchText">
+        <template #prepend>
+          <v-icon :icon="mdiInformation" />
+        </template>
+        <v-list-item-title> Name eingeben zum Anlegen </v-list-item-title>
+      </v-list-item>
+    </template>
   </v-autocomplete>
 </template>
 
@@ -50,6 +57,7 @@ import {
   mdiFileDocumentEdit,
   mdiFileDocumentMultiple,
   mdiFileDocumentPlus,
+  mdiInformation,
 } from "@mdi/js";
 import { computed, ref, useTemplateRef } from "vue";
 
@@ -79,6 +87,7 @@ function updateSelection(selectedItem: BaseData | null) {
   }
 }
 
+const isBaseDataListEmpty = computed(() => props.baseDataList.length === 0);
 const baseDataNames = computed(() =>
   props.baseDataList.map((baseData) => baseData.name)
 );
@@ -98,7 +107,7 @@ function createNewBaseDataByName() {
     unions: [],
     groups: [],
   });
-  autocompleteRef.value?.reset();
+  reset();
   unfocus();
 }
 
@@ -117,7 +126,15 @@ function createNewEmptyBaseData() {
   });
 }
 
+function reset() {
+  autocompleteRef.value?.reset();
+}
+
 function unfocus() {
   autocompleteRef.value?.blur();
 }
+
+defineExpose({
+  reset,
+});
 </script>
