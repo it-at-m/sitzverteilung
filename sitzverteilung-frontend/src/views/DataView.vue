@@ -54,7 +54,7 @@
 import type { BaseData } from "@/types/BaseData";
 
 import { mdiContentSave, mdiDelete } from "@mdi/js";
-import {computed, ref, toRaw, useTemplateRef, watch} from "vue";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
@@ -132,7 +132,6 @@ watch(selectedBaseData, (newBaseData) => {
     reset();
     return;
   }
-  console.log(structuredClone(toRaw(newBaseData)));
   currentBaseData.value = structuredClone(toRaw(newBaseData)); // JSON.parse(JSON.stringify(newBaseData));
 });
 
