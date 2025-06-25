@@ -132,7 +132,7 @@ watch(selectedBaseData, (newBaseData) => {
     reset();
     return;
   }
-  currentBaseData.value = structuredClone(toRaw(newBaseData)); // JSON.parse(JSON.stringify(newBaseData));
+  currentBaseData.value = structuredClone(toRaw(newBaseData));
 });
 
 function reset() {
