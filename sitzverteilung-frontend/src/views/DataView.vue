@@ -19,7 +19,7 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isValid || !dirty"
+            :disabled="!isValid || (isBaseDataSelected && !dirty)"
             @click="saveBaseData"
             >{{ isBaseDataSelected ? "Aktualisieren" : "Anlegen" }}
           </v-btn>
