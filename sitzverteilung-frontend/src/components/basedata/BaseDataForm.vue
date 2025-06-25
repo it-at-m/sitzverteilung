@@ -6,7 +6,7 @@
     <v-row>
       <v-col>
         <v-text-field
-          v-model="baseData.name"
+          v-model.trim="baseData.name"
           :rules="[
             FieldValidationRules.Required,
             FieldValidationRules.IsUnique(comparedBaseDataNames),

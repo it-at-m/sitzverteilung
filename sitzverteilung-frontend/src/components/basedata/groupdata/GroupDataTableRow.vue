@@ -5,7 +5,7 @@
     </td>
     <td>
       <v-text-field
-        v-model="group.name"
+        v-model.trim="group.name"
         ref="nameInputField"
         :rules="
           applyRules

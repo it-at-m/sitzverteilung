@@ -103,7 +103,7 @@ function clickClear() {
 
 function createNewBaseDataByName() {
   emit("update", {
-    name: searchText.value,
+    name: searchText.value.trim(),
     committeeSize: undefined,
     unions: [],
     groups: [],
