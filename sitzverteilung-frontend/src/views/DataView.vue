@@ -19,7 +19,7 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isValid || !dirty"
+            :disabled="!isValid && !dirty"
             @click="saveBaseData"
             >{{ isBaseDataSelected ? "Aktualisieren" : "Anlegen" }}
           </v-btn>
@@ -31,8 +31,9 @@
             :prepend-icon="mdiDelete"
             :disabled="!isBaseDataSelected"
             @click="deleteSelectedBaseData"
-            >Löschen</v-btn
           >
+            Löschen
+          </v-btn>
         </v-col>
       </v-row>
     </v-toolbar>
@@ -82,7 +83,7 @@ const isBaseDataSelected = computed(
     baseDataNames.value.includes(selectedBaseData.value.name)
 );
 
-const currentBaseData = ref<BaseData | undefined>(getEmptyBaseData());
+const currentBaseData = ref<BaseData>(getEmptyBaseData());
 
 const isValid = ref(false);
 function updateIsValid(newIsValid: boolean) {
