@@ -1,10 +1,10 @@
 import type { BaseData } from "@/types/BaseData";
 
 import { acceptHMRUpdate, defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 export const useBaseDataStore = defineStore("basedata", () => {
-  const baseDatas = ref<BaseData[]>([
+  const internalBaseDatas = ref<BaseData[]>([
     {
       name: "Testbasisdaten",
       committeeSize: 100,
@@ -23,29 +23,44 @@ export const useBaseDataStore = defineStore("basedata", () => {
       unions: [],
     },
   ]);
+  const baseDatas = computed(() => internalBaseDatas.value);
 
-  function addOrUpdateBaseData(baseData: BaseData) {
-    const index = baseDatas.value.findIndex(
+  function addBaseData(baseData: BaseData) {
+    const index = internalBaseDatas.value.findIndex(
       (data) => data.name === baseData.name
     );
     if (index === -1) {
-      baseDatas.value.push(baseData);
-    } else {
-      baseDatas.value[index] = baseData;
+      internalBaseDatas.value.push(baseData);
+    }
+  }
+
+  function updateBaseData(name: string, baseData: BaseData) {
+    const index = internalBaseDatas.value.findIndex(
+      (data) => data.name === name
+    );
+    if (index !== -1) {
+      internalBaseDatas.value[index] = baseData;
     }
   }
 
   function deleteBaseData(name: string) {
-    baseDatas.value = baseDatas.value.filter(
+    internalBaseDatas.value = internalBaseDatas.value.filter(
       (baseData) => baseData.name !== name
     );
   }
 
   function deleteAllBaseData() {
-    baseDatas.value = [];
+    internalBaseDatas.value = [];
   }
 
-  return { baseDatas, addOrUpdateBaseData, deleteBaseData, deleteAllBaseData };
+  return {
+    internalBaseDatas,
+    baseDatas,
+    addBaseData,
+    updateBaseData,
+    deleteBaseData,
+    deleteAllBaseData,
+  };
 });
 
 if (import.meta.hot) {

@@ -1,12 +1,15 @@
 <template>
-  <v-form @update:modelValue="validChanged">
+  <v-form
+    @update:modelValue="validChanged"
+    ref="baseDataFormRef"
+  >
     <v-row>
       <v-col>
         <v-text-field
           v-model="baseData.name"
           :rules="[
             FieldValidationRules.Required,
-            FieldValidationRules.IsUnique(newBaseDataNames),
+            FieldValidationRules.IsUnique(comparedBaseDataNames),
           ]"
           hide-details="auto"
           validate-on="input"
@@ -44,18 +47,20 @@
 
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
+import type { VForm } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
-import { computed, toRef } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
 import { FieldValidationRules } from "@/utility/rules";
 
 const baseData = defineModel<BaseData>({ required: true });
-const groups = toRef(baseData.value, "groups");
+const groups = computed(() => baseData.value.groups);
 
 const {
+  isEditing,
   limitVotes = 100_000_000,
   limitCommitteeSize = 999,
   baseDataNames = [],
@@ -63,6 +68,7 @@ const {
   limitVotes?: number;
   limitCommitteeSize?: number;
   baseDataNames?: string[];
+  isEditing: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -82,14 +88,22 @@ const seatFieldValidationError = computed(() => {
   return "";
 });
 
-const newBaseDataNames = computed(() => [
-  ...baseDataNames,
-  baseData.value.name,
-]);
+const comparedBaseDataNames = computed(() =>
+  isEditing ? baseDataNames : [...baseDataNames, baseData.value.name]
+);
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
   groups,
   expectedSeats
 );
+
+const baseDataFormRef = useTemplateRef<VForm>("baseDataFormRef");
+function reset() {
+  baseDataFormRef.value?.reset();
+}
+
+defineExpose({
+  reset,
+});
 </script>

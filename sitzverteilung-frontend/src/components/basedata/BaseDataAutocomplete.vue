@@ -14,6 +14,7 @@
     @click:clear.stop="clickClear"
     label="Basisdaten wählen (optional)"
     hide-details
+    single-line
     :prepend-inner-icon="mdiFileDocumentMultiple"
     glow
     variant="outlined"
@@ -74,7 +75,7 @@ const props = defineProps<{
 const searchText = ref("");
 function updateSearchText(newSearchText: string) {
   searchText.value = newSearchText;
-  if (!newSearchText || newSearchText.trim() == "") {
+  if (!newSearchText || newSearchText.trim() === "") {
     itemSelected.value = false;
   }
 }

@@ -11,7 +11,7 @@
           <base-data-autocomplete
             ref="baseDataAutocompleteRef"
             @update="updatedBaseDataSelection"
-            :base-data-list="storedBaseDatas"
+            :base-data-list="storedBaseData"
           />
           <v-btn
             variant="flat"
@@ -19,9 +19,10 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isValid"
-            >Speichern</v-btn
-          >
+            :disabled="!isValid || !dirty"
+            @click="saveBaseData"
+            >{{ isBaseDataSelected ? "Aktualisieren" : "Anlegen" }}
+          </v-btn>
           <v-btn
             variant="flat"
             color="red"
@@ -38,9 +39,11 @@
     <v-row>
       <v-col>
         <base-data-form
+          ref="baseDataFormRef"
           v-model="currentBaseData"
           @valid-changed="updateIsValid"
           :base-data-names="baseDataNames"
+          :is-editing="isBaseDataSelected"
         />
       </v-col>
     </v-row>
@@ -56,9 +59,19 @@ import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import { useBaseDataStore } from "@/stores/basedata.ts";
 
-const { baseDatas: storedBaseDatas, deleteBaseData } = useBaseDataStore();
+const store = useBaseDataStore();
+
+const storedBaseData = computed(() => store.baseDatas);
+
+const dirty = computed(
+  () =>
+    isBaseDataSelected.value &&
+    JSON.stringify(currentBaseData.value) !==
+      JSON.stringify(selectedBaseData.value)
+);
+
 const baseDataNames = computed(() =>
-  storedBaseDatas.map((baseData) => baseData.name)
+  storedBaseData.value.map((baseData) => baseData.name)
 );
 
 const selectedBaseData = ref<BaseData>();
@@ -85,9 +98,23 @@ function getEmptyBaseData(): BaseData {
   };
 }
 
+function saveBaseData() {
+  if (currentBaseData.value) {
+    const copy = JSON.parse(JSON.stringify(currentBaseData.value));
+    if (isBaseDataSelected.value && selectedBaseData.value) {
+      store.updateBaseData(selectedBaseData.value.name, copy);
+      selectedBaseData.value = undefined;
+    } else {
+      store.addBaseData(copy);
+      reset();
+    }
+  }
+}
+
+const baseDataFormRef = useTemplateRef("baseDataFormRef");
 function deleteSelectedBaseData() {
   if (isBaseDataSelected.value && selectedBaseData.value) {
-    deleteBaseData(selectedBaseData.value.name);
+    store.deleteBaseData(selectedBaseData.value.name);
     selectedBaseData.value = undefined;
   }
 }
@@ -100,11 +127,16 @@ const baseDataAutocompleteRef = useTemplateRef<typeof BaseDataAutocomplete>(
   "baseDataAutocompleteRef"
 );
 watch(selectedBaseData, (newBaseData) => {
-  if (newBaseData === undefined) {
-    currentBaseData.value = getEmptyBaseData();
-    baseDataAutocompleteRef.value?.reset();
+  if (newBaseData === undefined || newBaseData.name === "") {
+    reset();
     return;
   }
   currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
 });
+
+function reset() {
+  baseDataAutocompleteRef.value?.reset();
+  baseDataFormRef.value?.reset();
+  currentBaseData.value = getEmptyBaseData();
+}
 </script>
