@@ -19,7 +19,7 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isValid && !dirty"
+            :disabled="!isValid || !dirty"
             @click="saveBaseData"
             >{{ isBaseDataSelected ? "Aktualisieren" : "Anlegen" }}
           </v-btn>
@@ -54,7 +54,7 @@
 import type { BaseData } from "@/types/BaseData";
 
 import { mdiContentSave, mdiDelete } from "@mdi/js";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import {computed, ref, toRaw, useTemplateRef, watch} from "vue";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
@@ -101,7 +101,7 @@ function getEmptyBaseData(): BaseData {
 
 function saveBaseData() {
   if (currentBaseData.value) {
-    const copy = JSON.parse(JSON.stringify(currentBaseData.value));
+    const copy = structuredClone(toRaw(currentBaseData.value));
     if (isBaseDataSelected.value && selectedBaseData.value) {
       store.updateBaseData(selectedBaseData.value.name, copy);
       selectedBaseData.value = undefined;
@@ -132,7 +132,8 @@ watch(selectedBaseData, (newBaseData) => {
     reset();
     return;
   }
-  currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
+  console.log(structuredClone(toRaw(newBaseData)));
+  currentBaseData.value = structuredClone(toRaw(newBaseData)); // JSON.parse(JSON.stringify(newBaseData));
 });
 
 function reset() {

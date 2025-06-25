@@ -75,7 +75,7 @@ const props = defineProps<{
 const searchText = ref("");
 function updateSearchText(newSearchText: string) {
   searchText.value = newSearchText;
-  if (!newSearchText || newSearchText.trim() === "") {
+  if (!newSearchText?.trim()) {
     itemSelected.value = false;
   }
 }
