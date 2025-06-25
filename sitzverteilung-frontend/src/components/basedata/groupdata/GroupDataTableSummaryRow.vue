@@ -11,7 +11,8 @@
     </td>
     <td>
       <p class="font-weight-bold">
-        Gesamtanzahl: {{ useNumberFormatter(totalSeats) }} von {{ useNumberFormatter(expectedSeats) }}
+        Gesamtanzahl: {{ useNumberFormatter(totalSeats) }} von
+        {{ useNumberFormatter(expectedSeats) }}
         <span
           v-if="isSeatsTooHigh"
           class="text-red"
@@ -24,7 +25,9 @@
       </p>
     </td>
     <td>
-      <p class="font-weight-bold">Gesamtanzahl: {{ useNumberFormatter(totalVotes) }}</p>
+      <p class="font-weight-bold">
+        Gesamtanzahl: {{ useNumberFormatter(totalVotes) }}
+      </p>
     </td>
     <td />
   </tr>
@@ -36,7 +39,7 @@ import type { Group } from "@/types/Group";
 import { toRefs } from "vue";
 
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
-import {useNumberFormatter} from "@/composables/useNumberFormatter.ts";
+import { useNumberFormatter } from "@/composables/useNumberFormatter.ts";
 
 const props = defineProps<{
   groups: Group[];
