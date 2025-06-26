@@ -3,10 +3,10 @@
     :headers="headers"
     :items="indexedGroups"
     hide-default-footer
-    hide-no-data
     no-filter
     disable-sort
     density="compact"
+    no-data-text="Es wurden noch keine Parteien/Gruppierungen hinzugefügt."
     show-select
     return-object
     v-model="selected"

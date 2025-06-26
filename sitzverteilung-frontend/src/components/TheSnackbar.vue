@@ -53,11 +53,13 @@ watch(
   () => snackbarStore.show,
   () => {
     if (snackbarStore.show) {
-      isShowing.value = false;
-      setTimeout(() => {
-        isShowing.value = true;
-        snackbarStore.show = false;
-      }, timeout.value);
+      isShowing.value = true;
+      if (timeout.value > 0) {
+        setTimeout(() => {
+          isShowing.value = false;
+          snackbarStore.show = false;
+        }, timeout.value);
+      }
     }
   }
 );
