@@ -53,9 +53,9 @@ watch(
   () => snackbarStore.show,
   () => {
     if (snackbarStore.show) {
-      isShowing.value = false;
+      isShowing.value = true;
       setTimeout(() => {
-        isShowing.value = true;
+        isShowing.value = false;
         snackbarStore.show = false;
       }, timeout.value);
     }

@@ -59,8 +59,10 @@ import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import { useBaseDataStore } from "@/stores/basedata.ts";
+import { useSnackbarStore } from "@/stores/snackbar.ts";
 
 const store = useBaseDataStore();
+const snackbar = useSnackbarStore();
 
 const storedBaseData = computed(() => store.baseDatas);
 
@@ -104,9 +106,15 @@ function saveBaseData() {
     const copy = structuredClone(toRaw(currentBaseData.value));
     if (isBaseDataSelected.value && selectedBaseData.value) {
       store.updateBaseData(selectedBaseData.value.name, copy);
+      snackbar.showMessage({
+        message: `Die Basisdaten '${copy.name}' wurden aktualisiert.`,
+      });
       selectedBaseData.value = undefined;
     } else {
       store.addBaseData(copy);
+      snackbar.showMessage({
+        message: `Die Basisdaten '${copy.name}' wurden angelegt.`,
+      });
       reset();
     }
   }
@@ -116,6 +124,9 @@ const baseDataFormRef = useTemplateRef("baseDataFormRef");
 function deleteSelectedBaseData() {
   if (isBaseDataSelected.value && selectedBaseData.value) {
     store.deleteBaseData(selectedBaseData.value.name);
+    snackbar.showMessage({
+      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden gelöscht.`,
+    });
     selectedBaseData.value = undefined;
   }
 }
