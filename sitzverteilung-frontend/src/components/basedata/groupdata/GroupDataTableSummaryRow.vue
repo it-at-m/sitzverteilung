@@ -3,15 +3,16 @@
     <td />
     <td>
       <p class="font-weight-bold">
-        Gesamtanzahl: {{ amountOfGroups
+        Gesamtanzahl: {{ numberFormatter(amountOfGroups)
         }}<span :class="{ 'text-red': isTooManyGroups }">
-          (max. {{ expectedSeats }})</span
+          (max. {{ numberFormatter(expectedSeats) }})</span
         >
       </p>
     </td>
     <td>
       <p class="font-weight-bold">
-        Gesamtanzahl: {{ totalSeats }} von {{ expectedSeats }}
+        Gesamtanzahl: {{ numberFormatter(totalSeats) }} von
+        {{ numberFormatter(expectedSeats) }}
         <span
           v-if="isSeatsTooHigh"
           class="text-red"
@@ -24,7 +25,9 @@
       </p>
     </td>
     <td>
-      <p class="font-weight-bold">Gesamtanzahl: {{ totalVotes }}</p>
+      <p class="font-weight-bold">
+        Gesamtanzahl: {{ numberFormatter(totalVotes) }}
+      </p>
     </td>
     <td />
   </tr>
@@ -36,6 +39,7 @@ import type { Group } from "@/types/Group";
 import { toRefs } from "vue";
 
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
+import { numberFormatter } from "@/utility/numberFormatter";
 
 const props = defineProps<{
   groups: Group[];
