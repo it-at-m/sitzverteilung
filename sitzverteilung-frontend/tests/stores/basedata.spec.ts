@@ -21,7 +21,7 @@ describe("BaseData Store", () => {
     const testData = getTestBaseData();
 
     // when
-    store.addOrUpdateBaseData(testData);
+    store.addBaseData(testData);
 
     // then
     expect(store.baseDatas.length).toBe(1);
@@ -32,14 +32,14 @@ describe("BaseData Store", () => {
     // given
     const store = useBaseDataStore();
     const testData = getTestBaseData();
-    store.addOrUpdateBaseData(testData);
+    store.addBaseData(testData);
     const newTestData: BaseData = {
       ...testData,
       committeeSize: 20,
     };
 
     // when
-    store.addOrUpdateBaseData(newTestData);
+    store.updateBaseData(testData.name, newTestData);
 
     // then
     expect(store.baseDatas.length).toBe(1);
@@ -49,12 +49,12 @@ describe("BaseData Store", () => {
   test("Delete BaseData", () => {
     const store = useBaseDataStore();
     const testData = getTestBaseData();
-    store.addOrUpdateBaseData(testData);
+    store.addBaseData(testData);
     const testData2: BaseData = {
       ...testData,
       name: "TestData 2",
     };
-    store.addOrUpdateBaseData(testData2);
+    store.addBaseData(testData2);
 
     // when
     store.deleteBaseData(testData.name);
@@ -68,12 +68,12 @@ describe("BaseData Store", () => {
     // given
     const store = useBaseDataStore();
     const testData = getTestBaseData();
-    store.addOrUpdateBaseData(testData);
+    store.addBaseData(testData);
     const testData2: BaseData = {
       ...testData,
       name: "TestData 2",
     };
-    store.addOrUpdateBaseData(testData2);
+    store.addBaseData(testData2);
 
     // when
     store.deleteAllBaseData();
