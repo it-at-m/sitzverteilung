@@ -38,7 +38,7 @@ import type { Group } from "@/types/Group";
 
 import { toRefs } from "vue";
 
-import { numberFormatter } from "@/composables/numberFormatter";
+import { numberFormatter } from "@/utility/numberFormatter";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
 
 const props = defineProps<{
