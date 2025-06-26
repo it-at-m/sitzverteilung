@@ -18,6 +18,7 @@
     :prepend-inner-icon="mdiFileDocumentMultiple"
     glow
     variant="outlined"
+    autocomplete="off"
   >
     <template #item="{ props }">
       <v-list-item v-bind="props">
