@@ -40,7 +40,6 @@ const {
   noText = "Nein",
 } = defineProps<{
   modelValue: boolean;
-  buttonText?: string;
   yesText?: string;
   yesColor?: string;
   noText?: string;
