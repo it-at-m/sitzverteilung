@@ -1,15 +1,24 @@
 <template>
-  <yes-no-dialog
-    :model-value="isDeleteConfirmationShown"
-    dialog-title="Basisdaten löschen?"
-    dialog-text="Wollen Sie die Basisdaten wirklich löschen?"
-    yes-text="Löschen"
-    no-text="Abbrechen"
-    yes-color="red"
-    @no="hideDeleteConfirmation"
-    @yes="deleteSelectedBaseData"
-  />
   <v-container>
+    <!-- SaveLeave dialog -->
+    <yes-no-dialog
+        :model-value="saveLeave.saveLeaveDialog.value"
+        :dialog-title="saveLeave.saveLeaveDialogTitle.value"
+        :dialog-text="saveLeave.saveLeaveDialogText.value"
+        @no="saveLeave.cancel()"
+        @yes="saveLeave.leave()"
+    />
+    <!-- Delete dialog -->
+    <yes-no-dialog
+        :model-value="isDeleteConfirmationShown"
+        dialog-title="Basisdaten löschen?"
+        dialog-text="Wollen Sie die Basisdaten wirklich löschen?"
+        yes-text="Löschen"
+        no-text="Abbrechen"
+        yes-color="red"
+        @no="hideDeleteConfirmation"
+        @yes="deleteSelectedBaseData"
+    />
     <v-row>
       <v-col>
         <h1>Verwaltung der Basisdaten</h1>
@@ -71,6 +80,7 @@ import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
 import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
+import { useSaveLeave } from "@/composables/useSaveLeave.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
@@ -83,6 +93,8 @@ const dirty = computed(
     JSON.stringify(currentBaseData.value) !==
       JSON.stringify(selectedBaseData.value)
 );
+const isDataEntered = computed(() => dirty.value || (!isBaseDataSelected.value && !dirty.value && JSON.stringify(currentBaseData.value) !== JSON.stringify(getEmptyBaseData())));
+const saveLeave = useSaveLeave(isDataEntered);
 
 const baseDataNames = computed(() =>
   storedBaseData.value.map((baseData) => baseData.name)
