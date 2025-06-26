@@ -1,4 +1,14 @@
 <template>
+  <yes-no-dialog
+    :model-value="isDeleteConfirmationShown"
+    dialog-title="Basisdaten löschen?"
+    dialog-text="Wollen Sie die Basisdaten wirklich löschen?"
+    yes-text="Löschen"
+    no-text="Abbrechen"
+    yes-color="red"
+    @no="hideDeleteConfirmation"
+    @yes="deleteSelectedBaseData"
+  />
   <v-container>
     <v-row>
       <v-col>
@@ -30,7 +40,7 @@
             class="mx-5"
             :prepend-icon="mdiDelete"
             :disabled="!isBaseDataSelected"
-            @click="deleteSelectedBaseData"
+            @click="showDeleteConfirmation"
           >
             Löschen
           </v-btn>
@@ -58,6 +68,7 @@ import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
+import YesNoDialog from "@/components/common/YesNoDialog.vue";
 import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
 
@@ -121,7 +132,15 @@ function saveBaseData() {
 }
 
 const baseDataFormRef = useTemplateRef("baseDataFormRef");
+const isDeleteConfirmationShown = ref(false);
+function showDeleteConfirmation() {
+  isDeleteConfirmationShown.value = true;
+}
+function hideDeleteConfirmation() {
+  isDeleteConfirmationShown.value = false;
+}
 function deleteSelectedBaseData() {
+  hideDeleteConfirmation();
   if (isBaseDataSelected.value && selectedBaseData.value) {
     store.deleteBaseData(selectedBaseData.value.name);
     snackbar.showMessage({
