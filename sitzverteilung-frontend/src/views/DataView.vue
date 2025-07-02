@@ -224,7 +224,10 @@ async function share() {
     const [path, ...params] = currentHash.split("?");
     const urlParams = new URLSearchParams(params.join("?") || "");
     try {
-      const importParam = await writeToUrlParam<BaseData>(selectedBaseData.value, window.location.toString());
+      const importParam = await writeToUrlParam<BaseData>(
+        selectedBaseData.value,
+        window.location.toString()
+      );
       urlParams.set("import", importParam);
       const shareUrl = `${window.location.origin}${window.location.pathname}#${path}?${urlParams.toString()}`;
 

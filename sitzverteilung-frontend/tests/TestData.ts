@@ -119,12 +119,13 @@ export function getTestBaseDataInputLimit(): BaseData {
   return {
     name: generateUniqueString(50), // 50
     committeeSize: generateUniqueNumber(3), // 999
-    groups: Array.from({ length: 18 }, () => ({ // 18
+    groups: Array.from({ length: 18 }, () => ({
+      // 18
       name: generateUniqueString(50), // 50
-      votes: generateUniqueNumber(9) // 100_000_000
+      votes: generateUniqueNumber(9), // 100_000_000
     })),
-    unions: []
-  }
+    unions: [],
+  };
 }
 
 export function getTestBaseDataInputTooLarge(): BaseData {
@@ -133,18 +134,23 @@ export function getTestBaseDataInputTooLarge(): BaseData {
     committeeSize: generateUniqueNumber(3),
     groups: Array.from({ length: 18 }, () => ({
       name: generateUniqueString(999),
-      votes: generateUniqueNumber(9)
+      votes: generateUniqueNumber(9),
     })),
-    unions: []
-  }
+    unions: [],
+  };
 }
 
-function generateUniqueString(length: number, characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?"): string {
-  let result = '';
+function generateUniqueString(
+  length: number,
+  characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?"
+): string {
+  let result = "";
   let previousChar = null;
 
   while (result.length < length) {
-    const randomChar = characters.charAt(Math.floor(Math.random() * characters.length));
+    const randomChar = characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
 
     if (randomChar !== previousChar) {
       result += randomChar;

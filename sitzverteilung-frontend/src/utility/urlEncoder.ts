@@ -1,4 +1,7 @@
-export async function writeToUrlParam<T>(object: T, url: string): Promise<string> {
+export async function writeToUrlParam<T>(
+  object: T,
+  url: string
+): Promise<string> {
   const json = JSON.stringify(object);
   const bytes = new TextEncoder().encode(json);
   const compressionStream = new CompressionStream("gzip");
@@ -11,11 +14,14 @@ export async function writeToUrlParam<T>(object: T, url: string): Promise<string
   const base = btoa(
     String.fromCharCode(...new Uint8Array(compressedArrayBuffer))
   );
-  const result = base.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const result = base
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
   if (result.length > 2048 - url.length) {
-    throw new Error("The amount of data to be url encoded is too high")
+    throw new Error("The amount of data to be url encoded is too high");
   }
-  return result
+  return result;
 }
 
 export async function writeUrlParamToObject<T>(urlParam: string): Promise<T> {
