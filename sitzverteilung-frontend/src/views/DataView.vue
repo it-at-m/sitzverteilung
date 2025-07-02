@@ -81,20 +81,20 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import type {BaseData} from "@/types/BaseData";
+import type { BaseData } from "@/types/BaseData";
 
-import {mdiContentSave, mdiDelete, mdiShare} from "@mdi/js";
-import {computed, ref, toRaw, useTemplateRef, watch} from "vue";
+import { mdiContentSave, mdiDelete, mdiShare } from "@mdi/js";
+import { useClipboard } from "@vueuse/core";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
-import {useSaveLeave} from "@/composables/useSaveLeave.ts";
-import {useBaseDataStore} from "@/stores/basedata.ts";
-import {useSnackbarStore} from "@/stores/snackbar.ts";
-import {writeToUrlParam} from "@/utility/urlEncoder.ts";
-import {useClipboard} from "@vueuse/core";
-import {STATUS_INDICATORS} from "@/constants.ts";
+import { useSaveLeave } from "@/composables/useSaveLeave.ts";
+import { STATUS_INDICATORS } from "@/constants.ts";
+import { useBaseDataStore } from "@/stores/basedata.ts";
+import { useSnackbarStore } from "@/stores/snackbar.ts";
+import { writeToUrlParam } from "@/utility/urlEncoder.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
@@ -210,15 +210,15 @@ async function share() {
     if (!isSupported.value) {
       snackbar.showMessage({
         message: `Das Kopieren in die Zwischenablage war nicht möglich.`,
-        level: STATUS_INDICATORS.ERROR
+        level: STATUS_INDICATORS.ERROR,
       });
-      return
+      return;
     }
 
     // Create shareable URL
     const currentHash = window.location.hash.slice(1);
-    const [path, ...params] = currentHash.split('?');
-    const urlParams = new URLSearchParams(params.join('?') || '');
+    const [path, ...params] = currentHash.split("?");
+    const urlParams = new URLSearchParams(params.join("?") || "");
     const importParam = await writeToUrlParam<BaseData>(selectedBaseData.value);
     urlParams.set("import", importParam);
     const shareUrl = `${window.location.origin}${window.location.pathname}#${path}?${urlParams.toString()}`;
