@@ -219,19 +219,19 @@ async function share() {
       return;
     }
 
-    // Create shareable URL
-    const urlParams = new URLSearchParams(
-      route.query as Record<string, string>
-    );
     try {
       const importParam = await writeToUrlParam<BaseData>(
         selectedBaseData.value,
         window.location.toString()
       );
-      urlParams.set("import", importParam);
-      const shareUrl = `${window.location.origin}${window.location.pathname}#${route.path}?${urlParams.toString()}`;
+      // Create shareable URL
+      const shareUrl = router.resolve({
+        path: route.path,
+        query: { ...route.query, import: importParam },
+      }).href;
+      const fullShareUrl = `${window.location.origin}/${shareUrl}`;
       // Copy to clipboard
-      await copy(shareUrl);
+      await copy(fullShareUrl);
       snackbar.showMessage({
         message: `Die Basisdaten '${selectedBaseData.value.name}' wurden als Link in die Zwischenablage kopiert.`,
       });
