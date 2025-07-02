@@ -75,8 +75,8 @@ import type { VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
-import { FieldValidationRules } from "@/utility/rules";
 import { preventTooLongInput } from "@/utility/input.ts";
+import { FieldValidationRules } from "@/utility/rules";
 
 const {
   isValidatingOnEmpty = true,
@@ -84,7 +84,7 @@ const {
   groupNames,
   limitSeats,
   limitVotes,
-  limitName
+  limitName,
 } = defineProps<{
   isValidatingOnEmpty?: boolean;
   disabled?: boolean;
@@ -162,11 +162,7 @@ function validate() {
 }
 
 function checkNameField(event: KeyboardEvent) {
-  preventTooLongInput(
-      group.value.name,
-      limitName,
-      event
-  );
+  preventTooLongInput(group.value.name, limitName, event);
 }
 
 function resetValidation() {

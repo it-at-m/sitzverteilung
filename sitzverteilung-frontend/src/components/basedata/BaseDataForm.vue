@@ -14,6 +14,9 @@
           hide-details="auto"
           validate-on="input"
           label="Name"
+          @keydown="checkNameField"
+          @paste="checkNameField"
+          @drop.prevent
           :prepend-inner-icon="mdiLabel"
           glow
         />
@@ -48,13 +51,14 @@
 
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
-import type { VForm } from "vuetify/components";
+import type { VForm, VTextField } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
 import { computed, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
+import { preventTooLongInput } from "@/utility/input.ts";
 import { FieldValidationRules } from "@/utility/rules";
 
 const baseData = defineModel<BaseData>({ required: true });
@@ -90,6 +94,10 @@ const seatFieldValidationError = computed(() => {
     return "Die Anzahl an Parteien/Gruppierungen übersteigt den angegebenen Wert.";
   return "";
 });
+
+function checkNameField(event: KeyboardEvent) {
+  preventTooLongInput(baseData.value.name, limitName, event);
+}
 
 const comparedBaseDataNames = computed(() =>
   isEditing ? baseDataNames : [...baseDataNames, baseData.value.name]
