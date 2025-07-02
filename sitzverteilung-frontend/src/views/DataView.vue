@@ -247,19 +247,26 @@ async function share() {
 const route = useRoute();
 const router = useRouter();
 watch(
-  () => route.query,
-  async (newQuery) => {
-    const importParam = newQuery.import?.toString() ?? "";
+  () => route.query.import,
+  async (newImport) => {
+    const importParam = newImport?.toString() ?? "";
     if (importParam !== "") {
       try {
         const baseData = await writeUrlParamToObject<BaseData>(importParam);
-        snackbar.showMessage({
-          message: `Die Basisdaten '${baseData.name}' wurden importiert. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
-        });
-        selectedBaseData.value = undefined;
-        await nextTick(() => {
-          currentBaseData.value = baseData;
-        });
+        if (!isValidBaseData(baseData)) {
+          snackbar.showMessage({
+            message: "Die Basisdaten im Link sind ungültig.",
+            level: STATUS_INDICATORS.ERROR,
+          });
+        } else {
+          selectedBaseData.value = undefined;
+          await nextTick(() => {
+            currentBaseData.value = baseData;
+          });
+          snackbar.showMessage({
+            message: `Die Basisdaten '${baseData.name}' wurden importiert. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
+          });
+        }
       } catch {
         snackbar.showMessage({
           message: "Die Basisdaten im Link sind ungültig.",
@@ -268,9 +275,20 @@ watch(
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { import: _, ...nextQuery } = newQuery;
+    const { import: _, ...nextQuery } = route.query;
     await router.replace({ path: route.path, query: nextQuery });
   },
-  { deep: true, immediate: true }
+  { immediate: true }
 );
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isValidBaseData(x: any): x is BaseData {
+  return (
+    x &&
+    typeof x.name === "string" &&
+    (x.committeeSize === undefined || typeof x.committeeSize === "number") &&
+    Array.isArray(x.groups) &&
+    Array.isArray(x.unions)
+  );
+}
 </script>

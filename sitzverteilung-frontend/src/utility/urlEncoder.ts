@@ -2,6 +2,9 @@ export async function writeToUrlParam<T>(
   object: T,
   url: string
 ): Promise<string> {
+  if (typeof CompressionStream === "undefined") {
+    throw new Error("CompressionStream is not supported in this browser");
+  }
   const json = JSON.stringify(object);
   const bytes = new TextEncoder().encode(json);
   const compressionStream = new CompressionStream("gzip");
@@ -11,8 +14,9 @@ export async function writeToUrlParam<T>(
   const compressedArrayBuffer = await new Response(
     compressedStream
   ).arrayBuffer();
+  const uint8Array = new Uint8Array(compressedArrayBuffer);
   const base = btoa(
-    String.fromCharCode(...new Uint8Array(compressedArrayBuffer))
+    Array.from(uint8Array, (byte) => String.fromCharCode(byte)).join("")
   );
   const result = base
     .replace(/\+/g, "-")
@@ -25,13 +29,12 @@ export async function writeToUrlParam<T>(
 }
 
 export async function writeUrlParamToObject<T>(urlParam: string): Promise<T> {
+  if (typeof DecompressionStream === "undefined") {
+    throw new Error("CompressionStream is not supported in this browser");
+  }
   const base64 = urlParam.replace(/-/g, "+").replace(/_/g, "/");
   const binaryString = atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
+  const bytes = Uint8Array.from(binaryString, (char) => char.charCodeAt(0));
   const blob = new Blob([bytes]);
   const decompressionStream = new DecompressionStream("gzip");
   const decompressedStream = blob.stream().pipeThrough(decompressionStream);

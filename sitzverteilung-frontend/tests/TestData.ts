@@ -162,6 +162,10 @@ function generateUniqueString(
 }
 
 function generateUniqueNumber(length: number): number {
-  const numberString = generateUniqueString(length, "0123456789");
+  if (length === 0) return 0;
+  const firstDigit = generateUniqueString(1, "123456789");
+  const remainingDigits =
+    length > 1 ? generateUniqueString(length - 1, "0123456789") : "";
+  const numberString = firstDigit + remainingDigits;
   return Number(numberString);
 }
