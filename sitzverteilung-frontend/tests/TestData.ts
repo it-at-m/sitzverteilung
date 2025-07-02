@@ -7,7 +7,7 @@ export function getTestBaseData(): BaseData {
     committeeSize: 60,
     groups: [
       {
-        name: "Testgroup 1",
+        name: "Testgroup 1 ä",
         committeeSeats: 10,
         votes: 100,
       },
@@ -113,4 +113,49 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
     ],
     unions: [],
   };
+}
+
+export function getTestBaseDataInputLimit(): BaseData {
+  return {
+    name: generateUniqueString(50), // 50
+    committeeSize: generateUniqueNumber(3), // 999
+    groups: Array.from({ length: 18 }, () => ({ // 18
+      name: generateUniqueString(50), // 50
+      votes: generateUniqueNumber(9) // 100_000_000
+    })),
+    unions: []
+  }
+}
+
+export function getTestBaseDataInputTooLarge(): BaseData {
+  return {
+    name: generateUniqueString(999),
+    committeeSize: generateUniqueNumber(3),
+    groups: Array.from({ length: 18 }, () => ({
+      name: generateUniqueString(999),
+      votes: generateUniqueNumber(9)
+    })),
+    unions: []
+  }
+}
+
+function generateUniqueString(length: number, characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?"): string {
+  let result = '';
+  let previousChar = null;
+
+  while (result.length < length) {
+    const randomChar = characters.charAt(Math.floor(Math.random() * characters.length));
+
+    if (randomChar !== previousChar) {
+      result += randomChar;
+      previousChar = randomChar;
+    }
+  }
+
+  return result;
+}
+
+function generateUniqueNumber(length: number): number {
+  const numberString = generateUniqueString(length, "0123456789");
+  return Number(numberString);
 }
