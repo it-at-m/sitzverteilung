@@ -46,12 +46,23 @@
             variant="flat"
             color="red"
             size="large"
-            class="mx-5"
+            class="ml-5"
             :prepend-icon="mdiDelete"
             :disabled="!isBaseDataSelected"
             @click="showDeleteConfirmation"
           >
             Löschen
+          </v-btn>
+          <v-btn
+            variant="flat"
+            color="blue"
+            size="large"
+            class="mx-5"
+            :prepend-icon="mdiShare"
+            :disabled="!isBaseDataSelected || dirty"
+            @click="share"
+          >
+            Teilen
           </v-btn>
         </v-col>
       </v-row>
@@ -70,17 +81,20 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import type { BaseData } from "@/types/BaseData";
+import type {BaseData} from "@/types/BaseData";
 
-import { mdiContentSave, mdiDelete } from "@mdi/js";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import {mdiContentSave, mdiDelete, mdiShare} from "@mdi/js";
+import {computed, ref, toRaw, useTemplateRef, watch} from "vue";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
-import { useSaveLeave } from "@/composables/useSaveLeave.ts";
-import { useBaseDataStore } from "@/stores/basedata.ts";
-import { useSnackbarStore } from "@/stores/snackbar.ts";
+import {useSaveLeave} from "@/composables/useSaveLeave.ts";
+import {useBaseDataStore} from "@/stores/basedata.ts";
+import {useSnackbarStore} from "@/stores/snackbar.ts";
+import {writeToUrlParam} from "@/utility/urlEncoder.ts";
+import {useClipboard} from "@vueuse/core";
+import {STATUS_INDICATORS} from "@/constants.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
@@ -188,5 +202,32 @@ function reset() {
   baseDataAutocompleteRef.value?.reset();
   baseDataFormRef.value?.reset();
   currentBaseData.value = getEmptyBaseData();
+}
+
+const { copy, isSupported } = useClipboard();
+async function share() {
+  if (isBaseDataSelected.value && selectedBaseData.value) {
+    if (!isSupported.value) {
+      snackbar.showMessage({
+        message: `Das Kopieren in die Zwischenablage war nicht möglich.`,
+        level: STATUS_INDICATORS.ERROR
+      });
+      return
+    }
+
+    // Create shareable URL
+    const currentHash = window.location.hash.slice(1);
+    const [path, ...params] = currentHash.split('?');
+    const urlParams = new URLSearchParams(params.join('?') || '');
+    const importParam = await writeToUrlParam<BaseData>(selectedBaseData.value);
+    urlParams.set("import", importParam);
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${path}?${urlParams.toString()}`;
+
+    // Copy to clipboard
+    await copy(shareUrl);
+    snackbar.showMessage({
+      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden in die Zwischenablage kopiert.`,
+    });
+  }
 }
 </script>
