@@ -220,7 +220,9 @@ async function share() {
     }
 
     // Create shareable URL
-    const urlParams = new URLSearchParams(route.query as Record<string, string>);
+    const urlParams = new URLSearchParams(
+      route.query as Record<string, string>
+    );
     try {
       const importParam = await writeToUrlParam<BaseData>(
         selectedBaseData.value,
