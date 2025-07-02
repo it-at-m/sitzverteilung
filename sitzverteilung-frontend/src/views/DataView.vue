@@ -223,15 +223,21 @@ async function share() {
     const currentHash = window.location.hash.slice(1);
     const [path, ...params] = currentHash.split("?");
     const urlParams = new URLSearchParams(params.join("?") || "");
-    const importParam = await writeToUrlParam<BaseData>(selectedBaseData.value);
-    urlParams.set("import", importParam);
-    const shareUrl = `${window.location.origin}${window.location.pathname}#${path}?${urlParams.toString()}`;
+    try {
+      const importParam = await writeToUrlParam<BaseData>(selectedBaseData.value, window.location.toString());
+      urlParams.set("import", importParam);
+      const shareUrl = `${window.location.origin}${window.location.pathname}#${path}?${urlParams.toString()}`;
 
-    // Copy to clipboard
-    await copy(shareUrl);
-    snackbar.showMessage({
-      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden als Link in die Zwischenablage kopiert.`,
-    });
+      // Copy to clipboard
+      await copy(shareUrl);
+      snackbar.showMessage({
+        message: `Die Basisdaten '${selectedBaseData.value.name}' wurden als Link in die Zwischenablage kopiert.`,
+      });
+    } catch {
+      snackbar.showMessage({
+        message: `Die Basisdaten '${selectedBaseData.value.name}' konnten nicht in einen Link umgewandelt werden.`,
+      });
+    }
   }
 }
 
