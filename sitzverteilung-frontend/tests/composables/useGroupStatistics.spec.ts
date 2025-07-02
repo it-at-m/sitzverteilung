@@ -16,9 +16,11 @@ describe("useGroupStatistics composable", () => {
     const testBaseData = getTestBaseData();
     const groups = ref(testBaseData.groups);
     const expectedSeats = ref(testBaseData.committeeSize);
+    const limitGroups = ref(10);
 
     const { amountOfGroups, totalSeats, totalVotes } = useGroupStatistics(
       groups,
+      limitGroups,
       expectedSeats
     );
 
@@ -43,10 +45,11 @@ describe("useGroupStatistics composable", () => {
       expectedSeatsTooLow
     ) => {
       const groups = ref(testBaseData.groups);
+      const limitGroups = ref(10);
       const expectedSeats = ref(testBaseData.committeeSize);
 
       const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } =
-        useGroupStatistics(groups, expectedSeats);
+        useGroupStatistics(groups, limitGroups, expectedSeats);
 
       expect(isTooManyGroups.value).toBe(expectedTooManyGroups);
       expect(isSeatsTooHigh.value).toBe(expectedSeatsTooHigh);
