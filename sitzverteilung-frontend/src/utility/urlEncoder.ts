@@ -30,7 +30,7 @@ export async function writeToUrlParam<T>(
 
 export async function writeUrlParamToObject<T>(urlParam: string): Promise<T> {
   if (typeof DecompressionStream === "undefined") {
-    throw new Error("CompressionStream is not supported in this browser");
+    throw new Error("DecompressionStream is not supported in this browser");
   }
   const base64 = urlParam.replace(/-/g, "+").replace(/_/g, "/");
   const binaryString = atob(base64);

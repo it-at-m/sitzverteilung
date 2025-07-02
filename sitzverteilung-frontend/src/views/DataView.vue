@@ -281,14 +281,17 @@ watch(
   { immediate: true }
 );
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function isValidBaseData(x: any): x is BaseData {
   return (
     x &&
     typeof x.name === "string" &&
-    (x.committeeSize === undefined || typeof x.committeeSize === "number") &&
+    typeof x.committeeSize === "number" &&
     Array.isArray(x.groups) &&
-    Array.isArray(x.unions)
+    Array.isArray(x.unions) &&
+    x.groups.every((group: any) => group && typeof group.name === "string") &&
+    x.unions.every((union: any) => union && Array.isArray(union.groups))
   );
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 </script>
