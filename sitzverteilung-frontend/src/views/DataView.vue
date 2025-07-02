@@ -253,8 +253,7 @@ watch(
         });
       } catch {
         snackbar.showMessage({
-          message:
-            "Die Basisdaten im Link sind ungültig.",
+          message: "Die Basisdaten im Link sind ungültig.",
           level: STATUS_INDICATORS.ERROR,
         });
       }
