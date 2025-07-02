@@ -10,6 +10,7 @@
     show-select
     return-object
     v-model="selected"
+    items-per-page="-1"
   >
     <template #top>
       <v-toolbar
