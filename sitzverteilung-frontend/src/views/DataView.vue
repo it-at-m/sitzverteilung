@@ -85,7 +85,8 @@ import type { BaseData } from "@/types/BaseData";
 
 import { mdiContentSave, mdiDelete, mdiShare } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, toRaw, useTemplateRef, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
@@ -94,7 +95,10 @@ import { useSaveLeave } from "@/composables/useSaveLeave.ts";
 import { STATUS_INDICATORS } from "@/constants.ts";
 import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
-import { writeToUrlParam } from "@/utility/urlEncoder.ts";
+import {
+  writeToUrlParam,
+  writeUrlParamToObject,
+} from "@/utility/urlEncoder.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
@@ -230,4 +234,35 @@ async function share() {
     });
   }
 }
+
+const route = useRoute();
+const router = useRouter();
+watch(
+  () => route.query,
+  async (newQuery) => {
+    const importParam = newQuery.import?.toString() ?? "";
+    if (importParam !== "") {
+      try {
+        const baseData = await writeUrlParamToObject<BaseData>(importParam);
+        snackbar.showMessage({
+          message: `Die Basisdaten '${baseData.name}' wurden importiert. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
+        });
+        selectedBaseData.value = undefined;
+        await nextTick(() => {
+          currentBaseData.value = baseData;
+        });
+      } catch {
+        snackbar.showMessage({
+          message:
+            "Beim Importieren der Basisdaten ist ein Fehler aufgetreten.",
+          level: STATUS_INDICATORS.ERROR,
+        });
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { import: _, ...nextQuery } = newQuery;
+    await router.replace({ path: route.path, query: nextQuery });
+  },
+  { deep: true, immediate: true }
+);
 </script>
