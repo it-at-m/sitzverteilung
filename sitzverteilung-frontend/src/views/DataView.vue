@@ -220,17 +220,14 @@ async function share() {
     }
 
     // Create shareable URL
-    const currentHash = window.location.hash.slice(1);
-    const [path, ...params] = currentHash.split("?");
-    const urlParams = new URLSearchParams(params.join("?") || "");
+    const urlParams = new URLSearchParams(route.query as Record<string, string>);
     try {
       const importParam = await writeToUrlParam<BaseData>(
         selectedBaseData.value,
         window.location.toString()
       );
       urlParams.set("import", importParam);
-      const shareUrl = `${window.location.origin}${window.location.pathname}#${path}?${urlParams.toString()}`;
-
+      const shareUrl = `${window.location.origin}${window.location.pathname}#${route.path}?${urlParams.toString()}`;
       // Copy to clipboard
       await copy(shareUrl);
       snackbar.showMessage({
