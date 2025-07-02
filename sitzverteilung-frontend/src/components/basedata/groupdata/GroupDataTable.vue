@@ -107,6 +107,7 @@
       />
       <group-data-table-summary-row
         :groups="groups"
+        :limit-groups="limitGroups"
         :expected-seats="expectedSeats"
       />
     </template>
@@ -134,13 +135,14 @@ const headers = [
 const props = defineProps<{
   expectedSeats: number;
   limitName: number;
+  limitGroups: number;
   limitVotes: number;
 }>();
 
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
 const isGroupLimitReached = computed(
-  () => groups.value.length >= props.expectedSeats
+  () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
 );
 
 function addNewGroup(group: Group) {

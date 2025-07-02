@@ -230,7 +230,7 @@ async function share() {
     // Copy to clipboard
     await copy(shareUrl);
     snackbar.showMessage({
-      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden in die Zwischenablage kopiert.`,
+      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden als Link in die Zwischenablage kopiert.`,
     });
   }
 }
@@ -254,7 +254,7 @@ watch(
       } catch {
         snackbar.showMessage({
           message:
-            "Beim Importieren der Basisdaten ist ein Fehler aufgetreten.",
+            "Die Basisdaten im Link sind ungültig.",
           level: STATUS_INDICATORS.ERROR,
         });
       }

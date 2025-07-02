@@ -42,6 +42,7 @@
           v-model="baseData.groups"
           :expected-seats="expectedSeats"
           :limit-name="limitName"
+          :limit-groups="limitGroups"
           :limit-votes="limitVotes"
         />
       </v-col>
@@ -54,7 +55,7 @@ import type { BaseData } from "@/types/BaseData";
 import type { VForm, VTextField } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
-import { computed, useTemplateRef } from "vue";
+import { computed, toRef, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
@@ -67,11 +68,13 @@ const groups = computed(() => baseData.value.groups);
 const {
   isEditing,
   limitName = 50,
+  limitGroups = 18,
   limitVotes = 100_000_000,
   limitCommitteeSize = 999,
   baseDataNames = [],
 } = defineProps<{
   limitName?: number;
+  limitGroups?: number;
   limitVotes?: number;
   limitCommitteeSize?: number;
   baseDataNames?: string[];
@@ -104,8 +107,10 @@ const comparedBaseDataNames = computed(() =>
 );
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
+const limitGroupsRef = toRef(() => limitGroups);
 const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
   groups,
+  limitGroupsRef,
   expectedSeats
 );
 
