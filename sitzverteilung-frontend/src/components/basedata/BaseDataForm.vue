@@ -38,6 +38,7 @@
         <group-data-table
           v-model="baseData.groups"
           :expected-seats="expectedSeats"
+          :limit-name="limitName"
           :limit-votes="limitVotes"
         />
       </v-col>
@@ -61,10 +62,12 @@ const groups = computed(() => baseData.value.groups);
 
 const {
   isEditing,
+  limitName = 50,
   limitVotes = 100_000_000,
   limitCommitteeSize = 999,
   baseDataNames = [],
 } = defineProps<{
+  limitName?: number;
   limitVotes?: number;
   limitCommitteeSize?: number;
   baseDataNames?: string[];

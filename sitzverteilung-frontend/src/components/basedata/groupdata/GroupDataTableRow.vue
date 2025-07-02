@@ -22,6 +22,9 @@
         density="compact"
         class="py-3"
         @keydown.enter="hitEnter"
+        @keydown="checkNameField"
+        @paste="checkNameField"
+        @drop.prevent
         :disabled="disabled"
       />
     </td>
@@ -73,6 +76,7 @@ import type { VTextField } from "vuetify/components";
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
 import { FieldValidationRules } from "@/utility/rules";
+import { preventTooLongInput } from "@/utility/input.ts";
 
 const {
   isValidatingOnEmpty = true,
@@ -80,12 +84,14 @@ const {
   groupNames,
   limitSeats,
   limitVotes,
+  limitName
 } = defineProps<{
   isValidatingOnEmpty?: boolean;
   disabled?: boolean;
   groupNames: string[];
   limitSeats: number;
   limitVotes: number;
+  limitName: number;
 }>();
 
 const group = defineModel<Group>({ required: true });
@@ -153,6 +159,14 @@ function validate() {
     committeeSeatsInputField.value?.validate(true);
     votesInputField.value?.validate(true);
   });
+}
+
+function checkNameField(event: KeyboardEvent) {
+  preventTooLongInput(
+      group.value.name,
+      limitName,
+      event
+  );
 }
 
 function resetValidation() {

@@ -69,6 +69,7 @@
         :ref="groupDataTableRowsRef.set"
         v-model="groups[index]"
         :group-names="groupNames"
+        :limit-name="limitName"
         :limit-seats="expectedSeats"
         :limit-votes="limitVotes"
         @edited-name="validateNameFields"
@@ -98,6 +99,7 @@
       <group-data-table-add-row
         :group-names="groupNames"
         :disabled="isGroupLimitReached"
+        :limit-name="limitName"
         :limit-seats="expectedSeats"
         :limit-votes="limitVotes"
         @addGroup="addNewGroup"
@@ -131,6 +133,7 @@ const headers = [
 
 const props = defineProps<{
   expectedSeats: number;
+  limitName: number;
   limitVotes: number;
 }>();
 

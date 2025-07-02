@@ -5,6 +5,7 @@
     :group-names="allGroupNames"
     :is-validating-on-empty="false"
     :disabled="disabled"
+    :limit-name="limitName"
     :limit-seats="limitSeats"
     :limit-votes="limitVotes"
     @hit-enter="addGroupEnter"
@@ -41,11 +42,13 @@ const groupDataTableRowRef = useTemplateRef<typeof GroupDataTableRow>(
 const {
   disabled = false,
   groupNames,
+  limitName,
   limitSeats,
   limitVotes,
 } = defineProps<{
   disabled?: boolean;
   groupNames: string[];
+  limitName: number;
   limitSeats: number;
   limitVotes: number;
 }>();
