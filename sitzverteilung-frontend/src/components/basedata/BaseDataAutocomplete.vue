@@ -18,6 +18,7 @@
     :prepend-inner-icon="mdiFileDocumentMultiple"
     glow
     variant="outlined"
+    density="comfortable"
     autocomplete="off"
   >
     <template #item="{ props }">
