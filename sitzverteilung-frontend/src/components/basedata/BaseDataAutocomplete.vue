@@ -103,7 +103,7 @@ const baseDataNames = computed(() =>
 const isAlreadyExistent = computed(() =>
   baseDataNames.value.includes(searchText.value.trim())
 );
-function checkNameField(event: KeyboardEvent) {
+function checkNameField(event: KeyboardEvent | ClipboardEvent) {
   preventTooLongInput(searchText.value, props.limitName, event);
 }
 
