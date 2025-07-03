@@ -5,7 +5,7 @@
       <p class="font-weight-bold">
         Gesamtanzahl: {{ numberFormatter(amountOfGroups)
         }}<span :class="{ 'text-red': isTooManyGroups }">
-          (max. {{ numberFormatter(expectedSeats) }})</span
+          (max. {{ numberFormatter(maximumGroups) }})</span
         >
       </p>
     </td>
@@ -43,17 +43,23 @@ import { numberFormatter } from "@/utility/numberFormatter";
 
 const props = defineProps<{
   groups: Group[];
+  limitGroups: number;
   expectedSeats: number;
 }>();
 
-const { groups: groupsRef, expectedSeats: expectedSeatsRef } = toRefs(props);
+const {
+  groups: groupsRef,
+  limitGroups: limitGroupsRef,
+  expectedSeats: expectedSeatsRef,
+} = toRefs(props);
 
 const {
   amountOfGroups,
+  maximumGroups,
   isTooManyGroups,
   isSeatsTooHigh,
   isSeatsTooLow,
   totalSeats,
   totalVotes,
-} = useGroupStatistics(groupsRef, expectedSeatsRef);
+} = useGroupStatistics(groupsRef, limitGroupsRef, expectedSeatsRef);
 </script>

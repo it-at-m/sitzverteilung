@@ -10,6 +10,7 @@
     show-select
     return-object
     v-model="selected"
+    items-per-page="-1"
   >
     <template #top>
       <v-toolbar
@@ -68,6 +69,7 @@
         :ref="groupDataTableRowsRef.set"
         v-model="groups[index]"
         :group-names="groupNames"
+        :limit-name="limitName"
         :limit-seats="expectedSeats"
         :limit-votes="limitVotes"
         @edited-name="validateNameFields"
@@ -97,6 +99,7 @@
       <group-data-table-add-row
         :group-names="groupNames"
         :disabled="isGroupLimitReached"
+        :limit-name="limitName"
         :limit-seats="expectedSeats"
         :limit-votes="limitVotes"
         @addGroup="addNewGroup"
@@ -104,6 +107,7 @@
       />
       <group-data-table-summary-row
         :groups="groups"
+        :limit-groups="limitGroups"
         :expected-seats="expectedSeats"
       />
     </template>
@@ -130,13 +134,15 @@ const headers = [
 
 const props = defineProps<{
   expectedSeats: number;
+  limitName: number;
+  limitGroups: number;
   limitVotes: number;
 }>();
 
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
 const isGroupLimitReached = computed(
-  () => groups.value.length >= props.expectedSeats
+  () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
 );
 
 function addNewGroup(group: Group) {

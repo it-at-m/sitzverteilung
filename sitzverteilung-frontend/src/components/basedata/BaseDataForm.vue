@@ -14,6 +14,9 @@
           hide-details="auto"
           validate-on="input"
           label="Name"
+          @keydown="checkNameField"
+          @paste="checkNameField"
+          @drop.prevent
           :prepend-inner-icon="mdiLabel"
           glow
         />
@@ -38,6 +41,8 @@
         <group-data-table
           v-model="baseData.groups"
           :expected-seats="expectedSeats"
+          :limit-name="limitName"
+          :limit-groups="limitGroups"
           :limit-votes="limitVotes"
         />
       </v-col>
@@ -47,13 +52,14 @@
 
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
-import type { VForm } from "vuetify/components";
+import type { VForm, VTextField } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
-import { computed, useTemplateRef } from "vue";
+import { computed, toRef, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
+import { preventTooLongInput } from "@/utility/input.ts";
 import { FieldValidationRules } from "@/utility/rules";
 
 const baseData = defineModel<BaseData>({ required: true });
@@ -61,10 +67,14 @@ const groups = computed(() => baseData.value.groups);
 
 const {
   isEditing,
+  limitName = 50,
+  limitGroups = 18,
   limitVotes = 100_000_000,
   limitCommitteeSize = 999,
   baseDataNames = [],
 } = defineProps<{
+  limitName?: number;
+  limitGroups?: number;
   limitVotes?: number;
   limitCommitteeSize?: number;
   baseDataNames?: string[];
@@ -88,13 +98,19 @@ const seatFieldValidationError = computed(() => {
   return "";
 });
 
+function checkNameField(event: KeyboardEvent) {
+  preventTooLongInput(baseData.value.name, limitName, event);
+}
+
 const comparedBaseDataNames = computed(() =>
   isEditing ? baseDataNames : [...baseDataNames, baseData.value.name]
 );
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
+const limitGroupsRef = toRef(() => limitGroups);
 const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
   groups,
+  limitGroupsRef,
   expectedSeats
 );
 

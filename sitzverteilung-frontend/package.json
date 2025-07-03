@@ -33,6 +33,7 @@
     "@vue/eslint-config-typescript": "14.6.0",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.7.0",
+    "blob-polyfill": "9.0.20240710",
     "eslint": "9.30.0",
     "eslint-plugin-vue": "10.3.0",
     "jsdom": "26.1.0",

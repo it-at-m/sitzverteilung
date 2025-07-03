@@ -46,12 +46,23 @@
             variant="flat"
             color="red"
             size="large"
-            class="mx-5"
+            class="ml-5"
             :prepend-icon="mdiDelete"
             :disabled="!isBaseDataSelected"
             @click="showDeleteConfirmation"
           >
             Löschen
+          </v-btn>
+          <v-btn
+            variant="flat"
+            color="blue"
+            size="large"
+            class="mx-5"
+            :prepend-icon="mdiShare"
+            :disabled="!isBaseDataSelected || dirty"
+            @click="share"
+          >
+            Teilen
           </v-btn>
         </v-col>
       </v-row>
@@ -72,15 +83,22 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
 
-import { mdiContentSave, mdiDelete } from "@mdi/js";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import { mdiContentSave, mdiDelete, mdiShare } from "@mdi/js";
+import { useClipboard } from "@vueuse/core";
+import { computed, nextTick, ref, toRaw, useTemplateRef, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
+import { STATUS_INDICATORS } from "@/constants.ts";
 import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
+import {
+  writeToUrlParam,
+  writeUrlParamToObject,
+} from "@/utility/urlEncoder.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
@@ -189,4 +207,90 @@ function reset() {
   baseDataFormRef.value?.reset();
   currentBaseData.value = getEmptyBaseData();
 }
+
+const { copy, isSupported } = useClipboard();
+async function share() {
+  if (isBaseDataSelected.value && selectedBaseData.value) {
+    if (!isSupported.value) {
+      snackbar.showMessage({
+        message: `Das Kopieren in die Zwischenablage war nicht möglich.`,
+        level: STATUS_INDICATORS.ERROR,
+      });
+      return;
+    }
+
+    try {
+      const importParam = await writeToUrlParam<BaseData>(
+        selectedBaseData.value,
+        window.location.toString()
+      );
+      // Create shareable URL
+      const shareUrl = router.resolve({
+        path: route.path,
+        query: { ...route.query, import: importParam },
+      }).href;
+      const fullShareUrl = `${window.location.origin}/${shareUrl}`;
+      // Copy to clipboard
+      await copy(fullShareUrl);
+      snackbar.showMessage({
+        message: `Die Basisdaten '${selectedBaseData.value.name}' wurden als Link in die Zwischenablage kopiert.`,
+      });
+    } catch {
+      snackbar.showMessage({
+        message: `Die Basisdaten '${selectedBaseData.value.name}' konnten nicht in einen Link umgewandelt werden.`,
+      });
+    }
+  }
+}
+
+const route = useRoute();
+const router = useRouter();
+watch(
+  () => route.query.import,
+  async (newImport) => {
+    const importParam = newImport?.toString() ?? "";
+    if (importParam !== "") {
+      try {
+        const baseData = await writeUrlParamToObject<BaseData>(importParam);
+        if (!isValidBaseData(baseData)) {
+          snackbar.showMessage({
+            message: "Die Basisdaten im Link sind ungültig.",
+            level: STATUS_INDICATORS.ERROR,
+          });
+        } else {
+          selectedBaseData.value = undefined;
+          await nextTick(() => {
+            currentBaseData.value = baseData;
+          });
+          snackbar.showMessage({
+            message: `Die Basisdaten '${baseData.name}' wurden importiert. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
+          });
+        }
+      } catch {
+        snackbar.showMessage({
+          message: "Die Basisdaten im Link sind ungültig.",
+          level: STATUS_INDICATORS.ERROR,
+        });
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { import: _, ...nextQuery } = route.query;
+    await router.replace({ path: route.path, query: nextQuery });
+  },
+  { immediate: true }
+);
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function isValidBaseData(x: any): x is BaseData {
+  return (
+    x &&
+    typeof x.name === "string" &&
+    typeof x.committeeSize === "number" &&
+    Array.isArray(x.groups) &&
+    Array.isArray(x.unions) &&
+    x.groups.every((group: any) => group && typeof group.name === "string") &&
+    x.unions.every((union: any) => union && Array.isArray(union.groups))
+  );
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
 </script>

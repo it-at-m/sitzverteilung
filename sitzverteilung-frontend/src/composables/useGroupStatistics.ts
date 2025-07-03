@@ -5,6 +5,7 @@ import { computed } from "vue";
 
 export const useGroupStatistics = (
   groups: Ref<Group[]>,
+  limitGroups: Ref<number>,
   expectedSeats: Ref<number>
 ) => {
   // statistics
@@ -21,8 +22,11 @@ export const useGroupStatistics = (
 
   // validations
   const safeExpectedSeats = computed(() => expectedSeats.value ?? 0);
+  const maximumGroups = computed(() =>
+    Math.min(limitGroups.value, safeExpectedSeats.value)
+  );
   const isTooManyGroups = computed(
-    () => amountOfGroups.value > safeExpectedSeats.value
+    () => amountOfGroups.value > maximumGroups.value
   );
   const isSeatsTooHigh = computed(
     () => totalSeats.value > safeExpectedSeats.value
@@ -33,6 +37,7 @@ export const useGroupStatistics = (
 
   return {
     amountOfGroups,
+    maximumGroups,
     isTooManyGroups,
     isSeatsTooHigh,
     isSeatsTooLow,
