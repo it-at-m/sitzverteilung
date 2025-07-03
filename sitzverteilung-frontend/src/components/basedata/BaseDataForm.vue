@@ -59,8 +59,10 @@ import { computed, toRef, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
-import { preventTooLongInput } from "@/utility/input.ts";
-import { FieldValidationRules } from "@/utility/validation.ts";
+import {
+  FieldValidationRules,
+  preventTooLongInput,
+} from "@/utility/validation.ts";
 
 const baseData = defineModel<BaseData>({ required: true });
 const groups = computed(() => baseData.value.groups);

@@ -67,7 +67,7 @@ import {
 } from "@mdi/js";
 import { computed, ref, useTemplateRef } from "vue";
 
-import { preventTooLongInput } from "@/utility/input.ts";
+import { preventTooLongInput } from "@/utility/validation.ts";
 
 const emit = defineEmits<{
   update: [baseData: BaseData];
