@@ -66,19 +66,19 @@ const baseData = defineModel<BaseData>({ required: true });
 const groups = computed(() => baseData.value.groups);
 
 const {
-  isEditing,
-  limitName = 50,
-  limitGroups = 18,
-  limitVotes = 100_000_000,
-  limitCommitteeSize = 999,
   baseDataNames = [],
+  isEditing,
+  limitName,
+  limitGroups,
+  limitVotes,
+  limitCommitteeSize,
 } = defineProps<{
-  limitName?: number;
-  limitGroups?: number;
-  limitVotes?: number;
-  limitCommitteeSize?: number;
-  baseDataNames?: string[];
+  limitName: number;
+  limitGroups: number;
+  limitVotes: number;
+  limitCommitteeSize: number;
   isEditing: boolean;
+  baseDataNames?: string[];
 }>();
 
 const emit = defineEmits<{
