@@ -76,7 +76,7 @@ import type { VTextField } from "vuetify/components";
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
 import { preventTooLongInput } from "@/utility/input.ts";
-import { FieldValidationRules } from "@/utility/rules";
+import { FieldValidationRules } from "@/utility/validation.ts";
 
 const {
   isValidatingOnEmpty = true,

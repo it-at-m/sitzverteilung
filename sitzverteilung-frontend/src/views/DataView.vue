@@ -30,6 +30,7 @@
           <base-data-autocomplete
             ref="baseDataAutocompleteRef"
             @update="updatedBaseDataSelection"
+            :limit-name="50"
             :base-data-list="storedBaseData"
           />
           <v-btn
