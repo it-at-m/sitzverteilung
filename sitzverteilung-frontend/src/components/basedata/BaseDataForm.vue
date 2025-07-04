@@ -37,7 +37,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
+      <v-col cols="9">
         <group-data-table
           v-model="baseData.groups"
           :expected-seats="expectedSeats"
@@ -45,6 +45,9 @@
           :limit-groups="limitGroups"
           :limit-votes="limitVotes"
         />
+      </v-col>
+      <v-col cols="3">
+
       </v-col>
     </v-row>
   </v-form>

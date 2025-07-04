@@ -19,14 +19,17 @@
         class="px-2"
       >
         <template #prepend>
+          <p class="text-h6 font-weight-bold">Parteien / Gruppierungen</p>
+        </template>
+        <template #append>
           <v-btn
-            :disabled="!isDeletionPossible"
-            @click="deleteGroups"
-            :prepend-icon="mdiDelete"
-            variant="tonal"
-            color="error"
-            size="small"
-            class="mx-2"
+              :disabled="!isDeletionPossible"
+              @click="deleteGroups"
+              :prepend-icon="mdiDelete"
+              variant="tonal"
+              color="error"
+              size="small"
+              class="mx-2"
           >
             {{ selected.length > 1 ? "Zeilen" : "Zeile" }} löschen
           </v-btn>
