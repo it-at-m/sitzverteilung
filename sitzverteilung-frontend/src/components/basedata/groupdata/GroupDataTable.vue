@@ -23,13 +23,13 @@
         </template>
         <template #append>
           <v-btn
-              :disabled="!isDeletionPossible"
-              @click="deleteGroups"
-              :prepend-icon="mdiDelete"
-              variant="tonal"
-              color="error"
-              size="small"
-              class="mx-2"
+            :disabled="!isDeletionPossible"
+            @click="deleteGroups"
+            :prepend-icon="mdiDelete"
+            variant="tonal"
+            color="error"
+            size="small"
+            class="mx-2"
           >
             {{ selected.length > 1 ? "Zeilen" : "Zeile" }} löschen
           </v-btn>
