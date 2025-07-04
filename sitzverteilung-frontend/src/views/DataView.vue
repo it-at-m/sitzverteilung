@@ -30,6 +30,7 @@
           <base-data-autocomplete
             ref="baseDataAutocompleteRef"
             @update="updatedBaseDataSelection"
+            :limit-name="LimitConfiguration.limitName"
             :base-data-list="storedBaseData"
           />
           <v-btn
@@ -73,8 +74,12 @@
           ref="baseDataFormRef"
           v-model="currentBaseData"
           @valid-changed="updateIsValid"
-          :base-data-names="baseDataNames"
+          :limit-name="LimitConfiguration.limitName"
+          :limit-groups="LimitConfiguration.limitGroups"
+          :limit-committee-size="LimitConfiguration.limitCommitteeSize"
+          :limit-votes="LimitConfiguration.limitVotes"
           :is-editing="isBaseDataSelected"
+          :base-data-names="baseDataNames"
         />
       </v-col>
     </v-row>
@@ -99,6 +104,7 @@ import {
   writeToUrlParam,
   writeUrlParamToObject,
 } from "@/utility/urlEncoder.ts";
+import { LimitConfiguration } from "@/utility/validation.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
