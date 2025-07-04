@@ -129,9 +129,9 @@ import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow
 import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
 
 const headers = [
-  { title: "Name der Partei/Gruppierung", key: "name", width: 300 },
-  { title: "Anzahl der Sitze", key: "committeeSeats", width: 250 },
-  { title: "Anzahl der Stimmen", key: "votes", width: 250 },
+  { title: "Name der Partei/Gruppierung", key: "name", width: 400 },
+  { title: "Anzahl der Sitze", key: "committeeSeats", width: 200 },
+  { title: "Anzahl der Stimmen", key: "votes", width: 200 },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ] as const;
 
