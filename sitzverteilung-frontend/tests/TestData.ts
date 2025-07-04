@@ -24,8 +24,9 @@ export function getTestBaseData(): BaseData {
     ],
     unions: [
       {
-        unionType: UnionType.COMMITTEE,
-        groups: ["Testgroup 1", "Testgroup 2"],
+        name: "Example fraction union",
+        unionType: UnionType.FRACTION,
+        groups: [0, 1],
       },
     ],
   };
