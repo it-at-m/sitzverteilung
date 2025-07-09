@@ -111,7 +111,7 @@ function deleteUnion(idx: number) {
 
 function removeGroup(unionIdx: number, groupIdx: GroupIndex) {
   const remainingGroups = unions.value[unionIdx].groups.filter(
-    (_, index) => index !== groupIdx
+    group => group !== groupIdx
   );
   if (remainingGroups.length < 2) {
     deleteUnion(unionIdx);
