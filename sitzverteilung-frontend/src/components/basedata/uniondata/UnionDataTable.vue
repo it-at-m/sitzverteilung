@@ -18,21 +18,6 @@
         <template #prepend>
           <p class="text-h6 font-weight-bold">{{ dataTableTitle }}</p>
         </template>
-        <template #append>
-          <v-btn
-            @click="addUnion(checkboxStore.selectedIndices)"
-            :prepend-icon="mdiPlusThick"
-            variant="tonal"
-            color="green"
-            size="small"
-            class="mx-2"
-          >
-            {{
-              props.unionType == UnionType.FRACTION ? "Fraktion" : "Ausschüsse"
-            }}
-            anlegen
-          </v-btn>
-        </template>
       </v-toolbar>
     </template>
 
@@ -74,12 +59,11 @@
 <script setup lang="ts">
 import type { GroupIndex, Union } from "@/types/Union.ts";
 
-import { mdiAccountGroup, mdiLabel, mdiPlusThick } from "@mdi/js";
+import { mdiAccountGroup, mdiLabel } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
 import { computed } from "vue";
 
 import UnionDataTableRow from "@/components/basedata/uniondata/UnionDataTableRow.vue";
-import { useCheckboxStore } from "@/stores/checkboxSave";
 import { UnionType } from "@/types/Union.ts";
 
 const headers = computed(() => [
@@ -106,7 +90,6 @@ const unions = defineModel<Union[]>({ required: true });
 const unionNames = computed(() => unions.value.map((union) => union.name));
 
 const unionDataTableRowsRef = useTemplateRefsList<typeof UnionDataTableRow>();
-const checkboxStore = useCheckboxStore();
 
 const validateNameFields = useDebounceFn(() => {
   unionDataTableRowsRef.value.forEach((rowRef) => rowRef.validateNameField());
