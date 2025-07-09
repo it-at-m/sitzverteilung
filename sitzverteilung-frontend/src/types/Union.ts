@@ -1,8 +1,8 @@
 export type GroupIndex = number;
 
 export enum UnionType {
-  COMMITTEE = "COMMITTEE",
-  FRACTION = "FRACTION",
+  COMMITTEE,
+  FRACTION,
 }
 
 export interface Union {
