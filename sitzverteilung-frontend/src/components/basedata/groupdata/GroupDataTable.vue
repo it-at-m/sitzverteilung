@@ -127,6 +127,7 @@ import { computed, ref, useTemplateRef, watch } from "vue";
 import GroupDataTableAddRow from "@/components/basedata/groupdata/GroupDataTableAddRow.vue";
 import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
+import { useCheckboxStore } from "@/stores/checkboxSave";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 400 },
@@ -147,6 +148,7 @@ const groupNames = computed(() => groups.value.map((group) => group.name));
 const isGroupLimitReached = computed(
   () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
 );
+const checkboxStore = useCheckboxStore();
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
@@ -174,25 +176,33 @@ const validateSeatFields = useDebounceFn(() => {
 }, 500);
 
 const selected = ref<(Group & { index: number })[]>([]);
-const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));
+const selectedIndexes = computed(() => {
+  return [
+    ...selected.value.map((sel) => sel.index),
+    ...checkboxStore.selectedIndices,
+  ];
+});
 const indexedGroups = computed(() =>
   groups.value.map((group, index) => ({
     index,
     ...group,
   }))
 );
+
 const isDeletionPossible = computed(() => selected.value.length > 0);
 function deleteGroups() {
   groups.value = groups.value.filter(
     (_, index) => !selectedIndexes.value.includes(index)
   );
   selected.value = [];
+  checkboxStore.selectedIndices = [];
   validateNameFields();
 }
 
 function deleteGroup(index: number) {
   groups.value.splice(index, 1);
   selected.value = [];
+  checkboxStore.selectedIndices = [];
   validateNameFields();
 }
 </script>
