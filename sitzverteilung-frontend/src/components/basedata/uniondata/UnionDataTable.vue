@@ -61,7 +61,7 @@ import type { GroupIndex, Union } from "@/types/Union.ts";
 
 import { mdiAccountGroup, mdiLabel } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, nextTick } from "vue";
 
 import UnionDataTableRow from "@/components/basedata/uniondata/UnionDataTableRow.vue";
 import { UnionType } from "@/types/Union.ts";
@@ -102,6 +102,9 @@ function addUnion(selectedIndexes: GroupIndex[]) {
     groups: sorted,
   };
   unions.value = [...unions.value, newUnion];
+  nextTick(() => {
+    unionDataTableRowsRef.value?.at(-1)?.focusNameField();
+  });
 }
 
 function deleteUnion(idx: number) {

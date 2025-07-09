@@ -97,6 +97,10 @@ function validateNameField() {
   nameInputField.value?.validate();
 }
 
+function focusNameField() {
+  nameInputField.value?.focus();
+}
+
 const isUniqueConstellation = computed(() => {
   const search = JSON.stringify(union.value.groups);
 
@@ -123,6 +127,7 @@ function resetValidation() {
 
 defineExpose({
   validateNameField,
+  focusNameField,
   resetValidation,
 });
 </script>
