@@ -45,6 +45,7 @@
           :limit-groups="limitGroups"
           :limit-votes="limitVotes"
           :union-groups="unionGroups"
+          @create-union="createUnion"
         />
       </v-col>
     </v-row>
@@ -73,7 +74,7 @@
 
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
-import type { Union } from "@/types/Union.ts";
+import type { GroupIndex, Union } from "@/types/Union.ts";
 import type { VForm, VTextField } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
@@ -177,6 +178,14 @@ const fractionsDataTableRef = useTemplateRef<typeof UnionDataTable>(
 const committeesDataTableRef = useTemplateRef<typeof UnionDataTable>(
   "committeesDataTableRef"
 );
+
+function createUnion(groupIdx: GroupIndex[], type: UnionType) {
+  if (type === UnionType.FRACTION) {
+    fractionsDataTableRef.value?.addUnion(groupIdx);
+  } else if (type === UnionType.COMMITTEE) {
+    committeesDataTableRef.value?.addUnion(groupIdx);
+  }
+}
 
 defineExpose({
   reset,

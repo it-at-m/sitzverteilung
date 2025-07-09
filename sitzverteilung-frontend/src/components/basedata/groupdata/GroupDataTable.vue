@@ -23,6 +23,27 @@
         </template>
         <template #append>
           <v-btn
+            :disabled="isUnionDisabled"
+            @click="createUnion(UnionType.FRACTION)"
+            :prepend-icon="mdiPlus"
+            variant="tonal"
+            color="primary"
+            size="small"
+            class="mx-2"
+            text="Fraktion anlegen"
+          >
+          </v-btn>
+          <v-btn
+            :disabled="isUnionDisabled"
+            @click="createUnion(UnionType.COMMITTEE)"
+            :prepend-icon="mdiPlus"
+            variant="tonal"
+            color="primary"
+            size="small"
+            class="mx-2"
+            text="Ausschuss anlegen"
+          />
+          <v-btn
             :disabled="isDeletionDisabled"
             @click="deleteGroups"
             :prepend-icon="mdiDelete"
@@ -30,9 +51,8 @@
             color="error"
             size="small"
             class="mx-2"
-          >
-            {{ selected.length > 1 ? "Zeilen" : "Zeile" }} löschen
-          </v-btn>
+            text="Zeilen löschen"
+          />
         </template>
       </v-toolbar>
     </template>
@@ -122,13 +142,14 @@
 import type { Group } from "@/types/Group";
 import type { GroupIndex } from "@/types/Union.ts";
 
-import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
+import { mdiAccountGroup, mdiDelete, mdiPlus, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
 import { computed, ref, useTemplateRef, watch } from "vue";
 
 import GroupDataTableAddRow from "@/components/basedata/groupdata/GroupDataTableAddRow.vue";
 import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
+import { UnionType } from "@/types/Union.ts";
 
 const headers = [
   { title: "Name der Partei/Gruppierung", key: "name", width: 400 },
@@ -184,6 +205,15 @@ const indexedGroups = computed(() =>
     ...group,
   }))
 );
+
+const isUnionDisabled = computed(() => selected.value.length < 2);
+function createUnion(type: UnionType) {
+  emit("createUnion", selectedIndexes.value, type);
+  selected.value = [];
+}
+const emit = defineEmits<{
+  createUnion: [groups: GroupIndex[], type: UnionType]; // named tuple syntax
+}>();
 
 const isDeletionDisabled = computed(
   () =>
