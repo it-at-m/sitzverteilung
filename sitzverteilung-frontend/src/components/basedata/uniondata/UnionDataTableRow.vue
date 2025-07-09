@@ -69,7 +69,7 @@ const { unions, groupNames, limitName } = defineProps<{
   groupNames: string[];
   limitName: number;
 }>();
-const unionNames = computed(() => unions.map(union => union.name));
+const unionNames = computed(() => unions.map((union) => union.name));
 
 const union = defineModel<Union>({ required: true });
 
@@ -100,13 +100,17 @@ function validateNameField() {
 const isUniqueConstellation = computed(() => {
   const search = JSON.stringify(union.value.groups);
 
-  const matchingUnions = unions.filter(union => JSON.stringify(union.groups) === search);
+  const matchingUnions = unions.filter(
+    (union) => JSON.stringify(union.groups) === search
+  );
 
   return matchingUnions.length < 2;
-})
+});
 
 const unionConstellationValidationError = computed(() => {
-  return !isUniqueConstellation.value ? "Es existiert bereits ein Eintrag mit identischer Konstellation." : "";
+  return !isUniqueConstellation.value
+    ? "Es existiert bereits ein Eintrag mit identischer Konstellation."
+    : "";
 });
 
 function checkNameField(event: KeyboardEvent) {

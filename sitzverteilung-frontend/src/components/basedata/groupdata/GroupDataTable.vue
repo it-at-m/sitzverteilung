@@ -23,7 +23,7 @@
         </template>
         <template #append>
           <v-btn
-            :disabled="!isDeletionPossible"
+            :disabled="isDeletionDisabled"
             @click="deleteGroups"
             :prepend-icon="mdiDelete"
             variant="tonal"
@@ -87,6 +87,7 @@
           <div class="d-flex justify-center">
             <v-btn
               @click="deleteGroup(index)"
+              :disabled="isSingleDeletionDisabled(index)"
               :icon="mdiDelete"
               size="small"
               color="red"
@@ -119,6 +120,7 @@
 
 <script setup lang="ts">
 import type { Group } from "@/types/Group";
+import type { GroupIndex } from "@/types/Union.ts";
 
 import { mdiAccountGroup, mdiDelete, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
@@ -140,6 +142,7 @@ const props = defineProps<{
   limitName: number;
   limitGroups: number;
   limitVotes: number;
+  unionGroups: GroupIndex[];
 }>();
 
 const groups = defineModel<Group[]>({ required: true });
@@ -181,7 +184,17 @@ const indexedGroups = computed(() =>
     ...group,
   }))
 );
-const isDeletionPossible = computed(() => selected.value.length > 0);
+
+const isDeletionDisabled = computed(
+  () =>
+    selected.value.length == 0 ||
+    selectedIndexes.value.some((selected) =>
+      props.unionGroups.includes(selected)
+    )
+);
+function isSingleDeletionDisabled(groupIdx: GroupIndex) {
+  return props.unionGroups.includes(groupIdx);
+}
 function deleteGroups() {
   groups.value = groups.value.filter(
     (_, index) => !selectedIndexes.value.includes(index)
