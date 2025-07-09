@@ -45,7 +45,7 @@
       <union-data-table-row
         :ref="unionDataTableRowsRef.set"
         v-model="unions[index]"
-        :union-names="unionNames"
+        :unions="unions"
         :group-names="groupNames"
         :limit-name="limitName"
         @edited-name="validateNameFields"
@@ -87,7 +87,6 @@ const props = defineProps<{
 }>();
 
 const unions = defineModel<Union[]>({ required: true });
-const unionNames = computed(() => unions.value.map((union) => union.name));
 
 const unionDataTableRowsRef = useTemplateRefsList<typeof UnionDataTableRow>();
 

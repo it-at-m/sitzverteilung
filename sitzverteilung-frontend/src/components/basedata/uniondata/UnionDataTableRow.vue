@@ -10,6 +10,7 @@
         ]"
         hide-details="auto"
         validate-on="input"
+        :error-messages="unionConstellationValidationError"
         @input="editedName"
         variant="underlined"
         density="compact"
@@ -27,6 +28,7 @@
           :text="groupNames[groupIdx]"
           variant="flat"
           :ripple="false"
+          label
         >
           <template #close>
             <v-icon
@@ -57,16 +59,17 @@ import type { Union } from "@/types/Union.ts";
 import type { VTextField } from "vuetify/components";
 
 import { mdiDelete } from "@mdi/js";
-import { useTemplateRef } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 import { preventTooLongInput } from "@/utility/input.ts";
 import { FieldValidationRules } from "@/utility/rules";
 
-const { unionNames, groupNames, limitName } = defineProps<{
-  unionNames: string[];
+const { unions, groupNames, limitName } = defineProps<{
+  unions: Union[];
   groupNames: string[];
   limitName: number;
 }>();
+const unionNames = computed(() => unions.map(union => union.name));
 
 const union = defineModel<Union>({ required: true });
 
@@ -93,6 +96,18 @@ function removeGroup(groupIdx: number) {
 function validateNameField() {
   nameInputField.value?.validate();
 }
+
+const isUniqueConstellation = computed(() => {
+  const search = JSON.stringify(union.value.groups);
+
+  const matchingUnions = unions.filter(union => JSON.stringify(union.groups) === search);
+
+  return matchingUnions.length < 2;
+})
+
+const unionConstellationValidationError = computed(() => {
+  return !isUniqueConstellation.value ? "Es existiert bereits ein Eintrag mit identischer Konstellation." : "";
+});
 
 function checkNameField(event: KeyboardEvent) {
   preventTooLongInput(union.value.name, limitName, event);

@@ -36,7 +36,7 @@ export const useBaseDataStore = defineStore("basedata", () => {
         {
           name: "Testfraktion 2",
           unionType: UnionType.FRACTION,
-          groups: [1, 2],
+          groups: [0, 1, 2],
         },
         {
           name: "Testausschuss 1",
