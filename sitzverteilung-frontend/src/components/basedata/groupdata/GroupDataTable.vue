@@ -23,7 +23,7 @@
         </template>
         <template #append>
           <v-btn
-            :disabled="isUnionDisabled"
+            :disabled="isFractionDisabled"
             @click="createUnion(UnionType.FRACTION)"
             :prepend-icon="mdiPlus"
             variant="tonal"
@@ -34,7 +34,7 @@
           >
           </v-btn>
           <v-btn
-            :disabled="isUnionDisabled"
+            :disabled="isCommitteeDisabled"
             @click="createUnion(UnionType.COMMITTEE)"
             :prepend-icon="mdiPlus"
             variant="tonal"
@@ -140,7 +140,7 @@
 
 <script setup lang="ts">
 import type { Group } from "@/types/Group";
-import type { GroupIndex } from "@/types/Union.ts";
+import type { GroupIndex, Union } from "@/types/Union.ts";
 
 import { mdiAccountGroup, mdiDelete, mdiPlus, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
@@ -163,7 +163,8 @@ const props = defineProps<{
   limitName: number;
   limitGroups: number;
   limitVotes: number;
-  unionGroups: GroupIndex[];
+  fractions: Union[];
+  committees: Union[];
 }>();
 
 const groups = defineModel<Group[]>({ required: true });
@@ -171,6 +172,12 @@ const groupNames = computed(() => groups.value.map((group) => group.name));
 const isGroupLimitReached = computed(
   () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
 );
+const unionGroups = computed(() => {
+  const flattenedGroups = [...props.fractions, ...props.committees]
+    .map((union) => union.groups)
+    .flat();
+  return [...new Set(flattenedGroups)];
+});
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
@@ -198,7 +205,9 @@ const validateSeatFields = useDebounceFn(() => {
 }, 500);
 
 const selected = ref<(Group & { index: number })[]>([]);
-const selectedIndexes = computed(() => selected.value.map((sel) => sel.index));
+const selectedIndexes = computed(() =>
+  selected.value.map((sel) => sel.index).sort()
+);
 const indexedGroups = computed(() =>
   groups.value.map((group, index) => ({
     index,
@@ -206,7 +215,23 @@ const indexedGroups = computed(() =>
   }))
 );
 
-const isUnionDisabled = computed(() => selected.value.length < 2);
+const isFractionDisabled = computed(() => {
+  if (selectedIndexes.value.length < 2) return true;
+  const search = JSON.stringify(selectedIndexes.value);
+  const matchingFractions = props.fractions.filter(
+    (union) => JSON.stringify(union.groups) === search
+  );
+  return matchingFractions.length > 0;
+});
+const isCommitteeDisabled = computed(() => {
+  if (selectedIndexes.value.length < 2) return true;
+  const search = JSON.stringify(selectedIndexes.value);
+  const matchingCommittees = props.committees.filter(
+    (union) => JSON.stringify(union.groups) === search
+  );
+  return matchingCommittees.length > 0;
+});
+
 function createUnion(type: UnionType) {
   emit("createUnion", selectedIndexes.value, type);
   selected.value = [];
@@ -219,11 +244,11 @@ const isDeletionDisabled = computed(
   () =>
     selected.value.length == 0 ||
     selectedIndexes.value.some((selected) =>
-      props.unionGroups.includes(selected)
+      unionGroups.value.includes(selected)
     )
 );
 function isSingleDeletionDisabled(groupIdx: GroupIndex) {
-  return props.unionGroups.includes(groupIdx);
+  return unionGroups.value.includes(groupIdx);
 }
 function deleteGroups() {
   groups.value = groups.value.filter(

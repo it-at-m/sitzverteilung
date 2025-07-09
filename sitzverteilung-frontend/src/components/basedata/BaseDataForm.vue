@@ -44,7 +44,8 @@
           :limit-name="limitName"
           :limit-groups="limitGroups"
           :limit-votes="limitVotes"
-          :union-groups="unionGroups"
+          :fractions="fractions"
+          :committees="committees"
           @create-union="createUnion"
         />
       </v-col>
@@ -110,12 +111,6 @@ const committees = computed({
   set(newCommittees: Union[]) {
     baseData.value.unions = [...newCommittees, ...fractions.value];
   },
-});
-const unionGroups = computed(() => {
-  const flattenedGroups = baseData.value.unions
-    .map((union) => union.groups)
-    .flat();
-  return [...new Set(flattenedGroups)];
 });
 
 const {
