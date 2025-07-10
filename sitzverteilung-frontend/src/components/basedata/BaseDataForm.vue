@@ -13,7 +13,7 @@
           ]"
           hide-details="auto"
           validate-on="input"
-          label="Name"
+          :label="`Name (max. ${limitName} Zeichen)`"
           :maxlength="limitName"
           :prepend-inner-icon="mdiLabel"
           glow
@@ -28,7 +28,7 @@
           hide-details="auto"
           validate-on="input"
           :error-messages="seatFieldValidationError"
-          label="Größe des Hauptorgans"
+          :label="`Größe des Hauptorgans (max. ${limitCommitteeSize})`"
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />
