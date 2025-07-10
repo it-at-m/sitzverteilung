@@ -47,6 +47,7 @@
           :fractions="fractions"
           :committees="committees"
           @create-union="createUnion"
+          @deleted-group="deletedUnion"
         />
       </v-col>
     </v-row>
@@ -180,6 +181,11 @@ function createUnion(groupIdx: GroupIndex[], type: UnionType) {
   } else if (type === UnionType.COMMITTEE) {
     committeesDataTableRef.value?.addUnion(groupIdx);
   }
+}
+
+function deletedUnion(newLength: number, removeList: GroupIndex[]) {
+  fractionsDataTableRef.value?.updateGroupReferencesOnRemoval(newLength, removeList);
+  committeesDataTableRef.value?.updateGroupReferencesOnRemoval(newLength, removeList);
 }
 
 defineExpose({

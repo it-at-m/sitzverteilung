@@ -237,7 +237,8 @@ function createUnion(type: UnionType) {
   selected.value = [];
 }
 const emit = defineEmits<{
-  createUnion: [groups: GroupIndex[], type: UnionType]; // named tuple syntax
+  createUnion: [groups: GroupIndex[], type: UnionType];
+  deletedGroup: [newGroupSize: number, removeList: GroupIndex[]];
 }>();
 
 const isDeletionDisabled = computed(
@@ -251,14 +252,18 @@ function isSingleDeletionDisabled(groupIdx: GroupIndex) {
   return unionGroups.value.includes(groupIdx);
 }
 function deleteGroups() {
-  groups.value = groups.value.filter(
-    (_, index) => !selectedIndexes.value.includes(index)
+  const newElements = groups.value.filter(
+      (_, index) => !selectedIndexes.value.includes(index)
   );
+  emit("deletedGroup", newElements.length, selectedIndexes.value);
+  groups.value = newElements;
   selected.value = [];
   validateNameFields();
 }
 
 function deleteGroup(index: number) {
+  const newLength = groups.value.length - 1;
+  emit("deletedGroup", newLength, [index]);
   groups.value.splice(index, 1);
   selected.value = [];
   validateNameFields();
