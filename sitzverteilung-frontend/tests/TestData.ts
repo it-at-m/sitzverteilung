@@ -1,5 +1,6 @@
 import { BaseData } from "../src/types/BaseData";
 import { UnionType } from "../src/types/Union";
+import { LimitConfiguration } from "../src/utility/validation";
 
 export function getTestBaseData(): BaseData {
   return {
@@ -118,12 +119,15 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
 
 export function getTestBaseDataInputLimit(): BaseData {
   return {
-    name: generateUniqueString(50), // 50
-    committeeSize: generateUniqueNumber(3), // 999
-    groups: Array.from({ length: 18 }, () => ({
-      // 18
-      name: generateUniqueString(50), // 50
-      votes: generateUniqueNumber(9), // 100_000_000
+    name: generateUniqueString(LimitConfiguration.limitName),
+    committeeSize: generateUniqueNumber(
+      LimitConfiguration.limitCommitteeSize.toString().length
+    ), // 999
+    groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
+      name: generateUniqueString(LimitConfiguration.limitName),
+      votes: generateUniqueNumber(
+        LimitConfiguration.limitVotes.toString().length
+      ), // 100_000_000
     })),
     unions: [],
   };

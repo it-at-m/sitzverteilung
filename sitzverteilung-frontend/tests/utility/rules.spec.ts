@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { FieldValidationRules } from "../../src/utility/rules";
+import { FieldValidationRules } from "../../src/utility/validation";
 
 describe("FieldValidationRules tests", () => {
   test("Required positive", () => {

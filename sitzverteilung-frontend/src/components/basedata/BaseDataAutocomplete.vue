@@ -12,6 +12,9 @@
     @update:model-value="updateSelection"
     @keydown.enter="hitEnter"
     @click:clear.stop="clickClear"
+    @keydown="checkNameField"
+    @paste="checkNameField"
+    @drop.prevent
     label="Basisdaten wählen (optional)"
     hide-details
     single-line
@@ -64,6 +67,8 @@ import {
 } from "@mdi/js";
 import { computed, ref, useTemplateRef } from "vue";
 
+import { preventTooLongInput } from "@/utility/validation.ts";
+
 const emit = defineEmits<{
   update: [baseData: BaseData];
 }>();
@@ -72,6 +77,7 @@ const autocompleteRef = useTemplateRef<VAutocomplete>("autocompleteRef");
 
 const props = defineProps<{
   baseDataList: BaseData[];
+  limitName: number;
 }>();
 
 const searchText = ref("");
@@ -97,6 +103,9 @@ const baseDataNames = computed(() =>
 const isAlreadyExistent = computed(() =>
   baseDataNames.value.includes(searchText.value.trim())
 );
+function checkNameField(event: KeyboardEvent | ClipboardEvent) {
+  preventTooLongInput(searchText.value, props.limitName, event);
+}
 
 function clickClear() {
   createNewEmptyBaseData();
