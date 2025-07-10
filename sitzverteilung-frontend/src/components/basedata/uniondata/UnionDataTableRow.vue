@@ -61,8 +61,10 @@ import type { VTextField } from "vuetify/components";
 import { mdiDelete } from "@mdi/js";
 import { computed, useTemplateRef } from "vue";
 
-import { preventTooLongInput } from "@/utility/input.ts";
-import { FieldValidationRules } from "@/utility/rules";
+import {
+  FieldValidationRules,
+  preventTooLongInput,
+} from "@/utility/validation.ts";
 
 const { unions, groupNames, limitName } = defineProps<{
   unions: Union[];
