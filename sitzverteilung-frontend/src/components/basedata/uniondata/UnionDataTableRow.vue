@@ -15,9 +15,7 @@
         variant="underlined"
         density="compact"
         class="py-3"
-        @keydown="checkNameField"
-        @paste="checkNameField"
-        @drop.prevent
+        :maxlength="limitName"
       />
     </td>
     <td>
@@ -61,10 +59,7 @@ import type { VTextField } from "vuetify/components";
 import { mdiDelete } from "@mdi/js";
 import { computed, useTemplateRef } from "vue";
 
-import {
-  FieldValidationRules,
-  preventTooLongInput,
-} from "@/utility/validation.ts";
+import { FieldValidationRules } from "@/utility/validation.ts";
 
 const { unions, groupNames, limitName } = defineProps<{
   unions: Union[];
@@ -118,10 +113,6 @@ const unionConstellationValidationError = computed(() => {
     ? "Es existiert bereits ein Eintrag mit identischer Konstellation."
     : "";
 });
-
-function checkNameField(event: KeyboardEvent) {
-  preventTooLongInput(union.value.name, limitName, event);
-}
 
 function resetValidation() {
   nameInputField.value?.resetValidation();

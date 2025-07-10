@@ -14,9 +14,7 @@
           hide-details="auto"
           validate-on="input"
           label="Name"
-          @keydown="checkNameField"
-          @paste="checkNameField"
-          @drop.prevent
+          :maxlength="limitName"
           :prepend-inner-icon="mdiLabel"
           glow
         />
@@ -86,10 +84,7 @@ import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import UnionDataTable from "@/components/basedata/uniondata/UnionDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
 import { UnionType } from "@/types/Union.ts";
-import {
-  FieldValidationRules,
-  preventTooLongInput,
-} from "@/utility/validation.ts";
+import { FieldValidationRules } from "@/utility/validation.ts";
 
 const baseData = defineModel<BaseData>({ required: true });
 const groups = computed(() => baseData.value.groups);
@@ -148,10 +143,6 @@ const seatFieldValidationError = computed(() => {
     return "Die Anzahl an Parteien/Gruppierungen übersteigt den angegebenen Wert.";
   return "";
 });
-
-function checkNameField(event: KeyboardEvent) {
-  preventTooLongInput(baseData.value.name, limitName, event);
-}
 
 const comparedBaseDataNames = computed(() =>
   isEditing ? baseDataNames : [...baseDataNames, baseData.value.name]
