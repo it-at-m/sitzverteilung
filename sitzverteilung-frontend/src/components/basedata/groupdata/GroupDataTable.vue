@@ -253,7 +253,7 @@ function isSingleDeletionDisabled(groupIdx: GroupIndex) {
 }
 function deleteGroups() {
   const newElements = groups.value.filter(
-      (_, index) => !selectedIndexes.value.includes(index)
+    (_, index) => !selectedIndexes.value.includes(index)
   );
   emit("deletedGroup", newElements.length, selectedIndexes.value);
   groups.value = newElements;

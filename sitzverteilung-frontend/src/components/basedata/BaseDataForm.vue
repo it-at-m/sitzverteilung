@@ -184,8 +184,14 @@ function createUnion(groupIdx: GroupIndex[], type: UnionType) {
 }
 
 function deletedUnion(newLength: number, removeList: GroupIndex[]) {
-  fractionsDataTableRef.value?.updateGroupReferencesOnRemoval(newLength, removeList);
-  committeesDataTableRef.value?.updateGroupReferencesOnRemoval(newLength, removeList);
+  fractionsDataTableRef.value?.updateGroupReferencesOnRemoval(
+    newLength,
+    removeList
+  );
+  committeesDataTableRef.value?.updateGroupReferencesOnRemoval(
+    newLength,
+    removeList
+  );
 }
 
 defineExpose({

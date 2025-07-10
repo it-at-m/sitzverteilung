@@ -122,17 +122,22 @@ function removeGroup(unionIdx: number, groupIdx: GroupIndex) {
   }
 }
 
-function updateGroupReferencesOnRemoval(newGroupSize: number, removeList: GroupIndex[]) {
-  const sortedRemoveList = removeList.sort((a, b) => b-a);
-  unions.value.forEach(union => {
+function updateGroupReferencesOnRemoval(
+  newGroupSize: number,
+  removeList: GroupIndex[]
+) {
+  const sortedRemoveList = removeList.sort((a, b) => b - a);
+  unions.value.forEach((union) => {
     union.groups = union.groups
-        .map(groupIdx => sortedRemoveList.reduce((a, rem) => a > rem ? a - 1 : a, groupIdx))
-        .filter(groupIdx => groupIdx >= 0 && groupIdx < newGroupSize);
-  })
+      .map((groupIdx) =>
+        sortedRemoveList.reduce((a, rem) => (a > rem ? a - 1 : a), groupIdx)
+      )
+      .filter((groupIdx) => groupIdx >= 0 && groupIdx < newGroupSize);
+  });
 }
 
 defineExpose({
   addUnion,
-  updateGroupReferencesOnRemoval
+  updateGroupReferencesOnRemoval,
 });
 </script>
