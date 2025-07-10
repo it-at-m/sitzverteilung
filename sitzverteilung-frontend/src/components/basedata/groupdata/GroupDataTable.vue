@@ -31,8 +31,7 @@
             size="small"
             class="mx-2"
             text="Fraktion anlegen"
-          >
-          </v-btn>
+          />
           <v-btn
             :disabled="isCommitteeDisabled"
             @click="createUnion(UnionType.COMMITTEE)"

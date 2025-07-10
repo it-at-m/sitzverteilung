@@ -47,7 +47,7 @@
           :fractions="fractions"
           :committees="committees"
           @create-union="createUnion"
-          @deleted-group="deletedUnion"
+          @deleted-group="deletedGroup"
         />
       </v-col>
     </v-row>
@@ -185,7 +185,7 @@ function createUnion(groupIdx: GroupIndex[], type: UnionType) {
   }
 }
 
-function deletedUnion(newLength: number, removeList: GroupIndex[]) {
+function deletedGroup(newLength: number, removeList: GroupIndex[]) {
   fractionsDataTableRef.value?.updateGroupReferencesOnRemoval(
     newLength,
     removeList
