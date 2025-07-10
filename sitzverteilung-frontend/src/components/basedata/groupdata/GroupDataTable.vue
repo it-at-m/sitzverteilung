@@ -214,22 +214,16 @@ const indexedGroups = computed(() =>
   }))
 );
 
-const isFractionDisabled = computed(() => {
+function isUnionDisabled(unions: Union[]) {
   if (selectedIndexes.value.length < 2) return true;
   const search = JSON.stringify(selectedIndexes.value);
-  const matchingFractions = props.fractions.filter(
-    (union) => JSON.stringify(union.groups) === search
-  );
-  return matchingFractions.length > 0;
-});
-const isCommitteeDisabled = computed(() => {
-  if (selectedIndexes.value.length < 2) return true;
-  const search = JSON.stringify(selectedIndexes.value);
-  const matchingCommittees = props.committees.filter(
+  const matchingCommittees = unions.filter(
     (union) => JSON.stringify(union.groups) === search
   );
   return matchingCommittees.length > 0;
-});
+}
+const isFractionDisabled = computed(() => isUnionDisabled(props.fractions));
+const isCommitteeDisabled = computed(() => isUnionDisabled(props.committees));
 
 function createUnion(type: UnionType) {
   emit("createUnion", selectedIndexes.value, type);
