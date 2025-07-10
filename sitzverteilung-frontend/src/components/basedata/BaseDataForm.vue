@@ -44,6 +44,30 @@
           :limit-name="limitName"
           :limit-groups="limitGroups"
           :limit-votes="limitVotes"
+          :fractions="fractions"
+          :committees="committees"
+          @create-union="createUnion"
+          @deleted-group="deletedGroup"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="6">
+        <union-data-table
+          ref="fractionsDataTableRef"
+          v-model="fractions"
+          :union-type="UnionType.FRACTION"
+          :group-names="groupNames"
+          :limit-name="limitName"
+        />
+      </v-col>
+      <v-col cols="6">
+        <union-data-table
+          ref="committeesDataTableRef"
+          v-model="committees"
+          :union-type="UnionType.COMMITTEE"
+          :group-names="groupNames"
+          :limit-name="limitName"
         />
       </v-col>
     </v-row>
@@ -52,13 +76,16 @@
 
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
+import type { GroupIndex, Union } from "@/types/Union.ts";
 import type { VForm, VTextField } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
 import { computed, toRef, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
+import UnionDataTable from "@/components/basedata/uniondata/UnionDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
+import { UnionType } from "@/types/Union.ts";
 import {
   FieldValidationRules,
   preventTooLongInput,
@@ -66,6 +93,28 @@ import {
 
 const baseData = defineModel<BaseData>({ required: true });
 const groups = computed(() => baseData.value.groups);
+const groupNames = computed(() => groups.value.map((group) => group.name));
+
+const fractions = computed({
+  get() {
+    return baseData.value.unions.filter(
+      (union) => union.unionType == UnionType.FRACTION
+    );
+  },
+  set(newFractions: Union[]) {
+    baseData.value.unions = [...committees.value, ...newFractions];
+  },
+});
+const committees = computed({
+  get() {
+    return baseData.value.unions.filter(
+      (union) => union.unionType == UnionType.COMMITTEE
+    );
+  },
+  set(newCommittees: Union[]) {
+    baseData.value.unions = [...newCommittees, ...fractions.value];
+  },
+});
 
 const {
   baseDataNames = [],
@@ -119,6 +168,32 @@ const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
 const baseDataFormRef = useTemplateRef<VForm>("baseDataFormRef");
 function reset() {
   baseDataFormRef.value?.reset();
+}
+
+const fractionsDataTableRef = useTemplateRef<typeof UnionDataTable>(
+  "fractionsDataTableRef"
+);
+const committeesDataTableRef = useTemplateRef<typeof UnionDataTable>(
+  "committeesDataTableRef"
+);
+
+function createUnion(groupIdx: GroupIndex[], type: UnionType) {
+  if (type === UnionType.FRACTION) {
+    fractionsDataTableRef.value?.addUnion(groupIdx);
+  } else if (type === UnionType.COMMITTEE) {
+    committeesDataTableRef.value?.addUnion(groupIdx);
+  }
+}
+
+function deletedGroup(newLength: number, removeList: GroupIndex[]) {
+  fractionsDataTableRef.value?.updateGroupReferencesOnRemoval(
+    newLength,
+    removeList
+  );
+  committeesDataTableRef.value?.updateGroupReferencesOnRemoval(
+    newLength,
+    removeList
+  );
 }
 
 defineExpose({

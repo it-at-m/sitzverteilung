@@ -90,7 +90,7 @@ import type { BaseData } from "@/types/BaseData";
 
 import { mdiContentSave, mdiDelete, mdiShare } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
-import { computed, nextTick, ref, toRaw, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
@@ -157,7 +157,7 @@ function getEmptyBaseData(): BaseData {
 
 function saveBaseData() {
   if (currentBaseData.value) {
-    const copy = structuredClone(toRaw(currentBaseData.value));
+    const copy = JSON.parse(JSON.stringify(currentBaseData.value));
     if (isBaseDataSelected.value && selectedBaseData.value) {
       store.updateBaseData(selectedBaseData.value.name, copy);
       snackbar.showMessage({
@@ -205,7 +205,7 @@ watch(selectedBaseData, (newBaseData) => {
     reset();
     return;
   }
-  currentBaseData.value = structuredClone(toRaw(newBaseData));
+  currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
 });
 
 function reset() {
