@@ -172,14 +172,14 @@ const isGroupLimitReached = computed(
   () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
 );
 function getUnionGroups(unions: Union[]) {
-  const flattenedGroups = unions
-      .map((union) => union.groups)
-      .flat();
+  const flattenedGroups = unions.map((union) => union.groups).flat();
   return [...new Set(flattenedGroups)];
 }
 const fractionGroups = computed(() => getUnionGroups(props.fractions));
 const committeeGroups = computed(() => getUnionGroups(props.committees));
-const unionGroups = computed(() => getUnionGroups([...props.fractions, ...props.committees]));
+const unionGroups = computed(() =>
+  getUnionGroups([...props.fractions, ...props.committees])
+);
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
@@ -224,13 +224,14 @@ function isUnionDisabled(unions: Union[], groupIdxs: GroupIndex[]) {
     (union) => JSON.stringify(union.groups) === search
   );
   if (matchingCommittees.length > 0) return true;
-  const isOverlapping = selectedIndexes.value.some((selected) =>
-      groupIdxs.includes(selected)
-  )
-  return isOverlapping;
+  return selectedIndexes.value.some((selected) => groupIdxs.includes(selected));
 }
-const isFractionDisabled = computed(() => isUnionDisabled(props.fractions, fractionGroups.value));
-const isCommitteeDisabled = computed(() => isUnionDisabled(props.committees, committeeGroups.value));
+const isFractionDisabled = computed(() =>
+  isUnionDisabled(props.fractions, fractionGroups.value)
+);
+const isCommitteeDisabled = computed(() =>
+  isUnionDisabled(props.committees, committeeGroups.value)
+);
 
 function createUnion(type: UnionType) {
   emit("createUnion", selectedIndexes.value, type);
