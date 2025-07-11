@@ -8,8 +8,8 @@ export const FieldValidationRules = {
 };
 
 export const LimitConfiguration = {
-  limitName: 50,
+  limitName: 45,
   limitGroups: 18,
-  limitVotes: 100_000_000,
+  limitVotes: 99_999_999,
   limitCommitteeSize: 999,
 };

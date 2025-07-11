@@ -184,12 +184,15 @@ const groupNames = computed(() => groups.value.map((group) => group.name));
 const isGroupLimitReached = computed(
   () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
 );
-const unionGroups = computed(() => {
-  const flattenedGroups = [...props.fractions, ...props.committees]
-    .map((union) => union.groups)
-    .flat();
+function getUnionGroups(unions: Union[]) {
+  const flattenedGroups = unions.map((union) => union.groups).flat();
   return [...new Set(flattenedGroups)];
-});
+}
+const fractionGroups = computed(() => getUnionGroups(props.fractions));
+const committeeGroups = computed(() => getUnionGroups(props.committees));
+const unionGroups = computed(() =>
+  getUnionGroups([...props.fractions, ...props.committees])
+);
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
@@ -227,16 +230,21 @@ const indexedGroups = computed(() =>
   }))
 );
 
-function isUnionDisabled(unions: Union[]) {
+function isUnionDisabled(unions: Union[], groupIdxs: GroupIndex[]) {
   if (selectedIndexes.value.length < 2) return true;
   const search = JSON.stringify(selectedIndexes.value);
   const matchingCommittees = unions.filter(
     (union) => JSON.stringify(union.groups) === search
   );
-  return matchingCommittees.length > 0;
+  if (matchingCommittees.length > 0) return true;
+  return selectedIndexes.value.some((selected) => groupIdxs.includes(selected));
 }
-const isFractionDisabled = computed(() => isUnionDisabled(props.fractions));
-const isCommitteeDisabled = computed(() => isUnionDisabled(props.committees));
+const isFractionDisabled = computed(() =>
+  isUnionDisabled(props.fractions, fractionGroups.value)
+);
+const isCommitteeDisabled = computed(() =>
+  isUnionDisabled(props.committees, committeeGroups.value)
+);
 
 function createUnion(type: UnionType) {
   emit("createUnion", selectedIndexes.value, type);
