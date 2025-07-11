@@ -19,92 +19,87 @@
       @no="hideDeleteConfirmation"
       @yes="deleteSelectedBaseData"
     />
-    <info-dialog
-      :model-value="isInformationDialogShown"
-      @back="hideInformationDialog"
-    >
-      <template #dialog-text>
-        <div class="dialog-text">
-          <h2>Informationen zur Basisdatenübersicht</h2>
-          <p>
-            In dieser Ansicht wird die Verwaltung der Basisdaten geregelt,
-            bestehend aus:
-          </p>
-          <ul>
-            <li>Verwaltung der Basisdatenübersicht</li>
-            <li>Parteien und Gruppierungen</li>
-            <li>Fraktionen und Ausschüsse</li>
-          </ul>
-          <p>
-            Bei der Verwaltung der Basisdatenübersicht lassen sich bereits
-            angelegte Basisdaten durch ein Drop-Down-Menü in die Übersicht
-            übernehmen. Eingefügte Basisdaten lassen sich hier anlegen, löschen
-            und über einen Link teilen.
-          </p>
-          <p>Ein Anlegen neuer Daten ist nur dann möglich, wenn:</p>
-          <ul>
-            <li>
-              Der Name des Basisdatensatzes und die Größe des Hauptorgans
-              eingegeben wurden.
-            </li>
-            <li>Mindestens eine Partei vorhanden ist.</li>
-          </ul>
-          <p>
-            Der Name ist auf 50 Zeichen beschränkt, die Größe des Hauptorgans
-            auf 999 Sitze.
-          </p>
-          <p>
-            Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-            Limit von 50 Zeichen. Zusätzlich bietet die Tabelle an, die Anzahl
-            der Sitze und der Stimmen zu erfassen.
-          </p>
-          <p>
-            Bevor der Basisdatensatz angelegt werden kann, muss die Anzahl der
-            Sitze aller Parteien addiert mit der Größe des Hauptorgans
-            übereinstimmen. Gelöscht werden können die Parteien und
-            Gruppierungen:
-          </p>
-          <ul>
-            <li>Entweder einzeln in der jeweiligen Zeile.</li>
-            <li>
-              Oder indem mehrere ausgewählt werden und auf Zeile bzw. Zeilen
-              löschen geklickt wird.
-            </li>
-          </ul>
-          <p>
-            Fraktionen und Ausschüsse werden separat unter
-            Parteien/Gruppierungen angezeigt. Sofern mindestens zwei Parteien
-            oder Gruppierungen ausgewählt wurden, lassen diese sich innerhalb
-            der Gruppierungstabelle in eine Fraktion oder einen Ausschuss
-            zusammenfassen.
-          </p>
-          <p>
-            Jede Partei/Gruppierung kann nur Teil einer Fraktion bzw. eines
-            Ausschusses sein. Es ist möglich, innerhalb der
-            Fraktions-/Ausschusstabelle Parteien oder Gruppierungen wieder zu
-            entfernen. Diese lassen sich allerdings nicht wieder hinzufügen, es
-            sei denn, es wird eine neue Fraktion/ein neuer Ausschuss angelegt.
-          </p>
-        </div>
-      </template>
-    </info-dialog>
     <v-row
       align="center"
       class="d-flex"
     >
       <v-col class="d-flex align-center">
         <h1 class="mr-2">Verwaltung der Basisdaten</h1>
-        <v-icon
-          @click="showInformationDialog"
-          :icon="mdiInformation"
-          class="mx-1"
-          size="x-large"
-          role="button"
-          :aria-label="'Informationen zur Basisdatenübersicht anzeigen'"
-          tabindex="0"
-          @keydown.enter="showInformationDialog"
-          @keydown.space="showInformationDialog"
-        />
+        <info-dialog>
+          <template #dialog-text>
+            <div class="dialog-text pa-4">
+              <h3 class="mb-2">Information zur Basisdatenübersicht</h3>
+              <p class="mb-3">
+                In dieser Ansicht wird die Verwaltung der Basisdaten geregelt,
+                bestehend aus:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>Verwaltung der Basisdatenübersicht</li>
+                <li>Parteien und Gruppierungen</li>
+                <li>Fraktionen und Ausschüsse</li>
+              </ul>
+
+              <p class="mb-3">
+                Bei der Verwaltung der Basisdatenübersicht lassen sich bereits
+                angelegte Basisdaten durch ein Drop-Down-Menü in die Übersicht
+                übernehmen. Eingefügte Basisdaten lassen sich hier anlegen,
+                löschen und über einen Link teilen.
+              </p>
+
+              <p class="mb-3">
+                Ein Anlegen neuer Daten ist nur dann möglich, wenn:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>
+                  Der Name des Basisdatensatzes und die Größe des Hauptorgans
+                  eingegeben wurden.
+                </li>
+                <li>Mindestens eine Partei vorhanden ist.</li>
+              </ul>
+
+              <p class="mb-3">
+                Der Name ist auf 50 Zeichen beschränkt, die Größe des
+                Hauptorgans auf 999 Sitze.
+              </p>
+
+              <p class="mb-3">
+                Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
+                Limit von 50 Zeichen. Zusätzlich bietet die Tabelle an, die
+                Anzahl der Sitze und der Stimmen zu erfassen.
+              </p>
+
+              <p class="mb-3">
+                Bevor der Basisdatensatz angelegt werden kann, muss die Anzahl
+                der Sitze aller Parteien addiert mit der Größe des Hauptorgans
+                übereinstimmen. Gelöscht werden können die Parteien und
+                Gruppierungen:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>Entweder einzeln in der jeweiligen Zeile</li>
+                <li>
+                  Oder indem mehrere ausgewählt werden und auf Zeile bzw. Zeilen
+                  löschen geklickt wird.
+                </li>
+              </ul>
+
+              <p class="mb-3">
+                Fraktionen und Ausschüsse werden separat unter
+                Parteien/Gruppierungen angezeigt. Sofern mindestens zwei
+                Parteien oder Gruppierungen ausgewählt wurden, lassen diese sich
+                in eine Fraktion oder einen Ausschuss zusammenfassen.
+              </p>
+
+              <p class="mb-3">
+                Jede Partei/Gruppierung kann nur Teil einer Fraktion bzw. eines
+                Ausschusses sein. Es ist möglich, innerhalb der
+                Fraktions-/Ausschusstabelle Parteien oder Gruppierungen wieder
+                zu entfernen. Diese lassen sich allerdings nicht wieder
+                hinzufügen, es sei denn, es wird eine neue Fraktion/ein neuer
+                Ausschuss angelegt.
+              </p>
+            </div>
+          </template>
+        </info-dialog>
       </v-col>
     </v-row>
     <v-toolbar class="my-6 py-2 px-3 bg-primary">
@@ -171,7 +166,7 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
 
-import { mdiContentSave, mdiDelete, mdiInformation, mdiShare } from "@mdi/js";
+import { mdiContentSave, mdiDelete, mdiShare } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -383,30 +378,4 @@ function isValidBaseData(x: any): x is BaseData {
   );
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
-
-const isInformationDialogShown = ref(false);
-function showInformationDialog() {
-  isInformationDialogShown.value = true;
-}
-function hideInformationDialog() {
-  isInformationDialogShown.value = false;
-}
 </script>
-
-<style scoped>
-.dialog-text h2 {
-  margin-bottom: 0.5em; /* Space below header */
-}
-
-.dialog-text {
-  padding: 20px; /* Padding around the text */
-}
-
-.dialog-text ul {
-  padding-left: 20px; /* Lists are in the correct position */
-}
-
-.dialog-text p {
-  margin-bottom: 1em; /* Space below paragraphs */
-}
-</style>
