@@ -138,7 +138,9 @@ export function getTestBaseDataInputLimit(): BaseData {
       () => ({
         name: generateUniqueString(LimitConfiguration.limitName),
         unionType: UnionType.FRACTION,
-        groups: [generateUniqueNumber(1), generateUniqueNumber(1)],
+        groups: Array.from({ length: 2 }, () =>
+          generateUniqueNumber(LimitConfiguration.limitGroups.toString().length)
+        ),
       })
     ),
   };
