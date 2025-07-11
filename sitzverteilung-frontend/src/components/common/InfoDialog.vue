@@ -1,8 +1,8 @@
 <template>
   <v-dialog
-      :model-value="modelValue"
-      persistent
-      width="800"
+    :model-value="modelValue"
+    persistent
+    width="800"
   >
     <v-card>
       <v-card-text class="dialog-text">
@@ -11,9 +11,9 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
-            id="infodialog-btn-back"
-            variant="flat"
-            @click="back"
+          id="infodialog-btn-back"
+          variant="flat"
+          @click="back"
         >
           {{ backText }}
         </v-btn>
@@ -23,9 +23,7 @@
 </template>
 
 <script setup lang="ts">
-const {
-  backText = "Zurück zur Seite",
-} = defineProps<{
+const { backText = "Zurück zur Seite" } = defineProps<{
   modelValue: boolean;
   backText?: string;
   dialogTitle: string;
