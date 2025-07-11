@@ -67,7 +67,11 @@ import UnionDataTableRow from "@/components/basedata/uniondata/UnionDataTableRow
 import { UnionType } from "@/types/Union.ts";
 
 const headers = computed(() => [
-  { title: nameHeaderTitle, key: "name", width: 200 },
+  {
+    title: `${nameHeaderTitle.value} (max. ${props.limitName} Zeichen)`,
+    key: "name",
+    width: 200,
+  },
   { title: "Parteien / Gruppierungen", key: "groups", width: 250 },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ]);
