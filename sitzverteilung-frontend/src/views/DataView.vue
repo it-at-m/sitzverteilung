@@ -19,9 +19,91 @@
       @no="hideDeleteConfirmation"
       @yes="deleteSelectedBaseData"
     />
-    <v-row>
-      <v-col>
-        <h1>Verwaltung der Basisdaten</h1>
+    <v-row
+      align="center"
+      class="d-flex"
+    >
+      <v-col class="d-flex align-center">
+        <h1 class="mr-2">Verwaltung der Basisdaten</h1>
+        <info-dialog>
+          <template #dialog-text>
+            <div class="dialog-text pa-4">
+              <h3 class="mb-2">Information zur Basisdatenübersicht</h3>
+              <p class="mb-3">
+                In dieser Ansicht wird die Verwaltung der Basisdaten geregelt,
+                bestehend aus:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>Verwaltung der Basisdatenübersicht</li>
+                <li>Parteien und Gruppierungen</li>
+                <li>Fraktionen und Ausschüsse</li>
+              </ul>
+
+              <h4 class="mt-4 mb-2">Basisdatenübersicht</h4>
+              <p class="mb-3">
+                Bei der Verwaltung der Basisdatenübersicht lassen sich bereits
+                angelegte Basisdaten durch ein Drop-Down-Menü in die Übersicht
+                übernehmen. Eingefügte Basisdaten lassen sich hier anlegen,
+                löschen und über einen Link teilen.
+              </p>
+
+              <h4 class="mt-4 mb-2">Eingabebeschränkungen</h4>
+              <p class="mb-3">
+                Ein Anlegen neuer Daten ist nur dann möglich, wenn:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>
+                  Der Name des Basisdatensatzes und die Größe des Hauptorgans
+                  eingegeben wurden.
+                </li>
+                <li>Mindestens eine Partei vorhanden ist.</li>
+              </ul>
+
+              <p class="mb-3">
+                Der Name ist auf 50 Zeichen beschränkt, die Größe des
+                Hauptorgans auf 999 Sitze und die Stimmen auf 99.999.999
+                Stimmen.
+              </p>
+
+              <p class="mb-3">
+                Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
+                Limit von 50 Zeichen. Zusätzlich bietet die Tabelle an, die
+                Anzahl der Sitze und der Stimmen zu erfassen.
+              </p>
+
+              <p class="mb-3">
+                Bevor der Basisdatensatz angelegt werden kann, muss die Anzahl
+                der Sitze aller Parteien addiert mit der Größe des Hauptorgans
+                übereinstimmen. Gelöscht werden können die Parteien und
+                Gruppierungen:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>Entweder einzeln in der jeweiligen Zeile</li>
+                <li>
+                  Oder indem mehrere ausgewählt werden und auf Zeile bzw. Zeilen
+                  löschen geklickt wird.
+                </li>
+              </ul>
+
+              <h4 class="mt-4 mb-2">Fraktionen und Ausschüsse</h4>
+              <p class="mb-3">
+                Fraktionen und Ausschüsse werden separat unter
+                Parteien/Gruppierungen angezeigt. Sofern mindestens zwei
+                Parteien oder Gruppierungen ausgewählt wurden, lassen diese sich
+                in eine Fraktion oder einen Ausschuss zusammenfassen.
+              </p>
+
+              <p class="mb-3">
+                Jede Partei/Gruppierung kann nur Teil einer Fraktion bzw. eines
+                Ausschusses sein. Es ist möglich, innerhalb der
+                Fraktions-/Ausschusstabelle Parteien oder Gruppierungen wieder
+                zu entfernen. Diese lassen sich allerdings nicht wieder
+                hinzufügen, es sei denn, es wird eine neue Fraktion/ein neuer
+                Ausschuss angelegt.
+              </p>
+            </div>
+          </template>
+        </info-dialog>
       </v-col>
     </v-row>
     <v-toolbar class="my-6 py-2 px-3 bg-primary">
@@ -95,6 +177,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
+import InfoDialog from "@/components/common/InfoDialog.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
 import { STATUS_INDICATORS } from "@/constants.ts";
