@@ -23,7 +23,9 @@ export async function writeToUrlParam<T>(
     .replace(/\//g, "_")
     .replace(/=+$/, "");
   if (result.length > 2048 - url.length) {
-    throw new Error("The amount of data to be url encoded is too high");
+    throw new Error(
+      `The amount of data to be url encoded is too high. Maximum is 2048, but was ${result.length}`
+    );
   }
   return result;
 }

@@ -122,14 +122,25 @@ export function getTestBaseDataInputLimit(): BaseData {
     name: generateUniqueString(LimitConfiguration.limitName),
     committeeSize: generateUniqueNumber(
       LimitConfiguration.limitCommitteeSize.toString().length
-    ), // 999
+    ),
     groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
       name: generateUniqueString(LimitConfiguration.limitName),
       votes: generateUniqueNumber(
         LimitConfiguration.limitVotes.toString().length
-      ), // 100_000_000
+      ),
+      committeeSeats: generateUniqueNumber(
+        LimitConfiguration.limitCommitteeSize.toString().length
+      ),
     })),
-    unions: [],
+    // Smallest constellation is pair-wise unions
+    unions: Array.from(
+      { length: Math.floor(LimitConfiguration.limitGroups / 2) },
+      () => ({
+        name: generateUniqueString(LimitConfiguration.limitName),
+        unionType: UnionType.FRACTION,
+        groups: [generateUniqueNumber(1), generateUniqueNumber(1)],
+      })
+    ),
   };
 }
 
