@@ -391,18 +391,18 @@ function hideInformationDialog() {
 
 <style scoped>
 .dialog-text h2 {
-  margin-bottom: 0.5em; /* Abstand der Überschrift nach unten */
+  margin-bottom: 0.5em; /* Space below header */
 }
 
 .dialog-text {
-  padding: 20px; /* Padding um den gesamten Text*/
+  padding: 20px; /* Padding around the text */
 }
 
 .dialog-text ul {
-  padding-left: 20px; /* Einrückung der Liste */
+  padding-left: 20px; /* Lists are in the correct position */
 }
 
 .dialog-text p {
-  margin-bottom: 1em; /* Abstand zwischen Absätzen nach unten */
+  margin-bottom: 1em; /* Space below paragraphs */
 }
 </style>
