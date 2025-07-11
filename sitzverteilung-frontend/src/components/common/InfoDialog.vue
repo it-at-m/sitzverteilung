@@ -26,7 +26,6 @@
 const { backText = "Zurück zur Seite" } = defineProps<{
   modelValue: boolean;
   backText?: string;
-  dialogTitle: string;
 }>();
 
 const emit = defineEmits<{

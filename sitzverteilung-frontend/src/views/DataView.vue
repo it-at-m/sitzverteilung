@@ -21,7 +21,6 @@
     />
     <info-dialog
       :model-value="isInformationDialogShown"
-      dialog-title=""
       @back="hideInformationDialog"
     >
       <template #dialog-text>
@@ -100,6 +99,11 @@
           :icon="mdiInformation"
           class="mx-1"
           size="x-large"
+          role="button"
+          :aria-label="'Informationen zur Basisdatenübersicht anzeigen'"
+          tabindex="0"
+          @keydown.enter="showInformationDialog"
+          @keydown.space="showInformationDialog"
         />
       </v-col>
     </v-row>
