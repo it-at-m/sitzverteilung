@@ -4,6 +4,8 @@
       @click="openDialog"
       :icon="mdiInformation"
       size="20"
+      :aria-label="'Informationen anzeigen'"
+      :tabindex="0"
     />
     <v-dialog
       v-model="isOpen"
@@ -31,11 +33,7 @@
 
 <script setup lang="ts">
 import { mdiInformation } from "@mdi/js";
-import { defineEmits, ref } from "vue";
-
-const emit = defineEmits<{
-  close: [];
-}>();
+import { ref } from "vue";
 
 const isOpen = ref(false);
 
@@ -45,6 +43,5 @@ function openDialog() {
 
 function closeDialog() {
   isOpen.value = false;
-  emit("close");
 }
 </script>

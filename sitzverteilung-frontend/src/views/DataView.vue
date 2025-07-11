@@ -39,6 +39,7 @@
                 <li>Fraktionen und Ausschüsse</li>
               </ul>
 
+              <h4 class="mt-4 mb-2">Basisdatenübersicht</h4>
               <p class="mb-3">
                 Bei der Verwaltung der Basisdatenübersicht lassen sich bereits
                 angelegte Basisdaten durch ein Drop-Down-Menü in die Übersicht
@@ -46,6 +47,7 @@
                 löschen und über einen Link teilen.
               </p>
 
+              <h4 class="mt-4 mb-2">Eingabebeschränkungen</h4>
               <p class="mb-3">
                 Ein Anlegen neuer Daten ist nur dann möglich, wenn:
               </p>
@@ -59,7 +61,8 @@
 
               <p class="mb-3">
                 Der Name ist auf 50 Zeichen beschränkt, die Größe des
-                Hauptorgans auf 999 Sitze.
+                Hauptorgans auf 999 Sitze und die Stimmen auf 99.999.999
+                Stimmen.
               </p>
 
               <p class="mb-3">
@@ -82,6 +85,7 @@
                 </li>
               </ul>
 
+              <h4 class="mt-4 mb-2">Fraktionen und Ausschüsse</h4>
               <p class="mb-3">
                 Fraktionen und Ausschüsse werden separat unter
                 Parteien/Gruppierungen angezeigt. Sofern mindestens zwei
