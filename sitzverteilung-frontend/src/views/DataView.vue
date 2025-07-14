@@ -61,14 +61,21 @@
 
               <p class="mb-3">
                 Der Name ist auf 50 Zeichen beschränkt, die Größe des
-                Hauptorgans auf {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }} Sitze und die Stimmen auf {{ numberFormatter(LimitConfiguration.limitVotes) }}
+                Hauptorgans auf
+                {{
+                  numberFormatter(LimitConfiguration.limitCommitteeSize)
+                }}
+                Sitze und die Stimmen auf
+                {{ numberFormatter(LimitConfiguration.limitVotes) }}
                 Stimmen.
               </p>
 
               <p class="mb-3">
                 Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-                Limit von {{ LimitConfiguration.limitName }} Zeichen. Zusätzlich bietet die Tabelle an, die
-                Anzahl der Sitze und der Stimmen zu erfassen. Maximal können {{ LimitConfiguration.limitGroups }} Parteien angelegt werden.
+                Limit von {{ LimitConfiguration.limitName }} Zeichen. Zusätzlich
+                bietet die Tabelle an, die Anzahl der Sitze und der Stimmen zu
+                erfassen. Maximal können
+                {{ LimitConfiguration.limitGroups }} Parteien angelegt werden.
               </p>
 
               <p class="mb-3">
@@ -183,12 +190,12 @@ import { useSaveLeave } from "@/composables/useSaveLeave.ts";
 import { STATUS_INDICATORS } from "@/constants.ts";
 import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
+import { numberFormatter } from "@/utility/numberFormatter.ts";
 import {
   writeToUrlParam,
   writeUrlParamToObject,
 } from "@/utility/urlEncoder.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
-import {numberFormatter} from "@/utility/numberFormatter.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
