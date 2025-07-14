@@ -61,14 +61,14 @@
 
               <p class="mb-3">
                 Der Name ist auf 50 Zeichen beschränkt, die Größe des
-                Hauptorgans auf 999 Sitze und die Stimmen auf 99.999.999
+                Hauptorgans auf {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }} Sitze und die Stimmen auf {{ numberFormatter(LimitConfiguration.limitVotes) }}
                 Stimmen.
               </p>
 
               <p class="mb-3">
                 Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-                Limit von 50 Zeichen. Zusätzlich bietet die Tabelle an, die
-                Anzahl der Sitze und der Stimmen zu erfassen.
+                Limit von {{ LimitConfiguration.limitName }} Zeichen. Zusätzlich bietet die Tabelle an, die
+                Anzahl der Sitze und der Stimmen zu erfassen. Maximal können {{ LimitConfiguration.limitGroups }} Parteien angelegt werden.
               </p>
 
               <p class="mb-3">
@@ -188,6 +188,7 @@ import {
   writeUrlParamToObject,
 } from "@/utility/urlEncoder.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
+import {numberFormatter} from "@/utility/numberFormatter.ts";
 
 const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
