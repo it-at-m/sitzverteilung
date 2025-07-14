@@ -62,9 +62,9 @@
               <p class="mb-3">
                 Der Name ist auf 50 Zeichen beschränkt, die Größe des
                 Hauptorgans auf
-                {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }}
+                {{ formattedCommitteeSize }}
                 Sitze und die Stimmen auf
-                {{ numberFormatter(LimitConfiguration.limitVotes) }}
+                {{ formattedVotesLimit }}
                 Stimmen.
               </p>
 
@@ -199,6 +199,8 @@ const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
 
 const storedBaseData = computed(() => store.baseDatas);
+const formattedCommitteeSize = numberFormatter(LimitConfiguration.limitCommitteeSize);
+const formattedVotesLimit     = numberFormatter(LimitConfiguration.limitVotes);
 
 const dirty = computed(
   () =>
