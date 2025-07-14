@@ -199,8 +199,10 @@ const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
 
 const storedBaseData = computed(() => store.baseDatas);
-const formattedCommitteeSize = numberFormatter(LimitConfiguration.limitCommitteeSize);
-const formattedVotesLimit     = numberFormatter(LimitConfiguration.limitVotes);
+const formattedCommitteeSize = numberFormatter(
+  LimitConfiguration.limitCommitteeSize
+);
+const formattedVotesLimit = numberFormatter(LimitConfiguration.limitVotes);
 
 const dirty = computed(
   () =>
