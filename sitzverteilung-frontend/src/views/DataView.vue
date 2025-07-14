@@ -62,9 +62,7 @@
               <p class="mb-3">
                 Der Name ist auf 50 Zeichen beschränkt, die Größe des
                 Hauptorgans auf
-                {{
-                  numberFormatter(LimitConfiguration.limitCommitteeSize)
-                }}
+                {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }}
                 Sitze und die Stimmen auf
                 {{ numberFormatter(LimitConfiguration.limitVotes) }}
                 Stimmen.
