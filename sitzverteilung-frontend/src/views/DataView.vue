@@ -35,14 +35,20 @@
                 <li>Bilden von Fraktionen und Ausschüssen</li>
               </ul>
 
-              <v-alert color="warning" :icon="mdiExclamation" title="Speicherung der Daten" text="Die angelegten Basisdaten werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Basisdaten als Link (über die 'Teilen'-Funktion) extern abgelegt werden." />
+              <v-alert
+                color="warning"
+                :icon="mdiExclamation"
+                title="Speicherung der Daten"
+                text="Die angelegten Basisdaten werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Basisdaten als Link (über die 'Teilen'-Funktion) extern abgelegt werden."
+              />
 
               <h3 class="mt-4 mb-2">Basisdatenübersicht</h3>
               <p class="mb-3">
-                Neue Basisdaten können über das Ausfüllen des Formulars angelegt werden.
-                Bereits angelegte Basisdaten lassen sich durch ein Drop-Down-Menü in die Übersicht
-                übernehmen. Die ausgewählten Basisdaten lassen sich dann aktualisieren,
-                löschen und über einen Link teilen.
+                Neue Basisdaten können über das Ausfüllen des Formulars angelegt
+                werden. Bereits angelegte Basisdaten lassen sich durch ein
+                Drop-Down-Menü in die Übersicht übernehmen. Die ausgewählten
+                Basisdaten lassen sich dann aktualisieren, löschen und über
+                einen Link teilen.
               </p>
 
               <h3 class="mt-4 mb-2">Eingabebeschränkungen</h3>
@@ -58,26 +64,27 @@
               </ul>
 
               <p class="mb-3">
-                Der Name ist auf {{ formattedNameLimit }} Zeichen beschränkt, die Größe des
-                Hauptorgans auf {{ formattedCommitteeSizeLimit }} Sitze und die Stimmen auf
+                Der Name ist auf {{ formattedNameLimit }} Zeichen beschränkt,
+                die Größe des Hauptorgans auf
+                {{ formattedCommitteeSizeLimit }} Sitze und die Stimmen auf
                 {{ formattedVotesLimit }} Stimmen.
               </p>
 
               <p class="mb-3">
                 Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-                Limit von {{ formattedNameLimit }} Zeichen. Zusätzlich
-                muss die Anzahl der Sitze und der Stimmen in der Tabelle erfasst werden.
-                Maximal können {{ formattedGroupLimit }} Parteien angelegt werden.
+                Limit von {{ formattedNameLimit }} Zeichen. Zusätzlich muss die
+                Anzahl der Sitze und der Stimmen in der Tabelle erfasst werden.
+                Maximal können {{ formattedGroupLimit }} Parteien angelegt
+                werden.
               </p>
 
               <p class="mb-3">
-                Bevor der Basisdatensatz angelegt werden kann, muss die Gesamtanzahl
-                der Sitze aller Parteien mit der Größe des Hauptorgans
-                übereinstimmen.
+                Bevor der Basisdatensatz angelegt werden kann, muss die
+                Gesamtanzahl der Sitze aller Parteien mit der Größe des
+                Hauptorgans übereinstimmen.
               </p>
               <p class="mb-3">
-                Gelöscht werden können die Parteien und
-                Gruppierungen:
+                Gelöscht werden können die Parteien und Gruppierungen:
               </p>
               <ul class="pl-4 mb-3">
                 <li>Entweder einzeln in der jeweiligen Zeile</li>
@@ -172,7 +179,12 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
 
-import {mdiContentSave, mdiDelete, mdiExclamation, mdiInformation, mdiShare} from "@mdi/js";
+import {
+  mdiContentSave,
+  mdiDelete,
+  mdiExclamation,
+  mdiShare,
+} from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -386,16 +398,16 @@ function isValidBaseData(x: any): x is BaseData {
 }
 
 const formattedCommitteeSizeLimit = computed(() =>
-    numberFormatter(LimitConfiguration.limitCommitteeSize)
+  numberFormatter(LimitConfiguration.limitCommitteeSize)
 );
 const formattedVotesLimit = computed(() =>
-    numberFormatter(LimitConfiguration.limitVotes)
+  numberFormatter(LimitConfiguration.limitVotes)
 );
 const formattedNameLimit = computed(() =>
-    numberFormatter(LimitConfiguration.limitName)
+  numberFormatter(LimitConfiguration.limitName)
 );
 const formattedGroupLimit = computed(() =>
-    numberFormatter(LimitConfiguration.limitGroups)
-)
+  numberFormatter(LimitConfiguration.limitGroups)
+);
 /* eslint-enable @typescript-eslint/no-explicit-any */
 </script>
