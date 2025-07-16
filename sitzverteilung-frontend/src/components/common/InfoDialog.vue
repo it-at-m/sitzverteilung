@@ -3,27 +3,25 @@
     <v-btn
       @click="openDialog"
       :icon="mdiInformation"
-      size="20"
-      :aria-label="'Informationen anzeigen'"
-      :tabindex="0"
+      variant="text"
+      aria-label="Informationen anzeigen"
     />
     <v-dialog
       v-model="isOpen"
-      persistent
       width="800"
+      scrollable
     >
       <v-card>
-        <v-card-text class="dialog-text">
+        <v-card-text>
           <slot name="dialog-text" />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn
-            id="infodialog-btn-back"
             variant="flat"
             @click="closeDialog"
           >
-            Zurück zur Seite
+            Schließen
           </v-btn>
         </v-card-actions>
       </v-card>

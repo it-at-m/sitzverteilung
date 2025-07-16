@@ -19,35 +19,33 @@
       @no="hideDeleteConfirmation"
       @yes="deleteSelectedBaseData"
     />
-    <v-row
-      align="center"
-      class="d-flex"
-    >
+    <v-row>
       <v-col class="d-flex align-center">
         <h1 class="mr-2">Verwaltung der Basisdaten</h1>
         <info-dialog>
           <template #dialog-text>
-            <div class="dialog-text pa-4">
-              <h3 class="mb-2">Information zur Basisdatenübersicht</h3>
+            <div class="pa-4 text-justify">
+              <h2 class="mb-2">Information zur Basisdatenübersicht</h2>
               <p class="mb-3">
                 In dieser Ansicht wird die Verwaltung der Basisdaten geregelt,
                 bestehend aus:
               </p>
               <ul class="pl-4 mb-3">
-                <li>Verwaltung der Basisdatenübersicht</li>
-                <li>Parteien und Gruppierungen</li>
-                <li>Fraktionen und Ausschüsse</li>
+                <li>Parteien / Gruppierungen und zugehörige Informationen</li>
+                <li>Bilden von Fraktionen und Ausschüssen</li>
               </ul>
 
-              <h4 class="mt-4 mb-2">Basisdatenübersicht</h4>
+              <v-alert color="warning" :icon="mdiExclamation" title="Speicherung der Daten" text="Die angelegten Basisdaten werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Basisdaten als Link (über die 'Teilen'-Funktion) extern abgelegt werden." />
+
+              <h3 class="mt-4 mb-2">Basisdatenübersicht</h3>
               <p class="mb-3">
-                Bei der Verwaltung der Basisdatenübersicht lassen sich bereits
-                angelegte Basisdaten durch ein Drop-Down-Menü in die Übersicht
-                übernehmen. Eingefügte Basisdaten lassen sich hier anlegen,
+                Neue Basisdaten können über das Ausfüllen des Formulars angelegt werden.
+                Bereits angelegte Basisdaten lassen sich durch ein Drop-Down-Menü in die Übersicht
+                übernehmen. Die ausgewählten Basisdaten lassen sich dann aktualisieren,
                 löschen und über einen Link teilen.
               </p>
 
-              <h4 class="mt-4 mb-2">Eingabebeschränkungen</h4>
+              <h3 class="mt-4 mb-2">Eingabebeschränkungen</h3>
               <p class="mb-3">
                 Ein Anlegen neuer Daten ist nur dann möglich, wenn:
               </p>
@@ -60,26 +58,25 @@
               </ul>
 
               <p class="mb-3">
-                Der Name ist auf 50 Zeichen beschränkt, die Größe des
-                Hauptorgans auf
-                {{ formattedCommitteeSize }}
-                Sitze und die Stimmen auf
-                {{ formattedVotesLimit }}
-                Stimmen.
+                Der Name ist auf {{ formattedNameLimit }} Zeichen beschränkt, die Größe des
+                Hauptorgans auf {{ formattedCommitteeSizeLimit }} Sitze und die Stimmen auf
+                {{ formattedVotesLimit }} Stimmen.
               </p>
 
               <p class="mb-3">
                 Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-                Limit von {{ LimitConfiguration.limitName }} Zeichen. Zusätzlich
-                bietet die Tabelle an, die Anzahl der Sitze und der Stimmen zu
-                erfassen. Maximal können
-                {{ LimitConfiguration.limitGroups }} Parteien angelegt werden.
+                Limit von {{ formattedNameLimit }} Zeichen. Zusätzlich
+                muss die Anzahl der Sitze und der Stimmen in der Tabelle erfasst werden.
+                Maximal können {{ formattedGroupLimit }} Parteien angelegt werden.
               </p>
 
               <p class="mb-3">
-                Bevor der Basisdatensatz angelegt werden kann, muss die Anzahl
-                der Sitze aller Parteien addiert mit der Größe des Hauptorgans
-                übereinstimmen. Gelöscht werden können die Parteien und
+                Bevor der Basisdatensatz angelegt werden kann, muss die Gesamtanzahl
+                der Sitze aller Parteien mit der Größe des Hauptorgans
+                übereinstimmen.
+              </p>
+              <p class="mb-3">
+                Gelöscht werden können die Parteien und
                 Gruppierungen:
               </p>
               <ul class="pl-4 mb-3">
@@ -90,7 +87,7 @@
                 </li>
               </ul>
 
-              <h4 class="mt-4 mb-2">Fraktionen und Ausschüsse</h4>
+              <h3 class="mt-4 mb-2">Fraktionen und Ausschüsse</h3>
               <p class="mb-3">
                 Fraktionen und Ausschüsse werden separat unter
                 Parteien/Gruppierungen angezeigt. Sofern mindestens zwei
@@ -98,7 +95,7 @@
                 in eine Fraktion oder einen Ausschuss zusammenfassen.
               </p>
 
-              <p class="mb-3">
+              <p>
                 Jede Partei/Gruppierung kann nur Teil einer Fraktion bzw. eines
                 Ausschusses sein. Es ist möglich, innerhalb der
                 Fraktions-/Ausschusstabelle Parteien oder Gruppierungen wieder
@@ -175,7 +172,7 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
 
-import { mdiContentSave, mdiDelete, mdiShare } from "@mdi/js";
+import {mdiContentSave, mdiDelete, mdiExclamation, mdiInformation, mdiShare} from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -199,12 +196,6 @@ const store = useBaseDataStore();
 const snackbar = useSnackbarStore();
 
 const storedBaseData = computed(() => store.baseDatas);
-const formattedCommitteeSize = computed(() =>
-  numberFormatter(LimitConfiguration.limitCommitteeSize)
-);
-const formattedVotesLimit = computed(() =>
-  numberFormatter(LimitConfiguration.limitVotes)
-);
 
 const dirty = computed(
   () =>
@@ -393,5 +384,18 @@ function isValidBaseData(x: any): x is BaseData {
     x.unions.every((union: any) => union && Array.isArray(union.groups))
   );
 }
+
+const formattedCommitteeSizeLimit = computed(() =>
+    numberFormatter(LimitConfiguration.limitCommitteeSize)
+);
+const formattedVotesLimit = computed(() =>
+    numberFormatter(LimitConfiguration.limitVotes)
+);
+const formattedNameLimit = computed(() =>
+    numberFormatter(LimitConfiguration.limitName)
+);
+const formattedGroupLimit = computed(() =>
+    numberFormatter(LimitConfiguration.limitGroups)
+)
 /* eslint-enable @typescript-eslint/no-explicit-any */
 </script>
