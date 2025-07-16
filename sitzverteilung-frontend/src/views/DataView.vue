@@ -179,12 +179,7 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
 
-import {
-  mdiContentSave,
-  mdiDelete,
-  mdiExclamation,
-  mdiShare,
-} from "@mdi/js";
+import { mdiContentSave, mdiDelete, mdiExclamation, mdiShare } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -396,6 +391,7 @@ function isValidBaseData(x: any): x is BaseData {
     x.unions.every((union: any) => union && Array.isArray(union.groups))
   );
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const formattedCommitteeSizeLimit = computed(() =>
   numberFormatter(LimitConfiguration.limitCommitteeSize)
@@ -409,5 +405,4 @@ const formattedNameLimit = computed(() =>
 const formattedGroupLimit = computed(() =>
   numberFormatter(LimitConfiguration.limitGroups)
 );
-/* eslint-enable @typescript-eslint/no-explicit-any */
 </script>
