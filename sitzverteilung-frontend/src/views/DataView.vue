@@ -64,18 +64,22 @@
               </ul>
 
               <p class="mb-3">
-                Der Name ist auf {{ formattedNameLimit }} Zeichen beschränkt,
-                die Größe des Hauptorgans auf
-                {{ formattedCommitteeSizeLimit }} Sitze und die Stimmen auf
-                {{ formattedVotesLimit }} Stimmen.
+                Der Name ist auf
+                {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen
+                beschränkt, die Größe des Hauptorgans auf
+                {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }}
+                Sitze und die Stimmen auf
+                {{ numberFormatter(LimitConfiguration.limitVotes) }} Stimmen.
               </p>
 
               <p class="mb-3">
                 Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-                Limit von {{ formattedNameLimit }} Zeichen. Zusätzlich muss die
-                Anzahl der Sitze und der Stimmen in der Tabelle erfasst werden.
-                Maximal können {{ formattedGroupLimit }} Parteien angelegt
-                werden.
+                Limit von
+                {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen.
+                Zusätzlich muss die Anzahl der Sitze und der Stimmen in der
+                Tabelle erfasst werden. Maximal können
+                {{ numberFormatter(LimitConfiguration.limitGroups) }} Parteien
+                angelegt werden.
               </p>
 
               <p class="mb-3">
@@ -392,17 +396,4 @@ function isValidBaseData(x: any): x is BaseData {
   );
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
-
-const formattedCommitteeSizeLimit = computed(() =>
-  numberFormatter(LimitConfiguration.limitCommitteeSize)
-);
-const formattedVotesLimit = computed(() =>
-  numberFormatter(LimitConfiguration.limitVotes)
-);
-const formattedNameLimit = computed(() =>
-  numberFormatter(LimitConfiguration.limitName)
-);
-const formattedGroupLimit = computed(() =>
-  numberFormatter(LimitConfiguration.limitGroups)
-);
 </script>
