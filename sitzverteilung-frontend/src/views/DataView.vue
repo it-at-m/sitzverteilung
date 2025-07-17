@@ -20,8 +20,103 @@
       @yes="deleteSelectedBaseData"
     />
     <v-row>
-      <v-col>
-        <h1>Verwaltung der Basisdaten</h1>
+      <v-col class="d-flex align-center">
+        <h1 class="mr-2">Verwaltung der Basisdaten</h1>
+        <info-dialog>
+          <template #dialog-text>
+            <div class="pa-4 text-justify">
+              <h2 class="mb-2">Information zur Basisdatenübersicht</h2>
+              <p class="mb-3">
+                In dieser Ansicht wird die Verwaltung der Basisdaten geregelt,
+                bestehend aus:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>Parteien / Gruppierungen und zugehörige Informationen</li>
+                <li>Bilden von Fraktionen und Ausschüssen</li>
+              </ul>
+
+              <v-alert
+                color="warning"
+                :icon="mdiExclamation"
+                title="Speicherung der Daten"
+                text="Die angelegten Basisdaten werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Basisdaten als Link (über die 'Teilen'-Funktion) extern abgelegt werden."
+              />
+
+              <h3 class="mt-4 mb-2">Basisdatenübersicht</h3>
+              <p class="mb-3">
+                Neue Basisdaten können über das Ausfüllen des Formulars angelegt
+                werden. Bereits angelegte Basisdaten lassen sich durch ein
+                Drop-Down-Menü in die Übersicht übernehmen. Die ausgewählten
+                Basisdaten lassen sich dann aktualisieren, löschen und über
+                einen Link teilen.
+              </p>
+
+              <h3 class="mt-4 mb-2">Eingabebeschränkungen</h3>
+              <p class="mb-3">
+                Ein Anlegen neuer Daten ist nur dann möglich, wenn:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>
+                  Der Name des Basisdatensatzes und die Größe des Hauptorgans
+                  eingegeben wurden.
+                </li>
+                <li>Mindestens eine Partei vorhanden ist.</li>
+              </ul>
+
+              <p class="mb-3">
+                Der Name ist auf
+                {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen
+                beschränkt, die Größe des Hauptorgans auf
+                {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }}
+                Sitze und die Stimmen auf
+                {{ numberFormatter(LimitConfiguration.limitVotes) }} Stimmen.
+              </p>
+
+              <p class="mb-3">
+                Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
+                Limit von
+                {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen.
+                Zusätzlich muss die Anzahl der Sitze und der Stimmen in der
+                Tabelle erfasst werden. Maximal können
+                {{ numberFormatter(LimitConfiguration.limitGroups) }} Parteien
+                angelegt werden.
+              </p>
+
+              <p class="mb-3">
+                Bevor der Basisdatensatz angelegt werden kann, muss die
+                Gesamtanzahl der Sitze aller Parteien mit der Größe des
+                Hauptorgans übereinstimmen.
+              </p>
+              <p class="mb-3">
+                Gelöscht werden können die Parteien und Gruppierungen:
+              </p>
+              <ul class="pl-4 mb-3">
+                <li>Entweder einzeln in der jeweiligen Zeile</li>
+                <li>
+                  Oder indem mehrere ausgewählt werden und auf Zeile bzw. Zeilen
+                  löschen geklickt wird.
+                </li>
+              </ul>
+
+              <h3 class="mt-4 mb-2">Fraktionen und Ausschüsse</h3>
+              <p class="mb-3">
+                Fraktionen und Ausschüsse werden separat unter
+                Parteien/Gruppierungen angezeigt. Sofern mindestens zwei
+                Parteien oder Gruppierungen ausgewählt wurden, lassen diese sich
+                in eine Fraktion oder einen Ausschuss zusammenfassen.
+              </p>
+
+              <p>
+                Jede Partei/Gruppierung kann nur Teil einer Fraktion bzw. eines
+                Ausschusses sein. Es ist möglich, innerhalb der
+                Fraktions-/Ausschusstabelle Parteien oder Gruppierungen wieder
+                zu entfernen. Diese lassen sich allerdings nicht wieder
+                hinzufügen, es sei denn, es wird eine neue Fraktion/ein neuer
+                Ausschuss angelegt.
+              </p>
+            </div>
+          </template>
+        </info-dialog>
       </v-col>
     </v-row>
     <v-toolbar class="my-6 py-2 px-3 bg-primary">
@@ -88,18 +183,20 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
 
-import { mdiContentSave, mdiDelete, mdiShare } from "@mdi/js";
+import { mdiContentSave, mdiDelete, mdiExclamation, mdiShare } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
+import InfoDialog from "@/components/common/InfoDialog.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
 import { STATUS_INDICATORS } from "@/constants.ts";
 import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
+import { numberFormatter } from "@/utility/numberFormatter.ts";
 import {
   writeToUrlParam,
   writeUrlParamToObject,

@@ -12,4 +12,4 @@ export const LimitConfiguration = {
   limitGroups: 18,
   limitVotes: 99_999_999,
   limitCommitteeSize: 999,
-};
+} as const;
