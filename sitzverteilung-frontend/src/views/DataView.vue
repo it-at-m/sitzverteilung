@@ -31,8 +31,13 @@
                 bestehend aus:
               </p>
               <ul class="pl-4 mb-3">
-                <li>Parteien / Gruppierungen und zugehörige Informationen</li>
-                <li>Bilden von Fraktionen und Ausschüssen</li>
+                <li>
+                  Parteien / Gruppierungen / Einzelmitglieder und zugehörige
+                  Informationen
+                </li>
+                <li>
+                  Bilden von Fraktionsgemeinschaften und Ausschussgemeinschaften
+                </li>
               </ul>
 
               <v-alert
@@ -60,7 +65,10 @@
                   Der Name des Basisdatensatzes und die Größe des Hauptorgans
                   eingegeben wurden.
                 </li>
-                <li>Mindestens eine Partei vorhanden ist.</li>
+                <li>
+                  Mindestens eine Partei / Gruppierung / Einzelmitglied
+                  vorhanden ist.
+                </li>
               </ul>
 
               <p class="mb-3">
@@ -73,22 +81,23 @@
               </p>
 
               <p class="mb-3">
-                Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-                Limit von
+                Bei dem Namen der Parteien / Gruppierungen / Einzelmitglieder
+                gilt ebenfalls ein Limit von
                 {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen.
                 Zusätzlich muss die Anzahl der Sitze und der Stimmen in der
                 Tabelle erfasst werden. Maximal können
-                {{ numberFormatter(LimitConfiguration.limitGroups) }} Parteien
-                angelegt werden.
+                {{ numberFormatter(LimitConfiguration.limitGroups) }} Parteien /
+                Gruppierungen / Einzelmitglieder angelegt werden.
               </p>
 
               <p class="mb-3">
                 Bevor der Basisdatensatz angelegt werden kann, muss die
-                Gesamtanzahl der Sitze aller Parteien mit der Größe des
-                Hauptorgans übereinstimmen.
+                Gesamtanzahl der Sitze aller Parteien / Gruppierungen /
+                Einzelmitglieder mit der Größe des Hauptorgans übereinstimmen.
               </p>
               <p class="mb-3">
-                Gelöscht werden können die Parteien und Gruppierungen:
+                Gelöscht werden können die Parteien / Gruppierungen /
+                Einzelmitglieder:
               </p>
               <ul class="pl-4 mb-3">
                 <li>Entweder einzeln in der jeweiligen Zeile</li>
@@ -98,21 +107,26 @@
                 </li>
               </ul>
 
-              <h3 class="mt-4 mb-2">Fraktionen und Ausschüsse</h3>
+              <h3 class="mt-4 mb-2">
+                Fraktionsgemeinschaften und Ausschussgemeinschaften
+              </h3>
               <p class="mb-3">
-                Fraktionen und Ausschüsse werden separat unter
-                Parteien/Gruppierungen angezeigt. Sofern mindestens zwei
-                Parteien oder Gruppierungen ausgewählt wurden, lassen diese sich
-                in eine Fraktion oder einen Ausschuss zusammenfassen.
+                Fraktionsgemeinschaften und Ausschussgemeinschaften werden
+                separat unterhalb Parteien / Gruppierungen / Einzelmitglieder
+                angezeigt. Sofern mindestens zwei Einträge ausgewählt wurden,
+                lässt sich eine Fraktionsgemeinschaft oder eine
+                Ausschussgemeinschaft bilden.
               </p>
 
               <p>
-                Jede Partei/Gruppierung kann nur Teil einer Fraktion bzw. eines
-                Ausschusses sein. Es ist möglich, innerhalb der
-                Fraktions-/Ausschusstabelle Parteien oder Gruppierungen wieder
+                Jede Partei / Gruppierung / Einzelmitglied kann nur Teil einer
+                Fraktionsgemeinschaft bzw. einer Ausschussgemeinschaft sein. Es
+                ist möglich, innerhalb der
+                Fraktionsgemeinschaft-/Ausschussgemeinschaftstabelle
+                hinzugefügte Parteien / Gruppierungen / Einzelmitglieder wieder
                 zu entfernen. Diese lassen sich allerdings nicht wieder
-                hinzufügen, es sei denn, es wird eine neue Fraktion/ein neuer
-                Ausschuss angelegt.
+                hinzufügen, es sei denn, es wird eine neue Fraktionsgemeinschaft
+                oder eine neue Ausschussgemeinschaft angelegt.
               </p>
             </div>
           </template>
