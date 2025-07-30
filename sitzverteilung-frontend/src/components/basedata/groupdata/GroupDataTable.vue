@@ -6,7 +6,7 @@
     no-filter
     disable-sort
     density="compact"
-    no-data-text="Es wurden noch keine Parteien/Gruppierungen hinzugefügt."
+    no-data-text="Es wurden noch keine Parteien / Gruppierungen / Einzelmitglieder hinzugefügt."
     show-select
     return-object
     v-model="selected"
@@ -19,7 +19,9 @@
         class="px-2"
       >
         <template #prepend>
-          <p class="text-h6 font-weight-bold">Parteien / Gruppierungen</p>
+          <p class="text-h6 font-weight-bold">
+            Parteien / Gruppierungen / Einzelmitglieder
+          </p>
         </template>
         <template #append>
           <v-btn
@@ -30,7 +32,7 @@
             color="primary"
             size="small"
             class="mx-2"
-            text="Fraktion anlegen"
+            text="Fraktionsgemeinschaft anlegen"
           />
           <v-btn
             :disabled="isCommitteeDisabled"
@@ -40,7 +42,7 @@
             color="primary"
             size="small"
             class="mx-2"
-            text="Ausschuss anlegen"
+            text="Ausschussgemeinschaft anlegen"
           />
           <v-btn
             :disabled="isDeletionDisabled"
@@ -153,7 +155,7 @@ import { numberFormatter } from "@/utility/numberFormatter.ts";
 
 const headers = computed(() => [
   {
-    title: `Name der Partei/Gruppierung (max. ${numberFormatter(props.limitName)} Zeichen)`,
+    title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
     key: "name",
     width: 400,
   },

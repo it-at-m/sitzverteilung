@@ -140,7 +140,7 @@ const seatFieldValidationError = computed(() => {
   if (isSeatsTooHigh.value)
     return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
   if (isTooManyGroups.value)
-    return "Die Anzahl an Parteien/Gruppierungen übersteigt den angegebenen Wert.";
+    return "Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den angegebenen Wert.";
   return "";
 });
 
