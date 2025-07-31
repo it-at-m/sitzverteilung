@@ -84,8 +84,8 @@
                 Bei dem Namen der Parteien / Gruppierungen / Einzelmitglieder
                 gilt ebenfalls ein Limit von
                 {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen.
-                Zusätzlich muss die Anzahl der Sitze in der Tabelle erfasst werden.
-                Die Angabe der Stimmen ist optional. Maximal können
+                Zusätzlich muss die Anzahl der Sitze in der Tabelle erfasst
+                werden. Die Angabe der Stimmen ist optional. Maximal können
                 {{ numberFormatter(LimitConfiguration.limitGroups) }} Parteien /
                 Gruppierungen / Einzelmitglieder angelegt werden.
               </p>
