@@ -1,6 +1,7 @@
 <template>
   <v-autocomplete
     ref="autocompleteRef"
+    :model-value="selectedBaseData"
     :items="baseDataList"
     item-title="name"
     item-value="name"
@@ -65,9 +66,7 @@ import {
 } from "@mdi/js";
 import { computed, ref, useTemplateRef } from "vue";
 
-const emit = defineEmits<{
-  update: [baseData: BaseData];
-}>();
+const selectedBaseData = defineModel<BaseData>();
 
 const autocompleteRef = useTemplateRef<VAutocomplete>("autocompleteRef");
 
@@ -80,15 +79,16 @@ const searchText = ref("");
 function updateSearchText(newSearchText: string) {
   searchText.value = newSearchText;
   if (!newSearchText?.trim()) {
-    itemSelected.value = false;
+    isItemSelected.value = false;
   }
 }
 
-const itemSelected = ref(false);
+const isItemSelected = ref(false);
 function updateSelection(selectedItem: BaseData | null) {
   if (selectedItem) {
-    itemSelected.value = true;
-    emit("update", selectedItem);
+    isItemSelected.value = true;
+    selectedBaseData.value = selectedItem;
+    unfocus();
   }
 }
 
@@ -102,33 +102,34 @@ const isAlreadyExistent = computed(() =>
 
 function clickClear() {
   createNewEmptyBaseData();
-  itemSelected.value = false;
+  isItemSelected.value = false;
 }
 
 function createNewBaseDataByName() {
-  emit("update", {
+  selectedBaseData.value = {
     name: searchText.value.trim(),
     committeeSize: undefined,
     unions: [],
     groups: [],
-  });
+  };
   reset();
   unfocus();
 }
 
 function hitEnter() {
-  if (!itemSelected.value) {
+  if (!isItemSelected.value) {
     createNewBaseDataByName();
   }
 }
 
 function createNewEmptyBaseData() {
-  emit("update", {
+  selectedBaseData.value = {
     name: "",
     committeeSize: undefined,
     unions: [],
     groups: [],
-  });
+  };
+  unfocus();
 }
 
 function reset() {

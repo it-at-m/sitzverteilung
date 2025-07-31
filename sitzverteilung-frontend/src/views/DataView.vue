@@ -12,7 +12,7 @@
     <yes-no-dialog
       :model-value="isDeleteConfirmationShown"
       dialog-title="Basisdaten löschen?"
-      dialog-text="Wollen Sie die Basisdaten wirklich löschen?"
+      :dialog-text="`Wollen Sie die Basisdaten '${selectedBaseData?.name ?? ''}' wirklich löschen?`"
       yes-text="Löschen"
       no-text="Abbrechen"
       yes-color="red"
@@ -138,7 +138,7 @@
         <v-col class="d-flex align-center">
           <base-data-autocomplete
             ref="baseDataAutocompleteRef"
-            @update="updatedBaseDataSelection"
+            v-model="selectedBaseData"
             :limit-name="LimitConfiguration.limitName"
             :base-data-list="storedBaseData"
           />
@@ -222,6 +222,14 @@ const snackbar = useSnackbarStore();
 
 const storedBaseData = computed(() => store.baseDatas);
 
+const selectedBaseData = ref<BaseData>();
+const isBaseDataSelected = computed(
+  () =>
+    !!selectedBaseData.value &&
+    selectedBaseData.value.name !== "" &&
+    baseDataNames.value.includes(selectedBaseData.value.name)
+);
+
 const dirty = computed(
   () =>
     isBaseDataSelected.value &&
@@ -240,14 +248,6 @@ const saveLeave = useSaveLeave(isDataEntered);
 
 const baseDataNames = computed(() =>
   storedBaseData.value.map((baseData) => baseData.name)
-);
-
-const selectedBaseData = ref<BaseData>();
-const isBaseDataSelected = computed(
-  () =>
-    !!selectedBaseData.value &&
-    selectedBaseData.value.name !== "" &&
-    baseDataNames.value.includes(selectedBaseData.value.name)
 );
 
 const currentBaseData = ref<BaseData>(getEmptyBaseData());
@@ -272,16 +272,15 @@ function saveBaseData() {
     if (isBaseDataSelected.value && selectedBaseData.value) {
       store.updateBaseData(selectedBaseData.value.name, copy);
       snackbar.showMessage({
-        message: `Die Basisdaten '${copy.name}' wurden aktualisiert.`,
+        message: `Die Basisdaten '${selectedBaseData.value.name}' wurden aktualisiert.`,
       });
-      selectedBaseData.value = undefined;
     } else {
       store.addBaseData(copy);
       snackbar.showMessage({
         message: `Die Basisdaten '${copy.name}' wurden angelegt.`,
       });
-      reset();
     }
+    selectedBaseData.value = copy;
   }
 }
 
@@ -304,10 +303,6 @@ function deleteSelectedBaseData() {
   }
 }
 
-function updatedBaseDataSelection(baseData: BaseData) {
-  selectedBaseData.value = baseData;
-}
-
 const baseDataAutocompleteRef = useTemplateRef<typeof BaseDataAutocomplete>(
   "baseDataAutocompleteRef"
 );
@@ -317,6 +312,9 @@ watch(selectedBaseData, (newBaseData) => {
     return;
   }
   currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
+  if (currentBaseData.value.committeeSize == null) {
+    isValid.value = false;
+  }
 });
 
 function reset() {
