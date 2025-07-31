@@ -46,7 +46,6 @@
       <v-number-input
         v-model.number="group.votes"
         ref="votesInputField"
-        :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
         :max="limitVotes"
         hide-details="auto"
