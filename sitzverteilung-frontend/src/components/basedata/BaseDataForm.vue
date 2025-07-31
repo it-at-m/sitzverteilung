@@ -21,7 +21,7 @@
       </v-col>
       <v-col>
         <v-number-input
-          v-model.number="baseData.committeeSize"
+          v-model="baseData.committeeSize"
           :rules="[FieldValidationRules.Required]"
           :min="1"
           :max="limitCommitteeSize"
