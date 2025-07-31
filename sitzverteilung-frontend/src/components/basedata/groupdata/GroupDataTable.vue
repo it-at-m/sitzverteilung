@@ -165,7 +165,7 @@ const headers = computed(() => [
     width: 200,
   },
   {
-    title: `Anzahl der Stimmen (max. ${numberFormatter(props.limitVotes)})`,
+    title: `Anzahl der Stimmen (optional, max. ${numberFormatter(props.limitVotes)})`,
     key: "votes",
     width: 200,
   },
