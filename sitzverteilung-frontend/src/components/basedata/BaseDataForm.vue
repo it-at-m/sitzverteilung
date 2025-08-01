@@ -113,7 +113,7 @@ const committees = computed({
 
 const {
   baseDataNames = [],
-  isEditing,
+  selectedBaseDataName,
   limitName,
   limitGroups,
   limitVotes,
@@ -123,7 +123,7 @@ const {
   limitGroups: number;
   limitVotes: number;
   limitCommitteeSize: number;
-  isEditing: boolean;
+  selectedBaseDataName?: string;
   baseDataNames?: string[];
 }>();
 
@@ -144,9 +144,15 @@ const seatFieldValidationError = computed(() => {
   return "";
 });
 
-const comparedBaseDataNames = computed(() =>
-  isEditing ? baseDataNames : [...baseDataNames, baseData.value.name]
-);
+const comparedBaseDataNames = computed(() => {
+  let relevantBaseDataNames = baseDataNames;
+  if (selectedBaseDataName !== undefined && selectedBaseDataName !== null) {
+    relevantBaseDataNames = relevantBaseDataNames.filter(
+      (name) => name !== selectedBaseDataName
+    );
+  }
+  return [...relevantBaseDataNames, baseData.value.name];
+});
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const limitGroupsRef = toRef(() => limitGroups);
