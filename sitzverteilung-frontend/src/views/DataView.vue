@@ -298,13 +298,10 @@ function deleteSelectedBaseData() {
 }
 
 watch(selectedBaseData, (newBaseData) => {
-  if (newBaseData === null || newBaseData === undefined) {
+  if (!newBaseData) {
     reset();
-    return;
-  }
-  currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-  if (currentBaseData.value.committeeSize == null) {
-    isValid.value = false;
+  } else {
+    currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
   }
 });
 
@@ -355,7 +352,7 @@ watch(
   () => route.query.import,
   async (newImport) => {
     const importParam = newImport?.toString() ?? "";
-    if (importParam !== "") {
+    if (importParam) {
       try {
         const baseData = await writeUrlParamToObject<BaseData>(importParam);
         if (!isValidBaseData(baseData)) {

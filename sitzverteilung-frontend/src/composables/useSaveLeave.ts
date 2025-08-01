@@ -32,13 +32,13 @@ export function useSaveLeave(isDirty: Ref<boolean>) {
 
   function cancel(): void {
     saveLeaveDialog.value = false;
-    if (nextRoute.value != null) {
+    if (nextRoute.value) {
       nextRoute.value(false);
     }
   }
 
   function leave(): void {
-    if (nextRoute.value != null) {
+    if (nextRoute.value) {
       nextRoute.value();
     }
   }
