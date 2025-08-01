@@ -181,7 +181,7 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import type { BaseData } from "@/types/BaseData";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiContentSave, mdiDelete, mdiExclamation, mdiShare } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";

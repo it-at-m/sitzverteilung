@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { BaseData } from "../../src/types/BaseData";
+import { BaseData } from "../../src/types/basedata/BaseData";
 import {
   writeToUrlParam,
   writeUrlParamToObject,

@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseData } from "@/types/BaseData.ts";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
 import type { VAutocomplete } from "vuetify/components";
 
 import {

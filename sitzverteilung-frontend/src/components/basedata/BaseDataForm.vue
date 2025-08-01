@@ -73,8 +73,8 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseData } from "@/types/BaseData";
-import type { GroupIndex, Union } from "@/types/Union.ts";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
+import type { GroupIndex, Union } from "@/types/basedata/Union.ts";
 import type { VForm, VTextField } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
@@ -83,7 +83,7 @@ import { computed, toRef, useTemplateRef } from "vue";
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import UnionDataTable from "@/components/basedata/uniondata/UnionDataTable.vue";
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
-import { UnionType } from "@/types/Union.ts";
+import { UnionType } from "@/types/basedata/Union.ts";
 import { FieldValidationRules } from "@/utility/validation.ts";
 
 const baseData = defineModel<BaseData>({ required: true });

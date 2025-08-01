@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group";
+import type { Group } from "@/types/basedata/Group.ts";
 import type { VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";

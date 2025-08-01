@@ -138,8 +138,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group";
-import type { GroupIndex, Union } from "@/types/Union.ts";
+import type { Group } from "@/types/basedata/Group.ts";
+import type { GroupIndex, Union } from "@/types/basedata/Union.ts";
 
 import { mdiAccountGroup, mdiDelete, mdiPlus, mdiSeat, mdiVote } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
@@ -148,7 +148,7 @@ import { computed, ref, useTemplateRef, watch } from "vue";
 import GroupDataTableAddRow from "@/components/basedata/groupdata/GroupDataTableAddRow.vue";
 import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
-import { UnionType } from "@/types/Union.ts";
+import { UnionType } from "@/types/basedata/Union.ts";
 import { numberFormatter } from "@/utility/numberFormatter.ts";
 
 const headers = computed(() => [
