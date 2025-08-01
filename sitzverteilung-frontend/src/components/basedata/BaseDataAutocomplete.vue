@@ -1,7 +1,7 @@
 <template>
   <v-autocomplete
     v-model="selectedBaseData"
-    :items="baseDataList"
+    :items="sortedBaseDataList"
     item-title="name"
     item-value="name"
     return-object
@@ -41,14 +41,20 @@
 
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData.ts";
-import type { VAutocomplete } from "vuetify/components";
 
 import { mdiFileDocumentMultiple, mdiInformation } from "@mdi/js";
+import { computed } from "vue";
 
 const selectedBaseData = defineModel<BaseData | null>();
 
-defineProps<{
+const props = defineProps<{
   baseDataList: BaseData[];
   limitName: number;
 }>();
+
+const sortedBaseDataList = computed(() =>
+  [...props.baseDataList].sort((a: BaseData, b: BaseData) =>
+    a.name.localeCompare(b.name)
+  )
+);
 </script>

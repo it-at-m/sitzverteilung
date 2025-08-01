@@ -148,8 +148,18 @@
             class="ml-5"
             :prepend-icon="mdiContentSave"
             :disabled="!isValid || (isBaseDataSelected && !dirty)"
-            @click="saveBaseData"
-            >{{ isBaseDataSelected ? "Aktualisieren" : "Anlegen" }}
+            @click="createBaseData"
+            >Anlegen
+          </v-btn>
+          <v-btn
+            variant="flat"
+            color="green"
+            size="large"
+            class="ml-5"
+            :prepend-icon="mdiContentSaveEdit"
+            :disabled="!isBaseDataSelected || !isValid || !dirty"
+            @click="updateBaseData"
+            >Ändern
           </v-btn>
           <v-btn
             variant="flat"
@@ -196,7 +206,13 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/BaseData";
 
-import { mdiContentSave, mdiDelete, mdiExclamation, mdiShare } from "@mdi/js";
+import {
+  mdiContentSave,
+  mdiContentSaveEdit,
+  mdiDelete,
+  mdiExclamation,
+  mdiShare,
+} from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -260,20 +276,24 @@ function getEmptyBaseData(): BaseData {
   };
 }
 
-function saveBaseData() {
+function updateBaseData() {
+  if (currentBaseData.value && selectedBaseData.value) {
+    const copy = JSON.parse(JSON.stringify(currentBaseData.value));
+    store.updateBaseData(selectedBaseData.value.name, copy);
+    snackbar.showMessage({
+      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden aktualisiert.`,
+    });
+    selectedBaseData.value = copy;
+  }
+}
+
+function createBaseData() {
   if (currentBaseData.value) {
     const copy = JSON.parse(JSON.stringify(currentBaseData.value));
-    if (isBaseDataSelected.value && selectedBaseData.value) {
-      store.updateBaseData(selectedBaseData.value.name, copy);
-      snackbar.showMessage({
-        message: `Die Basisdaten '${selectedBaseData.value.name}' wurden aktualisiert.`,
-      });
-    } else {
-      store.addBaseData(copy);
-      snackbar.showMessage({
-        message: `Die Basisdaten '${copy.name}' wurden angelegt.`,
-      });
-    }
+    store.addBaseData(copy);
+    snackbar.showMessage({
+      message: `Die Basisdaten '${copy.name}' wurden angelegt.`,
+    });
     selectedBaseData.value = copy;
   }
 }
