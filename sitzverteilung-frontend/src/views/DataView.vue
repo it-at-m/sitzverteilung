@@ -187,7 +187,7 @@
           :limit-groups="LimitConfiguration.limitGroups"
           :limit-committee-size="LimitConfiguration.limitCommitteeSize"
           :limit-votes="LimitConfiguration.limitVotes"
-          :is-editing="isBaseDataSelected"
+          :selected-base-data-name="selectedBaseData?.name"
           :base-data-names="baseDataNames"
         />
       </v-col>
