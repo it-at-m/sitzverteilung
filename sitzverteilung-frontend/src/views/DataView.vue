@@ -137,7 +137,6 @@
       <v-row>
         <v-col class="d-flex align-center">
           <base-data-autocomplete
-            ref="baseDataAutocompleteRef"
             v-model="selectedBaseData"
             :limit-name="LimitConfiguration.limitName"
             :base-data-list="storedBaseData"
@@ -222,13 +221,8 @@ const snackbar = useSnackbarStore();
 
 const storedBaseData = computed(() => store.baseDatas);
 
-const selectedBaseData = ref<BaseData>();
-const isBaseDataSelected = computed(
-  () =>
-    !!selectedBaseData.value &&
-    selectedBaseData.value.name !== "" &&
-    baseDataNames.value.includes(selectedBaseData.value.name)
-);
+const selectedBaseData = ref<BaseData | null>();
+const isBaseDataSelected = computed(() => !!selectedBaseData.value);
 
 const dirty = computed(
   () =>
@@ -299,31 +293,25 @@ function deleteSelectedBaseData() {
     snackbar.showMessage({
       message: `Die Basisdaten '${selectedBaseData.value.name}' wurden gelöscht.`,
     });
-    selectedBaseData.value = undefined;
+    selectedBaseData.value = null;
   }
 }
 
-const baseDataAutocompleteRef = useTemplateRef<typeof BaseDataAutocomplete>(
-  "baseDataAutocompleteRef"
-);
 watch(selectedBaseData, (newBaseData) => {
-  if (newBaseData === undefined || newBaseData.name === "") {
+  if (!newBaseData) {
     reset();
-    return;
-  }
-  currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-  if (currentBaseData.value.committeeSize == null) {
-    isValid.value = false;
+  } else {
+    currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
   }
 });
 
 function reset() {
-  baseDataAutocompleteRef.value?.reset();
   baseDataFormRef.value?.reset();
   currentBaseData.value = getEmptyBaseData();
 }
 
 const { copy, isSupported } = useClipboard();
+
 async function share() {
   if (isBaseDataSelected.value && selectedBaseData.value) {
     if (!isSupported.value) {
@@ -364,7 +352,7 @@ watch(
   () => route.query.import,
   async (newImport) => {
     const importParam = newImport?.toString() ?? "";
-    if (importParam !== "") {
+    if (importParam) {
       try {
         const baseData = await writeUrlParamToObject<BaseData>(importParam);
         if (!isValidBaseData(baseData)) {
@@ -378,7 +366,7 @@ watch(
             currentBaseData.value = baseData;
           });
           snackbar.showMessage({
-            message: `Die Basisdaten '${baseData.name}' wurden importiert. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
+            message: `Die Basisdaten '${baseData.name}' wurden übertragen. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
           });
         }
       } catch {

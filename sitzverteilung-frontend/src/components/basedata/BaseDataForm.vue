@@ -123,7 +123,7 @@ const {
   limitGroups: number;
   limitVotes: number;
   limitCommitteeSize: number;
-  selectedBaseDataName?: string;
+  selectedBaseDataName?: string | null;
   baseDataNames?: string[];
 }>();
 
@@ -146,7 +146,7 @@ const seatFieldValidationError = computed(() => {
 
 const comparedBaseDataNames = computed(() => {
   let relevantBaseDataNames = baseDataNames;
-  if (selectedBaseDataName !== undefined && selectedBaseDataName !== null) {
+  if (selectedBaseDataName) {
     relevantBaseDataNames = relevantBaseDataNames.filter(
       (name) => name !== selectedBaseDataName
     );
