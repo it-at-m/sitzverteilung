@@ -1,14 +1,17 @@
 import type { CalculationGroup } from "@/types/calculation/internal/CalculationGroup.ts";
 import type { CalculationGroupRatio } from "@/types/calculation/internal/CalculationGroupRatio.ts";
+import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
+import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 
 export function dHondt(
   calculationGroups: CalculationGroup[],
   committeeSize: number
-) {
+): CalculationMethodResult {
   const seatDistribution: CalculationSeatDistribution = {};
   const seatOrder: CalculationSeatOrder = [];
+  let stale: CalculationStale | undefined = undefined;
 
   // initialize distributions with 0 seats for every group
   calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
@@ -24,21 +27,48 @@ export function dHondt(
     }
   });
 
-  // Calculate relevant ratios and drop the others
+  // Sort ratios descending (to get assignment order)
   ratios.sort((a, b) => b.value - a.value);
   const topRatios = ratios.slice(0, committeeSize);
 
-  // Calculate seat distribution and order
+  // Calculate preliminary seat distribution and order
   topRatios.forEach((ratio) => {
     seatDistribution[ratio.groupName]++;
-    seatOrder.push({
-      groupName: ratio.groupName,
-      value: Number(ratio.value.toFixed(3)),
-    });
+    seatOrder.push(ratio);
   });
+
+  // Check for stale situation
+  const staleRatio = topRatios[committeeSize - 1].value;
+  const potentialStales = ratios.filter((ratio) => ratio.value === staleRatio);
+  const staleGroupNames = [
+    ...new Set(potentialStales.map((ratio) => ratio.groupName)),
+  ];
+  const potentialStalesInTop = topRatios.filter(
+    (ratio) => ratio.value === staleRatio
+  );
+  const unresolvedSeats = potentialStales.length - potentialStalesInTop.length;
+
+  if (unresolvedSeats) {
+    // Create stale information
+    stale = {
+      groupNames: staleGroupNames,
+      amountSeats: potentialStalesInTop.length,
+    };
+
+    // Remove stale seats from seat distribution and order
+    let toRemove = unresolvedSeats;
+    for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
+      if (seatOrder[i].value === staleRatio) {
+        seatDistribution[seatOrder[i].groupName]--;
+        seatOrder.splice(i, 1);
+        toRemove--;
+      }
+    }
+  }
 
   return {
     distribution: seatDistribution,
     order: seatOrder,
+    stale: stale,
   };
 }
