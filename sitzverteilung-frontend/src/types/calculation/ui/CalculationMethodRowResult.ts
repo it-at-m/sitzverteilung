@@ -3,6 +3,6 @@ import type { CalculationRowSeatOrder } from "@/types/calculation/ui/Calculation
 export interface CalculationMethodRowResult {
   isValid: boolean;
   amountAllocatedSeats: number;
-  isStale: string; // Maybe split into two separate numeric attributes
+  isStale: string;
   arrangement: CalculationRowSeatOrder[];
 }

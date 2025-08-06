@@ -41,7 +41,6 @@
 
 <script setup lang="ts">
 import type { BaseData } from "@/types/basedata/BaseData.ts";
-import type { VAutocomplete } from "vuetify/components";
 
 import { mdiFileDocumentMultiple, mdiInformation } from "@mdi/js";
 import { computed } from "vue";

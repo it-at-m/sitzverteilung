@@ -5,7 +5,7 @@ import { CalculationGroupRatio } from "../../src/types/calculation/internal/Calc
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
 import { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
-import { dHondt } from "../../src/utility/calculator";
+import { exportForTesting } from "../../src/utility/calculator";
 
 interface CalculationTestData {
   given: {
@@ -15,7 +15,7 @@ interface CalculationTestData {
   expected: {
     distribution: CalculationSeatDistribution;
     order: CalculationSeatOrder;
-    stale: CalculationStale;
+    stale?: CalculationStale;
   };
 }
 
@@ -24,12 +24,15 @@ describe("Calculator tests", () => {
     [getDHondtTestDataNoStale1()],
     [getDHondtTestDataNoStale2()],
     [getDHondtTestDataStale()],
-  ])("Calculation method tests", (calculationTestData) => {
+  ])("D'Hondt tests", (calculationTestData) => {
     // given
     const data = calculationTestData;
 
     // when
-    const result = dHondt(data.given.groups, data.given.committeeSize);
+    const result = exportForTesting.calculateDHondt(
+      data.given.groups,
+      data.given.committeeSize
+    );
     const order = result.order.map((order: CalculationGroupRatio) => {
       return {
         groupName: order.groupName,

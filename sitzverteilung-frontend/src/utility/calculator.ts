@@ -5,7 +5,34 @@ import type { CalculationSeatDistribution } from "@/types/calculation/internal/C
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 
-export function dHondt(
+import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function calculateMethod(
+  method: CalculationMethod,
+  calculationGroups: CalculationGroup[],
+  committeeSize: number
+): CalculationMethodResult | undefined {
+  if (calculationGroups.length === 0) {
+    throw new Error("calculationGroups cannot be empty");
+  }
+  if (committeeSize <= 0) {
+    throw new Error("committeeSize must be positive");
+  }
+  if (calculationGroups.some((group) => group.seatsOrVotes <= 0)) {
+    throw new Error("All groups must have positive seatsOrVotes");
+  }
+  switch (method) {
+    case CalculationMethod.D_HONDT:
+      return calculateDHondt(calculationGroups, committeeSize);
+    case CalculationMethod.HARE_NIEMEYER:
+      throw new Error("Not implemented yet");
+    case CalculationMethod.SAINTE_LAGUE:
+      throw new Error("Not implemented yet");
+  }
+}
+
+function calculateDHondt(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
@@ -73,3 +100,7 @@ export function dHondt(
     stale: stale,
   };
 }
+
+export const exportForTesting = {
+  calculateDHondt,
+};
