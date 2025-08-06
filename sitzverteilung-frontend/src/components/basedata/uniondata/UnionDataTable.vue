@@ -72,16 +72,22 @@ const headers = computed(() => [
     key: "name",
     width: 200,
   },
-  { title: "Parteien / Gruppierungen", key: "groups", width: 250 },
+  {
+    title: "Parteien / Gruppierungen / Einzelmitglieder",
+    key: "groups",
+    width: 250,
+  },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ]);
 const nameHeaderTitle = computed(() =>
   props.unionType == UnionType.FRACTION
-    ? "Name der Fraktion"
-    : "Name des Ausschusses"
+    ? "Name der Fraktionsgemeinschaft"
+    : "Name der Ausschussgemeinschaft"
 );
 const dataTableTitle = computed(() =>
-  props.unionType == UnionType.FRACTION ? "Fraktionen" : "Ausschüsse"
+  props.unionType == UnionType.FRACTION
+    ? "Fraktionsgemeinschaften"
+    : "Ausschussgemeinschaften"
 );
 
 const props = defineProps<{

@@ -21,7 +21,7 @@
       </v-col>
       <v-col>
         <v-number-input
-          v-model.number="baseData.committeeSize"
+          v-model="baseData.committeeSize"
           :rules="[FieldValidationRules.Required]"
           :min="1"
           :max="limitCommitteeSize"
@@ -113,7 +113,7 @@ const committees = computed({
 
 const {
   baseDataNames = [],
-  isEditing,
+  selectedBaseDataName,
   limitName,
   limitGroups,
   limitVotes,
@@ -123,7 +123,7 @@ const {
   limitGroups: number;
   limitVotes: number;
   limitCommitteeSize: number;
-  isEditing: boolean;
+  selectedBaseDataName?: string | null;
   baseDataNames?: string[];
 }>();
 
@@ -140,13 +140,19 @@ const seatFieldValidationError = computed(() => {
   if (isSeatsTooHigh.value)
     return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
   if (isTooManyGroups.value)
-    return "Die Anzahl an Parteien/Gruppierungen übersteigt den angegebenen Wert.";
+    return "Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den angegebenen Wert.";
   return "";
 });
 
-const comparedBaseDataNames = computed(() =>
-  isEditing ? baseDataNames : [...baseDataNames, baseData.value.name]
-);
+const comparedBaseDataNames = computed(() => {
+  let relevantBaseDataNames = baseDataNames;
+  if (selectedBaseDataName) {
+    relevantBaseDataNames = relevantBaseDataNames.filter(
+      (name) => name !== selectedBaseDataName
+    );
+  }
+  return [...relevantBaseDataNames, baseData.value.name];
+});
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const limitGroupsRef = toRef(() => limitGroups);

@@ -12,7 +12,7 @@
     <yes-no-dialog
       :model-value="isDeleteConfirmationShown"
       dialog-title="Basisdaten löschen?"
-      dialog-text="Wollen Sie die Basisdaten wirklich löschen?"
+      :dialog-text="`Wollen Sie die Basisdaten '${selectedBaseData?.name ?? ''}' wirklich löschen?`"
       yes-text="Löschen"
       no-text="Abbrechen"
       yes-color="red"
@@ -31,8 +31,13 @@
                 bestehend aus:
               </p>
               <ul class="pl-4 mb-3">
-                <li>Parteien / Gruppierungen und zugehörige Informationen</li>
-                <li>Bilden von Fraktionen und Ausschüssen</li>
+                <li>
+                  Parteien / Gruppierungen / Einzelmitglieder und zugehörige
+                  Informationen
+                </li>
+                <li>
+                  Bilden von Fraktionsgemeinschaften und Ausschussgemeinschaften
+                </li>
               </ul>
 
               <v-alert
@@ -60,7 +65,10 @@
                   Der Name des Basisdatensatzes und die Größe des Hauptorgans
                   eingegeben wurden.
                 </li>
-                <li>Mindestens eine Partei vorhanden ist.</li>
+                <li>
+                  Mindestens eine Partei / Gruppierung / Einzelmitglied
+                  vorhanden ist.
+                </li>
               </ul>
 
               <p class="mb-3">
@@ -73,22 +81,23 @@
               </p>
 
               <p class="mb-3">
-                Bei dem Namen der Parteien und Gruppierungen gilt ebenfalls ein
-                Limit von
+                Bei dem Namen der Parteien / Gruppierungen / Einzelmitglieder
+                gilt ebenfalls ein Limit von
                 {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen.
-                Zusätzlich muss die Anzahl der Sitze und der Stimmen in der
-                Tabelle erfasst werden. Maximal können
-                {{ numberFormatter(LimitConfiguration.limitGroups) }} Parteien
-                angelegt werden.
+                Zusätzlich muss die Anzahl der Sitze in der Tabelle erfasst
+                werden. Die Angabe der Stimmen ist optional. Maximal können
+                {{ numberFormatter(LimitConfiguration.limitGroups) }} Parteien /
+                Gruppierungen / Einzelmitglieder angelegt werden.
               </p>
 
               <p class="mb-3">
                 Bevor der Basisdatensatz angelegt werden kann, muss die
-                Gesamtanzahl der Sitze aller Parteien mit der Größe des
-                Hauptorgans übereinstimmen.
+                Gesamtanzahl der Sitze aller Parteien / Gruppierungen /
+                Einzelmitglieder mit der Größe des Hauptorgans übereinstimmen.
               </p>
               <p class="mb-3">
-                Gelöscht werden können die Parteien und Gruppierungen:
+                Gelöscht werden können die Parteien / Gruppierungen /
+                Einzelmitglieder:
               </p>
               <ul class="pl-4 mb-3">
                 <li>Entweder einzeln in der jeweiligen Zeile</li>
@@ -98,21 +107,26 @@
                 </li>
               </ul>
 
-              <h3 class="mt-4 mb-2">Fraktionen und Ausschüsse</h3>
+              <h3 class="mt-4 mb-2">
+                Fraktionsgemeinschaften und Ausschussgemeinschaften
+              </h3>
               <p class="mb-3">
-                Fraktionen und Ausschüsse werden separat unter
-                Parteien/Gruppierungen angezeigt. Sofern mindestens zwei
-                Parteien oder Gruppierungen ausgewählt wurden, lassen diese sich
-                in eine Fraktion oder einen Ausschuss zusammenfassen.
+                Fraktionsgemeinschaften und Ausschussgemeinschaften werden
+                separat unterhalb Parteien / Gruppierungen / Einzelmitglieder
+                angezeigt. Sofern mindestens zwei Einträge ausgewählt wurden,
+                lässt sich eine Fraktionsgemeinschaft oder eine
+                Ausschussgemeinschaft bilden.
               </p>
 
               <p>
-                Jede Partei/Gruppierung kann nur Teil einer Fraktion bzw. eines
-                Ausschusses sein. Es ist möglich, innerhalb der
-                Fraktions-/Ausschusstabelle Parteien oder Gruppierungen wieder
+                Jede Partei / Gruppierung / Einzelmitglied kann nur Teil einer
+                Fraktionsgemeinschaft bzw. einer Ausschussgemeinschaft sein. Es
+                ist möglich, innerhalb der
+                Fraktionsgemeinschaft-/Ausschussgemeinschaftstabelle
+                hinzugefügte Parteien / Gruppierungen / Einzelmitglieder wieder
                 zu entfernen. Diese lassen sich allerdings nicht wieder
-                hinzufügen, es sei denn, es wird eine neue Fraktion/ein neuer
-                Ausschuss angelegt.
+                hinzufügen, es sei denn, es wird eine neue Fraktionsgemeinschaft
+                oder eine neue Ausschussgemeinschaft angelegt.
               </p>
             </div>
           </template>
@@ -123,8 +137,7 @@
       <v-row>
         <v-col class="d-flex align-center">
           <base-data-autocomplete
-            ref="baseDataAutocompleteRef"
-            @update="updatedBaseDataSelection"
+            v-model="selectedBaseData"
             :limit-name="LimitConfiguration.limitName"
             :base-data-list="storedBaseData"
           />
@@ -134,9 +147,23 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isValid || (isBaseDataSelected && !dirty)"
-            @click="saveBaseData"
-            >{{ isBaseDataSelected ? "Aktualisieren" : "Anlegen" }}
+            :disabled="
+              !isValid ||
+              (isBaseDataSelected && !dirty) ||
+              basedataNameIsNotChanged
+            "
+            @click="createBaseData"
+            >Anlegen
+          </v-btn>
+          <v-btn
+            variant="flat"
+            color="green"
+            size="large"
+            class="ml-5"
+            :prepend-icon="mdiContentSaveEdit"
+            :disabled="!isBaseDataSelected || !isValid || !dirty"
+            @click="updateBaseData"
+            >Ändern
           </v-btn>
           <v-btn
             variant="flat"
@@ -173,7 +200,7 @@
           :limit-groups="LimitConfiguration.limitGroups"
           :limit-committee-size="LimitConfiguration.limitCommitteeSize"
           :limit-votes="LimitConfiguration.limitVotes"
-          :is-editing="isBaseDataSelected"
+          :selected-base-data-name="selectedBaseData?.name"
           :base-data-names="baseDataNames"
         />
       </v-col>
@@ -183,7 +210,13 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 
-import { mdiContentSave, mdiDelete, mdiExclamation, mdiShare } from "@mdi/js";
+import {
+  mdiContentSave,
+  mdiContentSaveEdit,
+  mdiDelete,
+  mdiExclamation,
+  mdiShare,
+} from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -208,6 +241,9 @@ const snackbar = useSnackbarStore();
 
 const storedBaseData = computed(() => store.baseDatas);
 
+const selectedBaseData = ref<BaseData | null>();
+const isBaseDataSelected = computed(() => !!selectedBaseData.value);
+
 const dirty = computed(
   () =>
     isBaseDataSelected.value &&
@@ -222,18 +258,14 @@ const isDataEntered = computed(
       JSON.stringify(currentBaseData.value) !==
         JSON.stringify(getEmptyBaseData()))
 );
+
+const basedataNameIsNotChanged = computed(
+  () => currentBaseData.value?.name === selectedBaseData.value?.name
+);
 const saveLeave = useSaveLeave(isDataEntered);
 
 const baseDataNames = computed(() =>
   storedBaseData.value.map((baseData) => baseData.name)
-);
-
-const selectedBaseData = ref<BaseData>();
-const isBaseDataSelected = computed(
-  () =>
-    !!selectedBaseData.value &&
-    selectedBaseData.value.name !== "" &&
-    baseDataNames.value.includes(selectedBaseData.value.name)
 );
 
 const currentBaseData = ref<BaseData>(getEmptyBaseData());
@@ -252,22 +284,25 @@ function getEmptyBaseData(): BaseData {
   };
 }
 
-function saveBaseData() {
+function updateBaseData() {
+  if (currentBaseData.value && selectedBaseData.value) {
+    const copy = JSON.parse(JSON.stringify(currentBaseData.value));
+    store.updateBaseData(selectedBaseData.value.name, copy);
+    snackbar.showMessage({
+      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden aktualisiert.`,
+    });
+    selectedBaseData.value = copy;
+  }
+}
+
+function createBaseData() {
   if (currentBaseData.value) {
     const copy = JSON.parse(JSON.stringify(currentBaseData.value));
-    if (isBaseDataSelected.value && selectedBaseData.value) {
-      store.updateBaseData(selectedBaseData.value.name, copy);
-      snackbar.showMessage({
-        message: `Die Basisdaten '${copy.name}' wurden aktualisiert.`,
-      });
-      selectedBaseData.value = undefined;
-    } else {
-      store.addBaseData(copy);
-      snackbar.showMessage({
-        message: `Die Basisdaten '${copy.name}' wurden angelegt.`,
-      });
-      reset();
-    }
+    store.addBaseData(copy);
+    snackbar.showMessage({
+      message: `Die Basisdaten '${copy.name}' wurden angelegt.`,
+    });
+    selectedBaseData.value = copy;
   }
 }
 
@@ -286,32 +321,25 @@ function deleteSelectedBaseData() {
     snackbar.showMessage({
       message: `Die Basisdaten '${selectedBaseData.value.name}' wurden gelöscht.`,
     });
-    selectedBaseData.value = undefined;
+    selectedBaseData.value = null;
   }
 }
 
-function updatedBaseDataSelection(baseData: BaseData) {
-  selectedBaseData.value = baseData;
-}
-
-const baseDataAutocompleteRef = useTemplateRef<typeof BaseDataAutocomplete>(
-  "baseDataAutocompleteRef"
-);
 watch(selectedBaseData, (newBaseData) => {
-  if (newBaseData === undefined || newBaseData.name === "") {
+  if (!newBaseData) {
     reset();
-    return;
+  } else {
+    currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
   }
-  currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
 });
 
 function reset() {
-  baseDataAutocompleteRef.value?.reset();
   baseDataFormRef.value?.reset();
   currentBaseData.value = getEmptyBaseData();
 }
 
 const { copy, isSupported } = useClipboard();
+
 async function share() {
   if (isBaseDataSelected.value && selectedBaseData.value) {
     if (!isSupported.value) {
@@ -352,7 +380,7 @@ watch(
   () => route.query.import,
   async (newImport) => {
     const importParam = newImport?.toString() ?? "";
-    if (importParam !== "") {
+    if (importParam) {
       try {
         const baseData = await writeUrlParamToObject<BaseData>(importParam);
         if (!isValidBaseData(baseData)) {
@@ -366,7 +394,7 @@ watch(
             currentBaseData.value = baseData;
           });
           snackbar.showMessage({
-            message: `Die Basisdaten '${baseData.name}' wurden importiert. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
+            message: `Die Basisdaten '${baseData.name}' wurden übertragen. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
           });
         }
       } catch {

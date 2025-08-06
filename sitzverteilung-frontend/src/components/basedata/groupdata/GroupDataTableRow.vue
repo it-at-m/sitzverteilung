@@ -28,7 +28,7 @@
     </td>
     <td>
       <v-number-input
-        v-model.number="group.committeeSeats"
+        v-model="group.committeeSeats"
         ref="committeeSeatsInputField"
         :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
@@ -44,9 +44,8 @@
     </td>
     <td>
       <v-number-input
-        v-model.number="group.votes"
+        v-model="group.votes"
         ref="votesInputField"
-        :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
         :max="limitVotes"
         hide-details="auto"
