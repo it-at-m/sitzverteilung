@@ -1,75 +1,41 @@
 import { describe, expect, test } from "vitest";
 
 import { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
+import { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
 import { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 import { dHondt } from "../../src/utility/calculator";
-import { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
 
 interface CalculationTestData {
   given: {
     committeeSize: number;
     groups: CalculationGroup[];
-  },
+  };
   expected: {
-    distribution: CalculationSeatDistribution,
-    order: CalculationSeatOrder,
-    stale: CalculationStale
-  }
+    distribution: CalculationSeatDistribution;
+    order: CalculationSeatOrder;
+    stale: CalculationStale;
+  };
 }
 
 describe("Calculator tests", () => {
-  test("dHondt 1 no stale", () => {
+  test.each([
+    [getDHondtTestDataNoStale1()],
+    [getDHondtTestDataNoStale2()],
+    [getDHondtTestDataStale()],
+  ])("Calculation method tests", (calculationTestData) => {
     // given
-    const data = getDHondtTestDataNoStale1();
+    const data = calculationTestData;
 
     // when
     const result = dHondt(data.given.groups, data.given.committeeSize);
     const order = result.order.map((order: CalculationGroupRatio) => {
       return {
         groupName: order.groupName,
-        value: Number(order.value.toFixed(3))
-      }
-    })
-
-    // then
-    expect(result.distribution).toEqual(data.expected.distribution);
-    expect(order).toEqual(data.expected.order);
-    expect(result.stale).toEqual(data.expected.stale);
-  });
-
-  test("dHondt 2 no stale", () => {
-    // given
-    const data = getDHondtTestDataNoStale2();
-
-    // when
-    const result = dHondt(data.given.groups, data.given.committeeSize);
-    const order = result.order.map((order: CalculationGroupRatio) => {
-      return {
-        groupName: order.groupName,
-        value: Number(order.value.toFixed(3))
-      }
-    })
-
-    // then
-    expect(result.distribution).toEqual(data.expected.distribution);
-    expect(order).toEqual(data.expected.order);
-    expect(result.stale).toEqual(data.expected.stale);
-  });
-
-  test("dHondt stale", () => {
-    // given
-    const data = getDHondtTestDataStale()
-
-    // when
-    const result = dHondt(data.given.groups, data.given.committeeSize);
-    const order = result.order.map((order: CalculationGroupRatio) => {
-      return {
-        groupName: order.groupName,
-        value: Number(order.value.toFixed(3))
-      }
-    })
+        value: Number(order.value.toFixed(3)),
+      };
+    });
 
     // then
     expect(result.distribution).toEqual(data.expected.distribution);
@@ -96,7 +62,7 @@ function getDHondtTestDataNoStale1(): CalculationTestData {
           name: "Partei C",
           seatsOrVotes: 1_500,
         },
-      ]
+      ],
     },
     expected: {
       distribution: {
@@ -138,9 +104,9 @@ function getDHondtTestDataNoStale1(): CalculationTestData {
           value: 2_000.0,
         },
       ],
-      stale: undefined
+      stale: undefined,
     },
-  }
+  };
 }
 
 function getDHondtTestDataNoStale2(): CalculationTestData {
@@ -176,7 +142,7 @@ function getDHondtTestDataNoStale2(): CalculationTestData {
           name: "Partei G",
           seatsOrVotes: 3,
         },
-      ]
+      ],
     },
     expected: {
       distribution: {
@@ -278,16 +244,16 @@ function getDHondtTestDataNoStale2(): CalculationTestData {
           value: 3.167,
         },
       ],
-      stale: undefined
-    }
-  }
+      stale: undefined,
+    },
+  };
 }
 
 function getDHondtTestDataStale(): CalculationTestData {
   return {
     given: {
       committeeSize: 7,
-      groups: getDHondtTestDataNoStale1().given.groups
+      groups: getDHondtTestDataNoStale1().given.groups,
     },
     expected: {
       distribution: {
@@ -324,7 +290,7 @@ function getDHondtTestDataStale(): CalculationTestData {
       stale: {
         groupNames: ["Partei A", "Partei B"],
         amountSeats: 1,
-      }
-    }
-  }
+      },
+    },
+  };
 }
