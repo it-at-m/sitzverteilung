@@ -53,6 +53,7 @@ export function dHondt(
     stale = {
       groupNames: staleGroupNames,
       amountSeats: potentialStalesInTop.length,
+      ratio: staleRatio,
     };
 
     // Remove stale seats from seat distribution and order

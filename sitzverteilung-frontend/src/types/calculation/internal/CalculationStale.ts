@@ -3,4 +3,5 @@ import type { CalculationGroupName } from "@/types/calculation/internal/Calculat
 export interface CalculationStale {
   groupNames: CalculationGroupName[];
   amountSeats: number;
+  ratio: number;
 }

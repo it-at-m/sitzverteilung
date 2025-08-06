@@ -290,6 +290,7 @@ function getDHondtTestDataStale(): CalculationTestData {
       stale: {
         groupNames: ["Partei A", "Partei B"],
         amountSeats: 1,
+        ratio: 2_000.0,
       },
     },
   };
