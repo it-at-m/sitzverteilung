@@ -147,7 +147,11 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isValid || (isBaseDataSelected && !dirty) || basedataNameIsNotChanged"
+            :disabled="
+              !isValid ||
+              (isBaseDataSelected && !dirty) ||
+              basedataNameIsNotChanged
+            "
             @click="createBaseData"
             >Anlegen
           </v-btn>
