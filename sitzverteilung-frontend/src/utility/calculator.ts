@@ -13,7 +13,7 @@ export function dHondt(
   // initialize distributions with 0 seats for every group
   calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
 
-  // calculate ratios using increasing divisors, maybe change iteration?
+  // calculate ratios using increasing divisors
   const ratios: CalculationGroupRatio[] = [];
   calculationGroups.forEach((group) => {
     for (let i = 1; i <= committeeSize; i++) {
@@ -33,7 +33,7 @@ export function dHondt(
     seatDistribution[ratio.groupName]++;
     seatOrder.push({
       groupName: ratio.groupName,
-      value: Number(ratio.value.toFixed(2)),
+      value: Number(ratio.value.toFixed(3)),
     });
   });
 
