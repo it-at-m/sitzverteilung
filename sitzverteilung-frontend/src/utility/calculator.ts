@@ -27,7 +27,7 @@ function calculateMethod(
       return calculateDHondt(calculationGroups, committeeSize);
     case CalculationMethod.HARE_NIEMEYER:
       throw new Error("Not implemented yet");
-    case CalculationMethod.SAINTE_LAGUE:
+    case CalculationMethod.SAINTE_LAGUE_SCHEPERS:
       throw new Error("Not implemented yet");
   }
 }
