@@ -147,7 +147,7 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isValid || (isBaseDataSelected && !dirty)"
+            :disabled="!isValid || (isBaseDataSelected && !dirty) || basedataNameIsNotChanged"
             @click="createBaseData"
             >Anlegen
           </v-btn>
@@ -254,6 +254,13 @@ const isDataEntered = computed(
       JSON.stringify(currentBaseData.value) !==
         JSON.stringify(getEmptyBaseData()))
 );
+
+const basedataNameIsNotChanged = computed(() => {
+  if (currentBaseData.value && selectedBaseData.value) {
+    return currentBaseData.value.name === selectedBaseData.value.name;
+  }
+  return false;
+});
 const saveLeave = useSaveLeave(isDataEntered);
 
 const baseDataNames = computed(() =>
