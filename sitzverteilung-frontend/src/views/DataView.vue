@@ -259,10 +259,7 @@ const isDataEntered = computed(
         JSON.stringify(getEmptyBaseData()))
 );
 
-const basedataNameIsNotChanged = computed(
-  () => currentBaseData.value?.name === selectedBaseData.value?.name
-);
-
+const basedataNameIsNotChanged = computed(() => currentBaseData.value?.name === selectedBaseData.value?.name);
 const saveLeave = useSaveLeave(isDataEntered);
 
 const baseDataNames = computed(() =>
