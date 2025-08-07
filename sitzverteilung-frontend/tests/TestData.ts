@@ -1,5 +1,5 @@
-import { BaseData } from "../src/types/BaseData";
-import { UnionType } from "../src/types/Union";
+import { BaseData } from "../src/types/basedata/BaseData";
+import { UnionType } from "../src/types/basedata/Union";
 import { LimitConfiguration } from "../src/utility/validation";
 
 export function getTestBaseData(): BaseData {

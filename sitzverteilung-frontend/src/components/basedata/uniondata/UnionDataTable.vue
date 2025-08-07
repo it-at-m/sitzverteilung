@@ -57,14 +57,14 @@
 </template>
 
 <script setup lang="ts">
-import type { GroupIndex, Union } from "@/types/Union.ts";
+import type { GroupIndex, Union } from "@/types/basedata/Union.ts";
 
 import { mdiAccountGroup, mdiLabel } from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
 import { computed, nextTick } from "vue";
 
 import UnionDataTableRow from "@/components/basedata/uniondata/UnionDataTableRow.vue";
-import { UnionType } from "@/types/Union.ts";
+import { UnionType } from "@/types/basedata/Union.ts";
 
 const headers = computed(() => [
   {

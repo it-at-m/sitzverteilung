@@ -2,7 +2,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, test } from "vitest";
 
 import { useBaseDataStore } from "../../src/stores/basedata";
-import { BaseData } from "../../src/types/BaseData";
+import { BaseData } from "../../src/types/basedata/BaseData";
 import { getTestBaseData } from "../TestData";
 
 describe("BaseData Store", () => {

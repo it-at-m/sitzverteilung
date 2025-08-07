@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Union } from "@/types/Union.ts";
+import type { Union } from "@/types/basedata/Union.ts";
 import type { VTextField } from "vuetify/components";
 
 import { mdiDelete } from "@mdi/js";

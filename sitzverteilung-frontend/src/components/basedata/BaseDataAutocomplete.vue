@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseData } from "@/types/BaseData.ts";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiFileDocumentMultiple, mdiInformation } from "@mdi/js";
 import { computed } from "vue";

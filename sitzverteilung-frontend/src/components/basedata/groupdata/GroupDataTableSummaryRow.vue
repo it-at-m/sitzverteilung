@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Group } from "@/types/Group";
+import type { Group } from "@/types/basedata/Group.ts";
 
 import { toRefs } from "vue";
 
