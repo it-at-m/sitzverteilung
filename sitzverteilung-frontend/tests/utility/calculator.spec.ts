@@ -2,11 +2,11 @@ import { describe, expect, test } from "vitest";
 
 import { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
 import { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
+import { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
 import { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 import { exportForTesting } from "../../src/utility/calculator";
-import { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
 
 interface CalculationTestData {
   given: {
@@ -25,14 +25,16 @@ describe("Calculator tests", () => {
     [getDHondtTestDataNoStale1()],
     [getDHondtTestDataNoStale2()],
     [getDHondtTestDataNoStale3()],
-    [getDHondtTestDataNoStale4()]
+    [getDHondtTestDataNoStale4()],
   ])("D'Hondt test no stale", (calculationTestData) => {
     const data = calculationTestData;
 
-    const result = getComparableResult(exportForTesting.calculateDHondt(
+    const result = getComparableResult(
+      exportForTesting.calculateDHondt(
         data.given.groups,
         data.given.committeeSize
-    ));
+      )
+    );
 
     expect(result).toEqual(data.expected);
   });
@@ -40,20 +42,24 @@ describe("Calculator tests", () => {
   test.each([
     [getDHondtTestDataStale1()],
     [getDHondtTestDataStale2()],
-    [getDHondtTestDataStale3()]
+    [getDHondtTestDataStale3()],
   ])("D'Hondt test stale", (calculationTestData) => {
     const data = calculationTestData;
 
-    const result = getComparableResult(exportForTesting.calculateDHondt(
+    const result = getComparableResult(
+      exportForTesting.calculateDHondt(
         data.given.groups,
         data.given.committeeSize
-    ));
+      )
+    );
 
     expect(result).toEqual(data.expected);
   });
 });
 
-function getComparableResult(result: CalculationMethodResult): CalculationMethodResult {
+function getComparableResult(
+  result: CalculationMethodResult
+): CalculationMethodResult {
   const order = result.order.map((order: CalculationGroupRatio) => {
     return {
       groupName: order.groupName,
@@ -62,8 +68,8 @@ function getComparableResult(result: CalculationMethodResult): CalculationMethod
   });
   return {
     ...result,
-    order
-  }
+    order,
+  };
 }
 
 // Data from https://www.bundeswahlleiterin.de/service/glossar/d/d-hondtsche-sitzverteilung.html
@@ -545,64 +551,70 @@ function getDHondtTestDataStale2(): CalculationTestData {
       order: [
         {
           groupName: "Partei A",
-          value: 24.0
+          value: 24.0,
         },
         {
           groupName: "Partei B",
-          value: 20.0
+          value: 20.0,
         },
         {
           groupName: "Partei C",
-          value: 19.0
+          value: 19.0,
         },
         {
           groupName: "Partei A",
-          value: 12.0
+          value: 12.0,
         },
         {
           groupName: "Partei B",
-          value: 10.0
+          value: 10.0,
         },
         {
           groupName: "Partei C",
-          value: 9.5
+          value: 9.5,
         },
         {
           groupName: "Partei A",
-          value: 8.0
+          value: 8.0,
         },
         {
           groupName: "Partei B",
-          value: 6.667
+          value: 6.667,
         },
         {
           groupName: "Partei C",
-          value: 6.333
+          value: 6.333,
         },
         {
           groupName: "Partei A",
-          value: 6.0
+          value: 6.0,
         },
         {
           groupName: "Partei B",
-          value: 5.0
+          value: 5.0,
         },
         {
           groupName: "Partei A",
-          value: 4.8
+          value: 4.8,
         },
         {
           groupName: "Partei C",
-          value: 4.75
+          value: 4.75,
         },
       ],
       stale: {
-        groupNames: ["Partei A", "Partei B", "Partei D", "Partei E", "Partei F"],
+        groupNames: [
+          "Partei A",
+          "Partei B",
+          "Partei D",
+          "Partei E",
+          "Partei F",
+        ],
         amountSeats: 1,
-        ratio: 4.0
-      }
-    }
-  }
+        ratio: 4.0,
+      },
+    },
+  };
 }
 
 // Data from an internal example
@@ -654,34 +666,34 @@ function getDHondtTestDataStale3(): CalculationTestData {
       order: [
         {
           groupName: "Partei A",
-          value: 24.0
+          value: 24.0,
         },
         {
           groupName: "Partei B",
-          value: 20.0
+          value: 20.0,
         },
         {
           groupName: "Partei C",
-          value: 19.0
+          value: 19.0,
         },
         {
           groupName: "Partei A",
-          value: 12.0
+          value: 12.0,
         },
         {
           groupName: "Partei B",
-          value: 10.0
+          value: 10.0,
         },
         {
           groupName: "Partei C",
-          value: 9.5
-        }
+          value: 9.5,
+        },
       ],
       stale: {
         groupNames: ["Partei A", "Partei D"],
         amountSeats: 1,
-        ratio: 8.0
-      }
-    }
-  }
+        ratio: 8.0,
+      },
+    },
+  };
 }
