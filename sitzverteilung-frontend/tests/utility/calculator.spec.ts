@@ -25,7 +25,7 @@ describe("Calculator tests", () => {
     [getDHondtTestDataNoStale1()],
     [getDHondtTestDataNoStale2()],
     [getDHondtTestDataNoStale3()],
-    [getDHondtTestDataNoStale4()],
+    [getDHondtTestDataNoStale4()]
   ])("D'Hondt test no stale", (calculationTestData) => {
     const data = calculationTestData;
 
@@ -63,7 +63,7 @@ function getComparableResult(
   const order = result.order.map((order: CalculationGroupRatio) => {
     return {
       groupName: order.groupName,
-      value: Number(order.value.toFixed(3)),
+      value: Math.floor(order.value * 1000) / 1000,
     };
   });
   return {
@@ -214,7 +214,7 @@ function getDHondtTestDataNoStale2(): CalculationTestData {
         },
         {
           groupName: "Partei B",
-          value: 6.667,
+          value: 6.666,
         },
         {
           groupName: "Partei C",
@@ -262,7 +262,7 @@ function getDHondtTestDataNoStale2(): CalculationTestData {
         },
         {
           groupName: "Partei A",
-          value: 3.429,
+          value: 3.428,
         },
         {
           groupName: "Partei B",
@@ -270,7 +270,7 @@ function getDHondtTestDataNoStale2(): CalculationTestData {
         },
         {
           groupName: "Partei C",
-          value: 3.167,
+          value: 3.166,
         },
       ],
       stale: undefined,
@@ -351,15 +351,15 @@ function getDHondtTestDataNoStale3(): CalculationTestData {
         },
         {
           groupName: "Partei A",
-          value: 6.167,
+          value: 6.166,
         },
         {
           groupName: "Partei B",
-          value: 5.667,
+          value: 5.666,
         },
         {
           groupName: "Partei A",
-          value: 5.286,
+          value: 5.285,
         },
         {
           groupName: "Partei B",
@@ -425,11 +425,11 @@ function getDHondtTestDataNoStale4(): CalculationTestData {
         },
         {
           groupName: "Partei A",
-          value: 138.667,
+          value: 138.666,
         },
         {
           groupName: "Partei B",
-          value: 111.667,
+          value: 111.666,
         },
         {
           groupName: "Partei A",
@@ -579,7 +579,7 @@ function getDHondtTestDataStale2(): CalculationTestData {
         },
         {
           groupName: "Partei B",
-          value: 6.667,
+          value: 6.666,
         },
         {
           groupName: "Partei C",
