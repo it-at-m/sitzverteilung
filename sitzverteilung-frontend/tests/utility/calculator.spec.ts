@@ -23,6 +23,8 @@ describe("Calculator tests", () => {
   test.each([
     [getDHondtTestDataNoStale1()],
     [getDHondtTestDataNoStale2()],
+    [getDHondtTestDataNoStale3()],
+    [getDHondtTestDataNoStale4()],
     [getDHondtTestDataStale()],
   ])("D'Hondt tests", (calculationTestData) => {
     // given
@@ -112,6 +114,7 @@ function getDHondtTestDataNoStale1(): CalculationTestData {
   };
 }
 
+// Data from an internal example
 function getDHondtTestDataNoStale2(): CalculationTestData {
   return {
     given: {
@@ -245,6 +248,177 @@ function getDHondtTestDataNoStale2(): CalculationTestData {
         {
           groupName: "Partei C",
           value: 3.167,
+        },
+      ],
+      stale: undefined,
+    },
+  };
+}
+
+// Data from an internal example
+function getDHondtTestDataNoStale3(): CalculationTestData {
+  return {
+    given: {
+      committeeSize: 15,
+      groups: [
+        {
+          name: "Partei A",
+          seatsOrVotes: 37,
+        },
+        {
+          name: "Partei B",
+          seatsOrVotes: 34,
+        },
+        {
+          name: "Partei C",
+          seatsOrVotes: 9,
+        },
+      ],
+    },
+    expected: {
+      distribution: {
+        "Partei A": 7,
+        "Partei B": 7,
+        "Partei C": 1,
+      },
+      order: [
+        {
+          groupName: "Partei A",
+          value: 37.0,
+        },
+        {
+          groupName: "Partei B",
+          value: 34.0,
+        },
+        {
+          groupName: "Partei A",
+          value: 18.5,
+        },
+        {
+          groupName: "Partei B",
+          value: 17.0,
+        },
+        {
+          groupName: "Partei A",
+          value: 12.333,
+        },
+        {
+          groupName: "Partei B",
+          value: 11.333,
+        },
+        {
+          groupName: "Partei A",
+          value: 9.25,
+        },
+        {
+          groupName: "Partei C",
+          value: 9.0,
+        },
+        {
+          groupName: "Partei B",
+          value: 8.5,
+        },
+        {
+          groupName: "Partei A",
+          value: 7.4,
+        },
+        {
+          groupName: "Partei B",
+          value: 6.8,
+        },
+        {
+          groupName: "Partei A",
+          value: 6.167,
+        },
+        {
+          groupName: "Partei B",
+          value: 5.667,
+        },
+        {
+          groupName: "Partei A",
+          value: 5.286,
+        },
+        {
+          groupName: "Partei B",
+          value: 4.857,
+        },
+      ],
+      stale: undefined,
+    },
+  };
+}
+
+// Data from https://de.wikipedia.org/wiki/D%E2%80%99Hondt-Verfahren
+function getDHondtTestDataNoStale4(): CalculationTestData {
+  return {
+    given: {
+      committeeSize: 10,
+      groups: [
+        {
+          name: "Partei A",
+          seatsOrVotes: 416,
+        },
+        {
+          name: "Partei B",
+          seatsOrVotes: 335,
+        },
+        {
+          name: "Partei C",
+          seatsOrVotes: 160,
+        },
+        {
+          name: "Partei D",
+          seatsOrVotes: 89,
+        },
+      ],
+    },
+    expected: {
+      distribution: {
+        "Partei A": 4,
+        "Partei B": 4,
+        "Partei C": 1,
+        "Partei D": 1,
+      },
+      order: [
+        {
+          groupName: "Partei A",
+          value: 416.0,
+        },
+        {
+          groupName: "Partei B",
+          value: 335.0,
+        },
+        {
+          groupName: "Partei A",
+          value: 208.0,
+        },
+        {
+          groupName: "Partei B",
+          value: 167.5,
+        },
+        {
+          groupName: "Partei C",
+          value: 160.0,
+        },
+        {
+          groupName: "Partei A",
+          value: 138.667,
+        },
+        {
+          groupName: "Partei B",
+          value: 111.667,
+        },
+        {
+          groupName: "Partei A",
+          value: 104.0,
+        },
+        {
+          groupName: "Partei D",
+          value: 89.0,
+        },
+        {
+          groupName: "Partei B",
+          value: 83.75,
         },
       ],
       stale: undefined,
