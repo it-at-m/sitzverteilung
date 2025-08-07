@@ -6,6 +6,7 @@ import { CalculationSeatDistribution } from "../../src/types/calculation/interna
 import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
 import { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 import { exportForTesting } from "../../src/utility/calculator";
+import { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
 
 interface CalculationTestData {
   given: {
@@ -24,30 +25,46 @@ describe("Calculator tests", () => {
     [getDHondtTestDataNoStale1()],
     [getDHondtTestDataNoStale2()],
     [getDHondtTestDataNoStale3()],
-    [getDHondtTestDataNoStale4()],
-    [getDHondtTestDataStale()],
-  ])("D'Hondt tests", (calculationTestData) => {
-    // given
+    [getDHondtTestDataNoStale4()]
+  ])("D'Hondt test no stale", (calculationTestData) => {
     const data = calculationTestData;
 
-    // when
-    const result = exportForTesting.calculateDHondt(
-      data.given.groups,
-      data.given.committeeSize
-    );
-    const order = result.order.map((order: CalculationGroupRatio) => {
-      return {
-        groupName: order.groupName,
-        value: Number(order.value.toFixed(3)),
-      };
-    });
+    const result = getComparableResult(exportForTesting.calculateDHondt(
+        data.given.groups,
+        data.given.committeeSize
+    ));
 
-    // then
-    expect(result.distribution).toEqual(data.expected.distribution);
-    expect(order).toEqual(data.expected.order);
-    expect(result.stale).toEqual(data.expected.stale);
+    expect(result).toEqual(data.expected);
+  });
+
+  test.each([
+    [getDHondtTestDataStale1()],
+    [getDHondtTestDataStale2()],
+    [getDHondtTestDataStale3()]
+  ])("D'Hondt test stale", (calculationTestData) => {
+    const data = calculationTestData;
+
+    const result = getComparableResult(exportForTesting.calculateDHondt(
+        data.given.groups,
+        data.given.committeeSize
+    ));
+
+    expect(result).toEqual(data.expected);
   });
 });
+
+function getComparableResult(result: CalculationMethodResult): CalculationMethodResult {
+  const order = result.order.map((order: CalculationGroupRatio) => {
+    return {
+      groupName: order.groupName,
+      value: Number(order.value.toFixed(3)),
+    };
+  });
+  return {
+    ...result,
+    order
+  }
+}
 
 // Data from https://www.bundeswahlleiterin.de/service/glossar/d/d-hondtsche-sitzverteilung.html
 function getDHondtTestDataNoStale1(): CalculationTestData {
@@ -426,7 +443,8 @@ function getDHondtTestDataNoStale4(): CalculationTestData {
   };
 }
 
-function getDHondtTestDataStale(): CalculationTestData {
+// Data from https://www.bundeswahlleiterin.de/service/glossar/d/d-hondtsche-sitzverteilung.html
+function getDHondtTestDataStale1(): CalculationTestData {
   return {
     given: {
       committeeSize: 7,
@@ -471,4 +489,199 @@ function getDHondtTestDataStale(): CalculationTestData {
       },
     },
   };
+}
+
+// Data from an internal example
+function getDHondtTestDataStale2(): CalculationTestData {
+  return {
+    given: {
+      committeeSize: 14,
+      groups: [
+        {
+          name: "Partei A",
+          seatsOrVotes: 24,
+        },
+        {
+          name: "Partei B",
+          seatsOrVotes: 20,
+        },
+        {
+          name: "Partei C",
+          seatsOrVotes: 19,
+        },
+        {
+          name: "Partei D",
+          seatsOrVotes: 4,
+        },
+        {
+          name: "Partei E",
+          seatsOrVotes: 4,
+        },
+        {
+          name: "Partei F",
+          seatsOrVotes: 4,
+        },
+        {
+          name: "Partei G",
+          seatsOrVotes: 3,
+        },
+        {
+          name: "Partei H",
+          seatsOrVotes: 2,
+        },
+      ],
+    },
+    expected: {
+      distribution: {
+        "Partei A": 5,
+        "Partei B": 4,
+        "Partei C": 4,
+        "Partei D": 0,
+        "Partei E": 0,
+        "Partei F": 0,
+        "Partei G": 0,
+        "Partei H": 0,
+      },
+      order: [
+        {
+          groupName: "Partei A",
+          value: 24.0
+        },
+        {
+          groupName: "Partei B",
+          value: 20.0
+        },
+        {
+          groupName: "Partei C",
+          value: 19.0
+        },
+        {
+          groupName: "Partei A",
+          value: 12.0
+        },
+        {
+          groupName: "Partei B",
+          value: 10.0
+        },
+        {
+          groupName: "Partei C",
+          value: 9.5
+        },
+        {
+          groupName: "Partei A",
+          value: 8.0
+        },
+        {
+          groupName: "Partei B",
+          value: 6.667
+        },
+        {
+          groupName: "Partei C",
+          value: 6.333
+        },
+        {
+          groupName: "Partei A",
+          value: 6.0
+        },
+        {
+          groupName: "Partei B",
+          value: 5.0
+        },
+        {
+          groupName: "Partei A",
+          value: 4.8
+        },
+        {
+          groupName: "Partei C",
+          value: 4.75
+        },
+      ],
+      stale: {
+        groupNames: ["Partei A", "Partei B", "Partei D", "Partei E", "Partei F"],
+        amountSeats: 1,
+        ratio: 4.0
+      }
+    }
+  }
+}
+
+// Data from an internal example
+function getDHondtTestDataStale3(): CalculationTestData {
+  return {
+    given: {
+      committeeSize: 7,
+      groups: [
+        {
+          name: "Partei A",
+          seatsOrVotes: 24,
+        },
+        {
+          name: "Partei B",
+          seatsOrVotes: 20,
+        },
+        {
+          name: "Partei C",
+          seatsOrVotes: 19,
+        },
+        {
+          name: "Partei D",
+          seatsOrVotes: 8,
+        },
+        {
+          name: "Partei E",
+          seatsOrVotes: 4,
+        },
+        {
+          name: "Partei F",
+          seatsOrVotes: 3,
+        },
+        {
+          name: "Partei G",
+          seatsOrVotes: 2,
+        },
+      ],
+    },
+    expected: {
+      distribution: {
+        "Partei A": 2,
+        "Partei B": 2,
+        "Partei C": 2,
+        "Partei D": 0,
+        "Partei E": 0,
+        "Partei F": 0,
+        "Partei G": 0,
+      },
+      order: [
+        {
+          groupName: "Partei A",
+          value: 24.0
+        },
+        {
+          groupName: "Partei B",
+          value: 20.0
+        },
+        {
+          groupName: "Partei C",
+          value: 19.0
+        },
+        {
+          groupName: "Partei A",
+          value: 12.0
+        },
+        {
+          groupName: "Partei B",
+          value: 10.0
+        },
+        {
+          groupName: "Partei C",
+          value: 9.5
+        }
+      ],
+      stale: {
+        groupNames: ["Partei A", "Partei D"],
+        amountSeats: 1,
+        ratio: 8.0
+      }
+    }
+  }
 }
