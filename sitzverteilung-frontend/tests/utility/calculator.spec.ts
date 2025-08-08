@@ -3,9 +3,6 @@ import { describe, expect, test } from "vitest";
 import { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
 import { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
 import { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
-import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
-import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
-import { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 import { exportForTesting } from "../../src/utility/calculator";
 
 interface CalculationTestData {
@@ -13,11 +10,7 @@ interface CalculationTestData {
     committeeSize: number;
     groups: CalculationGroup[];
   };
-  expected: {
-    distribution: CalculationSeatDistribution;
-    order: CalculationSeatOrder;
-    stale?: CalculationStale;
-  };
+  expected: CalculationMethodResult;
 }
 
 describe("Calculator tests", () => {
