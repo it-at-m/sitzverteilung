@@ -7,7 +7,7 @@ import type { CalculationStale } from "@/types/calculation/internal/CalculationS
 
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 function calculateMethod(
   method: CalculationMethod,
   calculationGroups: CalculationGroup[],
@@ -102,5 +102,5 @@ function calculateDHondt(
 }
 
 export const exportForTesting = {
-  calculateDHondt,
+  calculateMethod,
 };
