@@ -2067,1012 +2067,1012 @@ function getHareNiemeyerTestDataNoStale5(): CalculationTestData {
       order: [
         {
           groupName: "Partei A",
-          value: 79
+          value: 79,
         },
         {
           groupName: "Partei B",
-          value: 65
+          value: 65,
         },
         {
           groupName: "Partei C",
-          value: 62
+          value: 62,
         },
         {
           groupName: "Partei A",
-          value: 39.5
+          value: 39.5,
         },
         {
           groupName: "Partei B",
-          value: 32.5
+          value: 32.5,
         },
         {
           groupName: "Partei C",
-          value: 31
+          value: 31,
         },
         {
           groupName: "Partei A",
-          value: 26.333
+          value: 26.333,
         },
         {
           groupName: "Partei B",
-          value: 21.666
+          value: 21.666,
         },
         {
           groupName: "Partei C",
-          value: 20.666
+          value: 20.666,
         },
         {
           groupName: "Partei D",
-          value: 20
+          value: 20,
         },
         {
           groupName: "Partei A",
-          value: 19.75
+          value: 19.75,
         },
         {
           groupName: "Partei B",
-          value: 16.25
+          value: 16.25,
         },
         {
           groupName: "Partei A",
-          value: 15.8
+          value: 15.8,
         },
         {
           groupName: "Partei C",
-          value: 15.5
+          value: 15.5,
         },
         {
           groupName: "Partei A",
-          value: 13.166
+          value: 13.166,
         },
         {
           groupName: "Partei B",
-          value: 13
+          value: 13,
         },
         {
           groupName: "Partei E",
-          value: 13
+          value: 13,
         },
         {
           groupName: "Partei F",
-          value: 13
+          value: 13,
         },
         {
           groupName: "Partei C",
-          value: 12.4
+          value: 12.4,
         },
         {
           groupName: "Partei A",
-          value: 11.285
+          value: 11.285,
         },
         {
           groupName: "Partei B",
-          value: 10.833
+          value: 10.833,
         },
         {
           groupName: "Partei C",
-          value: 10.333
+          value: 10.333,
         },
         {
           groupName: "Partei D",
-          value: 10
+          value: 10,
         },
         {
           groupName: "Partei A",
-          value: 9.875
+          value: 9.875,
         },
         {
           groupName: "Partei B",
-          value: 9.285
+          value: 9.285,
         },
         {
           groupName: "Partei C",
-          value: 8.857
+          value: 8.857,
         },
         {
           groupName: "Partei A",
-          value: 8.777
+          value: 8.777,
         },
         {
           groupName: "Partei B",
-          value: 8.125
+          value: 8.125,
         },
         {
           groupName: "Partei A",
-          value: 7.9
+          value: 7.9,
         },
         {
           groupName: "Partei C",
-          value: 7.75
+          value: 7.75,
         },
         {
           groupName: "Partei B",
-          value: 7.222
+          value: 7.222,
         },
         {
           groupName: "Partei A",
-          value: 7.181
+          value: 7.181,
         },
         {
           groupName: "Partei C",
-          value: 6.888
+          value: 6.888,
         },
         {
           groupName: "Partei D",
-          value: 6.666
+          value: 6.666,
         },
         {
           groupName: "Partei A",
-          value: 6.583
+          value: 6.583,
         },
         {
           groupName: "Partei B",
-          value: 6.5
+          value: 6.5,
         },
         {
           groupName: "Partei E",
-          value: 6.5
+          value: 6.5,
         },
         {
           groupName: "Partei F",
-          value: 6.5
+          value: 6.5,
         },
         {
           groupName: "Partei C",
-          value: 6.2
+          value: 6.2,
         },
         {
           groupName: "Partei A",
-          value: 6.076
+          value: 6.076,
         },
         {
           groupName: "Partei B",
-          value: 5.909
+          value: 5.909,
         },
         {
           groupName: "Partei A",
-          value: 5.642
+          value: 5.642,
         },
         {
           groupName: "Partei C",
-          value: 5.636
+          value: 5.636,
         },
         {
           groupName: "Partei B",
-          value: 5.416
+          value: 5.416,
         },
         {
           groupName: "Partei A",
-          value: 5.266
+          value: 5.266,
         },
         {
           groupName: "Partei C",
-          value: 5.166
+          value: 5.166,
         },
         {
           groupName: "Partei B",
-          value: 5
+          value: 5,
         },
         {
           groupName: "Partei D",
-          value: 5
+          value: 5,
         },
         {
           groupName: "Partei A",
-          value: 4.937
+          value: 4.937,
         },
         {
           groupName: "Partei C",
-          value: 4.769
+          value: 4.769,
         },
         {
           groupName: "Partei A",
-          value: 4.647
+          value: 4.647,
         },
         {
           groupName: "Partei B",
-          value: 4.642
+          value: 4.642,
         },
         {
           groupName: "Partei C",
-          value: 4.428
+          value: 4.428,
         },
         {
           groupName: "Partei A",
-          value: 4.388
+          value: 4.388,
         },
         {
           groupName: "Partei B",
-          value: 4.333
+          value: 4.333,
         },
         {
           groupName: "Partei E",
-          value: 4.333
+          value: 4.333,
         },
         {
           groupName: "Partei F",
-          value: 4.333
+          value: 4.333,
         },
         {
           groupName: "Partei A",
-          value: 4.157
+          value: 4.157,
         },
         {
           groupName: "Partei C",
-          value: 4.133
+          value: 4.133,
         },
         {
           groupName: "Partei B",
-          value: 4.062
+          value: 4.062,
         },
         {
           groupName: "Partei D",
-          value: 4
+          value: 4,
         },
         {
           groupName: "Partei A",
-          value: 3.95
+          value: 3.95,
         },
         {
           groupName: "Partei C",
-          value: 3.875
+          value: 3.875,
         },
         {
           groupName: "Partei B",
-          value: 3.823
+          value: 3.823,
         },
         {
           groupName: "Partei A",
-          value: 3.761
+          value: 3.761,
         },
         {
           groupName: "Partei C",
-          value: 3.647
+          value: 3.647,
         },
         {
           groupName: "Partei B",
-          value: 3.611
+          value: 3.611,
         },
         {
           groupName: "Partei A",
-          value: 3.59
+          value: 3.59,
         },
         {
           groupName: "Partei C",
-          value: 3.444
+          value: 3.444,
         },
         {
           groupName: "Partei A",
-          value: 3.434
+          value: 3.434,
         },
         {
           groupName: "Partei B",
-          value: 3.421
+          value: 3.421,
         },
         {
           groupName: "Partei D",
-          value: 3.333
+          value: 3.333,
         },
         {
           groupName: "Partei A",
-          value: 3.291
+          value: 3.291,
         },
         {
           groupName: "Partei C",
-          value: 3.263
+          value: 3.263,
         },
         {
           groupName: "Partei B",
-          value: 3.25
+          value: 3.25,
         },
         {
           groupName: "Partei E",
-          value: 3.25
+          value: 3.25,
         },
         {
           groupName: "Partei F",
-          value: 3.25
+          value: 3.25,
         },
         {
           groupName: "Partei A",
-          value: 3.16
+          value: 3.16,
         },
         {
           groupName: "Partei C",
-          value: 3.1
+          value: 3.1,
         },
         {
           groupName: "Partei B",
-          value: 3.095
+          value: 3.095,
         },
         {
           groupName: "Partei A",
-          value: 3.038
+          value: 3.038,
         },
         {
           groupName: "Partei B",
-          value: 2.954
+          value: 2.954,
         },
         {
           groupName: "Partei C",
-          value: 2.952
+          value: 2.952,
         },
         {
           groupName: "Partei A",
-          value: 2.925
+          value: 2.925,
         },
         {
           groupName: "Partei D",
-          value: 2.857
+          value: 2.857,
         },
         {
           groupName: "Partei B",
-          value: 2.826
+          value: 2.826,
         },
         {
           groupName: "Partei A",
-          value: 2.821
+          value: 2.821,
         },
         {
           groupName: "Partei C",
-          value: 2.818
+          value: 2.818,
         },
         {
           groupName: "Partei A",
-          value: 2.724
+          value: 2.724,
         },
         {
           groupName: "Partei B",
-          value: 2.708
+          value: 2.708,
         },
         {
           groupName: "Partei C",
-          value: 2.695
+          value: 2.695,
         },
         {
           groupName: "Partei A",
-          value: 2.633
+          value: 2.633,
         },
         {
           groupName: "Partei B",
-          value: 2.6
+          value: 2.6,
         },
         {
           groupName: "Partei E",
-          value: 2.6
+          value: 2.6,
         },
         {
           groupName: "Partei F",
-          value: 2.6
+          value: 2.6,
         },
         {
           groupName: "Partei C",
-          value: 2.583
+          value: 2.583,
         },
         {
           groupName: "Partei A",
-          value: 2.548
+          value: 2.548,
         },
         {
           groupName: "Partei B",
-          value: 2.5
+          value: 2.5,
         },
         {
           groupName: "Partei D",
-          value: 2.5
+          value: 2.5,
         },
         {
           groupName: "Partei C",
-          value: 2.48
+          value: 2.48,
         },
         {
           groupName: "Partei A",
-          value: 2.468
+          value: 2.468,
         },
         {
           groupName: "Partei B",
-          value: 2.407
+          value: 2.407,
         },
         {
           groupName: "Partei A",
-          value: 2.393
+          value: 2.393,
         },
         {
           groupName: "Partei C",
-          value: 2.384
+          value: 2.384,
         },
         {
           groupName: "Partei A",
-          value: 2.323
+          value: 2.323,
         },
         {
           groupName: "Partei B",
-          value: 2.321
+          value: 2.321,
         },
         {
           groupName: "Partei C",
-          value: 2.296
+          value: 2.296,
         },
         {
           groupName: "Partei A",
-          value: 2.257
+          value: 2.257,
         },
         {
           groupName: "Partei B",
-          value: 2.241
+          value: 2.241,
         },
         {
           groupName: "Partei D",
-          value: 2.222
+          value: 2.222,
         },
         {
           groupName: "Partei C",
-          value: 2.214
+          value: 2.214,
         },
         {
           groupName: "Partei A",
-          value: 2.194
+          value: 2.194,
         },
         {
           groupName: "Partei B",
-          value: 2.166
+          value: 2.166,
         },
         {
           groupName: "Partei E",
-          value: 2.166
+          value: 2.166,
         },
         {
           groupName: "Partei F",
-          value: 2.166
+          value: 2.166,
         },
         {
           groupName: "Partei C",
-          value: 2.137
+          value: 2.137,
         },
         {
           groupName: "Partei A",
-          value: 2.135
+          value: 2.135,
         },
         {
           groupName: "Partei B",
-          value: 2.096
+          value: 2.096,
         },
         {
           groupName: "Partei A",
-          value: 2.078
+          value: 2.078,
         },
         {
           groupName: "Partei C",
-          value: 2.066
+          value: 2.066,
         },
         {
           groupName: "Partei B",
-          value: 2.031
+          value: 2.031,
         },
         {
           groupName: "Partei A",
-          value: 2.025
+          value: 2.025,
         },
         {
           groupName: "Partei C",
-          value: 2
+          value: 2,
         },
         {
           groupName: "Partei D",
-          value: 2
+          value: 2,
         },
         {
           groupName: "Partei A",
-          value: 1.975
+          value: 1.975,
         },
         {
           groupName: "Partei B",
-          value: 1.969
+          value: 1.969,
         },
         {
           groupName: "Partei C",
-          value: 1.937
+          value: 1.937,
         },
         {
           groupName: "Partei A",
-          value: 1.926
+          value: 1.926,
         },
         {
           groupName: "Partei B",
-          value: 1.911
+          value: 1.911,
         },
         {
           groupName: "Partei A",
-          value: 1.88
+          value: 1.88,
         },
         {
           groupName: "Partei C",
-          value: 1.878
+          value: 1.878,
         },
         {
           groupName: "Partei B",
-          value: 1.857
+          value: 1.857,
         },
         {
           groupName: "Partei E",
-          value: 1.857
+          value: 1.857,
         },
         {
           groupName: "Partei F",
-          value: 1.857
+          value: 1.857,
         },
         {
           groupName: "Partei A",
-          value: 1.837
+          value: 1.837,
         },
         {
           groupName: "Partei C",
-          value: 1.823
+          value: 1.823,
         },
         {
           groupName: "Partei D",
-          value: 1.818
+          value: 1.818,
         },
         {
           groupName: "Partei B",
-          value: 1.805
+          value: 1.805,
         },
         {
           groupName: "Partei A",
-          value: 1.795
+          value: 1.795,
         },
         {
           groupName: "Partei C",
-          value: 1.771
+          value: 1.771,
         },
         {
           groupName: "Partei B",
-          value: 1.756
+          value: 1.756,
         },
         {
           groupName: "Partei A",
-          value: 1.755
+          value: 1.755,
         },
         {
           groupName: "Partei C",
-          value: 1.722
+          value: 1.722,
         },
         {
           groupName: "Partei A",
-          value: 1.717
+          value: 1.717,
         },
         {
           groupName: "Partei B",
-          value: 1.71
+          value: 1.71,
         },
         {
           groupName: "Partei A",
-          value: 1.68
+          value: 1.68,
         },
         {
           groupName: "Partei C",
-          value: 1.675
+          value: 1.675,
         },
         {
           groupName: "Partei B",
-          value: 1.666
+          value: 1.666,
         },
         {
           groupName: "Partei D",
-          value: 1.666
+          value: 1.666,
         },
         {
           groupName: "Partei A",
-          value: 1.645
+          value: 1.645,
         },
         {
           groupName: "Partei C",
-          value: 1.631
+          value: 1.631,
         },
         {
           groupName: "Partei B",
-          value: 1.625
+          value: 1.625,
         },
         {
           groupName: "Partei E",
-          value: 1.625
+          value: 1.625,
         },
         {
           groupName: "Partei F",
-          value: 1.625
+          value: 1.625,
         },
         {
           groupName: "Partei A",
-          value: 1.612
+          value: 1.612,
         },
         {
           groupName: "Partei C",
-          value: 1.589
+          value: 1.589,
         },
         {
           groupName: "Partei B",
-          value: 1.585
+          value: 1.585,
         },
         {
           groupName: "Partei A",
-          value: 1.58
+          value: 1.58,
         },
         {
           groupName: "Partei C",
-          value: 1.55
+          value: 1.55,
         },
         {
           groupName: "Partei A",
-          value: 1.549
+          value: 1.549,
         },
         {
           groupName: "Partei B",
-          value: 1.547
+          value: 1.547,
         },
         {
           groupName: "Partei D",
-          value: 1.538
+          value: 1.538,
         },
         {
           groupName: "Partei A",
-          value: 1.519
+          value: 1.519,
         },
         {
           groupName: "Partei C",
-          value: 1.512
+          value: 1.512,
         },
         {
           groupName: "Partei B",
-          value: 1.511
+          value: 1.511,
         },
         {
           groupName: "Partei A",
-          value: 1.49
+          value: 1.49,
         },
         {
           groupName: "Partei B",
-          value: 1.477
+          value: 1.477,
         },
         {
           groupName: "Partei C",
-          value: 1.476
+          value: 1.476,
         },
         {
           groupName: "Partei A",
-          value: 1.462
+          value: 1.462,
         },
         {
           groupName: "Partei B",
-          value: 1.444
+          value: 1.444,
         },
         {
           groupName: "Partei E",
-          value: 1.444
+          value: 1.444,
         },
         {
           groupName: "Partei F",
-          value: 1.444
+          value: 1.444,
         },
         {
           groupName: "Partei C",
-          value: 1.441
+          value: 1.441,
         },
         {
           groupName: "Partei A",
-          value: 1.436
+          value: 1.436,
         },
         {
           groupName: "Partei D",
-          value: 1.428
+          value: 1.428,
         },
         {
           groupName: "Partei B",
-          value: 1.413
+          value: 1.413,
         },
         {
           groupName: "Partei A",
-          value: 1.41
+          value: 1.41,
         },
         {
           groupName: "Partei C",
-          value: 1.409
+          value: 1.409,
         },
         {
           groupName: "Partei A",
-          value: 1.385
+          value: 1.385,
         },
         {
           groupName: "Partei B",
-          value: 1.382
+          value: 1.382,
         },
         {
           groupName: "Partei C",
-          value: 1.377
+          value: 1.377,
         },
         {
           groupName: "Partei A",
-          value: 1.362
+          value: 1.362,
         },
         {
           groupName: "Partei B",
-          value: 1.354
+          value: 1.354,
         },
         {
           groupName: "Partei C",
-          value: 1.347
+          value: 1.347,
         },
         {
           groupName: "Partei A",
-          value: 1.338
+          value: 1.338,
         },
         {
           groupName: "Partei D",
-          value: 1.333
+          value: 1.333,
         },
         {
           groupName: "Partei B",
-          value: 1.326
+          value: 1.326,
         },
         {
           groupName: "Partei C",
-          value: 1.319
+          value: 1.319,
         },
         {
           groupName: "Partei A",
-          value: 1.316
+          value: 1.316,
         },
         {
           groupName: "Partei B",
-          value: 1.3
+          value: 1.3,
         },
         {
           groupName: "Partei E",
-          value: 1.3
+          value: 1.3,
         },
         {
           groupName: "Partei F",
-          value: 1.3
+          value: 1.3,
         },
         {
           groupName: "Partei A",
-          value: 1.295
+          value: 1.295,
         },
         {
           groupName: "Partei C",
-          value: 1.291
+          value: 1.291,
         },
         {
           groupName: "Partei A",
-          value: 1.274
+          value: 1.274,
         },
         {
           groupName: "Partei B",
-          value: 1.274
+          value: 1.274,
         },
         {
           groupName: "Partei C",
-          value: 1.265
+          value: 1.265,
         },
         {
           groupName: "Partei A",
-          value: 1.253
+          value: 1.253,
         },
         {
           groupName: "Partei B",
-          value: 1.25
+          value: 1.25,
         },
         {
           groupName: "Partei D",
-          value: 1.25
+          value: 1.25,
         },
         {
           groupName: "Partei C",
-          value: 1.24
+          value: 1.24,
         },
         {
           groupName: "Partei A",
-          value: 1.234
+          value: 1.234,
         },
         {
           groupName: "Partei B",
-          value: 1.226
+          value: 1.226,
         },
         {
           groupName: "Partei A",
-          value: 1.215
+          value: 1.215,
         },
         {
           groupName: "Partei C",
-          value: 1.215
+          value: 1.215,
         },
         {
           groupName: "Partei B",
-          value: 1.203
+          value: 1.203,
         },
         {
           groupName: "Partei A",
-          value: 1.196
+          value: 1.196,
         },
         {
           groupName: "Partei C",
-          value: 1.192
+          value: 1.192,
         },
         {
           groupName: "Partei B",
-          value: 1.181
+          value: 1.181,
         },
         {
           groupName: "Partei E",
-          value: 1.181
+          value: 1.181,
         },
         {
           groupName: "Partei F",
-          value: 1.181
+          value: 1.181,
         },
         {
           groupName: "Partei A",
-          value: 1.179
+          value: 1.179,
         },
         {
           groupName: "Partei D",
-          value: 1.176
+          value: 1.176,
         },
         {
           groupName: "Partei C",
-          value: 1.169
+          value: 1.169,
         },
         {
           groupName: "Partei A",
-          value: 1.161
+          value: 1.161,
         },
         {
           groupName: "Partei B",
-          value: 1.16
+          value: 1.16,
         },
         {
           groupName: "Partei C",
-          value: 1.148
+          value: 1.148,
         },
         {
           groupName: "Partei A",
-          value: 1.144
+          value: 1.144,
         },
         {
           groupName: "Partei B",
-          value: 1.14
+          value: 1.14,
         },
         {
           groupName: "Partei A",
-          value: 1.128
+          value: 1.128,
         },
         {
           groupName: "Partei C",
-          value: 1.127
+          value: 1.127,
         },
         {
           groupName: "Partei B",
-          value: 1.12
+          value: 1.12,
         },
         {
           groupName: "Partei A",
-          value: 1.112
+          value: 1.112,
         },
         {
           groupName: "Partei D",
-          value: 1.111
+          value: 1.111,
         },
         {
           groupName: "Partei C",
-          value: 1.107
+          value: 1.107,
         },
         {
           groupName: "Partei B",
-          value: 1.101
+          value: 1.101,
         },
         {
           groupName: "Partei A",
-          value: 1.097
+          value: 1.097,
         },
         {
           groupName: "Partei C",
-          value: 1.087
+          value: 1.087,
         },
         {
           groupName: "Partei B",
-          value: 1.083
+          value: 1.083,
         },
         {
           groupName: "Partei E",
-          value: 1.083
+          value: 1.083,
         },
         {
           groupName: "Partei F",
-          value: 1.083
+          value: 1.083,
         },
         {
           groupName: "Partei A",
-          value: 1.082
+          value: 1.082,
         },
         {
           groupName: "Partei C",
-          value: 1.068
+          value: 1.068,
         },
         {
           groupName: "Partei A",
-          value: 1.067
+          value: 1.067,
         },
         {
           groupName: "Partei B",
-          value: 1.065
+          value: 1.065,
         },
         {
           groupName: "Partei A",
-          value: 1.053
+          value: 1.053,
         },
         {
           groupName: "Partei D",
-          value: 1.052
+          value: 1.052,
         },
         {
           groupName: "Partei C",
-          value: 1.05
+          value: 1.05,
         },
         {
           groupName: "Partei B",
-          value: 1.048
+          value: 1.048,
         },
         {
           groupName: "Partei A",
-          value: 1.039
+          value: 1.039,
         },
         {
           groupName: "Partei C",
-          value: 1.033
+          value: 1.033,
         },
         {
           groupName: "Partei B",
-          value: 1.031
+          value: 1.031,
         },
         {
           groupName: "Partei A",
-          value: 1.025
+          value: 1.025,
         },
         {
           groupName: "Partei C",
-          value: 1.016
+          value: 1.016,
         },
         {
           groupName: "Partei B",
-          value: 1.015
+          value: 1.015,
         },
         {
           groupName: "Partei A",
-          value: 1.012
+          value: 1.012,
         },
         {
           groupName: "Partei A",
-          value: 1
+          value: 1,
         },
         {
           groupName: "Partei B",
-          value: 1
+          value: 1,
         },
         {
           groupName: "Partei C",
-          value: 1
+          value: 1,
         },
         {
           groupName: "Partei D",
-          value: 1
+          value: 1,
         },
         {
           groupName: "Partei E",
-          value: 1
+          value: 1,
         },
         {
           groupName: "Partei F",
-          value: 1
-        }
+          value: 1,
+        },
       ],
       stale: undefined,
     },
