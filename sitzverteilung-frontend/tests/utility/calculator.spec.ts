@@ -1028,11 +1028,11 @@ function getDHondtTestDataNoStale5(): CalculationTestData {
           value: 0.571,
         },
         {
-          groupName: "Partei A",
+          groupName: "Partei C",
           value: 0.558,
         },
         {
-          groupName: "Partei C",
+          groupName: "Partei A",
           value: 0.558,
         },
         {
@@ -1272,11 +1272,11 @@ function getDHondtTestDataNoStale5(): CalculationTestData {
           value: 0.392,
         },
         {
-          groupName: "Partei A",
+          groupName: "Partei C",
           value: 0.387,
         },
         {
-          groupName: "Partei C",
+          groupName: "Partei A",
           value: 0.387,
         },
         {
@@ -1336,11 +1336,11 @@ function getDHondtTestDataNoStale5(): CalculationTestData {
           value: 0.363,
         },
         {
-          groupName: "Partei A",
+          groupName: "Partei C",
           value: 0.358,
         },
         {
-          groupName: "Partei C",
+          groupName: "Partei A",
           value: 0.358,
         },
         {
@@ -1384,11 +1384,11 @@ function getDHondtTestDataNoStale5(): CalculationTestData {
           value: 0.339,
         },
         {
-          groupName: "Partei A",
+          groupName: "Partei B",
           value: 0.338,
         },
         {
-          groupName: "Partei B",
+          groupName: "Partei A",
           value: 0.338,
         },
         {
