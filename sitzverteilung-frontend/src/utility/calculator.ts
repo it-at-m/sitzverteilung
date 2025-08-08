@@ -7,7 +7,6 @@ import type { CalculationStale } from "@/types/calculation/internal/CalculationS
 
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
- 
 function calculateMethod(
   method: CalculationMethod,
   calculationGroups: CalculationGroup[],
