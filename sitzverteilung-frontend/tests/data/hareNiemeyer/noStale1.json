@@ -1,0 +1,27 @@
+{
+  "given": {
+    "committeeSize": 8,
+    "groups": [
+      {
+        "name": "Partei A",
+        "seatsOrVotes": 10000
+      },
+      {
+        "name": "Partei B",
+        "seatsOrVotes": 6000
+      },
+      {
+        "name": "Partei C",
+        "seatsOrVotes": 1500
+      }
+    ]
+  },
+  "expected": {
+    "distribution": {
+      "Partei A": 4,
+      "Partei B": 3,
+      "Partei C": 1
+    },
+    "order": []
+  }
+}

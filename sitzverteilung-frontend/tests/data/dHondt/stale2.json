@@ -1,0 +1,116 @@
+{
+  "given": {
+    "committeeSize": 14,
+    "groups": [
+      {
+        "name": "Partei A",
+        "seatsOrVotes": 24
+      },
+      {
+        "name": "Partei B",
+        "seatsOrVotes": 20
+      },
+      {
+        "name": "Partei C",
+        "seatsOrVotes": 19
+      },
+      {
+        "name": "Partei D",
+        "seatsOrVotes": 4
+      },
+      {
+        "name": "Partei E",
+        "seatsOrVotes": 4
+      },
+      {
+        "name": "Partei F",
+        "seatsOrVotes": 4
+      },
+      {
+        "name": "Partei G",
+        "seatsOrVotes": 3
+      },
+      {
+        "name": "Partei H",
+        "seatsOrVotes": 2
+      }
+    ]
+  },
+  "expected": {
+    "distribution": {
+      "Partei A": 5,
+      "Partei B": 4,
+      "Partei C": 4,
+      "Partei D": 0,
+      "Partei E": 0,
+      "Partei F": 0,
+      "Partei G": 0,
+      "Partei H": 0
+    },
+    "order": [
+      {
+        "groupName": "Partei A",
+        "value": 24
+      },
+      {
+        "groupName": "Partei B",
+        "value": 20
+      },
+      {
+        "groupName": "Partei C",
+        "value": 19
+      },
+      {
+        "groupName": "Partei A",
+        "value": 12
+      },
+      {
+        "groupName": "Partei B",
+        "value": 10
+      },
+      {
+        "groupName": "Partei C",
+        "value": 9.5
+      },
+      {
+        "groupName": "Partei A",
+        "value": 8
+      },
+      {
+        "groupName": "Partei B",
+        "value": 6.666
+      },
+      {
+        "groupName": "Partei C",
+        "value": 6.333
+      },
+      {
+        "groupName": "Partei A",
+        "value": 6
+      },
+      {
+        "groupName": "Partei B",
+        "value": 5
+      },
+      {
+        "groupName": "Partei A",
+        "value": 4.8
+      },
+      {
+        "groupName": "Partei C",
+        "value": 4.75
+      }
+    ],
+    "stale": {
+      "groupNames": [
+        "Partei A",
+        "Partei B",
+        "Partei D",
+        "Partei E",
+        "Partei F"
+      ],
+      "amountSeats": 1,
+      "ratio": 4
+    }
+  }
+}
