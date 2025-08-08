@@ -49,10 +49,7 @@
       }
     ],
     "stale": {
-      "groupNames": [
-        "Partei A",
-        "Partei B"
-      ],
+      "groupNames": ["Partei A", "Partei B"],
       "amountSeats": 1,
       "ratio": 2000
     }

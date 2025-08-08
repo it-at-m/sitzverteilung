@@ -74,11 +74,7 @@
       }
     ],
     "stale": {
-      "groupNames": [
-        "Partei D",
-        "Partei E",
-        "Partei 4"
-      ],
+      "groupNames": ["Partei D", "Partei E", "Partei 4"],
       "amountSeats": 1,
       "ratio": 4
     }
