@@ -114,7 +114,7 @@ function calculateHareNiemeyer(
     (sum, group) => sum + group.seatsOrVotes,
     0
   );
-  const quotas: CalculationGroupRatio[] = [];
+  const remainder: CalculationGroupRatio[] = [];
   calculationGroups.forEach((group) => {
     const exactQuota = (group.seatsOrVotes * committeeSize) / totalSeatsOrVotes;
     const seats = Math.floor(exactQuota);
@@ -122,7 +122,7 @@ function calculateHareNiemeyer(
     for (let i = 0; i < seats; i++) {
       seatOrder.push({ groupName: group.name, value: exactQuota });
     }
-    quotas.push({
+    remainder.push({
       groupName: group.name,
       value: exactQuota - seats,
     });
@@ -136,19 +136,19 @@ function calculateHareNiemeyer(
   const remainingSeats = committeeSize - assignedSeats;
 
   // Sort remainders descending
-  quotas.sort((a, b) => b.value - a.value);
+  remainder.sort((a, b) => b.value - a.value);
 
   // Assign remaining seats based on highest remainders
-  const topRemainders = quotas.slice(0, remainingSeats);
-  topRemainders.forEach((quota) => {
-    seatDistribution[quota.groupName]++;
-    seatOrder.push({ groupName: quota.groupName, value: quota.value });
+  const topRemainders = remainder.slice(0, remainingSeats);
+  topRemainders.forEach((remainder) => {
+    seatDistribution[remainder.groupName]++;
+    seatOrder.push({ groupName: remainder.groupName, value: remainder.value });
   });
 
   // Check for stale situation
   if (remainingSeats > 0) {
     const staleRemainder = topRemainders[topRemainders.length - 1]?.value;
-    const potentialStales = quotas.filter(
+    const potentialStales = remainder.filter(
       (quota) => quota.value === staleRemainder
     );
     const potentialStalesInTop = topRemainders.filter(
