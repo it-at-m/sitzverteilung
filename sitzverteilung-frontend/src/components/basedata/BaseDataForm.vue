@@ -58,6 +58,7 @@
           :union-type="UnionType.FRACTION"
           :group-names="groupNames"
           :limit-name="limitName"
+          :is-base-data-view="isBaseDataView"
         />
       </v-col>
       <v-col cols="6">
@@ -67,6 +68,7 @@
           :union-type="UnionType.COMMITTEE"
           :group-names="groupNames"
           :limit-name="limitName"
+          :is-base-data-view="isBaseDataView"
         />
       </v-col>
     </v-row>

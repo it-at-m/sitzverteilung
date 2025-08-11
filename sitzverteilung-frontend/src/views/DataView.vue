@@ -290,7 +290,7 @@ function updateBaseData() {
     const copy = JSON.parse(JSON.stringify(currentBaseData.value));
     store.updateBaseData(selectedBaseData.value.name, copy);
     snackbar.showMessage({
-      message: `Die Vorlage '${selectedBaseData.value.name}' wurden aktualisiert.`,
+      message: `Die Vorlage '${selectedBaseData.value.name}' wurde aktualisiert.`,
     });
     selectedBaseData.value = copy;
   }
@@ -301,7 +301,7 @@ function createBaseData() {
     const copy = JSON.parse(JSON.stringify(currentBaseData.value));
     store.addBaseData(copy);
     snackbar.showMessage({
-      message: `Die Vorlage '${copy.name}' wurden angelegt.`,
+      message: `Die Vorlage '${copy.name}' wurde angelegt.`,
     });
     selectedBaseData.value = copy;
   }
@@ -320,7 +320,7 @@ function deleteSelectedBaseData() {
   if (isBaseDataSelected.value && selectedBaseData.value) {
     store.deleteBaseData(selectedBaseData.value.name);
     snackbar.showMessage({
-      message: `Die Vorlage '${selectedBaseData.value.name}' wurden gelöscht.`,
+      message: `Die Vorlage '${selectedBaseData.value.name}' wurde gelöscht.`,
     });
     selectedBaseData.value = null;
   }

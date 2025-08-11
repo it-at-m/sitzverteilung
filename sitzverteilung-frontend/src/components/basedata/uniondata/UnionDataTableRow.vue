@@ -30,6 +30,7 @@
         >
           <template #close>
             <v-icon
+              v-if="isBaseDataView"
               :icon="mdiDelete"
               @click.stop="removeGroup(groupIdx)"
             />
@@ -42,6 +43,7 @@
         <v-btn
           @click="deleteUnion"
           :icon="mdiDelete"
+          v-if="isBaseDataView"
           size="small"
           color="red"
           variant="text"
@@ -65,6 +67,7 @@ const { unions, groupNames, limitName } = defineProps<{
   unions: Union[];
   groupNames: string[];
   limitName: number;
+  isBaseDataView: boolean;
 }>();
 const unionNames = computed(() => unions.map((union) => union.name));
 

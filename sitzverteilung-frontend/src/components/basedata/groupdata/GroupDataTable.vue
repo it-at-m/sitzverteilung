@@ -25,7 +25,7 @@
         </template>
         <template #append>
           <v-btn
-            v-show="isBaseDataView"
+            v-if="isBaseDataView"
             :disabled="isFractionDisabled"
             @click="createUnion(UnionType.FRACTION)"
             :prepend-icon="mdiPlus"
@@ -36,7 +36,7 @@
             text="Fraktionsgemeinschaft anlegen"
           />
           <v-btn
-            v-show="isBaseDataView"
+            v-if="isBaseDataView"
             :disabled="isCommitteeDisabled"
             @click="createUnion(UnionType.COMMITTEE)"
             :prepend-icon="mdiPlus"
@@ -47,7 +47,7 @@
             text="Ausschussgemeinschaft anlegen"
           />
           <v-btn
-            v-show="isBaseDataView"
+            v-if="isBaseDataView"
             :disabled="isDeletionDisabled"
             @click="deleteGroups"
             :prepend-icon="mdiDelete"
@@ -110,7 +110,7 @@
         <template #append>
           <div class="d-flex justify-center">
             <v-btn
-              v-show="isBaseDataView"
+              v-if="isBaseDataView"
               @click="deleteGroup(index)"
               :disabled="isSingleDeletionDisabled(index)"
               :icon="mdiDelete"
@@ -126,7 +126,7 @@
 
     <template #body.append>
       <group-data-table-add-row
-        v-show="isBaseDataView"
+        v-if="isBaseDataView"
         :group-names="groupNames"
         :disabled="isGroupLimitReached"
         :limit-name="limitName"
@@ -158,24 +158,31 @@ import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataT
 import { UnionType } from "@/types/basedata/Union.ts";
 import { numberFormatter } from "@/utility/numberFormatter.ts";
 
-const headers = computed(() => [
-  {
-    title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
-    key: "name",
-    width: 400,
-  },
-  {
-    title: `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`,
-    key: "committeeSeats",
-    width: 200,
-  },
-  {
-    title: `Anzahl der Stimmen (optional, max. ${numberFormatter(props.limitVotes)})`,
-    key: "votes",
-    width: 200,
-  },
-  { title: "Aktionen", key: "actions", align: "center", width: 100 },
-]);
+const headers = computed(() => {
+  const base = [
+    {
+      title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
+      key: "name",
+      width: 400,
+    },
+    {
+      title: `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`,
+      key: "committeeSeats",
+      width: 200,
+    },
+    {
+      title: `Anzahl der Stimmen (optional, max. ${numberFormatter(props.limitVotes)})`,
+      key: "votes",
+      width: 200,
+    },
+  ];
+  return props.isBaseDataView
+    ? [
+        ...base,
+        { title: "Aktionen", key: "actions", align: "center", width: 100 },
+      ]
+    : base;
+});
 
 const props = defineProps<{
   expectedSeats: number;

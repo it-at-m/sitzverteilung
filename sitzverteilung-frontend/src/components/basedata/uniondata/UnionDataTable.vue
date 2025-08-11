@@ -48,6 +48,7 @@
         :unions="unions"
         :group-names="groupNames"
         :limit-name="limitName"
+        :is-base-data-view="isBaseDataView"
         @edited-name="validateNameFields"
         @delete="deleteUnion(index)"
         @remove-group="(groupIdx) => removeGroup(index, groupIdx)"
@@ -66,19 +67,26 @@ import { computed, nextTick } from "vue";
 import UnionDataTableRow from "@/components/basedata/uniondata/UnionDataTableRow.vue";
 import { UnionType } from "@/types/basedata/Union.ts";
 
-const headers = computed(() => [
-  {
-    title: `${nameHeaderTitle.value} (max. ${props.limitName} Zeichen)`,
-    key: "name",
-    width: 200,
-  },
-  {
-    title: "Parteien / Gruppierungen / Einzelmitglieder",
-    key: "groups",
-    width: 250,
-  },
-  { title: "Aktionen", key: "actions", align: "center", width: 100 },
-]);
+const headers = computed(() => {
+  const base = [
+    {
+      title: `${nameHeaderTitle.value} (max. ${props.limitName} Zeichen)`,
+      key: "name",
+      width: 200,
+    },
+    {
+      title: "Parteien / Gruppierungen / Einzelmitglieder",
+      key: "groups",
+      width: 250,
+    },
+  ];
+  return props.isBaseDataView
+    ? [
+        ...base,
+        { title: "Aktionen", key: "actions", align: "center", width: 100 },
+      ]
+    : base;
+});
 const nameHeaderTitle = computed(() =>
   props.unionType == UnionType.FRACTION
     ? "Name der Fraktionsgemeinschaft"
@@ -94,6 +102,7 @@ const props = defineProps<{
   groupNames: string[];
   unionType: UnionType;
   limitName: number;
+  isBaseDataView: boolean;
 }>();
 
 const unions = defineModel<Union[]>({ required: true });
