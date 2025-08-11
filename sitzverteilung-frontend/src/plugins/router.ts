@@ -1,11 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import AboutView from "@/views/AboutView.vue";
+import CalculationView from "@/views/CalculationView.vue";
 import DataView from "@/views/DataView.vue";
 
 export const enum RouteNames {
   ABOUT = "about",
   DATA = "data",
+  CALCULATION = "calculation",
 }
 
 const routes = [
@@ -18,6 +20,12 @@ const routes = [
     path: "/about",
     name: RouteNames.ABOUT,
     component: AboutView,
+    meta: {},
+  },
+  {
+    path: "/calculation",
+    name: RouteNames.CALCULATION,
+    component: CalculationView,
     meta: {},
   },
   { path: "/:catchAll(.*)*", redirect: "/data" }, // CatchAll route

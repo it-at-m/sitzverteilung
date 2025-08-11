@@ -25,6 +25,7 @@
         </template>
         <template #append>
           <v-btn
+            v-show="isBaseDataView"
             :disabled="isFractionDisabled"
             @click="createUnion(UnionType.FRACTION)"
             :prepend-icon="mdiPlus"
@@ -35,6 +36,7 @@
             text="Fraktionsgemeinschaft anlegen"
           />
           <v-btn
+            v-show="isBaseDataView"
             :disabled="isCommitteeDisabled"
             @click="createUnion(UnionType.COMMITTEE)"
             :prepend-icon="mdiPlus"
@@ -45,6 +47,7 @@
             text="Ausschussgemeinschaft anlegen"
           />
           <v-btn
+            v-show="isBaseDataView"
             :disabled="isDeletionDisabled"
             @click="deleteGroups"
             :prepend-icon="mdiDelete"
@@ -107,6 +110,7 @@
         <template #append>
           <div class="d-flex justify-center">
             <v-btn
+              v-show="isBaseDataView"
               @click="deleteGroup(index)"
               :disabled="isSingleDeletionDisabled(index)"
               :icon="mdiDelete"
@@ -122,6 +126,7 @@
 
     <template #body.append>
       <group-data-table-add-row
+        v-show="isBaseDataView"
         :group-names="groupNames"
         :disabled="isGroupLimitReached"
         :limit-name="limitName"
@@ -179,6 +184,7 @@ const props = defineProps<{
   limitVotes: number;
   fractions: Union[];
   committees: Union[];
+  isBaseDataView: boolean;
 }>();
 
 const groups = defineModel<Group[]>({ required: true });

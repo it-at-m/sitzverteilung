@@ -44,6 +44,7 @@
           :limit-votes="limitVotes"
           :fractions="fractions"
           :committees="committees"
+          :is-base-data-view="isBaseDataView"
           @create-union="createUnion"
           @deleted-group="deletedGroup"
         />
@@ -125,6 +126,7 @@ const {
   limitCommitteeSize: number;
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
+  isBaseDataView: boolean;
 }>();
 
 const emit = defineEmits<{
