@@ -36,18 +36,13 @@ function calculateDHondt(
   committeeSize: number
 ): CalculationMethodResult {
   const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
-      calculationGroups,
-      committeeSize,
-      (step) => step + 1 // D'Hondt divisors: 1, 2, 3, ...
+    calculationGroups,
+    committeeSize,
+    (step) => step + 1 // D'Hondt divisors: 1, 2, 3, ...
   );
 
   // Check for stale
-  const stale = handleStaleSituation(
-    ratios,
-    topRatios,
-    distribution,
-    order
-  );
+  const stale = handleStaleSituation(ratios, topRatios, distribution, order);
 
   return {
     distribution,
@@ -61,18 +56,13 @@ function calculateSainteLagueSchepers(
   committeeSize: number
 ): CalculationMethodResult {
   const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
-      calculationGroups,
-      committeeSize,
-      (step) => step + 0.5 // D'Hondt divisors: 0.5, 1.5, 2.5, ...
+    calculationGroups,
+    committeeSize,
+    (step) => step + 0.5 // D'Hondt divisors: 0.5, 1.5, 2.5, ...
   );
 
   // Check for stale
-  const stale = handleStaleSituation(
-      ratios,
-      topRatios,
-      distribution,
-      order
-  );
+  const stale = handleStaleSituation(ratios, topRatios, distribution, order);
 
   return {
     distribution,
@@ -148,9 +138,9 @@ function calculateHareNiemeyer(
 }
 
 function calculateDivisorMethod(
-    calculationGroups: CalculationGroup[],
-    committeeSize: number,
-    divisorFn: (step: number) => number
+  calculationGroups: CalculationGroup[],
+  committeeSize: number,
+  divisorFn: (step: number) => number
 ): {
   distribution: CalculationSeatDistribution;
   order: CalculationSeatOrder;
