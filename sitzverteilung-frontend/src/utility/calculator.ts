@@ -103,7 +103,6 @@ function calculateHareNiemeyer(
   committeeSize: number
 ): CalculationMethodResult {
   const seatDistribution: CalculationSeatDistribution = {};
-  const seatOrder: CalculationSeatOrder = [];
   let stale: CalculationStale | undefined = undefined;
 
   // Initialize distributions with 0 seats for every group
@@ -119,9 +118,6 @@ function calculateHareNiemeyer(
     const exactQuota = (group.seatsOrVotes * committeeSize) / totalSeatsOrVotes;
     const seats = Math.floor(exactQuota);
     seatDistribution[group.name] = seats;
-    for (let i = 0; i < seats; i++) {
-      seatOrder.push({ groupName: group.name, value: exactQuota });
-    }
     remainder.push({
       groupName: group.name,
       value: exactQuota - seats,
@@ -142,7 +138,6 @@ function calculateHareNiemeyer(
   const topRemainders = remainder.slice(0, remainingSeats);
   topRemainders.forEach((remainder) => {
     seatDistribution[remainder.groupName]++;
-    seatOrder.push({ groupName: remainder.groupName, value: remainder.value });
   });
 
   // Check for stale situation
@@ -169,18 +164,29 @@ function calculateHareNiemeyer(
 
       // Remove stale seats from seat distribution and order
       let toRemove = unresolvedSeats;
-      for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
-        if (seatOrder[i].value === staleRemainder) {
-          seatDistribution[seatOrder[i].groupName]--;
+      for (const remainder of [...topRemainders].reverse()) {
+        if (remainder.value === staleRemainder && toRemove > 0) {
+          seatDistribution[remainder.groupName]--;
           toRemove--;
         }
       }
     }
   }
 
+  // Calculate D'Hondt seat order using Hare/Niemeyer distribution
+  const dHondtCalculationGroups: CalculationGroup[] = Object.entries(
+    seatDistribution
+  ).map(([groupName, value]) => {
+    return {
+      name: groupName,
+      seatsOrVotes: value,
+    };
+  });
+  const { order } = calculateDHondt(dHondtCalculationGroups, committeeSize);
+
   return {
     distribution: seatDistribution,
-    order: seatOrder,
+    order,
     stale,
   };
 }
