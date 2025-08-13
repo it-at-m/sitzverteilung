@@ -37,7 +37,6 @@ function calculateDHondt(
 ): CalculationMethodResult {
   const seatDistribution: CalculationSeatDistribution = {};
   const seatOrder: CalculationSeatOrder = [];
-  let stale: CalculationStale | undefined = undefined;
 
   // Initialize distributions with 0 seats for every group
   calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
@@ -63,32 +62,13 @@ function calculateDHondt(
     seatOrder.push(ratio);
   });
 
-  // Check for stale situation
-  const staleRatio = topRatios[committeeSize - 1].value;
-  const potentialStales = ratios.filter((ratio) => ratio.value === staleRatio);
-  const potentialStalesInTop = topRatios.filter(
-    (ratio) => ratio.value === staleRatio
+  // Check for stale
+  const stale = handleStaleSituation(
+    ratios,
+    topRatios,
+    seatDistribution,
+    seatOrder
   );
-  const unresolvedSeats = potentialStales.length - potentialStalesInTop.length;
-
-  if (unresolvedSeats) {
-    // Create stale information
-    stale = {
-      groupNames: [...new Set(potentialStales.map((ratio) => ratio.groupName))],
-      amountSeats: potentialStalesInTop.length,
-      ratio: staleRatio,
-    };
-
-    // Remove stale seats from seat distribution and order
-    let toRemove = unresolvedSeats;
-    for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
-      if (seatOrder[i].value === staleRatio) {
-        seatDistribution[seatOrder[i].groupName]--;
-        seatOrder.splice(i, 1);
-        toRemove--;
-      }
-    }
-  }
 
   return {
     distribution: seatDistribution,
@@ -103,7 +83,6 @@ function calculateHareNiemeyer(
   committeeSize: number
 ): CalculationMethodResult {
   const seatDistribution: CalculationSeatDistribution = {};
-  let stale: CalculationStale | undefined = undefined;
 
   // Initialize distributions with 0 seats for every group
   calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
@@ -113,12 +92,12 @@ function calculateHareNiemeyer(
     (sum, group) => sum + group.seatsOrVotes,
     0
   );
-  const remainder: CalculationGroupRatio[] = [];
+  const remainders: CalculationGroupRatio[] = [];
   calculationGroups.forEach((group) => {
     const exactQuota = (group.seatsOrVotes * committeeSize) / totalSeatsOrVotes;
     const seats = Math.floor(exactQuota);
     seatDistribution[group.name] = seats;
-    remainder.push({
+    remainders.push({
       groupName: group.name,
       value: exactQuota - seats,
     });
@@ -132,45 +111,18 @@ function calculateHareNiemeyer(
   const remainingSeats = committeeSize - assignedSeats;
 
   // Sort remainders descending
-  remainder.sort((a, b) => b.value - a.value);
+  remainders.sort((a, b) => b.value - a.value);
 
   // Assign remaining seats based on highest remainders
-  const topRemainders = remainder.slice(0, remainingSeats);
+  const topRemainders = remainders.slice(0, remainingSeats);
   topRemainders.forEach((remainder) => {
     seatDistribution[remainder.groupName]++;
   });
 
   // Check for stale situation
+  let stale: CalculationStale | undefined = undefined;
   if (remainingSeats > 0) {
-    const staleRemainder = topRemainders[topRemainders.length - 1]?.value;
-    const potentialStales = remainder.filter(
-      (quota) => quota.value === staleRemainder
-    );
-    const potentialStalesInTop = topRemainders.filter(
-      (quota) => quota.value === staleRemainder
-    );
-    const unresolvedSeats =
-      potentialStales.length - potentialStalesInTop.length;
-
-    if (unresolvedSeats) {
-      // Create stale information
-      stale = {
-        groupNames: [
-          ...new Set(potentialStales.map((ratio) => ratio.groupName)),
-        ],
-        amountSeats: potentialStalesInTop.length,
-        ratio: staleRemainder,
-      };
-
-      // Remove stale seats from seat distribution and order
-      let toRemove = unresolvedSeats;
-      for (const remainder of [...topRemainders].reverse()) {
-        if (remainder.value === staleRemainder && toRemove > 0) {
-          seatDistribution[remainder.groupName]--;
-          toRemove--;
-        }
-      }
-    }
+    stale = handleStaleSituation(remainders, topRemainders, seatDistribution);
   }
 
   // Calculate D'Hondt seat order using Hare/Niemeyer distribution
@@ -189,6 +141,50 @@ function calculateHareNiemeyer(
     order,
     stale,
   };
+}
+
+function handleStaleSituation(
+  sortedRatios: CalculationGroupRatio[],
+  topRatios: CalculationGroupRatio[],
+  seatDistribution: CalculationSeatDistribution,
+  seatOrder?: CalculationSeatOrder
+): CalculationStale | undefined {
+  let stale = undefined;
+
+  const ratioValue = topRatios[topRatios.length - 1]?.value;
+  if (ratioValue === undefined) return stale;
+
+  const potentialStales = sortedRatios.filter((r) => r.value === ratioValue);
+  const potentialStalesInTop = topRatios.filter((r) => r.value === ratioValue);
+  const unresolvedSeats = potentialStales.length - potentialStalesInTop.length;
+
+  if (unresolvedSeats > 0) {
+    stale = {
+      groupNames: [...new Set(potentialStales.map((r) => r.groupName))],
+      amountSeats: potentialStalesInTop.length,
+      ratio: ratioValue,
+    };
+
+    let toRemove = unresolvedSeats;
+    if (seatOrder) {
+      for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
+        if (seatOrder[i].value === ratioValue) {
+          seatDistribution[seatOrder[i].groupName]--;
+          seatOrder.splice(i, 1);
+          toRemove--;
+        }
+      }
+    } else {
+      for (const item of [...topRatios].reverse()) {
+        if (item.value === ratioValue && toRemove > 0) {
+          seatDistribution[item.groupName]--;
+          toRemove--;
+        }
+      }
+    }
+  }
+
+  return stale;
 }
 
 export const exportForTesting = {
