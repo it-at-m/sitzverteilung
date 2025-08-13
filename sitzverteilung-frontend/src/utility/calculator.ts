@@ -149,7 +149,7 @@ function handleStaleSituation(
   seatDistribution: CalculationSeatDistribution,
   seatOrder?: CalculationSeatOrder
 ): CalculationStale | undefined {
-  let stale = undefined;
+  let stale: CalculationStale | undefined = undefined;
 
   const ratioValue = topRatios[topRatios.length - 1]?.value;
   if (ratioValue === undefined) return stale;
@@ -160,7 +160,7 @@ function handleStaleSituation(
 
   if (unresolvedSeats > 0) {
     stale = {
-      groupNames: [...new Set(potentialStales.map((r) => r.groupName))],
+      groupNames: Array.from(new Set(potentialStales.map((r) => r.groupName))),
       amountSeats: potentialStalesInTop.length,
       ratio: ratioValue,
     };

@@ -18,19 +18,15 @@ interface CalculationTestData {
 }
 
 const jsonFiles = [
-  ...loadJsonFiles(
+  ...loadJsonFiles<CalculationTestData>(
     join(__dirname, "../data/dHondt"),
     CalculationMethod.D_HONDT
   ),
-  ...loadJsonFiles(
+  ...loadJsonFiles<CalculationTestData>(
     join(__dirname, "../data/hareNiemeyer"),
     CalculationMethod.HARE_NIEMEYER
   ),
-] as {
-  fileName: string;
-  calculationMethod: CalculationMethod;
-  data: CalculationTestData;
-}[];
+];
 
 describe("Calculation tests", () => {
   test.each(
@@ -67,13 +63,18 @@ function getComparableResult(
   };
 }
 
-function loadJsonFiles(dir: string, calculationMethod: CalculationMethod) {
-  const files = readdirSync(dir);
-  return files
-    .filter((file) => file.endsWith(".json"))
-    .map((file) => {
-      const filePath = join(dir, file);
-      const content = readFileSync(filePath, "utf-8");
-      return { fileName: file, data: JSON.parse(content), calculationMethod };
-    });
+function loadJsonFiles<T>(
+  dir: string,
+  calculationMethod: CalculationMethod
+): { fileName: string; calculationMethod: CalculationMethod; data: T }[] {
+  const files = readdirSync(dir)
+    .filter((file) => file.toLowerCase().endsWith(".json"))
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+  return files.map((fileName) => {
+    const filePath = join(dir, fileName);
+    const content = readFileSync(filePath, "utf-8");
+    const data = JSON.parse(content) as T;
+    return { fileName, data, calculationMethod };
+  });
 }
