@@ -3,7 +3,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 import { acceptHMRUpdate, defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-export const useBaseDataStore = defineStore("basedata", () => {
+export const useTemplateDataStore = defineStore("basedata", () => {
   const internalBaseDatas = ref<BaseData[]>([]);
   const baseDatas = computed(() => internalBaseDatas.value);
 
@@ -46,5 +46,7 @@ export const useBaseDataStore = defineStore("basedata", () => {
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useBaseDataStore, import.meta.hot));
+  import.meta.hot.accept(
+    acceptHMRUpdate(useTemplateDataStore, import.meta.hot)
+  );
 }

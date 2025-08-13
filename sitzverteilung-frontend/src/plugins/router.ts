@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 
 import AboutView from "@/views/AboutView.vue";
 import CalculationView from "@/views/CalculationView.vue";
-import DataView from "@/views/DataView.vue";
+import TemplateView from "@/views/TemplateView.vue";
 
 export const enum RouteNames {
   ABOUT = "about",
@@ -14,7 +14,7 @@ const routes = [
   {
     path: "/data",
     name: RouteNames.DATA,
-    component: DataView,
+    component: TemplateView,
   },
   {
     path: "/about",

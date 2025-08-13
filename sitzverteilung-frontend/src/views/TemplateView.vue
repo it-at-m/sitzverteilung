@@ -136,7 +136,7 @@
     <v-toolbar class="my-6 py-2 px-3 bg-primary">
       <v-row>
         <v-col class="d-flex align-center">
-          <base-data-autocomplete
+          <template-data-autocomplete
             v-model="selectedBaseData"
             :limit-name="LimitConfiguration.limitName"
             :base-data-list="storedBaseData"
@@ -219,17 +219,18 @@ import {
   mdiShare,
 } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
-import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
+import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import InfoDialog from "@/components/common/InfoDialog.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
+import { useDataInputChecks } from "@/composables/useDataInputChecks.ts";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
 import { STATUS_INDICATORS } from "@/constants.ts";
-import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
+import { useTemplateDataStore } from "@/stores/templatedata.ts";
 import { numberFormatter } from "@/utility/numberFormatter.ts";
 import {
   writeToUrlParam,
@@ -237,53 +238,27 @@ import {
 } from "@/utility/urlEncoder.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
 
-const store = useBaseDataStore();
+const store = useTemplateDataStore();
 const snackbar = useSnackbarStore();
 
-const storedBaseData = computed(() => store.baseDatas);
-
-const selectedBaseData = ref<BaseData | null>();
 const isBaseDataSelected = computed(() => !!selectedBaseData.value);
 
-const dirty = computed(
-  () =>
-    isBaseDataSelected.value &&
-    JSON.stringify(currentBaseData.value) !==
-      JSON.stringify(selectedBaseData.value)
-);
-const isDataEntered = computed(
-  () =>
-    dirty.value ||
-    (!isBaseDataSelected.value &&
-      !dirty.value &&
-      JSON.stringify(currentBaseData.value) !==
-        JSON.stringify(getEmptyBaseData()))
-);
+const {
+  storedBaseData,
+  selectedBaseData,
+  baseDataNames,
+  currentBaseData,
+  updateIsValid,
+  isDataEntered,
+  baseDataFormRef,
+  dirty,
+  isValid,
+} = useDataInputChecks();
 
 const basedataNameIsNotChanged = computed(
   () => currentBaseData.value?.name === selectedBaseData.value?.name
 );
 const saveLeave = useSaveLeave(isDataEntered);
-
-const baseDataNames = computed(() =>
-  storedBaseData.value.map((baseData) => baseData.name)
-);
-
-const currentBaseData = ref<BaseData>(getEmptyBaseData());
-
-const isValid = ref(false);
-function updateIsValid(newIsValid: boolean) {
-  isValid.value = newIsValid;
-}
-
-function getEmptyBaseData(): BaseData {
-  return {
-    name: "",
-    committeeSize: undefined,
-    groups: [],
-    unions: [],
-  };
-}
 
 function updateBaseData() {
   if (currentBaseData.value && selectedBaseData.value) {
@@ -307,7 +282,6 @@ function createBaseData() {
   }
 }
 
-const baseDataFormRef = useTemplateRef("baseDataFormRef");
 const isDeleteConfirmationShown = ref(false);
 function showDeleteConfirmation() {
   isDeleteConfirmationShown.value = true;
@@ -324,19 +298,6 @@ function deleteSelectedBaseData() {
     });
     selectedBaseData.value = null;
   }
-}
-
-watch(selectedBaseData, (newBaseData) => {
-  if (!newBaseData) {
-    reset();
-  } else {
-    currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-  }
-});
-
-function reset() {
-  baseDataFormRef.value?.reset();
-  currentBaseData.value = getEmptyBaseData();
 }
 
 const { copy, isSupported } = useClipboard();
@@ -390,12 +351,12 @@ watch(
             level: STATUS_INDICATORS.ERROR,
           });
         } else {
-          selectedBaseData.value = undefined;
+          selectedBaseData.value = null;
           await nextTick(() => {
             currentBaseData.value = baseData;
           });
           snackbar.showMessage({
-            message: `Die Vorlage '${baseData.name}' wurde übertragen. ACHTUNG: Erst beim Speichern wird diese permanent gespeichert.`,
+            message: `Die Vorlage '${baseData.name}' wurde übertragen. ACHTUNG: Erst ach dem Klick auf 'Anlegen' wird diese permanent gespeichert.`,
           });
         }
       } catch {

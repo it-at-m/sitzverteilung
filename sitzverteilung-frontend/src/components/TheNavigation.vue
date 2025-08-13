@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     expand-on-hover
-    width="130"
+    width="120"
     color="primary"
     v-if="!mobile"
   >
@@ -54,7 +54,11 @@
 <script setup lang="ts">
 import type { NavigationItem } from "@/types/NavigationItem";
 
-import { mdiCalculatorVariant, mdiInformation, mdiNoteText } from "@mdi/js";
+import {
+  mdiCalculator,
+  mdiFileDocumentMultiple,
+  mdiInformation,
+} from "@mdi/js";
 import { useDisplay } from "vuetify";
 
 import { RouteNames } from "@/plugins/router";
@@ -65,12 +69,12 @@ const navigationItems: NavigationItem[] = [
   {
     text: "Vorlagen",
     routeName: RouteNames.DATA,
-    icon: mdiNoteText,
+    icon: mdiFileDocumentMultiple,
   },
   {
-    text: "Sitzberechnung",
+    text: "Berechnung",
     routeName: RouteNames.CALCULATION,
-    icon: mdiCalculatorVariant,
+    icon: mdiCalculator,
   },
   {
     text: "Über",

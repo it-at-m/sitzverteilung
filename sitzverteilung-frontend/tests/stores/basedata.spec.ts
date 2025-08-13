@@ -1,7 +1,7 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { useBaseDataStore } from "../../src/stores/basedata";
+import { useTemplateDataStore } from "../../src/stores/templatedata";
 import { BaseData } from "../../src/types/basedata/BaseData";
 import { getTestBaseData } from "../TestData";
 
@@ -11,13 +11,13 @@ describe("BaseData Store", () => {
   });
 
   test("Store is empty after initialization", () => {
-    const store = useBaseDataStore();
+    const store = useTemplateDataStore();
     expect(store.baseDatas.length).toBe(0);
   });
 
   test("Add new BaseData", () => {
     // given
-    const store = useBaseDataStore();
+    const store = useTemplateDataStore();
     const testData = getTestBaseData();
 
     // when
@@ -30,7 +30,7 @@ describe("BaseData Store", () => {
 
   test("Update BaseData", () => {
     // given
-    const store = useBaseDataStore();
+    const store = useTemplateDataStore();
     const testData = getTestBaseData();
     store.addBaseData(testData);
     const newTestData: BaseData = {
@@ -47,7 +47,7 @@ describe("BaseData Store", () => {
   });
 
   test("Delete BaseData", () => {
-    const store = useBaseDataStore();
+    const store = useTemplateDataStore();
     const testData = getTestBaseData();
     store.addBaseData(testData);
     const testData2: BaseData = {
@@ -66,7 +66,7 @@ describe("BaseData Store", () => {
 
   test("Delete all BaseData", () => {
     // given
-    const store = useBaseDataStore();
+    const store = useTemplateDataStore();
     const testData = getTestBaseData();
     store.addBaseData(testData);
     const testData2: BaseData = {
