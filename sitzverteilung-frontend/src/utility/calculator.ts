@@ -35,44 +35,23 @@ function calculateDHondt(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
-  const seatDistribution: CalculationSeatDistribution = {};
-  const seatOrder: CalculationSeatOrder = [];
-
-  // Initialize distributions with 0 seats for every group
-  calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
-
-  // Calculate ratios using increasing divisors
-  const ratios: CalculationGroupRatio[] = [];
-  calculationGroups.forEach((group) => {
-    for (let i = 1; i <= committeeSize; i++) {
-      ratios.push({
-        groupName: group.name,
-        value: group.seatsOrVotes / i,
-      });
-    }
-  });
-
-  // Sort ratios descending (to get assignment order)
-  ratios.sort((a, b) => b.value - a.value);
-  const topRatios = ratios.slice(0, committeeSize);
-
-  // Calculate preliminary seat distribution and order
-  topRatios.forEach((ratio) => {
-    seatDistribution[ratio.groupName]++;
-    seatOrder.push(ratio);
-  });
+  const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
+      calculationGroups,
+      committeeSize,
+      (step) => step + 1 // D'Hondt divisors: 1, 2, 3, ...
+  );
 
   // Check for stale
   const stale = handleStaleSituation(
     ratios,
     topRatios,
-    seatDistribution,
-    seatOrder
+    distribution,
+    order
   );
 
   return {
-    distribution: seatDistribution,
-    order: seatOrder,
+    distribution,
+    order,
     stale,
   };
 }
@@ -81,45 +60,23 @@ function calculateSainteLagueSchepers(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
-  const seatDistribution: CalculationSeatDistribution = {};
-  const seatOrder: CalculationSeatOrder = [];
-
-  // Initialize distributions with 0 seats for every group
-  calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
-
-  // Calculate ratios using divisors: 0.5, 1.5, 2.5, ...
-  const ratios: CalculationGroupRatio[] = [];
-  calculationGroups.forEach((group) => {
-    for (let i = 0; i < committeeSize; i++) {
-      const divisor = 0.5 + i; // 0.5, 1.5, 2.5, ...
-      ratios.push({
-        groupName: group.name,
-        value: group.seatsOrVotes / divisor,
-      });
-    }
-  });
-
-  // Sort ratios descending (to get assignment order)
-  ratios.sort((a, b) => b.value - a.value);
-  const topRatios = ratios.slice(0, committeeSize);
-
-  // Calculate preliminary seat distribution and order
-  topRatios.forEach((ratio) => {
-    seatDistribution[ratio.groupName]++;
-    seatOrder.push(ratio);
-  });
+  const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
+      calculationGroups,
+      committeeSize,
+      (step) => step + 0.5 // D'Hondt divisors: 0.5, 1.5, 2.5, ...
+  );
 
   // Check for stale
   const stale = handleStaleSituation(
       ratios,
       topRatios,
-      seatDistribution,
-      seatOrder
+      distribution,
+      order
   );
 
   return {
-    distribution: seatDistribution,
-    order: seatOrder,
+    distribution,
+    order,
     stale,
   };
 }
@@ -187,6 +144,54 @@ function calculateHareNiemeyer(
     distribution: seatDistribution,
     order,
     stale,
+  };
+}
+
+function calculateDivisorMethod(
+    calculationGroups: CalculationGroup[],
+    committeeSize: number,
+    divisorFn: (step: number) => number
+): {
+  distribution: CalculationSeatDistribution;
+  order: CalculationSeatOrder;
+  ratios: CalculationGroupRatio[];
+  topRatios: CalculationGroupRatio[];
+} {
+  const seatDistribution: CalculationSeatDistribution = {};
+  const seatOrder: CalculationSeatOrder = [];
+
+  // Initialize with 0 seats
+  calculationGroups.forEach((group) => {
+    seatDistribution[group.name] = 0;
+  });
+
+  // Generate ratios using the divisor rule
+  const ratios: CalculationGroupRatio[] = [];
+  calculationGroups.forEach((group) => {
+    for (let i = 0; i < committeeSize; i++) {
+      ratios.push({
+        groupName: group.name,
+        value: group.seatsOrVotes / divisorFn(i),
+      });
+    }
+  });
+
+  // Sort ratios in descending order
+  ratios.sort((a, b) => b.value - a.value);
+  const topRatios = ratios.slice(0, committeeSize);
+
+  // Allocate seats & build order
+  topRatios.forEach((ratio) => {
+    seatDistribution[ratio.groupName]++;
+    seatOrder.push(ratio);
+  });
+
+  // Return raw results; stale check is done outside
+  return {
+    distribution: seatDistribution,
+    order: seatOrder,
+    ratios,
+    topRatios,
   };
 }
 
