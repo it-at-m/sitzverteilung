@@ -22,6 +22,39 @@
       "Partei B": 3,
       "Partei C": 1
     },
-    "order": []
+    "order": [
+      {
+        "groupName": "Partei A",
+        "value": 4
+      },
+      {
+        "groupName": "Partei B",
+        "value": 3
+      },
+      {
+        "groupName": "Partei A",
+        "value": 2
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.5
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.333
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1
+      }
+    ]
   }
 }
