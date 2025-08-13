@@ -24,10 +24,10 @@ function calculateMethod(
   switch (method) {
     case CalculationMethod.D_HONDT:
       return calculateDHondt(calculationGroups, committeeSize);
+    case CalculationMethod.SAINTE_LAGUE_SCHEPERS:
+      return calculateSainteLagueSchepers(calculationGroups, committeeSize);
     case CalculationMethod.HARE_NIEMEYER:
       return calculateHareNiemeyer(calculationGroups, committeeSize);
-    case CalculationMethod.SAINTE_LAGUE_SCHEPERS:
-      throw new Error("Not implemented yet");
   }
 }
 
@@ -68,6 +68,53 @@ function calculateDHondt(
     topRatios,
     seatDistribution,
     seatOrder
+  );
+
+  return {
+    distribution: seatDistribution,
+    order: seatOrder,
+    stale,
+  };
+}
+
+function calculateSainteLagueSchepers(
+  calculationGroups: CalculationGroup[],
+  committeeSize: number
+): CalculationMethodResult {
+  const seatDistribution: CalculationSeatDistribution = {};
+  const seatOrder: CalculationSeatOrder = [];
+
+  // Initialize distributions with 0 seats for every group
+  calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
+
+  // Calculate ratios using divisors: 0.5, 1.5, 2.5, ...
+  const ratios: CalculationGroupRatio[] = [];
+  calculationGroups.forEach((group) => {
+    for (let i = 0; i < committeeSize; i++) {
+      const divisor = 0.5 + i; // 0.5, 1.5, 2.5, ...
+      ratios.push({
+        groupName: group.name,
+        value: group.seatsOrVotes / divisor,
+      });
+    }
+  });
+
+  // Sort ratios descending (to get assignment order)
+  ratios.sort((a, b) => b.value - a.value);
+  const topRatios = ratios.slice(0, committeeSize);
+
+  // Calculate preliminary seat distribution and order
+  topRatios.forEach((ratio) => {
+    seatDistribution[ratio.groupName]++;
+    seatOrder.push(ratio);
+  });
+
+  // Check for stale
+  const stale = handleStaleSituation(
+      ratios,
+      topRatios,
+      seatDistribution,
+      seatOrder
   );
 
   return {
