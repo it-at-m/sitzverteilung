@@ -26,6 +26,10 @@ const jsonFiles = [
     join(__dirname, "../data/hareNiemeyer"),
     CalculationMethod.HARE_NIEMEYER
   ),
+  ...loadJsonFiles<CalculationTestData>(
+    join(__dirname, "../data/sainteLague"),
+    CalculationMethod.SAINTE_LAGUE_SCHEPERS
+  ),
 ];
 
 describe("Calculation tests", () => {
