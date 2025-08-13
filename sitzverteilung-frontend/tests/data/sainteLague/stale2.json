@@ -1,0 +1,1052 @@
+{
+  "given": {
+    "committeeSize": 252,
+    "groups": [
+      {
+        "name": "Partei A",
+        "seatsOrVotes": 24
+      },
+      {
+        "name": "Partei B",
+        "seatsOrVotes": 20
+      },
+      {
+        "name": "Partei C",
+        "seatsOrVotes": 19
+      },
+      {
+        "name": "Partei D",
+        "seatsOrVotes": 6
+      },
+      {
+        "name": "Partei E",
+        "seatsOrVotes": 4
+      },
+      {
+        "name": "Partei F",
+        "seatsOrVotes": 4
+      }
+    ]
+  },
+  "expected": {
+    "distribution": {
+      "Partei A": 78,
+      "Partei B": 65,
+      "Partei C": 62,
+      "Partei D": 20,
+      "Partei E": 13,
+      "Partei F": 13
+    },
+    "order": [
+      {
+        "groupName": "Partei A",
+        "value": 24
+      },
+      {
+        "groupName": "Partei B",
+        "value": 20
+      },
+      {
+        "groupName": "Partei C",
+        "value": 19
+      },
+      {
+        "groupName": "Partei A",
+        "value": 8
+      },
+      {
+        "groupName": "Partei B",
+        "value": 6.666
+      },
+      {
+        "groupName": "Partei C",
+        "value": 6.333
+      },
+      {
+        "groupName": "Partei D",
+        "value": 6
+      },
+      {
+        "groupName": "Partei A",
+        "value": 4.8
+      },
+      {
+        "groupName": "Partei B",
+        "value": 4
+      },
+      {
+        "groupName": "Partei E",
+        "value": 4
+      },
+      {
+        "groupName": "Partei F",
+        "value": 4
+      },
+      {
+        "groupName": "Partei C",
+        "value": 3.8
+      },
+      {
+        "groupName": "Partei A",
+        "value": 3.428
+      },
+      {
+        "groupName": "Partei B",
+        "value": 2.857
+      },
+      {
+        "groupName": "Partei C",
+        "value": 2.714
+      },
+      {
+        "groupName": "Partei A",
+        "value": 2.666
+      },
+      {
+        "groupName": "Partei B",
+        "value": 2.222
+      },
+      {
+        "groupName": "Partei A",
+        "value": 2.181
+      },
+      {
+        "groupName": "Partei C",
+        "value": 2.111
+      },
+      {
+        "groupName": "Partei D",
+        "value": 2
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.846
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.818
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1.727
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.6
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.538
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1.461
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.411
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.333
+      },
+      {
+        "groupName": "Partei E",
+        "value": 1.333
+      },
+      {
+        "groupName": "Partei F",
+        "value": 1.333
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1.266
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.263
+      },
+      {
+        "groupName": "Partei D",
+        "value": 1.2
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.176
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.142
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1.117
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.052
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.043
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.96
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.952
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.904
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.888
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.869
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.857
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.827
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.826
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.8
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.8
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.8
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.774
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.76
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.74
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.727
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.703
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.689
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.685
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.666
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.655
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.648
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.645
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.615
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.612
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.606
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.585
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.575
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.571
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.571
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.571
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.558
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.545
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.542
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.54
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.533
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.513
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.512
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.51
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.489
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.487
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.487
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.47
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.465
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.463
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.461
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.452
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.444
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.444
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.444
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.441
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.436
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.425
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.422
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.421
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.408
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.406
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.404
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.4
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.393
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.392
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.387
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.38
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.377
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.372
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.369
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.363
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.363
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.363
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.358
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.358
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.352
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.35
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.347
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.345
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.338
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.338
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.333
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.328
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.327
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.322
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.32
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.317
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.315
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.311
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.311
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.307
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.307
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.307
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.303
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.301
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.298
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.296
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.292
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.289
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.289
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.285
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.283
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.282
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.281
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.275
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.275
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.273
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.269
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.267
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.266
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.266
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.266
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.263
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.26
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.26
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.259
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.258
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.253
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.253
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.252
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.247
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.246
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.246
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.242
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.24
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.24
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.24
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.237
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.235
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.235
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.235
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.234
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.233
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.229
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.228
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.228
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.224
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.224
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.223
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.222
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.22
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.219
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.218
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.216
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.215
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.213
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.212
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.21
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.21
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.21
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.208
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.208
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.206
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.206
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.205
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.204
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.202
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.201
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.2
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.198
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.198
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.195
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.195
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.194
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.193
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.192
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.191
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.19
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.19
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.19
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.188
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.188
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.186
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.186
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.184
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.183
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.183
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.181
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.18
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.18
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.18
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.177
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.177
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.176
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.175
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.174
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.173
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.173
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.173
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.172
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.171
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.171
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.17
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.17
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.168
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.168
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.167
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.165
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.165
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.165
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.163
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.162
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.162
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.162
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.161
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.16
+      },
+      {
+        "groupName": "Partei E",
+        "value": 0.16
+      },
+      {
+        "groupName": "Partei F",
+        "value": 0.16
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.159
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.158
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.157
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.157
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.156
+      },
+      {
+        "groupName": "Partei B",
+        "value": 0.155
+      },
+      {
+        "groupName": "Partei A",
+        "value": 0.154
+      },
+      {
+        "groupName": "Partei C",
+        "value": 0.154
+      },
+      {
+        "groupName": "Partei D",
+        "value": 0.153
+      }
+    ],
+    "stale": {
+      "groupNames": ["Partei A", "Partei B"],
+      "amountSeats": 1,
+      "ratio": 0
+    }
+  }
+}
