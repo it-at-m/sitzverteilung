@@ -1,0 +1,167 @@
+{
+  "given": {
+    "committeeSize": 31,
+    "groups": [
+      {
+        "name": "Partei A",
+        "seatsOrVotes": 720257
+      },
+      {
+        "name": "Partei B",
+        "seatsOrVotes": 323524
+      },
+      {
+        "name": "Partei C",
+        "seatsOrVotes": 257466
+      },
+      {
+        "name": "Partei D",
+        "seatsOrVotes": 213138
+      },
+      {
+        "name": "Partei E",
+        "seatsOrVotes": 144392
+      },
+      {
+        "name": "Partei F",
+        "seatsOrVotes": 88315
+      }
+    ]
+  },
+  "expected": {
+    "distribution": {
+      "Partei A": 13,
+      "Partei B": 6,
+      "Partei C": 5,
+      "Partei D": 4,
+      "Partei E": 2,
+      "Partei F": 1
+    },
+    "order": [
+      {
+        "groupName": "Partei A",
+        "value": 13
+      },
+      {
+        "groupName": "Partei A",
+        "value": 6.5
+      },
+      {
+        "groupName": "Partei B",
+        "value": 6
+      },
+      {
+        "groupName": "Partei C",
+        "value": 5
+      },
+      {
+        "groupName": "Partei A",
+        "value": 4.333
+      },
+      {
+        "groupName": "Partei D",
+        "value": 4
+      },
+      {
+        "groupName": "Partei A",
+        "value": 3.25
+      },
+      {
+        "groupName": "Partei B",
+        "value": 3
+      },
+      {
+        "groupName": "Partei A",
+        "value": 2.6
+      },
+      {
+        "groupName": "Partei C",
+        "value": 2.5
+      },
+      {
+        "groupName": "Partei A",
+        "value": 2.166
+      },
+      {
+        "groupName": "Partei B",
+        "value": 2
+      },
+      {
+        "groupName": "Partei D",
+        "value": 2
+      },
+      {
+        "groupName": "Partei E",
+        "value": 2
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.857
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1.666
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.625
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.5
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.444
+      },
+      {
+        "groupName": "Partei D",
+        "value": 1.333
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.3
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1.25
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1.2
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.181
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1.083
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1
+      },
+      {
+        "groupName": "Partei D",
+        "value": 1
+      },
+      {
+        "groupName": "Partei E",
+        "value": 1
+      },
+      {
+        "groupName": "Partei F",
+        "value": 1
+      }
+    ]
+  }
+}
