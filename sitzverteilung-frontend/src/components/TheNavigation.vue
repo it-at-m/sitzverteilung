@@ -54,7 +54,11 @@
 <script setup lang="ts">
 import type { NavigationItem } from "@/types/NavigationItem";
 
-import { mdiDatabase, mdiInformation } from "@mdi/js";
+import {
+  mdiCalculator,
+  mdiFileDocumentMultiple,
+  mdiInformation,
+} from "@mdi/js";
 import { useDisplay } from "vuetify";
 
 import { RouteNames } from "@/plugins/router";
@@ -63,9 +67,14 @@ const { mobile } = useDisplay();
 
 const navigationItems: NavigationItem[] = [
   {
-    text: "Basisdaten",
+    text: "Vorlagen",
     routeName: RouteNames.DATA,
-    icon: mdiDatabase,
+    icon: mdiFileDocumentMultiple,
+  },
+  {
+    text: "Berechnung",
+    routeName: RouteNames.CALCULATION,
+    icon: mdiCalculator,
   },
   {
     text: "Über",

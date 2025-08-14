@@ -9,7 +9,7 @@
     clearable
     auto-select-first
     :maxlength="limitName"
-    label="Basisdaten wählen (optional)"
+    label="Vorlage wählen (optional)"
     hide-details
     single-line
     :prepend-inner-icon="mdiFileDocumentMultiple"
@@ -17,7 +17,7 @@
     variant="outlined"
     density="comfortable"
     autocomplete="off"
-    no-data-text="Keine passenden Basisdaten gefunden"
+    no-data-text="Keine passende Vorlage gefunden"
   >
     <template #item="{ props }">
       <v-list-item v-bind="props">
@@ -31,9 +31,7 @@
         <template #prepend>
           <v-icon :icon="mdiInformation" />
         </template>
-        <v-list-item-title
-          >Keine passenden Basisdaten gefunden.</v-list-item-title
-        >
+        <v-list-item-title>Keine passende Vorlage gefunden.</v-list-item-title>
       </v-list-item>
     </template>
   </v-autocomplete>

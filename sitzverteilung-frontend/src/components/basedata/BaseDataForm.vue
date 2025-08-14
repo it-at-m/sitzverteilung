@@ -4,7 +4,7 @@
     ref="baseDataFormRef"
   >
     <v-row>
-      <v-col>
+      <v-col v-if="showNameColumn">
         <v-text-field
           v-model.trim="baseData.name"
           :rules="[
@@ -32,6 +32,9 @@
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />
+      </v-col>
+      <v-col>
+        <!-- Still up for implementation -->
       </v-col>
     </v-row>
     <v-row>
@@ -125,6 +128,7 @@ const {
   limitCommitteeSize: number;
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
+  showNameColumn: boolean;
 }>();
 
 const emit = defineEmits<{
