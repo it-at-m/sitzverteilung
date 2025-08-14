@@ -1,0 +1,77 @@
+{
+  "given": {
+    "committeeSize": 7,
+    "groups": [
+      {
+        "name": "Partei A",
+        "seatsOrVotes": 24
+      },
+      {
+        "name": "Partei B",
+        "seatsOrVotes": 20
+      },
+      {
+        "name": "Partei C",
+        "seatsOrVotes": 19
+      },
+      {
+        "name": "Partei D",
+        "seatsOrVotes": 8
+      },
+      {
+        "name": "Partei E",
+        "seatsOrVotes": 4
+      },
+      {
+        "name": "Partei F",
+        "seatsOrVotes": 3
+      },
+      {
+        "name": "Partei G",
+        "seatsOrVotes": 2
+      }
+    ]
+  },
+  "expected": {
+    "distribution": {
+      "Partei A": 2,
+      "Partei B": 2,
+      "Partei C": 2,
+      "Partei D": 0,
+      "Partei E": 0,
+      "Partei F": 0,
+      "Partei G": 0
+    },
+    "order": [
+      {
+        "groupName": "Partei A",
+        "value": 24
+      },
+      {
+        "groupName": "Partei B",
+        "value": 20
+      },
+      {
+        "groupName": "Partei C",
+        "value": 19
+      },
+      {
+        "groupName": "Partei A",
+        "value": 12
+      },
+      {
+        "groupName": "Partei B",
+        "value": 10
+      },
+      {
+        "groupName": "Partei C",
+        "value": 9.5
+      }
+    ],
+    "stale": {
+      "groupNames": ["Partei A", "Partei D"],
+      "amountSeats": 1,
+      "ratio": 8
+    }
+  }
+}
