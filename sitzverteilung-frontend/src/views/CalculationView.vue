@@ -26,9 +26,7 @@
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-row
-        v-if="isDataEntered"
-    >
+    <v-row v-if="isDataEntered">
       <v-col>
         <v-alert
           text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert."
