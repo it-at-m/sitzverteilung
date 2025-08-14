@@ -136,7 +136,7 @@
     "stale": {
       "groupNames": ["Partei A", "Partei B"],
       "amountSeats": 1,
-      "ratio": 0
+      "ratio": 1.769
     }
   }
 }

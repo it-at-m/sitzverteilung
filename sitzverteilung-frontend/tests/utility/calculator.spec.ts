@@ -8,6 +8,7 @@ import { CalculationGroup } from "../../src/types/calculation/internal/Calculati
 import { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
 import { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
 import { exportForTesting } from "../../src/utility/calculator";
+import { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 
 interface CalculationTestData {
   given: {
@@ -61,8 +62,17 @@ function getComparableResult(
       value: Math.floor(order.value * 1000) / 1000,
     };
   });
+  let stale: CalculationStale = undefined;
+  if(result.stale) {
+    stale = {
+      ...result.stale,
+      ratio: Math.floor(result.stale.ratio * 1000) / 1000,
+    }
+  }
+
   return {
     ...result,
+    stale,
     order,
   };
 }
