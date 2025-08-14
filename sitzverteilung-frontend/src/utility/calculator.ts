@@ -78,7 +78,7 @@ function calculateHareNiemeyer(
 ): CalculationMethodResult {
   const seatDistribution: CalculationSeatDistribution = {};
 
-  // Initialize distributions with 0 seats for every group
+  // initialize distributions with 0 seats for every group
   calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
 
   // Calculate hare quotas and assign whole seats
