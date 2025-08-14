@@ -202,7 +202,7 @@
           :limit-votes="LimitConfiguration.limitVotes"
           :selected-base-data-name="selectedBaseData?.name"
           :base-data-names="baseDataNames"
-          :is-calculation-view="false"
+          :show-name-column="false"
         />
       </v-col>
     </v-row>

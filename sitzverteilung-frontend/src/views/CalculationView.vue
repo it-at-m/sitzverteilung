@@ -26,10 +26,11 @@
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-row>
+    <v-row
+        v-if="isDataEntered"
+    >
       <v-col>
         <v-alert
-          v-if="isDataEntered"
           text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert."
           type="info"
           variant="tonal"
@@ -49,7 +50,7 @@
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :is-base-data-view="false"
-      :is-calculation-view="true"
+      :show-name-column="true"
     />
   </v-container>
 </template>
