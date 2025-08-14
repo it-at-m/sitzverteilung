@@ -4,7 +4,7 @@
     ref="baseDataFormRef"
   >
     <v-row>
-      <v-col>
+      <v-col v-if="!isCalculationView">
         <v-text-field
           v-model.trim="baseData.name"
           :rules="[
@@ -29,6 +29,21 @@
           validate-on="input"
           :error-messages="seatFieldValidationError"
           :label="`Größe des Hauptorgans (max. ${limitCommitteeSize})`"
+          :prepend-inner-icon="mdiAccountSwitch"
+          glow
+        />
+      </v-col>
+      <v-col>
+        <!-- Still up for implementation -->
+        <v-number-input
+          v-model="baseData.committeeSize"
+          :rules="[FieldValidationRules.Required]"
+          :min="1"
+          :max="limitCommitteeSize"
+          hide-details="auto"
+          validate-on="input"
+          :error-messages="seatFieldValidationError"
+          :label="`Ausschussgröße`"
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />
@@ -125,6 +140,7 @@ const {
   limitCommitteeSize: number;
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
+  isCalculationView: boolean;
 }>();
 
 const emit = defineEmits<{

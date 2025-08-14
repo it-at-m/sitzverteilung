@@ -3,7 +3,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 import { acceptHMRUpdate, defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-export const useTemplateDataStore = defineStore("basedata", () => {
+export const useTemplateDataStore = defineStore("template-data", () => {
   const internalBaseDatas = ref<BaseData[]>([]);
   const baseDatas = computed(() => internalBaseDatas.value);
 

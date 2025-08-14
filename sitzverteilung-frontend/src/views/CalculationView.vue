@@ -19,20 +19,25 @@
             variant="flat"
             size="large"
             class="ml-5"
+            :prepend-icon="isExpanded ? mdiClose : mdiContentSaveEdit"
           >
-            {{ isExpanded ? "Schließen" : "Bearbeiten" }}
+            {{ isExpanded ? "Schließen" : "Ändern" }}
           </v-btn>
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-alert
-      v-if="isDataEntered"
-      text="Die Daten wurden bearbeitet."
-      type="info"
-      variant="tonal"
-    ></v-alert>
-    <div style="height: 20px"></div>
+    <v-row>
+      <v-col>
+        <v-alert
+          v-if="isDataEntered"
+          text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert."
+          type="info"
+          variant="tonal"
+        />
+      </v-col>
+    </v-row>
     <base-data-form
+      class="mt-5"
       v-show="isExpanded"
       ref="baseDataFormRef"
       v-model="currentBaseData"
@@ -44,16 +49,18 @@
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :is-base-data-view="false"
+      :is-calculation-view="true"
     />
   </v-container>
 </template>
 
 <script setup lang="ts">
+import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
-import { useDataInputChecks } from "@/composables/useDataInputChecks.ts";
+import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
@@ -66,5 +73,5 @@ const {
   updateIsValid,
   isDataEntered,
   baseDataFormRef,
-} = useDataInputChecks();
+} = useTemplateData();
 </script>

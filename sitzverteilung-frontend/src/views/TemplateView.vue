@@ -202,7 +202,7 @@
           :limit-votes="LimitConfiguration.limitVotes"
           :selected-base-data-name="selectedBaseData?.name"
           :base-data-names="baseDataNames"
-          :is-base-data-view="true"
+          :is-calculation-view="false"
         />
       </v-col>
     </v-row>
@@ -226,8 +226,8 @@ import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import InfoDialog from "@/components/common/InfoDialog.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
-import { useDataInputChecks } from "@/composables/useDataInputChecks.ts";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
+import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { STATUS_INDICATORS } from "@/constants.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
@@ -253,7 +253,7 @@ const {
   baseDataFormRef,
   dirty,
   isValid,
-} = useDataInputChecks();
+} = useTemplateData();
 
 const basedataNameIsNotChanged = computed(
   () => currentBaseData.value?.name === selectedBaseData.value?.name
@@ -356,7 +356,7 @@ watch(
             currentBaseData.value = baseData;
           });
           snackbar.showMessage({
-            message: `Die Vorlage '${baseData.name}' wurde übertragen. ACHTUNG: Erst ach dem Klick auf 'Anlegen' wird diese permanent gespeichert.`,
+            message: `Die Vorlage '${baseData.name}' wurde übertragen. ACHTUNG: Erst nach dem Klick auf 'Anlegen' wird diese permanent gespeichert.`,
           });
         }
       } catch {

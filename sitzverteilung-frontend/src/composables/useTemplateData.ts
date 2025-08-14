@@ -5,7 +5,7 @@ import { computed, ref, useTemplateRef, watch } from "vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
 
-export function useDataInputChecks() {
+export function useTemplateData() {
   const store = useTemplateDataStore();
   const storedBaseData = computed(() => store.baseDatas);
 
@@ -34,7 +34,6 @@ export function useDataInputChecks() {
     () =>
       dirty.value ||
       (!isBaseDataSelected.value &&
-        !dirty.value &&
         JSON.stringify(currentBaseData.value) !==
           JSON.stringify(getEmptyBaseData()))
   );

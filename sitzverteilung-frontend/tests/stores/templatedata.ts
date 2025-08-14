@@ -5,7 +5,7 @@ import { useTemplateDataStore } from "../../src/stores/templatedata";
 import { BaseData } from "../../src/types/basedata/BaseData";
 import { getTestBaseData } from "../TestData";
 
-describe("BaseData Store", () => {
+describe("Template Data Store", () => {
   beforeEach(() => {
     setActivePinia(createPinia());
   });
