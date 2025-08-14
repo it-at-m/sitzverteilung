@@ -7,7 +7,6 @@ import type { CalculationStale } from "@/types/calculation/internal/CalculationS
 
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function calculateMethod(
   method: CalculationMethod,
   calculationGroups: CalculationGroup[],
@@ -26,7 +25,7 @@ function calculateMethod(
     case CalculationMethod.D_HONDT:
       return calculateDHondt(calculationGroups, committeeSize);
     case CalculationMethod.HARE_NIEMEYER:
-      throw new Error("Not implemented yet");
+      return calculateHareNiemeyer(calculationGroups, committeeSize);
     case CalculationMethod.SAINTE_LAGUE_SCHEPERS:
       throw new Error("Not implemented yet");
   }
@@ -38,12 +37,11 @@ function calculateDHondt(
 ): CalculationMethodResult {
   const seatDistribution: CalculationSeatDistribution = {};
   const seatOrder: CalculationSeatOrder = [];
-  let stale: CalculationStale | undefined = undefined;
 
-  // initialize distributions with 0 seats for every group
+  // Initialize distributions with 0 seats for every group
   calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
 
-  // calculate ratios using increasing divisors
+  // Calculate ratios using increasing divisors
   const ratios: CalculationGroupRatio[] = [];
   calculationGroups.forEach((group) => {
     for (let i = 1; i <= committeeSize; i++) {
@@ -64,43 +62,131 @@ function calculateDHondt(
     seatOrder.push(ratio);
   });
 
-  // Check for stale situation
-  const staleRatio = topRatios[committeeSize - 1].value;
-  const potentialStales = ratios.filter((ratio) => ratio.value === staleRatio);
-  const staleGroupNames = [
-    ...new Set(potentialStales.map((ratio) => ratio.groupName)),
-  ];
-  const potentialStalesInTop = topRatios.filter(
-    (ratio) => ratio.value === staleRatio
+  // Check for stale
+  const stale = handleStaleSituation(
+    ratios,
+    topRatios,
+    seatDistribution,
+    seatOrder
   );
-  const unresolvedSeats = potentialStales.length - potentialStalesInTop.length;
-
-  if (unresolvedSeats) {
-    // Create stale information
-    stale = {
-      groupNames: staleGroupNames,
-      amountSeats: potentialStalesInTop.length,
-      ratio: staleRatio,
-    };
-
-    // Remove stale seats from seat distribution and order
-    let toRemove = unresolvedSeats;
-    for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
-      if (seatOrder[i].value === staleRatio) {
-        seatDistribution[seatOrder[i].groupName]--;
-        seatOrder.splice(i, 1);
-        toRemove--;
-      }
-    }
-  }
 
   return {
     distribution: seatDistribution,
     order: seatOrder,
-    stale: stale,
+    stale,
   };
 }
 
+// Hare-Niemeyer calculation, seat order via D'Hondt
+function calculateHareNiemeyer(
+  calculationGroups: CalculationGroup[],
+  committeeSize: number
+): CalculationMethodResult {
+  const seatDistribution: CalculationSeatDistribution = {};
+
+  // Initialize distributions with 0 seats for every group
+  calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
+
+  // Calculate hare quotas and assign whole seats
+  const totalSeatsOrVotes = calculationGroups.reduce(
+    (sum, group) => sum + group.seatsOrVotes,
+    0
+  );
+  const remainders: CalculationGroupRatio[] = [];
+  calculationGroups.forEach((group) => {
+    const exactQuota = (group.seatsOrVotes * committeeSize) / totalSeatsOrVotes;
+    const seats = Math.floor(exactQuota);
+    seatDistribution[group.name] = seats;
+    remainders.push({
+      groupName: group.name,
+      value: exactQuota - seats,
+    });
+  });
+
+  // Check remaining seats to assign
+  const assignedSeats = Object.values(seatDistribution).reduce(
+    (sum, seats) => sum + seats,
+    0
+  );
+  const remainingSeats = committeeSize - assignedSeats;
+
+  // Sort remainders descending
+  remainders.sort((a, b) => b.value - a.value);
+
+  // Assign remaining seats based on highest remainders
+  const topRemainders = remainders.slice(0, remainingSeats);
+  topRemainders.forEach((remainder) => {
+    seatDistribution[remainder.groupName]++;
+  });
+
+  // Check for stale situation
+  let stale: CalculationStale | undefined = undefined;
+  if (remainingSeats > 0) {
+    stale = handleStaleSituation(remainders, topRemainders, seatDistribution);
+  }
+
+  // Calculate D'Hondt seat order using Hare/Niemeyer distribution
+  const dHondtCalculationGroups: CalculationGroup[] = Object.entries(
+    seatDistribution
+  ).map(([groupName, value]) => {
+    return {
+      name: groupName,
+      seatsOrVotes: value,
+    };
+  });
+  const { order } = calculateDHondt(dHondtCalculationGroups, committeeSize);
+
+  return {
+    distribution: seatDistribution,
+    order,
+    stale,
+  };
+}
+
+function handleStaleSituation(
+  sortedRatios: CalculationGroupRatio[],
+  topRatios: CalculationGroupRatio[],
+  seatDistribution: CalculationSeatDistribution,
+  seatOrder?: CalculationSeatOrder
+): CalculationStale | undefined {
+  let stale: CalculationStale | undefined = undefined;
+
+  const ratioValue = topRatios[topRatios.length - 1]?.value;
+  if (ratioValue === undefined) return stale;
+
+  const potentialStales = sortedRatios.filter((r) => r.value === ratioValue);
+  const potentialStalesInTop = topRatios.filter((r) => r.value === ratioValue);
+  const unresolvedSeats = potentialStales.length - potentialStalesInTop.length;
+
+  if (unresolvedSeats > 0) {
+    stale = {
+      groupNames: Array.from(new Set(potentialStales.map((r) => r.groupName))),
+      amountSeats: potentialStalesInTop.length,
+      ratio: ratioValue,
+    };
+
+    let toRemove = unresolvedSeats;
+    if (seatOrder) {
+      for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
+        if (seatOrder[i].value === ratioValue) {
+          seatDistribution[seatOrder[i].groupName]--;
+          seatOrder.splice(i, 1);
+          toRemove--;
+        }
+      }
+    } else {
+      for (const item of [...topRatios].reverse()) {
+        if (item.value === ratioValue && toRemove > 0) {
+          seatDistribution[item.groupName]--;
+          toRemove--;
+        }
+      }
+    }
+  }
+
+  return stale;
+}
+
 export const exportForTesting = {
-  calculateDHondt,
+  calculateMethod,
 };
