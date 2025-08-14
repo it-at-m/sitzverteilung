@@ -48,7 +48,7 @@
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :is-base-data-view="false"
-      :show-name-column="true"
+      :show-name-column="false"
     />
   </v-container>
 </template>

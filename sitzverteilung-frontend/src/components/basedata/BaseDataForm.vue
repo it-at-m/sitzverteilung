@@ -4,7 +4,7 @@
     ref="baseDataFormRef"
   >
     <v-row>
-      <v-col v-if="!showNameColumn">
+      <v-col v-if="showNameColumn">
         <v-text-field
           v-model.trim="baseData.name"
           :rules="[
