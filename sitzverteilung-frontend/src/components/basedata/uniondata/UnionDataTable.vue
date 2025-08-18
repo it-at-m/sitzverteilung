@@ -18,6 +18,15 @@
         <template #prepend>
           <p class="text-h6 font-weight-bold">{{ dataTableTitle }}</p>
         </template>
+        <v-tooltip text="Zum Anlegen mind. 2 Parteien auswählen.">
+          <template v-slot:activator="{ props }">
+            <v-icon
+            :icon="mdiInformation"
+            v-bind="props"
+            >
+            </v-icon>
+          </template>
+        </v-tooltip>
       </v-toolbar>
     </template>
 
@@ -59,7 +68,7 @@
 <script setup lang="ts">
 import type { GroupIndex, Union } from "@/types/basedata/Union.ts";
 
-import { mdiAccountGroup, mdiLabel } from "@mdi/js";
+import {mdiAccountGroup, mdiInformation, mdiLabel} from "@mdi/js";
 import { useDebounceFn, useTemplateRefsList } from "@vueuse/core";
 import { computed, nextTick } from "vue";
 
