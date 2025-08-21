@@ -24,7 +24,27 @@
           </p>
         </template>
         <template #append>
+          <v-tooltip
+            v-if="isFractionDisabled"
+            text="Zum Anlegen mind. 2 Parteien auswählen."
+          >
+            <template #activator="{ props }">
+              <div v-bind="props">
+                <v-btn
+                  :disabled="isFractionDisabled"
+                  @click="createUnion(UnionType.FRACTION)"
+                  :prepend-icon="mdiPlus"
+                  variant="tonal"
+                  color="primary"
+                  size="small"
+                  class="mx-2"
+                  text="Fraktionsgemeinschaft anlegen"
+                />
+              </div>
+            </template>
+          </v-tooltip>
           <v-btn
+            v-else
             :disabled="isFractionDisabled"
             @click="createUnion(UnionType.FRACTION)"
             :prepend-icon="mdiPlus"
@@ -34,7 +54,27 @@
             class="mx-2"
             text="Fraktionsgemeinschaft anlegen"
           />
+          <v-tooltip
+            v-if="isCommitteeDisabled"
+            text="Zum Anlegen mind. 2 Parteien auswählen."
+          >
+            <template #activator="{ props }">
+              <div v-bind="props">
+                <v-btn
+                  :disabled="isCommitteeDisabled"
+                  @click="createUnion(UnionType.COMMITTEE)"
+                  :prepend-icon="mdiPlus"
+                  variant="tonal"
+                  color="primary"
+                  size="small"
+                  class="mx-2"
+                  text="Ausschussgemeinschaft anlegen"
+                />
+              </div>
+            </template>
+          </v-tooltip>
           <v-btn
+            v-else
             :disabled="isCommitteeDisabled"
             @click="createUnion(UnionType.COMMITTEE)"
             :prepend-icon="mdiPlus"
