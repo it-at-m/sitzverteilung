@@ -10,11 +10,11 @@
           :rules="[
             FieldValidationRules.Required,
             FieldValidationRules.IsUnique(comparedBaseDataNames),
+            FieldValidationRules.IsLimitReached(limitName),
           ]"
           hide-details="auto"
           validate-on="input"
           :label="`Name (max. ${limitName} Zeichen)`"
-          :maxlength="limitName"
           :prepend-inner-icon="mdiLabel"
           glow
         />
