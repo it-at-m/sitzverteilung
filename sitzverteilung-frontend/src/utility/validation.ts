@@ -6,7 +6,7 @@ export const FieldValidationRules = {
     arr.filter((val) => val.trim() === value.trim()).length < 2 ||
     "Es gibt andere Einträge mit identischem Wert.",
   MaxLength: (limit: number) => (value: string) =>
-    (value ?? "").trim().length <= limit ||
+    value.trim().length <= limit ||
     `Die maximale Länge beträgt ${limit} Zeichen.`,
 };
 
