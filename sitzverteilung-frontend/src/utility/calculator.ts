@@ -58,7 +58,7 @@ function calculateSainteLagueSchepers(
   const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
     calculationGroups,
     committeeSize,
-    (step) => step + 0.5 // Sainte-Lague/Schepers divisors: 0.5, 1.5, 2.5, ...
+    (step) => step * 2 + 1 // Sainte-Lague/Schepers divisors: 1, 3, 5, ...
   );
 
   // Check for stale
