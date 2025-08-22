@@ -5,6 +5,8 @@ export const FieldValidationRules = {
   IsUnique: (arr: string[]) => (value: string) =>
     arr.filter((val) => val.trim() === value.trim()).length < 2 ||
     "Es gibt andere Einträge mit identischem Wert.",
+  MaxLength: (limit: number) => (value: string) =>
+    value.length <= limit || `Die maximale Länge beträgt ${limit} Zeichen.`,
 };
 
 export const LimitConfiguration = {
