@@ -29,9 +29,11 @@
             text="Zum Anlegen mind. 2 Parteien auswählen."
           >
             <template #activator="{ props }">
-              <div v-bind="props"
-                   tabindex="0
-">
+              <div
+                v-bind="props"
+                tabindex="0
+"
+              >
                 <v-btn
                   :disabled="isFractionDisabled"
                   @click="createUnion(UnionType.FRACTION)"
@@ -61,8 +63,9 @@
             text="Zum Anlegen mind. 2 Parteien auswählen."
           >
             <template #activator="{ props }">
-              <div v-bind="props"
-                  tabindex="0"
+              <div
+                v-bind="props"
+                tabindex="0"
               >
                 <v-btn
                   :disabled="isCommitteeDisabled"
