@@ -12,7 +12,7 @@
             ? [
                 FieldValidationRules.Required,
                 FieldValidationRules.IsUnique(groupNames),
-                FieldValidationRules.IsLimitReached(limitName),
+                FieldValidationRules.MaxLength(limitName),
               ]
             : []
         "

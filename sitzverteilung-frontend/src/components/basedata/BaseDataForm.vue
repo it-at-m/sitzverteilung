@@ -10,7 +10,7 @@
           :rules="[
             FieldValidationRules.Required,
             FieldValidationRules.IsUnique(comparedBaseDataNames),
-            FieldValidationRules.IsLimitReached(limitName),
+            FieldValidationRules.MaxLength(limitName),
           ]"
           hide-details="auto"
           validate-on="input"
