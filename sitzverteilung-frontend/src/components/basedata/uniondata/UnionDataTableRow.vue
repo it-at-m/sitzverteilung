@@ -7,6 +7,7 @@
         :rules="[
           FieldValidationRules.Required,
           FieldValidationRules.IsUnique(unionNames),
+          FieldValidationRules.MaxLength(limitName),
         ]"
         hide-details="auto"
         validate-on="input"
@@ -15,7 +16,6 @@
         variant="underlined"
         density="compact"
         class="py-3"
-        :maxlength="limitName"
       />
     </td>
     <td>
