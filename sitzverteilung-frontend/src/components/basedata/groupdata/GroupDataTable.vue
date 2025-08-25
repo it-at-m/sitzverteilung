@@ -24,15 +24,11 @@
           </p>
         </template>
         <template #append>
-          <v-tooltip
-            v-if="isFractionDisabled"
-            text="Zum Anlegen mind. 2 Parteien auswählen."
-          >
+          <v-tooltip text="Zum Anlegen mind. 2 Parteien auswählen.">
             <template #activator="{ props }">
-              <div
+              <span
                 v-bind="props"
-                tabindex="0
-"
+                tabindex="0"
               >
                 <v-btn
                   :disabled="isFractionDisabled"
@@ -44,26 +40,12 @@
                   class="mx-2"
                   text="Fraktionsgemeinschaft anlegen"
                 />
-              </div>
+              </span>
             </template>
           </v-tooltip>
-          <v-btn
-            v-else
-            :disabled="isFractionDisabled"
-            @click="createUnion(UnionType.FRACTION)"
-            :prepend-icon="mdiPlus"
-            variant="tonal"
-            color="primary"
-            size="small"
-            class="mx-2"
-            text="Fraktionsgemeinschaft anlegen"
-          />
-          <v-tooltip
-            v-if="isCommitteeDisabled"
-            text="Zum Anlegen mind. 2 Parteien auswählen."
-          >
+          <v-tooltip text="Zum Anlegen mind. 2 Parteien auswählen.">
             <template #activator="{ props }">
-              <div
+              <span
                 v-bind="props"
                 tabindex="0"
               >
@@ -77,20 +59,9 @@
                   class="mx-2"
                   text="Ausschussgemeinschaft anlegen"
                 />
-              </div>
+              </span>
             </template>
           </v-tooltip>
-          <v-btn
-            v-else
-            :disabled="isCommitteeDisabled"
-            @click="createUnion(UnionType.COMMITTEE)"
-            :prepend-icon="mdiPlus"
-            variant="tonal"
-            color="primary"
-            size="small"
-            class="mx-2"
-            text="Ausschussgemeinschaft anlegen"
-          />
           <v-btn
             :disabled="isDeletionDisabled"
             @click="deleteGroups"
@@ -311,6 +282,7 @@ const isDeletionDisabled = computed(
       unionGroups.value.includes(selected)
     )
 );
+
 function isSingleDeletionDisabled(groupIdx: GroupIndex) {
   return unionGroups.value.includes(groupIdx);
 }
