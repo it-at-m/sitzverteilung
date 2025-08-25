@@ -12,6 +12,7 @@
             ? [
                 FieldValidationRules.Required,
                 FieldValidationRules.IsUnique(groupNames),
+                FieldValidationRules.MaxLength(limitName),
               ]
             : []
         "
@@ -22,7 +23,6 @@
         density="compact"
         class="py-3"
         @keydown.enter="hitEnter"
-        :maxlength="limitName"
         :disabled="disabled"
       />
     </td>
