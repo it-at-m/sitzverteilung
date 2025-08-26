@@ -1,39 +1,52 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog
+    v-model="dialog"
+    max-width="600px"
+  >
     <v-card>
       <v-card-title>{{ detailTitle }}</v-card-title>
       <v-card-text>
         <p>Detailinformationen zu: {{ detailInfo }}</p>
       </v-card-text>
       <v-card-actions>
-        <v-btn text @click="dialog = false">Schließen</v-btn>
+        <v-btn
+          text
+          @click="dialog = false"
+          >Schließen</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
-    <v-toolbar flat>
-      <v-toolbar-title>Detailansicht zu:</v-toolbar-title>
-      <v-btn
-          variant="outlined"
-          class="mx-2"
-          @click="goToDetail('Hare/Niemeyer')">Hare/Niemayer</v-btn>
-      <v-btn
-          variant="outlined"
-          class="mx-2"
-          @click="goToDetail('SanteLague/Schepers')">Sainte-Lague/Schepers</v-btn>
-      <v-btn
-          variant="outlined"
-          class="mx-2"
-          @click="goToDetail('DHondt')">D'Hondt</v-btn>
-    </v-toolbar>
+  <v-toolbar flat>
+    <v-toolbar-title>Detailansicht zu:</v-toolbar-title>
+    <v-btn
+      variant="outlined"
+      class="mx-2"
+      @click="goToDetail('Hare/Niemeyer')"
+      >Hare/Niemayer</v-btn
+    >
+    <v-btn
+      variant="outlined"
+      class="mx-2"
+      @click="goToDetail('SanteLague/Schepers')"
+      >Sainte-Lague/Schepers</v-btn
+    >
+    <v-btn
+      variant="outlined"
+      class="mx-2"
+      @click="goToDetail('DHondt')"
+      >D'Hondt</v-btn
+    >
+  </v-toolbar>
   <v-data-table
-      :headers="headers as any"
-      :items="results"
-      hide-default-footer
-      no-filter
-      disable-sort
-      density="compact"
-      :no-data-text="`Keine Berechnungsdaten vorhanden.`"
-      items-per-page="-1"
+    :headers="headers as any"
+    :items="results"
+    hide-default-footer
+    no-filter
+    disable-sort
+    density="compact"
+    :no-data-text="`Keine Berechnungsdaten vorhanden.`"
+    items-per-page="-1"
   >
     <template #header.name="{ column }">
       <div class="d-flex">
@@ -49,7 +62,7 @@
   </v-data-table>
 </template>
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 
 const headers = computed(() => [
   {
@@ -66,7 +79,7 @@ const headers = computed(() => [
         key: "committeeSeats",
         width: 50,
       },
-    ]
+    ],
   },
   {
     title: `Zulässigkeit des Verfahrens`,
@@ -97,7 +110,7 @@ const headers = computed(() => [
         key: "dhVotes",
         width: 50,
       },
-    ]
+    ],
   },
   {
     title: `Ergebnisse`,
@@ -154,43 +167,43 @@ const headers = computed(() => [
           },
         ],
       },
-    ]
+    ],
   },
   {
     title: `Pattauflösung/Dokumentation`,
     width: 50,
     children: [
       {
-        title:``,
+        title: ``,
         key: "documentation",
         width: 200,
-      }
+      },
     ],
   },
 ]);
 
 const results = [
   {
-    name: 'Beispielpartei',
+    name: "Beispielpartei",
     committeeSeats: 5.45,
     committee: "0 oder 1",
     quota: 2,
     hnVotes: "OK",
     slsVotes: "OK",
     dhVotes: "NOK",
-      hareSeats: 3,
-      harePatt: "2/3",
-      sainteSeats: 2,
-      saintePatt: 0,
-      dHSeats: 1,
-      dHPatt: "1/3",
-    documentation: "JustALongSampleTextToDisplayTableBehaviour"
+    hareSeats: 3,
+    harePatt: "2/3",
+    sainteSeats: 2,
+    saintePatt: 0,
+    dHSeats: 1,
+    dHPatt: "1/3",
+    documentation: "JustALongSampleTextToDisplayTableBehaviour",
   },
 ];
 
 const dialog = ref(false);
-const detailTitle = ref('');
-const detailInfo = ref('');
+const detailTitle = ref("");
+const detailInfo = ref("");
 
 function goToDetail(selectedCalculationMethod: string) {
   detailTitle.value = selectedCalculationMethod;
