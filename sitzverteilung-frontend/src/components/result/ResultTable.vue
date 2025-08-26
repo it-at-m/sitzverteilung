@@ -29,7 +29,7 @@
       variant="outlined"
       class="mx-2"
       @click="goToDetail('Sante-Lague/Schepers')"
-      >Sainte-Lague/Schepers</v-btn
+      >Sainte-Laguë/Schepers</v-btn
     >
     <v-btn
       variant="outlined"
@@ -39,24 +39,19 @@
     >
   </v-toolbar>
   <v-data-table
-    :headers="headers as any"
+    :headers="headers"
     :items="results"
     hide-default-footer
     density="compact"
     :no-data-text="`Keine Berechnungsdaten vorhanden.`"
     items-per-page="-1"
   >
-    <template #header.name="{ column }">
-      <div class="d-flex">
-        <p>{{ column.title }}</p>
-      </div>
-    </template>
   </v-data-table>
 </template>
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
-const headers = computed(() => [
+const headers = [
   {
     title: `Zusammensetzung`,
     width: 250,
@@ -172,7 +167,7 @@ const headers = computed(() => [
       },
     ],
   },
-]);
+];
 
 const results = [
   {
