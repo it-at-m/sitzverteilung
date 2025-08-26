@@ -24,7 +24,11 @@
           </p>
         </template>
         <template #append>
-          <v-tooltip text="Zum Anlegen mind. 2 Parteien auswählen.">
+          <v-tooltip
+            :disabled="!isFractionDisabled"
+            text="Zum Anlegen mind. 2 Parteien auswählen."
+            location="top"
+          >
             <template #activator="{ props }">
               <span
                 v-bind="props"
@@ -43,7 +47,11 @@
               </span>
             </template>
           </v-tooltip>
-          <v-tooltip text="Zum Anlegen mind. 2 Parteien auswählen.">
+          <v-tooltip
+            :disabled="!isCommitteeDisabled"
+            text="Zum Anlegen mind. 2 Parteien auswählen."
+            location="top"
+          >
             <template #activator="{ props }">
               <span
                 v-bind="props"
