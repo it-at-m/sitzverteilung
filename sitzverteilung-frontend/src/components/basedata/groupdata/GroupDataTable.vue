@@ -24,26 +24,52 @@
           </p>
         </template>
         <template #append>
-          <v-btn
-            :disabled="isFractionDisabled"
-            @click="createUnion(UnionType.FRACTION)"
-            :prepend-icon="mdiPlus"
-            variant="tonal"
-            color="primary"
-            size="small"
-            class="mx-2"
-            text="Fraktionsgemeinschaft anlegen"
-          />
-          <v-btn
-            :disabled="isCommitteeDisabled"
-            @click="createUnion(UnionType.COMMITTEE)"
-            :prepend-icon="mdiPlus"
-            variant="tonal"
-            color="primary"
-            size="small"
-            class="mx-2"
-            text="Ausschussgemeinschaft anlegen"
-          />
+          <v-tooltip
+            :disabled="!isFractionDisabled"
+            text="Zum Anlegen mind. 2 Parteien auswählen."
+            location="top"
+          >
+            <template #activator="{ props }">
+              <span
+                v-bind="props"
+                tabindex="0"
+              >
+                <v-btn
+                  :disabled="isFractionDisabled"
+                  @click="createUnion(UnionType.FRACTION)"
+                  :prepend-icon="mdiPlus"
+                  variant="tonal"
+                  color="primary"
+                  size="small"
+                  class="mx-2"
+                  text="Fraktionsgemeinschaft anlegen"
+                />
+              </span>
+            </template>
+          </v-tooltip>
+          <v-tooltip
+            :disabled="!isCommitteeDisabled"
+            text="Zum Anlegen mind. 2 Parteien auswählen."
+            location="top"
+          >
+            <template #activator="{ props }">
+              <span
+                v-bind="props"
+                tabindex="0"
+              >
+                <v-btn
+                  :disabled="isCommitteeDisabled"
+                  @click="createUnion(UnionType.COMMITTEE)"
+                  :prepend-icon="mdiPlus"
+                  variant="tonal"
+                  color="primary"
+                  size="small"
+                  class="mx-2"
+                  text="Ausschussgemeinschaft anlegen"
+                />
+              </span>
+            </template>
+          </v-tooltip>
           <v-btn
             :disabled="isDeletionDisabled"
             @click="deleteGroups"
@@ -264,6 +290,7 @@ const isDeletionDisabled = computed(
       unionGroups.value.includes(selected)
     )
 );
+
 function isSingleDeletionDisabled(groupIdx: GroupIndex) {
   return unionGroups.value.includes(groupIdx);
 }
