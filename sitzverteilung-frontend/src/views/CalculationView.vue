@@ -49,7 +49,7 @@
       :base-data-names="baseDataNames"
       :show-name-column="false"
     />
-    <result-table> </result-table>
+    <result-table />
   </v-container>
 </template>
 

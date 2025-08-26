@@ -6,11 +6,11 @@
     <v-card>
       <v-card-title>{{ detailTitle }}</v-card-title>
       <v-card-text>
-        <p>Detailinformationen zu: {{ detailInfo }}</p>
+        <p>Detailinformationen {{ detailInfo }}</p>
       </v-card-text>
       <v-card-actions>
         <v-btn
-          text
+          variant="text"
           @click="dialog = false"
           >Schließen</v-btn
         >
@@ -23,12 +23,12 @@
       variant="outlined"
       class="mx-2"
       @click="goToDetail('Hare/Niemeyer')"
-      >Hare/Niemayer</v-btn
+      >Hare/Niemeyer</v-btn
     >
     <v-btn
       variant="outlined"
       class="mx-2"
-      @click="goToDetail('SanteLague/Schepers')"
+      @click="goToDetail('Sante-Lague/Schepers')"
       >Sainte-Lague/Schepers</v-btn
     >
     <v-btn
@@ -42,19 +42,11 @@
     :headers="headers as any"
     :items="results"
     hide-default-footer
-    no-filter
-    disable-sort
     density="compact"
     :no-data-text="`Keine Berechnungsdaten vorhanden.`"
     items-per-page="-1"
   >
     <template #header.name="{ column }">
-      <div class="d-flex">
-        <p>{{ column.title }}</p>
-      </div>
-    </template>
-
-    <template #header.groups="{ column }">
       <div class="d-flex">
         <p>{{ column.title }}</p>
       </div>
@@ -97,17 +89,17 @@ const headers = computed(() => [
       },
       {
         title: `H/N`,
-        key: "hnVotes",
+        key: "hN",
         width: 50,
       },
       {
         title: `SL/S`,
-        key: "slsVotes",
+        key: "sls",
         width: 50,
       },
       {
         title: `d/H`,
-        key: "dhVotes",
+        key: "dH",
         width: 50,
       },
     ],
@@ -188,9 +180,9 @@ const results = [
     committeeSeats: 5.45,
     committee: "0 oder 1",
     quota: 2,
-    hnVotes: "OK",
-    slsVotes: "OK",
-    dhVotes: "NOK",
+    hN: "OK",
+    sls: "OK",
+    dH: "NOK",
     hareSeats: 3,
     harePatt: "2/3",
     sainteSeats: 2,
@@ -203,7 +195,9 @@ const results = [
 
 const dialog = ref(false);
 const detailTitle = ref("");
-const detailInfo = ref("");
+
+// Placeholder for future content, currently unused
+const detailInfo = ref<string>("");
 
 function goToDetail(selectedCalculationMethod: string) {
   detailTitle.value = selectedCalculationMethod;
