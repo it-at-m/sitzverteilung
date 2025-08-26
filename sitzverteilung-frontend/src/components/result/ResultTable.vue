@@ -73,28 +73,28 @@ const headers = computed(() => [
     width: 250,
     children: [
       {
-        title: `Ausschuss`,
-        key: "name",
+        title: `Proporzgenaue Zahl Ausschuss`,
+        key: "committee",
         width: 50,
       },
       {
         title: `Quotenkriterium`,
-        key: "committeeSeats",
+        key: "quota",
         width: 50,
       },
       {
         title: `H/N`,
-        key: "votes",
+        key: "hnVotes",
         width: 50,
       },
       {
         title: `SL/S`,
-        key: "votes",
+        key: "slsVotes",
         width: 50,
       },
       {
         title: `d/H`,
-        key: "votes",
+        key: "dhVotes",
         width: 50,
       },
     ]
@@ -105,18 +105,54 @@ const headers = computed(() => [
     children: [
       {
         title: `Hare/Niemeyer`,
-        key: "name",
+        key: "hareNiemeyer",
         width: 200,
+        children: [
+          {
+            title: `Sitze`,
+            key: "hareSeats",
+            width: 50,
+          },
+          {
+            title: `Patt`,
+            key: "harePatt",
+            width: 50,
+          },
+        ],
       },
       {
         title: `Sainte-Lague/Schepers`,
-        key: "committeeSeats",
+        key: "sainteLague",
         width: 50,
+        children: [
+          {
+            title: `Sitze`,
+            key: "sainteSeats",
+            width: 50,
+          },
+          {
+            title: `Patt`,
+            key: "saintePatt",
+            width: 50,
+          },
+        ],
       },
       {
         title: `D'Hondt`,
-        key: "votes",
+        key: "dHondt",
         width: 50,
+        children: [
+          {
+            title: `Sitze`,
+            key: "dHSeats",
+            width: 50,
+          },
+          {
+            title: `Patt`,
+            key: "dHPatt",
+            width: 50,
+          },
+        ],
       },
     ]
   },
@@ -126,7 +162,7 @@ const headers = computed(() => [
     children: [
       {
         title:``,
-        key: "votes",
+        key: "documentation",
         width: 200,
       }
     ],
@@ -135,17 +171,20 @@ const headers = computed(() => [
 
 const results = [
   {
-    party: 'Beispielpartei',
-    seats: 5,
-    committee: 100,
+    name: 'Beispielpartei',
+    committeeSeats: 5.45,
+    committee: "0 oder 1",
     quota: 2,
-    hN: 30,
-    sls: 20,
-    dH: 15,
-    hareNiemeyer: 10,
-    sainteLague: 5,
-    dHondt: 8,
-    documentation: "JustALittleTestNothingToWorryAbout"
+    hnVotes: "OK",
+    slsVotes: "OK",
+    dhVotes: "NOK",
+      hareSeats: 3,
+      harePatt: "2/3",
+      sainteSeats: 2,
+      saintePatt: 0,
+      dHSeats: 1,
+      dHPatt: "1/3",
+    documentation: "JustALongSampleTextToDisplayTableBehaviour"
   },
 ];
 
