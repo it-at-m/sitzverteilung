@@ -22,7 +22,6 @@
       <v-col>
         <v-number-input
           v-model="baseData.committeeSize"
-          :rules="[FieldValidationRules.Required]"
           :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
@@ -44,7 +43,6 @@
           :expected-seats="expectedSeats"
           :limit-name="limitName"
           :limit-groups="limitGroups"
-          :limit-votes="limitVotes"
           :fractions="fractions"
           :committees="committees"
           @create-union="createUnion"
@@ -119,12 +117,10 @@ const {
   selectedBaseDataName,
   limitName,
   limitGroups,
-  limitVotes,
   limitCommitteeSize,
 } = defineProps<{
   limitName: number;
   limitGroups: number;
-  limitVotes: number;
   limitCommitteeSize: number;
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
@@ -141,7 +137,11 @@ function validChanged(valid: boolean | null) {
 const seatFieldValidationError = computed(() => {
   if (isSeatsTooLow.value)
     return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
-  if (isSeatsTooHigh.value)
+  if (
+    isSeatsTooHigh.value &&
+    baseData.value.committeeSize !== 0 &&
+    baseData.value.committeeSize
+  )
     return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
   if (isTooManyGroups.value)
     return "Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den angegebenen Wert.";

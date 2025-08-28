@@ -32,22 +32,7 @@
         ref="committeeSeatsInputField"
         :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
-        :max="limitSeats"
-        hide-details="auto"
-        validate-on="input"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-        @keydown.enter="hitEnter"
-        :disabled="disabled"
-      />
-    </td>
-    <td>
-      <v-number-input
-        v-model="group.votes"
-        ref="votesInputField"
-        :min="1"
-        :max="limitVotes"
+        :max="adjustMaxSeats"
         hide-details="auto"
         validate-on="input"
         variant="underlined"
@@ -79,14 +64,12 @@ const {
   disabled = false,
   groupNames,
   limitSeats,
-  limitVotes,
   limitName,
 } = defineProps<{
   isValidatingOnEmpty?: boolean;
   disabled?: boolean;
   groupNames: string[];
   limitSeats: number;
-  limitVotes: number;
   limitName: number;
 }>();
 
@@ -96,10 +79,12 @@ const nameInputField = useTemplateRef<VTextField>("nameInputField");
 const committeeSeatsInputField = useTemplateRef<VTextField>(
   "committeeSeatsInputField"
 );
-const votesInputField = useTemplateRef<VTextField>("votesInputField");
+const adjustMaxSeats = computed(() => {
+  return limitSeats === 0 ? Infinity : limitSeats;
+});
 
 const isEmpty = computed(
-  () => !(group.value.name || group.value.committeeSeats || group.value.votes)
+  () => !(group.value.name || group.value.committeeSeats)
 );
 
 watch(
@@ -111,9 +96,7 @@ watch(
 
 const isValid = computed(() =>
   Boolean(
-    nameInputField.value?.isValid &&
-      committeeSeatsInputField.value?.isValid &&
-      votesInputField.value?.isValid
+    nameInputField.value?.isValid && committeeSeatsInputField.value?.isValid
   )
 );
 const isActionDisabled = computed(
@@ -153,14 +136,12 @@ function validate() {
   nextTick(() => {
     nameInputField.value?.validate(true);
     committeeSeatsInputField.value?.validate(true);
-    votesInputField.value?.validate(true);
   });
 }
 
 function resetValidation() {
   nameInputField.value?.resetValidation();
   committeeSeatsInputField.value?.resetValidation();
-  votesInputField.value?.resetValidation();
 }
 
 function focusNameField() {

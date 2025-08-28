@@ -10,17 +10,14 @@ export function getTestBaseData(): BaseData {
       {
         name: "Testgroup 1 ä",
         committeeSeats: 10,
-        votes: 100,
       },
       {
         name: "Testgroup 2",
         committeeSeats: 20,
-        votes: 200,
       },
       {
         name: "Testgroup 3",
         committeeSeats: 30,
-        votes: 50,
       },
     ],
     unions: [
@@ -50,12 +47,10 @@ export function getTestBaseDataTooManyGroups(): BaseData {
       {
         name: "Testgroup 1",
         committeeSeats: 1,
-        votes: 100,
       },
       {
         name: "Testgroup 2",
         committeeSeats: 0,
-        votes: 200,
       },
     ],
     unions: [],
@@ -70,12 +65,10 @@ export function getTestBaseDataTooManySeats(): BaseData {
       {
         name: "Testgroup 1",
         committeeSeats: 3,
-        votes: 100,
       },
       {
         name: "Testgroup 2",
         committeeSeats: 3,
-        votes: 200,
       },
     ],
     unions: [],
@@ -90,7 +83,6 @@ export function getTestBaseDataUndefinedTooManySeats(): BaseData {
       {
         name: "Testgroup 1",
         committeeSeats: 1,
-        votes: 100,
       },
     ],
     unions: [],
@@ -105,12 +97,28 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
       {
         name: "Testgroup 1",
         committeeSeats: 1,
-        votes: 100,
       },
       {
         name: "Testgroup 2",
         committeeSeats: 3,
-        votes: 200,
+      },
+    ],
+    unions: [],
+  };
+}
+
+export function getTestBaseDataSeatsAreNull(): BaseData {
+  return {
+    name: "TestData Seats Are Null",
+    committeeSize: 5,
+    groups: [
+      {
+        name: "Testgroup 1",
+        committeeSeats: 0,
+      },
+      {
+        name: "Testgroup 2",
+        committeeSeats: 0,
       },
     ],
     unions: [],
@@ -125,9 +133,6 @@ export function getTestBaseDataInputLimit(): BaseData {
     ),
     groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
       name: generateUniqueString(LimitConfiguration.limitName),
-      votes: generateUniqueNumber(
-        LimitConfiguration.limitVotes.toString().length
-      ),
       committeeSeats: generateUniqueNumber(
         LimitConfiguration.limitCommitteeSize.toString().length
       ),
@@ -152,7 +157,6 @@ export function getTestBaseDataInputTooLarge(): BaseData {
     committeeSize: generateUniqueNumber(3),
     groups: Array.from({ length: 18 }, () => ({
       name: generateUniqueString(999),
-      votes: generateUniqueNumber(9),
     })),
     unions: [],
   };

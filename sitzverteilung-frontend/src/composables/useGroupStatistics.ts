@@ -16,15 +16,10 @@ export const useGroupStatistics = (
       0
     );
   });
-  const totalVotes = computed(() => {
-    return groups.value.reduce((sum, group) => sum + (group.votes ?? 0), 0);
-  });
 
   // validations
   const safeExpectedSeats = computed(() => expectedSeats.value ?? 0);
-  const maximumGroups = computed(() =>
-    Math.min(limitGroups.value, safeExpectedSeats.value)
-  );
+  const maximumGroups = computed(() => Math.min(limitGroups.value));
   const isTooManyGroups = computed(
     () => amountOfGroups.value > maximumGroups.value
   );
@@ -42,6 +37,5 @@ export const useGroupStatistics = (
     isSeatsTooHigh,
     isSeatsTooLow,
     totalSeats,
-    totalVotes,
   };
 };

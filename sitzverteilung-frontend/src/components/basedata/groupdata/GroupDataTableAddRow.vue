@@ -4,10 +4,8 @@
     v-model="newGroup"
     :group-names="allGroupNames"
     :is-validating-on-empty="false"
-    :disabled="disabled"
     :limit-name="limitName"
     :limit-seats="limitSeats"
-    :limit-votes="limitVotes"
     @hit-enter="addGroupEnter"
     class="bg-grey-lighten-3"
   >
@@ -44,13 +42,11 @@ const {
   groupNames,
   limitName,
   limitSeats,
-  limitVotes,
 } = defineProps<{
   disabled?: boolean;
   groupNames: string[];
   limitName: number;
   limitSeats: number;
-  limitVotes: number;
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
@@ -104,7 +100,6 @@ function getEmptyGroup(): Group {
   return {
     name: "",
     committeeSeats: undefined,
-    votes: undefined,
   };
 }
 </script>
