@@ -43,7 +43,7 @@
     :items="results"
     hide-default-footer
     density="compact"
-    :no-data-text="`Keine Berechnungsdaten vorhanden.`"
+    no-data-text="Keine Berechnungsdaten vorhanden."
     items-per-page="-1"
   >
   </v-data-table>
@@ -169,7 +169,7 @@ const headers = [
   },
 ];
 
-const results = ref([]);
+const results = ref<unknown[]>([]);
 const dialog = ref(false);
 const detailTitle = ref("");
 
