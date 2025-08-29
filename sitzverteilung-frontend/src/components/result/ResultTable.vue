@@ -28,13 +28,13 @@
     <v-btn
       variant="outlined"
       class="mx-2"
-      @click="goToDetail('Sante-Lague/Schepers')"
+      @click="goToDetail('Sainte-Laguë/Schepers')"
       >Sainte-Laguë/Schepers</v-btn
     >
     <v-btn
       variant="outlined"
       class="mx-2"
-      @click="goToDetail('DHondt')"
+      @click="goToDetail('D`Hondt')"
       >D'Hondt</v-btn
     >
   </v-toolbar>
@@ -121,7 +121,7 @@ const headers = [
         ],
       },
       {
-        title: `Sainte-Lague/Schepers`,
+        title: `Sainte-Laguë/Schepers`,
         key: "sainteLague",
         width: 50,
         children: [
@@ -169,25 +169,7 @@ const headers = [
   },
 ];
 
-const results = [
-  {
-    name: "Beispielpartei",
-    committeeSeats: 5.45,
-    committee: "0 oder 1",
-    quota: 2,
-    hN: "OK",
-    sls: "OK",
-    dH: "NOK",
-    hareSeats: 3,
-    harePatt: "2/3",
-    sainteSeats: 2,
-    saintePatt: 0,
-    dHSeats: 1,
-    dHPatt: "1/3",
-    documentation: "JustALongSampleTextToDisplayTableBehaviour",
-  },
-];
-
+const results = ref([]);
 const dialog = ref(false);
 const detailTitle = ref("");
 
