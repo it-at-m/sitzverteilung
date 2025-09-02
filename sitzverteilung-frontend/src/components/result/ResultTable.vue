@@ -34,7 +34,7 @@
     <v-btn
       variant="outlined"
       class="mx-2"
-      @click="goToDetail('D`Hondt')"
+      @click="goToDetail(`D'Hondt`)"
       >D'Hondt</v-btn
     >
   </v-toolbar>
@@ -176,7 +176,12 @@ const detailTitle = ref("");
 // Placeholder for future content, currently unused
 const detailInfo = ref<string>("");
 
-function goToDetail(selectedCalculationMethod: string) {
+function goToDetail(
+  selectedCalculationMethod:
+    | "Hare/Niemeyer"
+    | "Sainte-Laguë/Schepers"
+    | "D'Hondt"
+) {
   detailTitle.value = selectedCalculationMethod;
   dialog.value = true;
 }
