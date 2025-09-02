@@ -49,6 +49,7 @@
       :base-data-names="baseDataNames"
       :show-name-column="false"
     />
+    <result-table />
   </v-container>
 </template>
 
@@ -58,6 +59,7 @@ import { useToggle } from "@vueuse/core";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
+import ResultTable from "@/components/result/ResultTable.vue";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
 
