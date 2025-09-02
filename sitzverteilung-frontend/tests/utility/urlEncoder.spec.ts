@@ -28,7 +28,8 @@ describe("urlEncoder tests", () => {
     expect(JSON.stringify(object)).toEqual(JSON.stringify(baseData));
   });
 
-  test("conforms to maximum url length of 2048", async () => {
+  //Test export limit with maximum URL length of 8192 (smartphone browsers)
+  test("conforms to maximum url length of 8192", async () => {
     // given
     const baseData = getTestBaseDataInputLimit();
 
@@ -37,7 +38,7 @@ describe("urlEncoder tests", () => {
     const length = `${url}${urlParam}`.length;
 
     // then
-    expect(length).toBeLessThanOrEqual(2048);
+    expect(length).toBeLessThanOrEqual(8192);
   });
 
   test("throws error when input to large", async () => {
