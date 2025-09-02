@@ -44,7 +44,7 @@
     hide-default-footer
     density="compact"
     no-data-text="Keine Berechnungsdaten vorhanden."
-    items-per-page="-1"
+    :items-per-page="-1"
   >
   </v-data-table>
 </template>
