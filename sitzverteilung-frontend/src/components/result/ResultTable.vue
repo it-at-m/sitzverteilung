@@ -1,4 +1,13 @@
 <template>
+  <v-col class="d-flex justify-end">
+    <v-btn
+        @click="generatePdf"
+        color="blue"
+        size="large"
+        style="margin-top: 8px"
+    >PDF generieren</v-btn
+    >
+  </v-col>
   <v-dialog
     v-model="dialog"
     max-width="600px"
@@ -50,6 +59,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
+import {jsPDF} from "jspdf";
 
 const headers = [
   {
@@ -169,7 +179,29 @@ const headers = [
   },
 ];
 
-const results = ref<unknown[]>([]);
+const results =   [{
+      name: "Partei A",
+      committeeSeats: 10,
+      committee: 5,
+      quota: 0.5,
+      hN: 3,
+      sls: 2,
+      dH: 1,
+      hareNiemeyer: {
+        hareSeats: 5,
+        harePatt: 1,
+      },
+      sainteLague: {
+        sainteSeats: 4,
+        saintePatt: 0,
+      },
+      dHondt: {
+        dHSeats: 1,
+        dHPatt: 0,
+      },
+      documentation: "Dokumentationstext hier.",
+    }
+    ]
 const dialog = ref(false);
 const detailTitle = ref("");
 
@@ -184,5 +216,33 @@ function goToDetail(
 ) {
   detailTitle.value = selectedCalculationMethod;
   dialog.value = true;
+}
+
+function generatePdf() {
+  const doc = new jsPDF();
+
+  doc.text("Sitzberechnung", 10, 10);
+  let y = 20;
+
+  // Iteriere über die Ergebnisse
+  results.forEach(result => {
+    doc.text(`Partei: ${result.name}`, 10, y);
+    doc.text(`Ausschusssitze: ${result.committeeSeats}`, 10, y + 10);
+    doc.text(`Proporzgenaue Zahl Ausschuss: ${result.committee}`, 10, y + 20);
+    doc.text(`Quotenkriterium: ${result.quota}`, 10, y + 30);
+    doc.text(`H/N: ${result.hN}`, 10, y + 40);
+    doc.text(`SL/S: ${result.sls}`, 10, y + 50);
+    doc.text(`d/H: ${result.dH}`, 10, y + 60);
+    doc.text(`Hare/Niemeyer Sitze: ${result.hareNiemeyer.hareSeats}`, 10, y + 70);
+    doc.text(`Hare/Niemeyer Patt: ${result.hareNiemeyer.harePatt}`, 10, y + 80);
+    doc.text(`Sainte-Laguë/Schepers Sitze: ${result.sainteLague.sainteSeats}`, 10, y + 90);
+    doc.text(`Sainte-Laguë/Schepers Patt: ${result.sainteLague.saintePatt}`, 10, y + 100);
+    doc.text(`D'Hondt Sitze: ${result.dHondt.dHSeats}`, 10, y + 110);
+    doc.text(`D'Hondt Patt: ${result.dHondt.dHPatt}`, 10, y + 120);
+    doc.text(`Dokumentation: ${result.documentation}`, 10, y + 130);
+
+    y += 150; // Abstand zwischen den Ergebnissen
+    doc.save('Berechnungsergebnisse.pdf');
+  });
 }
 </script>
