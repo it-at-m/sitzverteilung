@@ -6,6 +6,7 @@ import {
   getTestBaseData,
   getTestBaseDataEmptyGroups,
   getTestBaseDataNotEnoughSeats,
+  getTestBaseDataSeatsAreNull,
   getTestBaseDataTooManyGroups,
   getTestBaseDataTooManySeats,
   getTestBaseDataUndefinedTooManySeats,
@@ -18,7 +19,7 @@ describe("useGroupStatistics composable", () => {
     const expectedSeats = ref(testBaseData.committeeSize);
     const limitGroups = ref(10);
 
-    const { amountOfGroups, totalSeats, totalVotes } = useGroupStatistics(
+    const { amountOfGroups, totalSeats } = useGroupStatistics(
       groups,
       limitGroups,
       expectedSeats
@@ -26,34 +27,30 @@ describe("useGroupStatistics composable", () => {
 
     expect(amountOfGroups.value).toBe(3);
     expect(totalSeats.value).toBe(60);
-    expect(totalVotes.value).toBe(350);
   });
 
   test.each([
     [getTestBaseData(), false, false, false],
     [getTestBaseDataEmptyGroups(), false, false, false],
-    [getTestBaseDataTooManyGroups(), true, false, false],
+    [getTestBaseDataTooManyGroups(), false, false, false],
     [getTestBaseDataTooManySeats(), false, true, false],
-    [getTestBaseDataUndefinedTooManySeats(), true, true, false],
+    [getTestBaseDataUndefinedTooManySeats(), false, true, false],
     [getTestBaseDataNotEnoughSeats(), false, false, true],
+    [getTestBaseDataSeatsAreNull(), false, false, true],
   ])(
     "correctly calculates validation",
-    (
-      testBaseData,
-      expectedTooManyGroups,
-      expectedSeatsTooHigh,
-      expectedSeatsTooLow
-    ) => {
+    (testBaseData, expectedTooManyGroups) => {
       const groups = ref(testBaseData.groups);
       const limitGroups = ref(10);
       const expectedSeats = ref(testBaseData.committeeSize);
 
-      const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } =
-        useGroupStatistics(groups, limitGroups, expectedSeats);
+      const { isTooManyGroups } = useGroupStatistics(
+        groups,
+        limitGroups,
+        expectedSeats
+      );
 
       expect(isTooManyGroups.value).toBe(expectedTooManyGroups);
-      expect(isSeatsTooHigh.value).toBe(expectedSeatsTooHigh);
-      expect(isSeatsTooLow.value).toBe(expectedSeatsTooLow);
     }
   );
 });

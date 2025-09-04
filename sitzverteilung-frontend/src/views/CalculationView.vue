@@ -44,7 +44,6 @@
       :limit-name="LimitConfiguration.limitName"
       :limit-groups="LimitConfiguration.limitGroups"
       :limit-committee-size="LimitConfiguration.limitCommitteeSize"
-      :limit-votes="LimitConfiguration.limitVotes"
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :show-name-column="false"

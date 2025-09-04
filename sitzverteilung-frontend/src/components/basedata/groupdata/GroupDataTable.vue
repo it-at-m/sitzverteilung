@@ -97,16 +97,12 @@
     <template #header.committeeSeats="{ column }">
       <div class="d-flex">
         <v-icon
+          v-if="expectedSeats !== 0"
           :icon="mdiSeat"
           class="mx-1"
         />
-        <p>{{ column.title }}</p>
-      </div>
-    </template>
-
-    <template #header.votes="{ column }">
-      <div class="d-flex">
         <v-icon
+          v-else
           :icon="mdiVote"
           class="mx-1"
         />
@@ -121,7 +117,6 @@
         :group-names="groupNames"
         :limit-name="limitName"
         :limit-seats="expectedSeats"
-        :limit-votes="limitVotes"
         @edited-name="validateNameFields"
       >
         <template #prepend>
@@ -152,7 +147,6 @@
         :disabled="isGroupLimitReached"
         :limit-name="limitName"
         :limit-seats="expectedSeats"
-        :limit-votes="limitVotes"
         @addGroup="addNewGroup"
         ref="groupDataTableAddRowRef"
       />
@@ -186,13 +180,8 @@ const headers = computed(() => [
     width: 400,
   },
   {
-    title: `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`,
+    title: displaySeatsOrVotesAsHeader,
     key: "committeeSeats",
-    width: 200,
-  },
-  {
-    title: `Anzahl der Stimmen (optional, max. ${numberFormatter(props.limitVotes)})`,
-    key: "votes",
     width: 200,
   },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
@@ -202,7 +191,6 @@ const props = defineProps<{
   expectedSeats: number;
   limitName: number;
   limitGroups: number;
-  limitVotes: number;
   fractions: Union[];
   committees: Union[];
 }>();
@@ -221,6 +209,13 @@ const committeeGroups = computed(() => getUnionGroups(props.committees));
 const unionGroups = computed(() =>
   getUnionGroups([...props.fractions, ...props.committees])
 );
+const displaySeatsOrVotesAsHeader = computed(() => {
+  if (props.expectedSeats !== 0) {
+    return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
+  } else {
+    return "Anzahl der Stimmen";
+  }
+});
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
