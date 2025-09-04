@@ -13,7 +13,7 @@ import {
 
 import "blob-polyfill";
 
-export const MAX_SHARE_URL_LENGTH = 4096;
+const MAX_SHARE_URL_LENGTH = 4096;
 
 describe("urlEncoder tests", () => {
   const url = "https://sitzverteilung.oss.muenchen.de/#/data?import=";
@@ -31,7 +31,7 @@ describe("urlEncoder tests", () => {
   });
 
   //Test export limit with maximum URL length of 4096 (smartphone browsers)
-  test("conforms to maximum url length of $[MAX_SHARE_URL_LENGTH]", async () => {
+  test(`conforms to maximum url length of ${MAX_SHARE_URL_LENGTH}`, async () => {
     // given
     const baseData = getTestBaseDataInputLimit();
 
