@@ -13,6 +13,8 @@ import {
 
 import "blob-polyfill";
 
+const MAX_SHARE_URL_LENGTH = 4096;
+
 describe("urlEncoder tests", () => {
   const url = "https://sitzverteilung.oss.muenchen.de/#/data?import=";
 
@@ -28,7 +30,8 @@ describe("urlEncoder tests", () => {
     expect(JSON.stringify(object)).toEqual(JSON.stringify(baseData));
   });
 
-  test("conforms to maximum url length of 2048", async () => {
+  //Test export limit with maximum URL length of 4096 (smartphone browsers)
+  test(`conforms to maximum url length of ${MAX_SHARE_URL_LENGTH}`, async () => {
     // given
     const baseData = getTestBaseDataInputLimit();
 
@@ -37,10 +40,10 @@ describe("urlEncoder tests", () => {
     const length = `${url}${urlParam}`.length;
 
     // then
-    expect(length).toBeLessThanOrEqual(2048);
+    expect(length).toBeLessThanOrEqual(MAX_SHARE_URL_LENGTH);
   });
 
-  test("throws error when input to large", async () => {
+  test("throws error when input too large", async () => {
     // given
     const baseData = getTestBaseDataInputTooLarge();
 
