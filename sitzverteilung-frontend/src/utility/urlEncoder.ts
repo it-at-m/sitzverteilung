@@ -1,4 +1,4 @@
-import {LimitConfiguration} from "@/utility/validation.ts";
+import { LimitConfiguration } from "@/utility/validation.ts";
 
 export async function writeToUrlParam<T>(
   object: T,

@@ -5,12 +5,12 @@ import {
   writeToUrlParam,
   writeUrlParamToObject,
 } from "../../src/utility/urlEncoder";
+import { LimitConfiguration } from "../../src/utility/validation";
 import {
   getTestBaseData,
   getTestBaseDataInputLimit,
   getTestBaseDataInputTooLarge,
 } from "../TestData";
-import { LimitConfiguration } from "../../src/utility/validation";
 
 import "blob-polyfill";
 
