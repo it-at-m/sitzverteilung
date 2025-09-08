@@ -11,7 +11,8 @@ export const FieldValidationRules = {
 
 export const LimitConfiguration = {
   limitName: 45,
-  limitGroups: 18,
+  limitGroups: 30,
   limitVotes: 99_999_999,
   limitCommitteeSize: 999,
+  limitURLEncoderSize: 8192,
 } as const;
