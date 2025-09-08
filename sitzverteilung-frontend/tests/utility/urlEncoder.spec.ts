@@ -5,6 +5,7 @@ import {
   writeToUrlParam,
   writeUrlParamToObject,
 } from "../../src/utility/urlEncoder";
+import { LimitConfiguration } from "../../src/utility/validation";
 import {
   getTestBaseData,
   getTestBaseDataInputLimit,
@@ -28,7 +29,7 @@ describe("urlEncoder tests", () => {
     expect(JSON.stringify(object)).toEqual(JSON.stringify(baseData));
   });
 
-  test("conforms to maximum url length of 2048", async () => {
+  test(`conforms to maximum url length of ${LimitConfiguration.limitURLEncoderSize}`, async () => {
     // given
     const baseData = getTestBaseDataInputLimit();
 
@@ -37,10 +38,10 @@ describe("urlEncoder tests", () => {
     const length = `${url}${urlParam}`.length;
 
     // then
-    expect(length).toBeLessThanOrEqual(2048);
+    expect(length).toBeLessThanOrEqual(LimitConfiguration.limitURLEncoderSize);
   });
 
-  test("throws error when input to large", async () => {
+  test("throws error when input too large", async () => {
     // given
     const baseData = getTestBaseDataInputTooLarge();
 
