@@ -14,4 +14,5 @@ export const LimitConfiguration = {
   limitGroups: 30,
   limitVotes: 99_999_999,
   limitCommitteeSize: 999,
+  limitURLEncoderSize: 8192,
 } as const;
