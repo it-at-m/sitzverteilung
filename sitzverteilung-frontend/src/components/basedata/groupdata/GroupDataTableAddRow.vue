@@ -44,7 +44,7 @@ const {
   groupNames,
   limitName,
   limitSeats,
-    limitVotes,
+  limitVotes,
 } = defineProps<{
   disabled?: boolean;
   groupNames: string[];

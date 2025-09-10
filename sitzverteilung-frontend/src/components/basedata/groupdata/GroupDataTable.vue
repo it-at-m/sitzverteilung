@@ -216,7 +216,7 @@ const displaySeatsOrVotesAsHeader = computed(() => {
   if (props.expectedSeats !== 0) {
     return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
   } else {
-    return `Anzahl der Sitze (max. ${numberFormatter(props.limitVotes)})`;
+    return `Anzahl der Stimmen (max. ${numberFormatter(props.limitVotes)})`;
   }
 });
 

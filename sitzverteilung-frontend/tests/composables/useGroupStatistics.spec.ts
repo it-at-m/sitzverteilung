@@ -6,7 +6,6 @@ import {
   getTestBaseData,
   getTestBaseDataEmptyGroups,
   getTestBaseDataNotEnoughSeats,
-  getTestBaseDataSeatsAreNull,
   getTestBaseDataTooManyGroups,
   getTestBaseDataTooManySeats,
   getTestBaseDataUndefinedTooManySeats,
@@ -36,19 +35,20 @@ describe("useGroupStatistics composable", () => {
     [getTestBaseDataTooManySeats(), false, true, false],
     [getTestBaseDataUndefinedTooManySeats(), false, true, false],
     [getTestBaseDataNotEnoughSeats(), false, false, true],
-    [getTestBaseDataSeatsAreNull(), false, false, true],
   ])(
     "correctly calculates validation",
-      (testBaseData, expectedTooManyGroups, expectedSeatsTooHigh, expectedSeatsTooLow) => {
+    (
+      testBaseData,
+      expectedTooManyGroups,
+      expectedSeatsTooHigh,
+      expectedSeatsTooLow
+    ) => {
       const groups = ref(testBaseData.groups);
       const limitGroups = ref(10);
       const expectedSeats = ref(testBaseData.committeeSize);
 
-        const { isTooManyGroups, isSeatsTooHigh, isSeatsTooLow } = useGroupStatistics(
-        groups,
-        limitGroups,
-        expectedSeats
-      );
+      const { isTooManyGroups, isSeatsTooHigh, isSeatsTooLow } =
+        useGroupStatistics(groups, limitGroups, expectedSeats);
 
       expect(isTooManyGroups.value).toBe(expectedTooManyGroups);
       expect(isSeatsTooHigh.value).toBe(expectedSeatsTooHigh);

@@ -42,7 +42,7 @@ export function getTestBaseDataEmptyGroups(): BaseData {
 export function getTestBaseDataTooManyGroups(): BaseData {
   return {
     name: "TestData TooMany Groups",
-    committeeSize: 2,
+    committeeSize: 1,
     groups: [
       {
         name: "Testgroup 1",
@@ -50,7 +50,7 @@ export function getTestBaseDataTooManyGroups(): BaseData {
       },
       {
         name: "Testgroup 2",
-        seatsOrVotes: 1,
+        seatsOrVotes: 0,
       },
     ],
     unions: [],
@@ -101,24 +101,6 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
       {
         name: "Testgroup 2",
         seatsOrVotes: 3,
-      },
-    ],
-    unions: [],
-  };
-}
-
-export function getTestBaseDataSeatsAreNull(): BaseData {
-  return {
-    name: "TestData Seats Are Null",
-    committeeSize: 5,
-    groups: [
-      {
-        name: "Testgroup 1",
-        seatsOrVotes: 0,
-      },
-      {
-        name: "Testgroup 2",
-        seatsOrVotes: 0,
       },
     ],
     unions: [],

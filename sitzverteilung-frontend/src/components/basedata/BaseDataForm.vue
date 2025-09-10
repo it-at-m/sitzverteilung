@@ -26,6 +26,7 @@
           hide-details="auto"
           validate-on="input"
           :error-messages="seatFieldValidationError"
+          :min="1"
           :label="`Größe des Hauptorgans (max. ${limitCommitteeSize})`"
           :prepend-inner-icon="mdiAccountSwitch"
           glow

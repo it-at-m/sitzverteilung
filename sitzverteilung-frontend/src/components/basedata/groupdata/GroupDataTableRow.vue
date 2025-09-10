@@ -30,9 +30,11 @@
       <v-number-input
         v-model="group.seatsOrVotes"
         ref="seatsOrVotesInputField"
-        :rules="applyRules ? [FieldValidationRules.Required] : []"
-        :min="1"
-        :max="limitSeats === 0 ? limitVotes : limitSeats"
+        :rules="
+          applyRules && limitSeats !== 0 ? [FieldValidationRules.Required] : []
+        "
+        :min="limitSeats === 0 ? 0 : 1"
+        :max="maxSeatsOrVotes"
         hide-details="auto"
         validate-on="input"
         variant="underlined"
@@ -53,7 +55,7 @@
 
 <script setup lang="ts">
 import type { Group } from "@/types/basedata/Group.ts";
-import type { VTextField } from "vuetify/components";
+import type { VNumberInput, VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
@@ -65,7 +67,7 @@ const {
   groupNames,
   limitSeats,
   limitName,
-    limitVotes,
+  limitVotes,
 } = defineProps<{
   isValidatingOnEmpty?: boolean;
   disabled?: boolean;
@@ -78,12 +80,12 @@ const {
 const group = defineModel<Group>({ required: true });
 
 const nameInputField = useTemplateRef<VTextField>("nameInputField");
-const seatsOrVotesInputField = useTemplateRef<VTextField>(
+const seatsOrVotesInputField = useTemplateRef<VNumberInput>(
   "seatsOrVotesInputField"
 );
 
 const isEmpty = computed(
-  () => !(group.value.name || group.value.seatsOrVotes)
+  () => !group.value.name?.trim() && group.value.seatsOrVotes == null
 );
 
 watch(
@@ -101,6 +103,9 @@ const isValid = computed(() =>
 const isActionDisabled = computed(
   () => disabled || isEmpty.value || !isValid.value
 );
+const maxSeatsOrVotes = computed(() => {
+  return limitSeats > 0 ? limitSeats : limitVotes;
+});
 
 const emit = defineEmits(["hitEnter", "editedName"]);
 function hitEnter() {

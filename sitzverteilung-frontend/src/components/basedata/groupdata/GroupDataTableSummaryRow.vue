@@ -15,13 +15,15 @@
           Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }} von
           {{ numberFormatter(expectedSeats) }}
           <span
-              v-if="isSeatsTooHigh"
-              class="text-red"
-          >(überschritten)</span>
+            v-if="isSeatsTooHigh"
+            class="text-red"
+            >(überschritten)</span
+          >
           <span
-              v-else-if="isSeatsTooLow"
-              class="text-red"
-          >(fehlend)</span>
+            v-else-if="isSeatsTooLow"
+            class="text-red"
+            >(fehlend)</span
+          >
         </p>
       </template>
       <template v-else>
