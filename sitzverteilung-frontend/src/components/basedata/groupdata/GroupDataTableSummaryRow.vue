@@ -10,7 +10,7 @@
       </p>
     </td>
     <td>
-      <template v-if="expectedSeats !== 0">
+      <template v-if="expectedSeats > 0 && expectedSeats">
         <p class="font-weight-bold">
           Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }} von
           {{ numberFormatter(expectedSeats) }}

@@ -97,7 +97,7 @@
     <template #header.seatsOrVotes="{ column }">
       <div class="d-flex">
         <v-icon
-          v-if="expectedSeats !== 0"
+          v-if="expectedSeats > 0 && expectedSeats"
           :icon="mdiSeat"
           class="mx-1"
         />
@@ -213,7 +213,7 @@ const unionGroups = computed(() =>
   getUnionGroups([...props.fractions, ...props.committees])
 );
 const displaySeatsOrVotesAsHeader = computed(() => {
-  if (props.expectedSeats !== 0) {
+  if (props.expectedSeats > 0 && props.expectedSeats) {
     return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
   } else {
     return `Anzahl der Stimmen (max. ${numberFormatter(props.limitVotes)})`;
