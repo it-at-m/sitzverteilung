@@ -116,7 +116,10 @@ export function getTestBaseDataInputLimit(): BaseData {
     groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
       name: generateUniqueString(LimitConfiguration.limitName),
       seatsOrVotes: generateUniqueNumber(
-        LimitConfiguration.limitCommitteeSize.toString().length
+        Math.max(
+          LimitConfiguration.limitCommitteeSize.toString().length,
+          LimitConfiguration.limitVotes.toString().length
+        )
       ),
     })),
     // Smallest constellation is pair-wise unions

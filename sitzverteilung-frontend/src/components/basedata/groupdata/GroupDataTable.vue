@@ -182,7 +182,7 @@ const headers = computed(() => [
     width: 400,
   },
   {
-    title: displaySeatsOrVotesAsHeader,
+    title: displaySeatsOrVotesAsHeader.value,
     key: "seatsOrVotes",
     width: 200,
   },
