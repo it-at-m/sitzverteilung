@@ -28,11 +28,11 @@
     </td>
     <td>
       <v-number-input
-        v-model="group.committeeSeats"
-        ref="committeeSeatsInputField"
+        v-model="group.seatsOrVotes"
+        ref="seatsOrVotesInputField"
         :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
-        :max="adjustMaxSeats"
+        :max="limitSeats === 0 ? limitVotes : limitSeats"
         hide-details="auto"
         validate-on="input"
         variant="underlined"
@@ -65,26 +65,25 @@ const {
   groupNames,
   limitSeats,
   limitName,
+    limitVotes,
 } = defineProps<{
   isValidatingOnEmpty?: boolean;
   disabled?: boolean;
   groupNames: string[];
   limitSeats: number;
   limitName: number;
+  limitVotes: number;
 }>();
 
 const group = defineModel<Group>({ required: true });
 
 const nameInputField = useTemplateRef<VTextField>("nameInputField");
-const committeeSeatsInputField = useTemplateRef<VTextField>(
-  "committeeSeatsInputField"
+const seatsOrVotesInputField = useTemplateRef<VTextField>(
+  "seatsOrVotesInputField"
 );
-const adjustMaxSeats = computed(() => {
-  return limitSeats === 0 ? Infinity : limitSeats;
-});
 
 const isEmpty = computed(
-  () => !(group.value.name || group.value.committeeSeats)
+  () => !(group.value.name || group.value.seatsOrVotes)
 );
 
 watch(
@@ -96,7 +95,7 @@ watch(
 
 const isValid = computed(() =>
   Boolean(
-    nameInputField.value?.isValid && committeeSeatsInputField.value?.isValid
+    nameInputField.value?.isValid && seatsOrVotesInputField.value?.isValid
   )
 );
 const isActionDisabled = computed(
@@ -128,20 +127,20 @@ function validateNameField() {
 }
 
 function validateSeatField() {
-  committeeSeatsInputField.value?.validate();
+  seatsOrVotesInputField.value?.validate();
 }
 
 function validate() {
   // requires nextTick as dynamic update of rules will otherwise not be respected
   nextTick(() => {
     nameInputField.value?.validate(true);
-    committeeSeatsInputField.value?.validate(true);
+    seatsOrVotesInputField.value?.validate(true);
   });
 }
 
 function resetValidation() {
   nameInputField.value?.resetValidation();
-  committeeSeatsInputField.value?.resetValidation();
+  seatsOrVotesInputField.value?.resetValidation();
 }
 
 function focusNameField() {

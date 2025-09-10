@@ -94,7 +94,7 @@
       </div>
     </template>
 
-    <template #header.committeeSeats="{ column }">
+    <template #header.seatsOrVotes="{ column }">
       <div class="d-flex">
         <v-icon
           v-if="expectedSeats !== 0"
@@ -117,6 +117,7 @@
         :group-names="groupNames"
         :limit-name="limitName"
         :limit-seats="expectedSeats"
+        :limit-votes="limitVotes"
         @edited-name="validateNameFields"
       >
         <template #prepend>
@@ -147,6 +148,7 @@
         :disabled="isGroupLimitReached"
         :limit-name="limitName"
         :limit-seats="expectedSeats"
+        :limit-votes="limitVotes"
         @addGroup="addNewGroup"
         ref="groupDataTableAddRowRef"
       />
@@ -181,7 +183,7 @@ const headers = computed(() => [
   },
   {
     title: displaySeatsOrVotesAsHeader,
-    key: "committeeSeats",
+    key: "seatsOrVotes",
     width: 200,
   },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
@@ -191,6 +193,7 @@ const props = defineProps<{
   expectedSeats: number;
   limitName: number;
   limitGroups: number;
+  limitVotes: number;
   fractions: Union[];
   committees: Union[];
 }>();
@@ -213,7 +216,7 @@ const displaySeatsOrVotesAsHeader = computed(() => {
   if (props.expectedSeats !== 0) {
     return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
   } else {
-    return "Anzahl der Stimmen";
+    return `Anzahl der Sitze (max. ${numberFormatter(props.limitVotes)})`;
   }
 });
 

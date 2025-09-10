@@ -6,6 +6,8 @@
     :is-validating-on-empty="false"
     :limit-name="limitName"
     :limit-seats="limitSeats"
+    :limit-votes="limitVotes"
+    :max="limitSeats ? limitVotes : limitSeats"
     @hit-enter="addGroupEnter"
     class="bg-grey-lighten-3"
   >
@@ -42,11 +44,13 @@ const {
   groupNames,
   limitName,
   limitSeats,
+    limitVotes,
 } = defineProps<{
   disabled?: boolean;
   groupNames: string[];
   limitName: number;
   limitSeats: number;
+  limitVotes: number;
 }>();
 
 const newGroup = ref<Group>(getEmptyGroup());
@@ -99,7 +103,7 @@ defineExpose({
 function getEmptyGroup(): Group {
   return {
     name: "",
-    committeeSeats: undefined,
+    seatsOrVotes: undefined,
   };
 }
 </script>

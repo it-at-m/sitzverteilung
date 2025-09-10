@@ -9,32 +9,34 @@
         >
       </p>
     </td>
-    <td v-if="expectedSeats !== 0">
-      <p class="font-weight-bold">
-        Gesamtanzahl: {{ numberFormatter(totalSeats) }} von
-        {{ displayVotesCorrectly }}
-        <span
-          v-if="isSeatsTooHigh"
-          class="text-red"
-          >(überschritten)</span
-        ><span
-          v-else-if="isSeatsTooLow"
-          class="text-red"
-          >(fehlend)</span
-        >
-      </p>
+    <td>
+      <template v-if="expectedSeats !== 0">
+        <p class="font-weight-bold">
+          Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }} von
+          {{ numberFormatter(expectedSeats) }}
+          <span
+              v-if="isSeatsTooHigh"
+              class="text-red"
+          >(überschritten)</span>
+          <span
+              v-else-if="isSeatsTooLow"
+              class="text-red"
+          >(fehlend)</span>
+        </p>
+      </template>
+      <template v-else>
+        <p class="font-weight-bold">
+          Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }}
+        </p>
+      </template>
     </td>
-    <td v-if="expectedSeats === 0">
-      <p class="font-weight-bold">Gesamtanzahl: {{ displayVotesCorrectly }}</p>
-    </td>
-    <td />
   </tr>
 </template>
 
 <script setup lang="ts">
 import type { Group } from "@/types/basedata/Group.ts";
 
-import { computed, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import { useGroupStatistics } from "@/composables/useGroupStatistics";
 import { numberFormatter } from "@/utility/numberFormatter";
@@ -44,14 +46,6 @@ const props = defineProps<{
   limitGroups: number;
   expectedSeats: number;
 }>();
-
-const displayVotesCorrectly = computed(() => {
-  if (props.expectedSeats === 0) {
-    return totalSeats;
-  } else {
-    return props.expectedSeats;
-  }
-});
 
 const {
   groups: groupsRef,
@@ -65,6 +59,6 @@ const {
   isTooManyGroups,
   isSeatsTooHigh,
   isSeatsTooLow,
-  totalSeats,
+  totalSeatsOrVotes,
 } = useGroupStatistics(groupsRef, limitGroupsRef, expectedSeatsRef);
 </script>

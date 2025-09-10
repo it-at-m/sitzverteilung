@@ -19,38 +19,40 @@ describe("useGroupStatistics composable", () => {
     const expectedSeats = ref(testBaseData.committeeSize);
     const limitGroups = ref(10);
 
-    const { amountOfGroups, totalSeats } = useGroupStatistics(
+    const { amountOfGroups, totalSeatsOrVotes } = useGroupStatistics(
       groups,
       limitGroups,
       expectedSeats
     );
 
     expect(amountOfGroups.value).toBe(3);
-    expect(totalSeats.value).toBe(60);
+    expect(totalSeatsOrVotes.value).toBe(60);
   });
 
   test.each([
     [getTestBaseData(), false, false, false],
     [getTestBaseDataEmptyGroups(), false, false, false],
-    [getTestBaseDataTooManyGroups(), false, false, false],
+    [getTestBaseDataTooManyGroups(), true, false, false],
     [getTestBaseDataTooManySeats(), false, true, false],
     [getTestBaseDataUndefinedTooManySeats(), false, true, false],
     [getTestBaseDataNotEnoughSeats(), false, false, true],
     [getTestBaseDataSeatsAreNull(), false, false, true],
   ])(
     "correctly calculates validation",
-    (testBaseData, expectedTooManyGroups) => {
+      (testBaseData, expectedTooManyGroups, expectedSeatsTooHigh, expectedSeatsTooLow) => {
       const groups = ref(testBaseData.groups);
       const limitGroups = ref(10);
       const expectedSeats = ref(testBaseData.committeeSize);
 
-      const { isTooManyGroups } = useGroupStatistics(
+        const { isTooManyGroups, isSeatsTooHigh, isSeatsTooLow } = useGroupStatistics(
         groups,
         limitGroups,
         expectedSeats
       );
 
       expect(isTooManyGroups.value).toBe(expectedTooManyGroups);
+      expect(isSeatsTooHigh.value).toBe(expectedSeatsTooHigh);
+      expect(isSeatsTooLow.value).toBe(expectedSeatsTooLow);
     }
   );
 });

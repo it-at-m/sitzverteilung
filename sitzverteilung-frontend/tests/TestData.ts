@@ -9,15 +9,15 @@ export function getTestBaseData(): BaseData {
     groups: [
       {
         name: "Testgroup 1 ä",
-        committeeSeats: 10,
+        seatsOrVotes: 10,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 20,
+        seatsOrVotes: 20,
       },
       {
         name: "Testgroup 3",
-        committeeSeats: 30,
+        seatsOrVotes: 30,
       },
     ],
     unions: [
@@ -42,15 +42,15 @@ export function getTestBaseDataEmptyGroups(): BaseData {
 export function getTestBaseDataTooManyGroups(): BaseData {
   return {
     name: "TestData TooMany Groups",
-    committeeSize: 1,
+    committeeSize: 2,
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 1,
+        seatsOrVotes: 1,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 0,
+        seatsOrVotes: 1,
       },
     ],
     unions: [],
@@ -64,11 +64,11 @@ export function getTestBaseDataTooManySeats(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 3,
+        seatsOrVotes: 3,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 3,
+        seatsOrVotes: 3,
       },
     ],
     unions: [],
@@ -82,7 +82,7 @@ export function getTestBaseDataUndefinedTooManySeats(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 1,
+        seatsOrVotes: 1,
       },
     ],
     unions: [],
@@ -96,11 +96,11 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 1,
+        seatsOrVotes: 1,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 3,
+        seatsOrVotes: 3,
       },
     ],
     unions: [],
@@ -114,11 +114,11 @@ export function getTestBaseDataSeatsAreNull(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 0,
+        seatsOrVotes: 0,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 0,
+        seatsOrVotes: 0,
       },
     ],
     unions: [],
@@ -133,7 +133,7 @@ export function getTestBaseDataInputLimit(): BaseData {
     ),
     groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
       name: generateUniqueString(LimitConfiguration.limitName),
-      committeeSeats: generateUniqueNumber(
+      seatsOrVotes: generateUniqueNumber(
         LimitConfiguration.limitCommitteeSize.toString().length
       ),
     })),
