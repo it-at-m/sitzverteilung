@@ -11,8 +11,8 @@
     <!-- Delete dialog -->
     <yes-no-dialog
       :model-value="isDeleteConfirmationShown"
-      dialog-title="Basisdaten löschen?"
-      :dialog-text="`Wollen Sie die Basisdaten '${selectedBaseData?.name ?? ''}' wirklich löschen?`"
+      dialog-title="Vorlage löschen?"
+      :dialog-text="`Wollen Sie die Vorlage '${selectedBaseData?.name ?? ''}' wirklich löschen?`"
       yes-text="Löschen"
       no-text="Abbrechen"
       yes-color="red"
@@ -21,13 +21,13 @@
     />
     <v-row>
       <v-col class="d-flex align-center">
-        <h1 class="mr-2">Verwaltung der Basisdaten</h1>
+        <h1 class="mr-2">Verwaltung der Vorlagen</h1>
         <info-dialog>
           <template #dialog-text>
             <div class="pa-4 text-justify">
-              <h2 class="mb-2">Information zur Basisdatenübersicht</h2>
+              <h2 class="mb-2">Information zur Vorlagenansicht</h2>
               <p class="mb-3">
-                In dieser Ansicht wird die Verwaltung der Basisdaten geregelt,
+                In dieser Ansicht wird die Verwaltung der Vorlagen geregelt,
                 bestehend aus:
               </p>
               <ul class="pl-4 mb-3">
@@ -44,16 +44,16 @@
                 color="warning"
                 :icon="mdiExclamation"
                 title="Speicherung der Daten"
-                text="Die angelegten Basisdaten werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Basisdaten als Link (über die 'Teilen'-Funktion) extern abgelegt werden."
+                text="Die angelegten Vorlagen werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Vorlagen als Link (über die 'Teilen'-Funktion) extern abgelegt werden."
               />
 
-              <h3 class="mt-4 mb-2">Basisdatenübersicht</h3>
+              <h3 class="mt-4 mb-2">Vorlagenansicht</h3>
               <p class="mb-3">
-                Neue Basisdaten können über das Ausfüllen des Formulars angelegt
-                werden. Bereits angelegte Basisdaten lassen sich durch ein
+                Neue Vorlagen können über das Ausfüllen des Formulars angelegt
+                werden. Bereits angelegte Vorlagen lassen sich durch ein
                 Drop-Down-Menü in die Übersicht übernehmen. Die ausgewählten
-                Basisdaten lassen sich dann aktualisieren, löschen und über
-                einen Link teilen.
+                Vorlagen lassen sich dann aktualisieren, löschen und über einen
+                Link teilen.
               </p>
 
               <h3 class="mt-4 mb-2">Eingabebeschränkungen</h3>
@@ -62,8 +62,8 @@
               </p>
               <ul class="pl-4 mb-3">
                 <li>
-                  Der Name des Basisdatensatzes und die Größe des Hauptorgans
-                  eingegeben wurden.
+                  Der Name der Vorlage und die Größe des Hauptorgans eingegeben
+                  wurden.
                 </li>
                 <li>
                   Mindestens eine Partei / Gruppierung / Einzelmitglied
@@ -91,9 +91,9 @@
               </p>
 
               <p class="mb-3">
-                Bevor der Basisdatensatz angelegt werden kann, muss die
-                Gesamtanzahl der Sitze aller Parteien / Gruppierungen /
-                Einzelmitglieder mit der Größe des Hauptorgans übereinstimmen.
+                Bevor die Vorlage angelegt werden kann, muss die Gesamtanzahl
+                der Sitze aller Parteien / Gruppierungen / Einzelmitglieder mit
+                der Größe des Hauptorgans übereinstimmen.
               </p>
               <p class="mb-3">
                 Gelöscht werden können die Parteien / Gruppierungen /
@@ -136,7 +136,7 @@
     <v-toolbar class="my-6 py-2 px-3 bg-primary">
       <v-row>
         <v-col class="d-flex align-center">
-          <base-data-autocomplete
+          <template-data-autocomplete
             v-model="selectedBaseData"
             :limit-name="LimitConfiguration.limitName"
             :base-data-list="storedBaseData"
@@ -202,6 +202,7 @@
           :limit-votes="LimitConfiguration.limitVotes"
           :selected-base-data-name="selectedBaseData?.name"
           :base-data-names="baseDataNames"
+          :show-name-column="true"
         />
       </v-col>
     </v-row>
@@ -218,17 +219,18 @@ import {
   mdiShare,
 } from "@mdi/js";
 import { useClipboard } from "@vueuse/core";
-import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import BaseDataAutocomplete from "@/components/basedata/BaseDataAutocomplete.vue";
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
+import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import InfoDialog from "@/components/common/InfoDialog.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
+import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { STATUS_INDICATORS } from "@/constants.ts";
-import { useBaseDataStore } from "@/stores/basedata.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
+import { useTemplateDataStore } from "@/stores/templatedata.ts";
 import { numberFormatter } from "@/utility/numberFormatter.ts";
 import {
   writeToUrlParam,
@@ -236,60 +238,34 @@ import {
 } from "@/utility/urlEncoder.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
 
-const store = useBaseDataStore();
+const store = useTemplateDataStore();
 const snackbar = useSnackbarStore();
 
-const storedBaseData = computed(() => store.baseDatas);
-
-const selectedBaseData = ref<BaseData | null>();
 const isBaseDataSelected = computed(() => !!selectedBaseData.value);
 
-const dirty = computed(
-  () =>
-    isBaseDataSelected.value &&
-    JSON.stringify(currentBaseData.value) !==
-      JSON.stringify(selectedBaseData.value)
-);
-const isDataEntered = computed(
-  () =>
-    dirty.value ||
-    (!isBaseDataSelected.value &&
-      !dirty.value &&
-      JSON.stringify(currentBaseData.value) !==
-        JSON.stringify(getEmptyBaseData()))
-);
+const {
+  storedBaseData,
+  selectedBaseData,
+  baseDataNames,
+  currentBaseData,
+  updateIsValid,
+  isDataEntered,
+  baseDataFormRef,
+  dirty,
+  isValid,
+} = useTemplateData();
 
 const basedataNameIsNotChanged = computed(
   () => currentBaseData.value?.name === selectedBaseData.value?.name
 );
 const saveLeave = useSaveLeave(isDataEntered);
 
-const baseDataNames = computed(() =>
-  storedBaseData.value.map((baseData) => baseData.name)
-);
-
-const currentBaseData = ref<BaseData>(getEmptyBaseData());
-
-const isValid = ref(false);
-function updateIsValid(newIsValid: boolean) {
-  isValid.value = newIsValid;
-}
-
-function getEmptyBaseData(): BaseData {
-  return {
-    name: "",
-    committeeSize: undefined,
-    groups: [],
-    unions: [],
-  };
-}
-
 function updateBaseData() {
   if (currentBaseData.value && selectedBaseData.value) {
     const copy = JSON.parse(JSON.stringify(currentBaseData.value));
     store.updateBaseData(selectedBaseData.value.name, copy);
     snackbar.showMessage({
-      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden aktualisiert.`,
+      message: `Die Vorlage '${selectedBaseData.value.name}' wurde aktualisiert.`,
     });
     selectedBaseData.value = copy;
   }
@@ -300,13 +276,12 @@ function createBaseData() {
     const copy = JSON.parse(JSON.stringify(currentBaseData.value));
     store.addBaseData(copy);
     snackbar.showMessage({
-      message: `Die Basisdaten '${copy.name}' wurden angelegt.`,
+      message: `Die Vorlage '${copy.name}' wurde angelegt.`,
     });
     selectedBaseData.value = copy;
   }
 }
 
-const baseDataFormRef = useTemplateRef("baseDataFormRef");
 const isDeleteConfirmationShown = ref(false);
 function showDeleteConfirmation() {
   isDeleteConfirmationShown.value = true;
@@ -319,23 +294,10 @@ function deleteSelectedBaseData() {
   if (isBaseDataSelected.value && selectedBaseData.value) {
     store.deleteBaseData(selectedBaseData.value.name);
     snackbar.showMessage({
-      message: `Die Basisdaten '${selectedBaseData.value.name}' wurden gelöscht.`,
+      message: `Die Vorlage '${selectedBaseData.value.name}' wurde gelöscht.`,
     });
     selectedBaseData.value = null;
   }
-}
-
-watch(selectedBaseData, (newBaseData) => {
-  if (!newBaseData) {
-    reset();
-  } else {
-    currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-  }
-});
-
-function reset() {
-  baseDataFormRef.value?.reset();
-  currentBaseData.value = getEmptyBaseData();
 }
 
 const { copy, isSupported } = useClipboard();
@@ -364,11 +326,11 @@ async function share() {
       // Copy to clipboard
       await copy(fullShareUrl);
       snackbar.showMessage({
-        message: `Die Basisdaten '${selectedBaseData.value.name}' wurden als Link in die Zwischenablage kopiert.`,
+        message: `Die Vorlage '${selectedBaseData.value.name}' wurde als Link in die Zwischenablage kopiert.`,
       });
     } catch {
       snackbar.showMessage({
-        message: `Die Basisdaten '${selectedBaseData.value.name}' konnten nicht in einen Link umgewandelt werden.`,
+        message: `Die Vorlage '${selectedBaseData.value.name}' konnte nicht in einen Link umgewandelt werden.`,
       });
     }
   }
@@ -385,21 +347,21 @@ watch(
         const baseData = await writeUrlParamToObject<BaseData>(importParam);
         if (!isValidBaseData(baseData)) {
           snackbar.showMessage({
-            message: "Die Basisdaten im Link sind ungültig.",
+            message: "Die Vorlage im Link ist ungültig.",
             level: STATUS_INDICATORS.ERROR,
           });
         } else {
-          selectedBaseData.value = undefined;
+          selectedBaseData.value = null;
           await nextTick(() => {
             currentBaseData.value = baseData;
           });
           snackbar.showMessage({
-            message: `Die Basisdaten '${baseData.name}' wurden übertragen. ACHTUNG: Erst beim Speichern werden diese permanent gespeichert.`,
+            message: `Die Vorlage '${baseData.name}' wurde übertragen. ACHTUNG: Erst nach dem Klick auf 'Anlegen' wird diese permanent gespeichert.`,
           });
         }
       } catch {
         snackbar.showMessage({
-          message: "Die Basisdaten im Link sind ungültig.",
+          message: "Die Vorlage im Link ist ungültig.",
           level: STATUS_INDICATORS.ERROR,
         });
       }
