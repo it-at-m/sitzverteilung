@@ -43,8 +43,9 @@
 
     <template #item="{ index }">
       <union-data-table-row
-        :ref="unionDataTableRowsRef.set"
+        v-if="unions[index]"
         v-model="unions[index]"
+        :ref="unionDataTableRowsRef.set"
         :unions="unions"
         :group-names="groupNames"
         :limit-name="limitName"
