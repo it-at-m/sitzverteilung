@@ -175,7 +175,10 @@ function calculateDivisorMethod(
 
   // Allocate seats & build order
   topRatios.forEach((ratio) => {
-    seatDistribution[ratio.groupName]++;
+    const groupName = ratio.groupName;
+    if (seatDistribution[groupName] !== undefined) {
+      seatDistribution[groupName]++;
+    }
     seatOrder.push(ratio);
   });
 
