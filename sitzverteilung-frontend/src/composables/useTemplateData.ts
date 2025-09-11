@@ -42,6 +42,7 @@ export function useTemplateData() {
     return {
       name: "",
       committeeSize: undefined,
+      targetSize: undefined,
       groups: [],
       unions: [],
     };
