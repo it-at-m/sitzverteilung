@@ -3,10 +3,12 @@ import { join } from "path";
 
 import { describe, expect, test } from "vitest";
 
+import type { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
+import type { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
+import type { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
+import type { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
+
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
-import { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
-import { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
-import { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
 import { exportForTesting } from "../../src/utility/calculator";
 
 interface CalculationTestData {
@@ -25,6 +27,10 @@ const jsonFiles = [
   ...loadJsonFiles<CalculationTestData>(
     join(__dirname, "../data/hareNiemeyer"),
     CalculationMethod.HARE_NIEMEYER
+  ),
+  ...loadJsonFiles<CalculationTestData>(
+    join(__dirname, "../data/sainteLague"),
+    CalculationMethod.SAINTE_LAGUE_SCHEPERS
   ),
 ];
 
@@ -57,8 +63,13 @@ function getComparableResult(
       value: Math.floor(order.value * 1000) / 1000,
     };
   });
+  const stale: CalculationStale | undefined = result.stale
+    ? { ...result.stale, ratio: Math.floor(result.stale.ratio * 1000) / 1000 }
+    : undefined;
+
   return {
     ...result,
+    stale,
     order,
   };
 }

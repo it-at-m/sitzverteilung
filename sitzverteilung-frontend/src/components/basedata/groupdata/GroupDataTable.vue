@@ -112,8 +112,9 @@
 
     <template #item="{ index, toggleSelect, internalItem }">
       <group-data-table-row
-        :ref="groupDataTableRowsRef.set"
+        v-if="groups[index]"
         v-model="groups[index]"
+        :ref="groupDataTableRowsRef.set"
         :group-names="groupNames"
         :limit-name="limitName"
         :limit-seats="expectedSeats"
