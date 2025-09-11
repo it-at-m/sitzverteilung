@@ -3,11 +3,12 @@ import { join } from "path";
 
 import { describe, expect, test } from "vitest";
 
+import type { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
+import type { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
+import type { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
+import type { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
+
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
-import { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
-import { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
-import { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
-import { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 import { exportForTesting } from "../../src/utility/calculator";
 
 interface CalculationTestData {
