@@ -129,7 +129,9 @@ export function getTestBaseDataInputLimit(): BaseData {
     committeeSize: generateUniqueNumber(
       LimitConfiguration.limitCommitteeSize.toString().length
     ),
-    targetSize: generateUniqueNumber(LimitConfiguration.limitCommitteeSize.toString().length),
+    targetSize: generateUniqueNumber(
+      LimitConfiguration.limitCommitteeSize.toString().length
+    ),
     groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
       name: generateUniqueString(LimitConfiguration.limitName),
       votes: generateUniqueNumber(
