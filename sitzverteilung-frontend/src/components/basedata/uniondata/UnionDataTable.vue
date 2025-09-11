@@ -122,13 +122,15 @@ function deleteUnion(idx: number) {
 }
 
 function removeGroup(unionIdx: number, groupIdx: GroupIndex) {
-  const remainingGroups = unions.value[unionIdx].groups.filter(
-    (group) => group !== groupIdx
-  );
-  if (remainingGroups.length < 2) {
-    deleteUnion(unionIdx);
-  } else {
-    unions.value[unionIdx].groups = remainingGroups;
+  const union = unions.value[unionIdx];
+  if (union) {
+    const remainingGroups = union.groups.filter((group) => group !== groupIdx);
+    if (remainingGroups.length < 2) {
+      deleteUnion(unionIdx);
+    } else {
+      union.groups = remainingGroups;
+      unions.value[unionIdx] = union;
+    }
   }
 }
 
