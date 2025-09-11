@@ -62,7 +62,7 @@ function getComparableResult(
       value: Math.floor(order.value * 1000) / 1000,
     };
   });
-  let stale: CalculationStale = undefined;
+  let stale: CalculationStale | undefined = undefined;
   if (result.stale) {
     stale = {
       ...result.stale,
