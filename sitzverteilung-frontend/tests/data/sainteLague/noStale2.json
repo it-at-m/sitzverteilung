@@ -25,63 +25,63 @@
     "order": [
       {
         "groupName": "Partei A",
-        "value": 10400
+        "value": 5200
       },
       {
         "groupName": "Partei C",
-        "value": 6200
+        "value": 3100
       },
       {
         "groupName": "Partei A",
-        "value": 3466.666
+        "value": 1733.333
       },
       {
         "groupName": "Partei B",
-        "value": 3400
+        "value": 1700
       },
       {
         "groupName": "Partei A",
-        "value": 2080
+        "value": 1040
       },
       {
         "groupName": "Partei C",
-        "value": 2066.666
+        "value": 1033.333
       },
       {
         "groupName": "Partei A",
-        "value": 1485.714
+        "value": 742.857
       },
       {
         "groupName": "Partei C",
-        "value": 1240
+        "value": 620
       },
       {
         "groupName": "Partei A",
-        "value": 1155.555
+        "value": 577.777
       },
       {
         "groupName": "Partei B",
-        "value": 1133.333
+        "value": 566.666
       },
       {
         "groupName": "Partei A",
-        "value": 945.454
+        "value": 472.727
       },
       {
         "groupName": "Partei C",
-        "value": 885.714
+        "value": 442.857
       },
       {
         "groupName": "Partei A",
-        "value": 800
+        "value": 400
       },
       {
         "groupName": "Partei A",
-        "value": 693.333
+        "value": 346.666
       },
       {
         "groupName": "Partei C",
-        "value": 688.888
+        "value": 344.444
       }
     ]
   }
