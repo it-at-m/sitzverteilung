@@ -78,7 +78,7 @@ function calculateHareNiemeyer(
 ): CalculationMethodResult {
   const seatDistribution: CalculationSeatDistribution = {};
 
-  // initialize distributions with 0 seats for every group
+  // Initialize distributions with 0 seats for every group
   calculationGroups.forEach((group) => (seatDistribution[group.name] = 0));
 
   // Calculate hare quotas and assign whole seats
@@ -110,7 +110,10 @@ function calculateHareNiemeyer(
   // Assign remaining seats based on highest remainders
   const topRemainders = remainders.slice(0, remainingSeats);
   topRemainders.forEach((remainder) => {
-    seatDistribution[remainder.groupName]++;
+    const groupName = remainder.groupName;
+    if (seatDistribution[groupName] !== undefined) {
+      seatDistribution[groupName]++;
+    }
   });
 
   // Check for stale situation
@@ -172,7 +175,10 @@ function calculateDivisorMethod(
 
   // Allocate seats & build order
   topRatios.forEach((ratio) => {
-    seatDistribution[ratio.groupName]++;
+    const groupName = ratio.groupName;
+    if (seatDistribution[groupName] !== undefined) {
+      seatDistribution[groupName]++;
+    }
     seatOrder.push(ratio);
   });
 
@@ -210,8 +216,12 @@ function handleStaleSituation(
     let toRemove = unresolvedSeats;
     if (seatOrder) {
       for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
-        if (seatOrder[i].value === ratioValue) {
-          seatDistribution[seatOrder[i].groupName]--;
+        const order = seatOrder[i];
+        if (order && order.value === ratioValue) {
+          const groupName = order.groupName;
+          if (seatDistribution[groupName] !== undefined) {
+            seatDistribution[groupName]--;
+          }
           seatOrder.splice(i, 1);
           toRemove--;
         }
@@ -219,7 +229,10 @@ function handleStaleSituation(
     } else {
       for (const item of [...topRatios].reverse()) {
         if (item.value === ratioValue && toRemove > 0) {
-          seatDistribution[item.groupName]--;
+          const groupName = item.groupName;
+          if (seatDistribution[groupName] !== undefined) {
+            seatDistribution[groupName]--;
+          }
           toRemove--;
         }
       }
