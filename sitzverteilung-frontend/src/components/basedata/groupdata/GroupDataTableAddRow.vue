@@ -7,7 +7,7 @@
     :limit-name="limitName"
     :limit-seats="limitSeats"
     :limit-votes="limitVotes"
-    :max="limitSeats ? limitVotes : limitSeats"
+    :max="limitSeats ?? limitVotes"
     @hit-enter="addGroupEnter"
     class="bg-grey-lighten-3"
   >

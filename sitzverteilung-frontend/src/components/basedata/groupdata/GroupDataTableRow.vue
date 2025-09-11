@@ -30,10 +30,8 @@
       <v-number-input
         v-model="group.seatsOrVotes"
         ref="seatsOrVotesInputField"
-        :rules="
-          applyRules && limitSeats !== 0 ? [FieldValidationRules.Required] : []
-        "
-        :min="limitSeats === 0 ? 0 : 1"
+        :rules="applyRules ? [FieldValidationRules.Required] : []"
+        :min="1"
         :max="maxSeatsOrVotes"
         hide-details="auto"
         validate-on="input"

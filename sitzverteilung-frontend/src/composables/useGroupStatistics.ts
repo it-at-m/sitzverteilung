@@ -18,10 +18,9 @@ export const useGroupStatistics = (
   });
 
   // validations
-  const safeExpectedSeats = computed(() => expectedSeats.value ?? 0);
   const maximumGroups = computed(() => {
-    if (safeExpectedSeats.value !== 0) {
-      return Math.min(limitGroups.value, safeExpectedSeats.value);
+    if (expectedSeats.value !== 0) {
+      return Math.min(limitGroups.value, expectedSeats.value);
     } else {
       return limitGroups.value;
     }
@@ -30,10 +29,12 @@ export const useGroupStatistics = (
     () => amountOfGroups.value > maximumGroups.value
   );
   const isSeatsTooHigh = computed(
-    () => totalSeatsOrVotes.value > safeExpectedSeats.value
+    () =>
+      totalSeatsOrVotes.value > expectedSeats.value && expectedSeats.value > 0
   );
   const isSeatsTooLow = computed(
-    () => totalSeatsOrVotes.value < safeExpectedSeats.value
+    () =>
+      totalSeatsOrVotes.value < expectedSeats.value && expectedSeats.value > 0
   );
 
   return {

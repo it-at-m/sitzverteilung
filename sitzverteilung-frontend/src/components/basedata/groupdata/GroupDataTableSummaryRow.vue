@@ -10,27 +10,22 @@
       </p>
     </td>
     <td>
-      <template v-if="expectedSeats > 0 && expectedSeats">
-        <p class="font-weight-bold">
-          Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }} von
-          {{ numberFormatter(expectedSeats) }}
-          <span
-            v-if="isSeatsTooHigh"
-            class="text-red"
-            >(überschritten)</span
-          >
-          <span
-            v-else-if="isSeatsTooLow"
-            class="text-red"
-            >(fehlend)</span
-          >
-        </p>
-      </template>
-      <template v-else>
-        <p class="font-weight-bold">
-          Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }}
-        </p>
-      </template>
+      <p class="font-weight-bold">
+        Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }}
+        <span v-if="expectedSeats > 0"
+          >von {{ numberFormatter(expectedSeats) }}</span
+        >
+        <span
+          v-if="isSeatsTooHigh"
+          class="text-red"
+          >(überschritten)</span
+        >
+        <span
+          v-else-if="isSeatsTooLow"
+          class="text-red"
+          >(fehlend)</span
+        >
+      </p>
     </td>
   </tr>
 </template>

@@ -97,13 +97,7 @@
     <template #header.seatsOrVotes="{ column }">
       <div class="d-flex">
         <v-icon
-          v-if="expectedSeats > 0 && expectedSeats"
-          :icon="mdiSeat"
-          class="mx-1"
-        />
-        <v-icon
-          v-else
-          :icon="mdiVote"
+          :icon="expectedSeats > 0 ? mdiSeat : mdiVote"
           class="mx-1"
         />
         <p>{{ column.title }}</p>
