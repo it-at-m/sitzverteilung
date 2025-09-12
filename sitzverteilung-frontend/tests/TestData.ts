@@ -6,6 +6,7 @@ export function getTestBaseData(): BaseData {
   return {
     name: "TestData 1",
     committeeSize: 60,
+    targetSize: 10,
     groups: [
       {
         name: "Testgroup 1 ä",
@@ -37,6 +38,7 @@ export function getTestBaseDataEmptyGroups(): BaseData {
   return {
     name: "TestData Empty Groups",
     committeeSize: 0,
+    targetSize: 0,
     groups: [],
     unions: [],
   };
@@ -46,6 +48,7 @@ export function getTestBaseDataTooManyGroups(): BaseData {
   return {
     name: "TestData TooMany Groups",
     committeeSize: 1,
+    targetSize: 0,
     groups: [
       {
         name: "Testgroup 1",
@@ -66,6 +69,7 @@ export function getTestBaseDataTooManySeats(): BaseData {
   return {
     name: "TestData TooMany Seats",
     committeeSize: 5,
+    targetSize: 1,
     groups: [
       {
         name: "Testgroup 1",
@@ -86,6 +90,7 @@ export function getTestBaseDataUndefinedTooManySeats(): BaseData {
   return {
     name: "TestData Undefined CommitteeSize",
     committeeSize: undefined,
+    targetSize: 1,
     groups: [
       {
         name: "Testgroup 1",
@@ -101,6 +106,7 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
   return {
     name: "TestData NotEnough Seats",
     committeeSize: 5,
+    targetSize: 1,
     groups: [
       {
         name: "Testgroup 1",
@@ -121,6 +127,9 @@ export function getTestBaseDataInputLimit(): BaseData {
   return {
     name: generateUniqueString(LimitConfiguration.limitName),
     committeeSize: generateUniqueNumber(
+      LimitConfiguration.limitCommitteeSize.toString().length
+    ),
+    targetSize: generateUniqueNumber(
       LimitConfiguration.limitCommitteeSize.toString().length
     ),
     groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
@@ -150,6 +159,7 @@ export function getTestBaseDataInputTooLarge(): BaseData {
   return {
     name: generateUniqueString(999),
     committeeSize: generateUniqueNumber(3),
+    targetSize: generateUniqueNumber(3),
     groups: Array.from({ length: 18 }, () => ({
       name: generateUniqueString(999),
       votes: generateUniqueNumber(9),
