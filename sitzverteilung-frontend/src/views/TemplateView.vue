@@ -81,6 +81,8 @@
                 {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }}
                 Sitze und die Stimmen auf
                 {{ numberFormatter(LimitConfiguration.limitVotes) }} Stimmen.
+                Ist eine Größe für das Hauptorgan angegeben, sind Sitze einzugeben.
+                Andernfalls wird von Stimmen als Eingabe ausgegangen.
               </p>
 
               <p class="mb-3">
