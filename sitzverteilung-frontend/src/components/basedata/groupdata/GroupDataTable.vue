@@ -94,20 +94,10 @@
       </div>
     </template>
 
-    <template #header.committeeSeats="{ column }">
+    <template #header.seatsOrVotes="{ column }">
       <div class="d-flex">
         <v-icon
-          :icon="mdiSeat"
-          class="mx-1"
-        />
-        <p>{{ column.title }}</p>
-      </div>
-    </template>
-
-    <template #header.votes="{ column }">
-      <div class="d-flex">
-        <v-icon
-          :icon="mdiVote"
+          :icon="expectedSeats > 0 ? mdiSeat : mdiVote"
           class="mx-1"
         />
         <p>{{ column.title }}</p>
@@ -187,13 +177,8 @@ const headers = computed(() => [
     width: 400,
   },
   {
-    title: `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`,
-    key: "committeeSeats",
-    width: 200,
-  },
-  {
-    title: `Anzahl der Stimmen (optional, max. ${numberFormatter(props.limitVotes)})`,
-    key: "votes",
+    title: displaySeatsOrVotesAsHeader.value,
+    key: "seatsOrVotes",
     width: 200,
   },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
@@ -222,6 +207,13 @@ const committeeGroups = computed(() => getUnionGroups(props.committees));
 const unionGroups = computed(() =>
   getUnionGroups([...props.fractions, ...props.committees])
 );
+const displaySeatsOrVotesAsHeader = computed(() => {
+  if (props.expectedSeats > 0) {
+    return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
+  } else {
+    return `Anzahl der Stimmen (max. ${numberFormatter(props.limitVotes)})`;
+  }
+});
 
 function addNewGroup(group: Group) {
   groups.value.push(group);

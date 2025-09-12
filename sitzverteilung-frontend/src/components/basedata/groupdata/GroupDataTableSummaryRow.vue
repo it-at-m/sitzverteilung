@@ -11,25 +11,22 @@
     </td>
     <td>
       <p class="font-weight-bold">
-        Gesamtanzahl: {{ numberFormatter(totalSeats) }} von
-        {{ numberFormatter(expectedSeats) }}
+        Gesamtanzahl: {{ numberFormatter(totalSeatsOrVotes) }}
+        <span v-if="expectedSeats > 0"
+          >von {{ numberFormatter(expectedSeats) }}</span
+        >
         <span
           v-if="isSeatsTooHigh"
           class="text-red"
           >(überschritten)</span
-        ><span
+        >
+        <span
           v-else-if="isSeatsTooLow"
           class="text-red"
           >(fehlend)</span
         >
       </p>
     </td>
-    <td>
-      <p class="font-weight-bold">
-        Gesamtanzahl: {{ numberFormatter(totalVotes) }}
-      </p>
-    </td>
-    <td />
   </tr>
 </template>
 
@@ -59,7 +56,6 @@ const {
   isTooManyGroups,
   isSeatsTooHigh,
   isSeatsTooLow,
-  totalSeats,
-  totalVotes,
+  totalSeatsOrVotes,
 } = useGroupStatistics(groupsRef, limitGroupsRef, expectedSeatsRef);
 </script>

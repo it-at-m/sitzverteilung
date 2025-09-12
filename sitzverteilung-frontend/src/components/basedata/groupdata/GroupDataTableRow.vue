@@ -28,26 +28,11 @@
     </td>
     <td>
       <v-number-input
-        v-model="group.committeeSeats"
-        ref="committeeSeatsInputField"
+        v-model="group.seatsOrVotes"
+        ref="seatsOrVotesInputField"
         :rules="applyRules ? [FieldValidationRules.Required] : []"
         :min="1"
-        :max="limitSeats"
-        hide-details="auto"
-        validate-on="input"
-        variant="underlined"
-        density="compact"
-        class="py-3"
-        @keydown.enter="hitEnter"
-        :disabled="disabled"
-      />
-    </td>
-    <td>
-      <v-number-input
-        v-model="group.votes"
-        ref="votesInputField"
-        :min="1"
-        :max="limitVotes"
+        :max="maxSeatsOrVotes"
         hide-details="auto"
         validate-on="input"
         variant="underlined"
@@ -68,7 +53,7 @@
 
 <script setup lang="ts">
 import type { Group } from "@/types/basedata/Group.ts";
-import type { VTextField } from "vuetify/components";
+import type { VNumberInput, VTextField } from "vuetify/components";
 
 import { computed, nextTick, useTemplateRef, watch } from "vue";
 
@@ -79,27 +64,26 @@ const {
   disabled = false,
   groupNames,
   limitSeats,
-  limitVotes,
   limitName,
+  limitVotes,
 } = defineProps<{
   isValidatingOnEmpty?: boolean;
   disabled?: boolean;
   groupNames: string[];
   limitSeats: number;
-  limitVotes: number;
   limitName: number;
+  limitVotes: number;
 }>();
 
 const group = defineModel<Group>({ required: true });
 
 const nameInputField = useTemplateRef<VTextField>("nameInputField");
-const committeeSeatsInputField = useTemplateRef<VTextField>(
-  "committeeSeatsInputField"
+const seatsOrVotesInputField = useTemplateRef<VNumberInput>(
+  "seatsOrVotesInputField"
 );
-const votesInputField = useTemplateRef<VTextField>("votesInputField");
 
 const isEmpty = computed(
-  () => !(group.value.name || group.value.committeeSeats || group.value.votes)
+  () => !group.value.name?.trim() && group.value.seatsOrVotes == null
 );
 
 watch(
@@ -111,14 +95,15 @@ watch(
 
 const isValid = computed(() =>
   Boolean(
-    nameInputField.value?.isValid &&
-      committeeSeatsInputField.value?.isValid &&
-      votesInputField.value?.isValid
+    nameInputField.value?.isValid && seatsOrVotesInputField.value?.isValid
   )
 );
 const isActionDisabled = computed(
   () => disabled || isEmpty.value || !isValid.value
 );
+const maxSeatsOrVotes = computed(() => {
+  return limitSeats > 0 ? limitSeats : limitVotes;
+});
 
 const emit = defineEmits(["hitEnter", "editedName"]);
 function hitEnter() {
@@ -145,22 +130,20 @@ function validateNameField() {
 }
 
 function validateSeatField() {
-  committeeSeatsInputField.value?.validate();
+  seatsOrVotesInputField.value?.validate();
 }
 
 function validate() {
   // requires nextTick as dynamic update of rules will otherwise not be respected
   nextTick(() => {
     nameInputField.value?.validate(true);
-    committeeSeatsInputField.value?.validate(true);
-    votesInputField.value?.validate(true);
+    seatsOrVotesInputField.value?.validate(true);
   });
 }
 
 function resetValidation() {
   nameInputField.value?.resetValidation();
-  committeeSeatsInputField.value?.resetValidation();
-  votesInputField.value?.resetValidation();
+  seatsOrVotesInputField.value?.resetValidation();
 }
 
 function focusNameField() {
