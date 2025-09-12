@@ -35,14 +35,13 @@
       </v-col>
       <v-col>
         <v-number-input
-          v-model="baseData.committeeSize"
+          v-model="baseData.targetSize"
           :rules="[FieldValidationRules.Required]"
           :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
           validate-on="input"
-          :error-messages="seatFieldValidationError"
-          :label="`Ausschussgröße`"
+          :label="`Ausschussgröße (max. ${limitCommitteeSize})`"
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />

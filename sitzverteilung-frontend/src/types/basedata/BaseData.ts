@@ -4,6 +4,7 @@ import type { Union } from "@/types/basedata/Union.ts";
 export interface BaseData {
   name: string;
   committeeSize?: number;
+  targetSize?: number;
   groups: Group[];
   unions: Union[];
 }
