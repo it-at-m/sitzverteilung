@@ -19,35 +19,54 @@ interface CalculationTestData {
   expected: CalculationMethodResult;
 }
 
-const jsonFiles = [
-  ...loadJsonFiles<CalculationTestData>(
-    join(__dirname, "../data/dHondt"),
-    CalculationMethod.D_HONDT
-  ),
-  ...loadJsonFiles<CalculationTestData>(
-    join(__dirname, "../data/hareNiemeyer"),
-    CalculationMethod.HARE_NIEMEYER
-  ),
-  ...loadJsonFiles<CalculationTestData>(
-    join(__dirname, "../data/sainteLague"),
-    CalculationMethod.SAINTE_LAGUE_SCHEPERS
-  ),
-];
-
-describe("Calculation tests", () => {
+describe("D'Hondt calculation test", () => {
   test.each(
-    jsonFiles.map(({ fileName, data, calculationMethod }) => [
-      calculationMethod,
-      fileName,
-      data,
-    ])
-  )("%s calculation test: %s", (calculationMethod, fileName, data) => {
+      loadJsonFiles<CalculationTestData>(
+          join(__dirname, "../data/dHondt"),
+          CalculationMethod.D_HONDT
+      ).map(({ fileName, data }) => [fileName, data])
+  )("%s", (fileName, data) => {
     const result = getComparableResult(
-      exportForTesting.calculateMethod(
-        calculationMethod,
+      exportForTesting.calculateDHondt(
         data.given.groups,
         data.given.committeeSize
       )
+    );
+
+    expect(result).toEqual(data.expected);
+  });
+});
+
+describe("Hare/Niemeyer calculation tests", () => {
+  test.each(
+      loadJsonFiles<CalculationTestData>(
+          join(__dirname, "../data/hareNiemeyer"),
+          CalculationMethod.HARE_NIEMEYER
+      ).map(({ fileName, data }) => [fileName, data])
+  )("%s", (fileName, data) => {
+    const result = getComparableResult(
+        exportForTesting.calculateHareNiemeyer(
+            data.given.groups,
+            data.given.committeeSize
+        )
+    );
+
+    expect(result).toEqual(data.expected);
+  });
+});
+
+describe("Sainte Lague calculation tests", () => {
+  test.each(
+      loadJsonFiles<CalculationTestData>(
+          join(__dirname, "../data/sainteLague"),
+          CalculationMethod.SAINTE_LAGUE_SCHEPERS
+      ).map(({ fileName, data }) => [fileName, data])
+  )("%s", (fileName, data) => {
+    const result = getComparableResult(
+        exportForTesting.calculateSainteLagueSchepers(
+            data.given.groups,
+            data.given.committeeSize
+        )
     );
 
     expect(result).toEqual(data.expected);
@@ -77,7 +96,7 @@ function getComparableResult(
 function loadJsonFiles<T>(
   dir: string,
   calculationMethod: CalculationMethod
-): { fileName: string; calculationMethod: CalculationMethod; data: T }[] {
+): { fileName: string; calculationMethod?: CalculationMethod; data: T }[] {
   const files = readdirSync(dir)
     .filter((file) => file.toLowerCase().endsWith(".json"))
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
