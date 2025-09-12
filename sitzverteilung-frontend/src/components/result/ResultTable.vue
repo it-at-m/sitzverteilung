@@ -1,65 +1,70 @@
 <template>
-  <v-col class="d-flex justify-end">
+  <v-toolbar flat>
     <v-btn
-        @click="generatePdf"
+        @click="useGeneratePDF()"
+        variant="outlined"
         color="blue"
         size="large"
-        style="margin-top: 8px"
-    >PDF generieren</v-btn
-    >
-  </v-col>
-  <v-dialog
-    v-model="dialog"
-    max-width="600px"
-  >
-    <v-card>
-      <v-card-title>{{ detailTitle }}</v-card-title>
-      <v-card-text>
-        <p>Detailinformationen {{ detailInfo }}</p>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-          variant="text"
-          @click="dialog = false"
-          >Schließen</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-  <v-toolbar flat>
-    <v-toolbar-title>Detailansicht zu:</v-toolbar-title>
+        style="margin-right: 16px"
+    >PDF generieren</v-btn>
+
+    <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
+
+    <v-toolbar-title class="mr-3">Detailansicht zu:</v-toolbar-title>
+
     <v-btn
-      variant="outlined"
-      class="mx-2"
-      @click="goToDetail('Hare/Niemeyer')"
-      >Hare/Niemeyer</v-btn
-    >
+        variant="outlined"
+        class="mx-2"
+        @click="goToDetail('Hare/Niemeyer')"
+    >Hare/Niemeyer</v-btn>
+
     <v-btn
-      variant="outlined"
-      class="mx-2"
-      @click="goToDetail('Sainte-Laguë/Schepers')"
-      >Sainte-Laguë/Schepers</v-btn
-    >
+        variant="outlined"
+        class="mx-2"
+        @click="goToDetail('Sainte-Laguë/Schepers')"
+    >Sainte-Laguë/Schepers</v-btn>
+
     <v-btn
-      variant="outlined"
-      class="mx-2"
-      @click="goToDetail(`D'Hondt`)"
-      >D'Hondt</v-btn
-    >
+        variant="outlined"
+        class="mx-2"
+        @click="goToDetail(`D'Hondt`)"
+    >D'Hondt</v-btn>
   </v-toolbar>
+
+  <v-col class="d-flex justify-end">
+    <v-dialog
+        v-model="dialog"
+        max-width="600px"
+    >
+      <v-card>
+        <v-card-title>{{ detailTitle }}</v-card-title>
+        <v-card-text>
+          <p>Detailinformationen {{ detailInfo }}</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+              variant="text"
+              @click="dialog = false"
+          >Schließen</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-col>
+
   <v-data-table
-    :headers="headers"
-    :items="results"
-    hide-default-footer
-    density="compact"
-    no-data-text="Keine Berechnungsdaten vorhanden."
-    :items-per-page="-1"
+      :headers="headers"
+      :items="results"
+      hide-default-footer
+      density="compact"
+      no-data-text="Keine Berechnungsdaten vorhanden."
+      :items-per-page="-1"
   >
   </v-data-table>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import {jsPDF} from "jspdf";
+import {useGeneratePDF} from "@/composables/useGeneratePDF.ts";
 
 const headers = [
   {
@@ -217,32 +222,5 @@ function goToDetail(
   detailTitle.value = selectedCalculationMethod;
   dialog.value = true;
 }
-
-function generatePdf() {
-  const doc = new jsPDF();
-
-  doc.text("Sitzberechnung", 10, 10);
-  let y = 20;
-
-  // Iteriere über die Ergebnisse
-  results.forEach(result => {
-    doc.text(`Partei: ${result.name}`, 10, y);
-    doc.text(`Ausschusssitze: ${result.committeeSeats}`, 10, y + 10);
-    doc.text(`Proporzgenaue Zahl Ausschuss: ${result.committee}`, 10, y + 20);
-    doc.text(`Quotenkriterium: ${result.quota}`, 10, y + 30);
-    doc.text(`H/N: ${result.hN}`, 10, y + 40);
-    doc.text(`SL/S: ${result.sls}`, 10, y + 50);
-    doc.text(`d/H: ${result.dH}`, 10, y + 60);
-    doc.text(`Hare/Niemeyer Sitze: ${result.hareNiemeyer.hareSeats}`, 10, y + 70);
-    doc.text(`Hare/Niemeyer Patt: ${result.hareNiemeyer.harePatt}`, 10, y + 80);
-    doc.text(`Sainte-Laguë/Schepers Sitze: ${result.sainteLague.sainteSeats}`, 10, y + 90);
-    doc.text(`Sainte-Laguë/Schepers Patt: ${result.sainteLague.saintePatt}`, 10, y + 100);
-    doc.text(`D'Hondt Sitze: ${result.dHondt.dHSeats}`, 10, y + 110);
-    doc.text(`D'Hondt Patt: ${result.dHondt.dHPatt}`, 10, y + 120);
-    doc.text(`Dokumentation: ${result.documentation}`, 10, y + 130);
-
-    y += 150; // Abstand zwischen den Ergebnissen
-    doc.save('Berechnungsergebnisse.pdf');
-  });
-}
 </script>
+
