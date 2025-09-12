@@ -64,8 +64,8 @@
               </p>
               <ul class="pl-4 mb-3">
                 <li>
-                  Der Name der Vorlage sowie die
-                  Ausschussgröße eingegeben wurden.
+                  Der Name der Vorlage sowie die Ausschussgröße eingegeben
+                  wurden.
                 </li>
                 <li>
                   Mindestens eine Partei / Gruppierung / Einzelmitglied
