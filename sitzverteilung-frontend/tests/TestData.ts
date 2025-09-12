@@ -82,7 +82,7 @@ export function getTestBaseDataTooManySeats(): BaseData {
 export function getTestBaseDataUndefinedVoteMode(): BaseData {
   return {
     name: "TestData Undefined CommitteeSize",
-    committeeSize: 1,
+    committeeSize: undefined,
     targetSize: 1,
     groups: [
       {
