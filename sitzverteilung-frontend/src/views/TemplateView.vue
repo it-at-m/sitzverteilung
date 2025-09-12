@@ -64,7 +64,7 @@
               </p>
               <ul class="pl-4 mb-3">
                 <li>
-                  Der Name der Vorlage, die Größe des Hauptorgans sowie die
+                  Der Name der Vorlage sowie die
                   Ausschussgröße eingegeben wurden.
                 </li>
                 <li>

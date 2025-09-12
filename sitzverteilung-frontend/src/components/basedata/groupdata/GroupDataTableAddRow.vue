@@ -4,10 +4,10 @@
     v-model="newGroup"
     :group-names="allGroupNames"
     :is-validating-on-empty="false"
+    :disabled="disabled"
     :limit-name="limitName"
     :limit-seats="limitSeats"
     :limit-votes="limitVotes"
-    :max="limitSeats ?? limitVotes"
     @hit-enter="addGroupEnter"
     class="bg-grey-lighten-3"
   >
@@ -103,7 +103,8 @@ defineExpose({
 function getEmptyGroup(): Group {
   return {
     name: "",
-    seatsOrVotes: undefined,
+    committeeSeats: undefined,
+    votes: undefined,
   };
 }
 </script>
