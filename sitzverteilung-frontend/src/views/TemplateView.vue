@@ -52,18 +52,20 @@
                 Neue Vorlagen können über das Ausfüllen des Formulars angelegt
                 werden. Bereits angelegte Vorlagen lassen sich durch ein
                 Drop-Down-Menü in die Übersicht übernehmen. Die ausgewählten
-                Vorlagen lassen sich dann aktualisieren, löschen und über einen
-                Link teilen.
+                Vorlagen lassen sich dann ändern, löschen und über einen Link
+                teilen. Außerdem lässt sich auf Basis einer bestehenden Vorlage
+                mit "Anlegen" auch eine neue Vorlage erzeugen.
               </p>
 
               <h3 class="mt-4 mb-2">Eingabebeschränkungen</h3>
               <p class="mb-3">
-                Ein Anlegen neuer Daten ist nur dann möglich, wenn:
+                Das Anlegen oder Ändern einer Vorlage ist nur dann möglich,
+                wenn:
               </p>
               <ul class="pl-4 mb-3">
                 <li>
-                  Der Name der Vorlage und die Größe des Hauptorgans eingegeben
-                  wurden.
+                  Der Name der Vorlage, die Größe des Hauptorgans sowie die
+                  Ausschussgröße eingegeben wurden.
                 </li>
                 <li>
                   Mindestens eine Partei / Gruppierung / Einzelmitglied
@@ -74,7 +76,8 @@
               <p class="mb-3">
                 Der Name ist auf
                 {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen
-                beschränkt, die Größe des Hauptorgans auf
+                beschränkt, die Größe des Hauptorgans sowie die Ausschussgröße
+                auf
                 {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }}
                 Sitze und die Stimmen auf
                 {{ numberFormatter(LimitConfiguration.limitVotes) }} Stimmen.
