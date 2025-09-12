@@ -79,10 +79,10 @@ export function getTestBaseDataTooManySeats(): BaseData {
   };
 }
 
-export function getTestBaseDataUndefinedTooManySeats(): BaseData {
+export function getTestBaseDataUndefinedVoteMode(): BaseData {
   return {
     name: "TestData Undefined CommitteeSize",
-    committeeSize: undefined,
+    committeeSize: 1,
     targetSize: 1,
     groups: [
       {
