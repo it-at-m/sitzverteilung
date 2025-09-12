@@ -21,10 +21,10 @@ interface CalculationTestData {
 
 describe("D'Hondt calculation test", () => {
   test.each(
-      loadJsonFiles<CalculationTestData>(
-          join(__dirname, "../data/dHondt"),
-          CalculationMethod.D_HONDT
-      ).map(({ fileName, data }) => [fileName, data])
+    loadJsonFiles<CalculationTestData>(
+      join(__dirname, "../data/dHondt"),
+      CalculationMethod.D_HONDT
+    ).map(({ fileName, data }) => [fileName, data])
   )("%s", (fileName, data) => {
     const result = getComparableResult(
       exportForTesting.calculateDHondt(
@@ -39,16 +39,16 @@ describe("D'Hondt calculation test", () => {
 
 describe("Hare/Niemeyer calculation tests", () => {
   test.each(
-      loadJsonFiles<CalculationTestData>(
-          join(__dirname, "../data/hareNiemeyer"),
-          CalculationMethod.HARE_NIEMEYER
-      ).map(({ fileName, data }) => [fileName, data])
+    loadJsonFiles<CalculationTestData>(
+      join(__dirname, "../data/hareNiemeyer"),
+      CalculationMethod.HARE_NIEMEYER
+    ).map(({ fileName, data }) => [fileName, data])
   )("%s", (fileName, data) => {
     const result = getComparableResult(
-        exportForTesting.calculateHareNiemeyer(
-            data.given.groups,
-            data.given.committeeSize
-        )
+      exportForTesting.calculateHareNiemeyer(
+        data.given.groups,
+        data.given.committeeSize
+      )
     );
 
     expect(result).toEqual(data.expected);
@@ -57,16 +57,16 @@ describe("Hare/Niemeyer calculation tests", () => {
 
 describe("Sainte Lague calculation tests", () => {
   test.each(
-      loadJsonFiles<CalculationTestData>(
-          join(__dirname, "../data/sainteLague"),
-          CalculationMethod.SAINTE_LAGUE_SCHEPERS
-      ).map(({ fileName, data }) => [fileName, data])
+    loadJsonFiles<CalculationTestData>(
+      join(__dirname, "../data/sainteLague"),
+      CalculationMethod.SAINTE_LAGUE_SCHEPERS
+    ).map(({ fileName, data }) => [fileName, data])
   )("%s", (fileName, data) => {
     const result = getComparableResult(
-        exportForTesting.calculateSainteLagueSchepers(
-            data.given.groups,
-            data.given.committeeSize
-        )
+      exportForTesting.calculateSainteLagueSchepers(
+        data.given.groups,
+        data.given.committeeSize
+      )
     );
 
     expect(result).toEqual(data.expected);

@@ -4,9 +4,9 @@ import type { CalculationMethodResult } from "@/types/calculation/internal/Calcu
 import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
+import type { CalculationValidation } from "@/types/calculation/internal/CalculationValidation.ts";
 
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
-import type { CalculationValidation } from "@/types/calculation/internal/CalculationValidation.ts";
 
 function calculateMethod(
   method: CalculationMethod,
@@ -35,7 +35,10 @@ function calculateMethod(
       break;
   }
 
-  result.validation = calculateMethodValidity(calculationGroups, result.distribution);
+  result.validation = calculateMethodValidity(
+    calculationGroups,
+    result.distribution
+  );
 
   return result;
 }
@@ -56,7 +59,7 @@ function calculateDHondt(
   return {
     distribution,
     order,
-    stale
+    stale,
   };
 }
 
@@ -137,7 +140,7 @@ function calculateHareNiemeyer(
   ).map(([groupName, value]) => {
     return {
       name: groupName,
-      seatsOrVotes: value
+      seatsOrVotes: value,
     };
   });
   const { order } = calculateDHondt(dHondtCalculationGroups, committeeSize);
@@ -251,18 +254,24 @@ function handleStaleSituation(
   return stale;
 }
 
-function calculateMethodValidity(calculationGroups: CalculationGroup[], distribution: CalculationSeatDistribution): CalculationValidation {
-  return calculationGroups.reduce((obj: CalculationValidation, currentObj: CalculationGroup) => {
-    const groupName = currentObj.name;
-    const seats = distribution[groupName] ?? 0;
-    const proportion = currentObj.proportion ?? 0;
-    obj[currentObj.name] = Math.abs(proportion - seats) <= 0.99;
-    return obj;
-  }, {});
+function calculateMethodValidity(
+  calculationGroups: CalculationGroup[],
+  distribution: CalculationSeatDistribution
+): CalculationValidation {
+  return calculationGroups.reduce(
+    (obj: CalculationValidation, currentObj: CalculationGroup) => {
+      const groupName = currentObj.name;
+      const seats = distribution[groupName] ?? 0;
+      const proportion = currentObj.proportion ?? 0;
+      obj[currentObj.name] = Math.abs(proportion - seats) <= 0.99;
+      return obj;
+    },
+    {}
+  );
 }
 
 export const exportForTesting = {
   calculateDHondt,
   calculateHareNiemeyer,
-  calculateSainteLagueSchepers
+  calculateSainteLagueSchepers,
 };
