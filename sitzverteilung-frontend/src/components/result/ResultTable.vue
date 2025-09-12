@@ -78,7 +78,7 @@ const headers = [
       },
       {
         title: `Sitze`,
-        key: "committeeSeats",
+        key: "seatsOrVotes",
         width: 50,
       },
     ],
