@@ -47,7 +47,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
+      <v-col cols="8">
         <group-data-table
           v-model="baseData.groups"
           :expected-seats="expectedSeats"
@@ -60,9 +60,7 @@
           @deleted-group="deletedGroup"
         />
       </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="6">
+      <v-col cols="4">
         <union-data-table
           ref="fractionsDataTableRef"
           v-model="fractions"
@@ -70,8 +68,6 @@
           :group-names="groupNames"
           :limit-name="limitName"
         />
-      </v-col>
-      <v-col cols="6">
         <union-data-table
           ref="committeesDataTableRef"
           v-model="committees"

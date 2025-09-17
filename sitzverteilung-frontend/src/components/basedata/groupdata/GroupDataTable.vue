@@ -42,7 +42,7 @@
                   color="primary"
                   size="small"
                   class="mx-2"
-                  text="Fraktionsgemeinschaft anlegen"
+                  text="Fraktion"
                 />
               </span>
             </template>
@@ -65,7 +65,7 @@
                   color="primary"
                   size="small"
                   class="mx-2"
-                  text="Ausschussgemeinschaft anlegen"
+                  text="Ausschuss"
                 />
               </span>
             </template>
@@ -174,14 +174,14 @@ const headers = computed(() => [
   {
     title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
     key: "name",
-    width: 400,
+    width: 150,
   },
   {
     title: displaySeatsOrVotesAsHeader.value,
     key: "seatsOrVotes",
-    width: 200,
+    width: 50,
   },
-  { title: "Aktionen", key: "actions", align: "center", width: 100 },
+  { title: "Aktionen", key: "actions", align: "center", width: 50 },
 ]);
 
 const props = defineProps<{
