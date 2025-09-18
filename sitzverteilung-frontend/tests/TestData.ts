@@ -2,14 +2,37 @@ import { BaseData } from "../src/types/basedata/BaseData";
 import { UnionType } from "../src/types/basedata/Union";
 import { LimitConfiguration } from "../src/utility/validation";
 
-export function getTestBaseData(): BaseData {
+export function getTestBaseDataWithoutUnion(): BaseData {
   return {
     name: "TestData 1",
     committeeSize: 60,
     targetSize: 10,
     groups: [
       {
-        name: "Testgroup 1 ä",
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20,
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+    ],
+    unions: [],
+  };
+}
+
+export function getTestBaseDataWithUnion(): BaseData {
+  return {
+    name: "TestData 1",
+    committeeSize: 60,
+    targetSize: 10,
+    groups: [
+      {
+        name: "Testgroup 1",
         seatsOrVotes: 10,
       },
       {
