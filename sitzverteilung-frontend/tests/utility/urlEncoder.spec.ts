@@ -7,7 +7,7 @@ import {
 } from "../../src/utility/urlEncoder";
 import { LimitConfiguration } from "../../src/utility/validation";
 import {
-  getTestBaseData,
+  getTestBaseDataWithUnion,
   getTestBaseDataInputLimit,
   getTestBaseDataInputTooLarge,
 } from "../TestData";
@@ -19,7 +19,7 @@ describe("urlEncoder tests", () => {
 
   test("No data lost", async () => {
     // given
-    const baseData = getTestBaseData();
+    const baseData = getTestBaseDataWithUnion();
 
     // when
     const urlParam = await writeToUrlParam<BaseData>(baseData, url);
