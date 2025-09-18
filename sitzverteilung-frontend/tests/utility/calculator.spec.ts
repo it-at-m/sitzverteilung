@@ -9,10 +9,14 @@ import type { CalculationMethodResult } from "../../src/types/calculation/intern
 import type { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
+import { CalculationProportions } from "../../src/types/calculation/internal/CalculationProportions";
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { CalculationValidation } from "../../src/types/calculation/internal/CalculationValidation";
 import { exportForTesting } from "../../src/utility/calculator";
-import { getTestBaseDataWithoutUnion, getTestBaseDataWithUnion } from "../TestData";
+import {
+  getTestBaseDataWithoutUnion,
+  getTestBaseDataWithUnion,
+} from "../TestData";
 
 interface CalculationTestData {
   given: {
@@ -82,15 +86,17 @@ describe("Method validity overrounding tests", () => {
     const calculationGroups: CalculationGroup[] = [
       {
         name: "Test 1",
-        proportion: 3.56,
         seatsOrVotes: 0,
       },
       {
         name: "Test 2",
-        proportion: 3.56,
         seatsOrVotes: 0,
       },
     ];
+    const proportions: CalculationProportions = {
+      "Test 1": 3.56,
+      "Test 2": 3.56,
+    };
     const distribution: CalculationSeatDistribution = {
       "Test 1": 4,
       "Test 2": 5,
@@ -102,6 +108,7 @@ describe("Method validity overrounding tests", () => {
 
     const validation = exportForTesting.calculateMethodValidity(
       calculationGroups,
+      proportions,
       distribution
     );
 
@@ -112,15 +119,14 @@ describe("Method validity overrounding tests", () => {
     const calculationGroups: CalculationGroup[] = [
       {
         name: "Test 1",
-        proportion: undefined,
         seatsOrVotes: 0,
       },
       {
         name: "Test 2",
-        proportion: undefined,
         seatsOrVotes: 0,
       },
     ];
+    const proportions: CalculationProportions = {};
     const distribution: CalculationSeatDistribution = {
       "Test 1": 4,
       "Test 2": 5,
@@ -129,6 +135,7 @@ describe("Method validity overrounding tests", () => {
 
     const validation = exportForTesting.calculateMethodValidity(
       calculationGroups,
+      proportions,
       distribution
     );
 
@@ -153,16 +160,15 @@ describe("Proportional seats calculation tests", () => {
       },
     ];
     const committeeSize = 10;
-    const expected = [
-      3.1818181818181817, 5.227272727272727, 1.5909090909090908,
-    ];
+    const expected = {
+      "Test 1": 3.1818181818181817,
+      "Test 2": 5.227272727272727,
+      "Test 3": 1.5909090909090908,
+    };
 
-    const newCalculationGroups = exportForTesting.calculateProportionalSeats(
+    const proportions = exportForTesting.calculateProportions(
       calculationGroups,
       committeeSize
-    );
-    const proportions = newCalculationGroups.map(
-      (calculationGroups) => calculationGroups.proportion
     );
 
     expect(proportions).toEqual(expected);
@@ -183,16 +189,15 @@ describe("Proportional seats calculation tests", () => {
       },
     ];
     const committeeSize = 100;
-    const expected = [
-      31.818181818181817, 52.27272727272727, 15.909090909090908,
-    ];
+    const expected = {
+      "Test 1": 31.818181818181817,
+      "Test 2": 52.27272727272727,
+      "Test 3": 15.909090909090908,
+    };
 
-    const newCalculationGroups = exportForTesting.calculateProportionalSeats(
+    const proportions = exportForTesting.calculateProportions(
       calculationGroups,
       committeeSize
-    );
-    const proportions = newCalculationGroups.map(
-      (calculationGroups) => calculationGroups.proportion
     );
 
     expect(proportions).toEqual(expected);
@@ -205,19 +210,20 @@ describe("Extract calculation groups tests", () => {
     const expected: CalculationGroup[] = [
       {
         name: "Testgroup 1",
-        seatsOrVotes: 10
+        seatsOrVotes: 10,
       },
       {
         name: "Testgroup 2",
-        seatsOrVotes: 20
+        seatsOrVotes: 20,
       },
       {
         name: "Testgroup 3",
-        seatsOrVotes: 30
+        seatsOrVotes: 30,
       },
     ];
 
-    const calculationGroups = exportForTesting.extractCalculationGroups(baseData);
+    const calculationGroups =
+      exportForTesting.extractCalculationGroups(baseData);
 
     expect(calculationGroups).toEqual(expected);
   });
@@ -227,18 +233,19 @@ describe("Extract calculation groups tests", () => {
     const expected: CalculationGroup[] = [
       {
         name: "Testgroup 3",
-        seatsOrVotes: 30
+        seatsOrVotes: 30,
       },
       {
         name: "Example fraction union",
-        seatsOrVotes: 30
-      }
+        seatsOrVotes: 30,
+      },
     ];
 
-    const calculationGroups = exportForTesting.extractCalculationGroups(baseData);
+    const calculationGroups =
+      exportForTesting.extractCalculationGroups(baseData);
 
     expect(calculationGroups).toEqual(expected);
-  })
+  });
 });
 
 function getComparableMethodResult(

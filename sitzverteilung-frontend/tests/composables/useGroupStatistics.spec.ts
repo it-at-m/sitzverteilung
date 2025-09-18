@@ -3,12 +3,12 @@ import { ref } from "vue";
 
 import { useGroupStatistics } from "../../src/composables/useGroupStatistics";
 import {
-  getTestBaseDataWithUnion,
   getTestBaseDataEmptyGroups,
   getTestBaseDataNotEnoughSeats,
   getTestBaseDataTooManyGroups,
   getTestBaseDataTooManySeats,
   getTestBaseDataUndefinedVoteMode,
+  getTestBaseDataWithUnion,
 } from "../TestData";
 
 describe("useGroupStatistics composable", () => {

@@ -7,9 +7,9 @@ import {
 } from "../../src/utility/urlEncoder";
 import { LimitConfiguration } from "../../src/utility/validation";
 import {
-  getTestBaseDataWithUnion,
   getTestBaseDataInputLimit,
   getTestBaseDataInputTooLarge,
+  getTestBaseDataWithUnion,
 } from "../TestData";
 
 import "blob-polyfill";
