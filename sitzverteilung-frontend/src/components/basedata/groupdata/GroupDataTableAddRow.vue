@@ -8,6 +8,7 @@
     :limit-name="limitName"
     :limit-seats="limitSeats"
     :limit-votes="limitVotes"
+    :max="limitSeats ?? limitVotes"
     @hit-enter="addGroupEnter"
     class="bg-grey-lighten-3"
   >
@@ -103,8 +104,7 @@ defineExpose({
 function getEmptyGroup(): Group {
   return {
     name: "",
-    committeeSeats: undefined,
-    votes: undefined,
+    seatsOrVotes: undefined,
   };
 }
 </script>

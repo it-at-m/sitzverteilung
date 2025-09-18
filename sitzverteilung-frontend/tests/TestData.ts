@@ -10,18 +10,15 @@ export function getTestBaseData(): BaseData {
     groups: [
       {
         name: "Testgroup 1 ä",
-        committeeSeats: 10,
-        votes: 100,
+        seatsOrVotes: 10,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 20,
-        votes: 200,
+        seatsOrVotes: 20,
       },
       {
         name: "Testgroup 3",
-        committeeSeats: 30,
-        votes: 50,
+        seatsOrVotes: 30,
       },
     ],
     unions: [
@@ -52,13 +49,11 @@ export function getTestBaseDataTooManyGroups(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 1,
-        votes: 100,
+        seatsOrVotes: 1,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 0,
-        votes: 200,
+        seatsOrVotes: 0,
       },
     ],
     unions: [],
@@ -73,20 +68,18 @@ export function getTestBaseDataTooManySeats(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 3,
-        votes: 100,
+        seatsOrVotes: 3,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 3,
-        votes: 200,
+        seatsOrVotes: 3,
       },
     ],
     unions: [],
   };
 }
 
-export function getTestBaseDataUndefinedTooManySeats(): BaseData {
+export function getTestBaseDataUndefinedVoteMode(): BaseData {
   return {
     name: "TestData Undefined CommitteeSize",
     committeeSize: undefined,
@@ -94,8 +87,7 @@ export function getTestBaseDataUndefinedTooManySeats(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 1,
-        votes: 100,
+        seatsOrVotes: 1,
       },
     ],
     unions: [],
@@ -110,13 +102,11 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
     groups: [
       {
         name: "Testgroup 1",
-        committeeSeats: 1,
-        votes: 100,
+        seatsOrVotes: 1,
       },
       {
         name: "Testgroup 2",
-        committeeSeats: 3,
-        votes: 200,
+        seatsOrVotes: 3,
       },
     ],
     unions: [],
@@ -134,11 +124,11 @@ export function getTestBaseDataInputLimit(): BaseData {
     ),
     groups: Array.from({ length: LimitConfiguration.limitGroups }, () => ({
       name: generateUniqueString(LimitConfiguration.limitName),
-      votes: generateUniqueNumber(
-        LimitConfiguration.limitVotes.toString().length
-      ),
-      committeeSeats: generateUniqueNumber(
-        LimitConfiguration.limitCommitteeSize.toString().length
+      seatsOrVotes: generateUniqueNumber(
+        Math.max(
+          LimitConfiguration.limitCommitteeSize.toString().length,
+          LimitConfiguration.limitVotes.toString().length
+        )
       ),
     })),
     // Smallest constellation is pair-wise unions
@@ -162,7 +152,6 @@ export function getTestBaseDataInputTooLarge(): BaseData {
     targetSize: generateUniqueNumber(3),
     groups: Array.from({ length: 18 }, () => ({
       name: generateUniqueString(999),
-      votes: generateUniqueNumber(9),
     })),
     unions: [],
   };
