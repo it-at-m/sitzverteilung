@@ -25,7 +25,7 @@ function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
             groupIndexesInUnion.add(groupIndex);
             return baseData.groups[groupIndex];
           })
-          .reduce((sum, group) => sum + (group?.committeeSeats ?? 0), 0),
+          .reduce((sum, group) => sum + (group?.seatsOrVotes ?? 0), 0),
       };
     }
   );
@@ -34,7 +34,7 @@ function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
     .map((singleGroup) => {
       return {
         name: singleGroup.name,
-        seatsOrVotes: singleGroup.committeeSeats,
+        seatsOrVotes: singleGroup.seatsOrVotes,
       } as CalculationGroup;
     });
   return [...singleCalculationGroups, ...unionCalculationGroups];
