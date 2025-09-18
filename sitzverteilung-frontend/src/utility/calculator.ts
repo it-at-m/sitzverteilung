@@ -3,15 +3,53 @@ import type { GroupIndex } from "@/types/basedata/Union.ts";
 import type { CalculationGroup } from "@/types/calculation/internal/CalculationGroup.ts";
 import type { CalculationGroupRatio } from "@/types/calculation/internal/CalculationGroupRatio.ts";
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
+import type { CalculationProportions } from "@/types/calculation/internal/CalculationProportions.ts";
+import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 import type { CalculationValidation } from "@/types/calculation/internal/CalculationValidation.ts";
 
-import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import {
+  AVAILABLE_METHODS,
+  CalculationMethod,
+} from "@/types/calculation/CalculationMethod.ts";
 
 /**
- * Extracts CalculationGroups from BaseData relevant for further calculation
+ * Executes a complete calculation.
+ *
+ * @param baseData input data to use for calculation
+ */
+function calculate(baseData: BaseData): CalculationResult {
+  const committeeSize = baseData.targetSize;
+  if (committeeSize === undefined) {
+    throw new Error(
+      "Cannot execute calculation because target size is missing."
+    );
+  }
+  const calculationGroups = extractCalculationGroups(baseData);
+  const proportions = calculateProportions(calculationGroups, committeeSize);
+
+  const methods: Partial<Record<CalculationMethod, CalculationMethodResult>> =
+    {};
+  AVAILABLE_METHODS.forEach((method) => {
+    methods[method] = calculateMethod(
+      method,
+      calculationGroups,
+      proportions,
+      committeeSize
+    );
+  });
+
+  return {
+    proportions,
+    methods,
+  };
+}
+
+/**
+ * Extracts CalculationGroups from BaseData relevant for further calculation.
+ *
  * @param baseData
  */
 function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
@@ -45,13 +83,15 @@ function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
  *
  * @param method the method to calculate
  * @param calculationGroups calculation data
+ * @param proportions pre-calculated proportions for the calculation groups
  * @param committeeSize target committee size
  */
 function calculateMethod(
   method: CalculationMethod,
   calculationGroups: CalculationGroup[],
+  proportions: CalculationProportions,
   committeeSize: number
-): CalculationMethodResult | undefined {
+): CalculationMethodResult {
   if (calculationGroups.length === 0) {
     throw new Error("calculationGroups cannot be empty");
   }
@@ -76,6 +116,7 @@ function calculateMethod(
 
   result.validation = calculateMethodValidity(
     calculationGroups,
+    proportions,
     result.distribution
   );
 
@@ -331,40 +372,43 @@ function handleStaleSituation(
  * @param calculationGroups calculation data
  * @param committeeSize size of the target committee
  */
-function calculateProportionalSeats(
+function calculateProportions(
   calculationGroups: CalculationGroup[],
   committeeSize: number
-): CalculationGroup[] {
+): CalculationProportions {
   const totalSeatsOrVotes = calculationGroups.reduce(
     (partialSum, calculationGroup) =>
       partialSum + calculationGroup.seatsOrVotes,
     0
   );
   const divisor = totalSeatsOrVotes / committeeSize;
-  return calculationGroups.map((calculationGroup) => {
-    return {
-      ...calculationGroup,
-      proportion: calculationGroup.seatsOrVotes / divisor,
-    };
-  });
+  return calculationGroups.reduce(
+    (obj: CalculationProportions, group: CalculationGroup) => {
+      obj[group.name] = group.seatsOrVotes / divisor;
+      return obj;
+    },
+    {}
+  );
 }
 
 /**
  * Checks whether the calculation of a method is valid.
  * This is the case, when the difference between calculated seats and proportional seats is less than 1.
  *
- * @param calculationGroups calculation data (with proportions) used to calculate the specific method
+ * @param calculationGroups calculation data used to calculate the specific method
+ * @param proportions pre-calculated proportions for the calculation groups
  * @param distribution seat distribution returned by the specific calculation method
  */
 function calculateMethodValidity(
   calculationGroups: CalculationGroup[],
+  proportions: CalculationProportions,
   distribution: CalculationSeatDistribution
 ): CalculationValidation {
   return calculationGroups.reduce(
     (obj: CalculationValidation, currentObj: CalculationGroup) => {
       const groupName = currentObj.name;
       const seats = distribution[groupName] ?? 0;
-      const proportion = currentObj.proportion;
+      const proportion = proportions[groupName];
       if (proportion !== undefined) {
         obj[currentObj.name] = Math.abs(proportion - seats) <= 0.99;
       }
@@ -379,6 +423,6 @@ export const exportForTesting = {
   calculateHareNiemeyer,
   calculateSainteLagueSchepers,
   calculateMethodValidity,
-  calculateProportionalSeats,
+  calculateProportions,
   extractCalculationGroups,
 };
