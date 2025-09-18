@@ -36,7 +36,7 @@
     "blob-polyfill": "9.0.20240710",
     "eslint": "9.35.0",
     "eslint-plugin-vue": "10.4.0",
-    "jsdom": "26.1.0",
+    "jsdom": "27.0.0",
     "prettier": "3.6.2",
     "typescript": "5.9.2",
     "unplugin-fonts": "1.4.0",
