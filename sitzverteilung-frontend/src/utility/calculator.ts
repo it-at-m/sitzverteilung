@@ -8,6 +8,13 @@ import type { CalculationValidation } from "@/types/calculation/internal/Calcula
 
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
+/**
+ * Wrapper method to calculate all data for a specific method.
+ *
+ * @param method the method to calculate
+ * @param calculationGroups calculation data
+ * @param committeeSize target committee size
+ */
 function calculateMethod(
   method: CalculationMethod,
   calculationGroups: CalculationGroup[],
@@ -43,6 +50,12 @@ function calculateMethod(
   return result;
 }
 
+/**
+ * D'Hondt calculation.
+ *
+ * @param calculationGroups calculation data
+ * @param committeeSize target committee size
+ */
 function calculateDHondt(
   calculationGroups: CalculationGroup[],
   committeeSize: number
@@ -63,6 +76,12 @@ function calculateDHondt(
   };
 }
 
+/**
+ * Sainte-Lague/Schepers calculation.
+ *
+ * @param calculationGroups calculation data
+ * @param committeeSize target committee size
+ */
 function calculateSainteLagueSchepers(
   calculationGroups: CalculationGroup[],
   committeeSize: number
@@ -83,7 +102,12 @@ function calculateSainteLagueSchepers(
   };
 }
 
-// Hare-Niemeyer calculation, seat order via D'Hondt
+/**
+ * Hare-Niemeyer calculation, seat order via D'Hondt.
+ *
+ * @param calculationGroups calculation data
+ * @param committeeSize target committee size
+ */
 function calculateHareNiemeyer(
   calculationGroups: CalculationGroup[],
   committeeSize: number
@@ -152,6 +176,13 @@ function calculateHareNiemeyer(
   };
 }
 
+/**
+ * Generous method to calculate divisor based methods (e.g. D'Hondt, Sainte/Lague).
+ *
+ * @param calculationGroups calculation data
+ * @param committeeSize size of the target committee
+ * @param divisorFn function that calculates the increasing divisors
+ */
 function calculateDivisorMethod(
   calculationGroups: CalculationGroup[],
   committeeSize: number,
@@ -203,6 +234,14 @@ function calculateDivisorMethod(
   };
 }
 
+/**
+ * Checks if a stale situation in the method calculation occured.
+ *
+ * @param sortedRatios all calculated ratios by the specific method
+ * @param topRatios only the kept ratios by the specific method
+ * @param seatDistribution calculated seat distribution
+ * @param seatOrder calculated seat order
+ */
 function handleStaleSituation(
   sortedRatios: CalculationGroupRatio[],
   topRatios: CalculationGroupRatio[],
@@ -254,6 +293,13 @@ function handleStaleSituation(
   return stale;
 }
 
+/**
+ * Checks whether the calculation of a method is valid.
+ * This is the case, when the difference between calculated seats and proportional seats is less than 1.
+ *
+ * @param calculationGroups calculation data (with proportions) used to calculate the specific method
+ * @param distribution seat distribution returned by the specific calculation method
+ */
 function calculateMethodValidity(
   calculationGroups: CalculationGroup[],
   distribution: CalculationSeatDistribution
@@ -262,8 +308,10 @@ function calculateMethodValidity(
     (obj: CalculationValidation, currentObj: CalculationGroup) => {
       const groupName = currentObj.name;
       const seats = distribution[groupName] ?? 0;
-      const proportion = currentObj.proportion ?? 0;
-      obj[currentObj.name] = Math.abs(proportion - seats) <= 0.99;
+      const proportion = currentObj.proportion;
+      if (proportion !== undefined) {
+        obj[currentObj.name] = Math.abs(proportion - seats) <= 0.99;
+      }
       return obj;
     },
     {}
@@ -274,4 +322,5 @@ export const exportForTesting = {
   calculateDHondt,
   calculateHareNiemeyer,
   calculateSainteLagueSchepers,
+  calculateMethodValidity,
 };
