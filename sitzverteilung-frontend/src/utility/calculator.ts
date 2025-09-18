@@ -1,3 +1,5 @@
+import type { BaseData } from "@/types/basedata/BaseData.ts";
+import type { GroupIndex } from "@/types/basedata/Union.ts";
 import type { CalculationGroup } from "@/types/calculation/internal/CalculationGroup.ts";
 import type { CalculationGroupRatio } from "@/types/calculation/internal/CalculationGroupRatio.ts";
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
@@ -7,6 +9,36 @@ import type { CalculationStale } from "@/types/calculation/internal/CalculationS
 import type { CalculationValidation } from "@/types/calculation/internal/CalculationValidation.ts";
 
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+
+/**
+ * Extracts CalculationGroups from BaseData relevant for further calculation
+ * @param baseData
+ */
+function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
+  const groupIndexesInUnion = new Set<GroupIndex>();
+  const unionCalculationGroups: CalculationGroup[] = baseData.unions.map(
+    (union) => {
+      return {
+        name: union.name,
+        seatsOrVotes: union.groups
+          .map((groupIndex) => {
+            groupIndexesInUnion.add(groupIndex);
+            return baseData.groups[groupIndex];
+          })
+          .reduce((sum, group) => sum + (group?.committeeSeats ?? 0), 0),
+      };
+    }
+  );
+  const singleCalculationGroups: CalculationGroup[] = baseData.groups
+    .filter((_, index) => !groupIndexesInUnion.has(index))
+    .map((singleGroup) => {
+      return {
+        name: singleGroup.name,
+        seatsOrVotes: singleGroup.committeeSeats,
+      } as CalculationGroup;
+    });
+  return [...singleCalculationGroups, ...unionCalculationGroups];
+}
 
 /**
  * Wrapper method to calculate all data for a specific method.
@@ -348,4 +380,5 @@ export const exportForTesting = {
   calculateSainteLagueSchepers,
   calculateMethodValidity,
   calculateProportionalSeats,
+  extractCalculationGroups,
 };
