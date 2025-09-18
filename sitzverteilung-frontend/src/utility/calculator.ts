@@ -117,7 +117,8 @@ function calculateMethod(
   result.validation = calculateMethodValidity(
     calculationGroups,
     proportions,
-    result.distribution
+    result.distribution,
+    result.stale
   );
 
   return result;
@@ -393,21 +394,25 @@ function calculateProportions(
 
 /**
  * Checks whether the calculation of a method is valid.
- * This is the case, when the difference between calculated seats and proportional seats is less than 1.
+ * This is the case, when the difference between distributed seats (plus pending seats by stale situations) and proportional seats is less than 1.
  *
  * @param calculationGroups calculation data used to calculate the specific method
  * @param proportions pre-calculated proportions for the calculation groups
  * @param distribution seat distribution returned by the specific calculation method
+ * @param stale optional stale to respect when calculating the over rounding
  */
 function calculateMethodValidity(
   calculationGroups: CalculationGroup[],
   proportions: CalculationProportions,
-  distribution: CalculationSeatDistribution
+  distribution: CalculationSeatDistribution,
+  stale?: CalculationStale
 ): CalculationValidation {
   return calculationGroups.reduce(
     (obj: CalculationValidation, currentObj: CalculationGroup) => {
       const groupName = currentObj.name;
-      const seats = distribution[groupName] ?? 0;
+      const distributedSeats = distribution[groupName] ?? 0;
+      const staleSeats = stale?.groupNames.includes(groupName) ? 1 : 0;
+      const seats = distributedSeats + staleSeats;
       const proportion = proportions[groupName];
       if (proportion !== undefined) {
         obj[currentObj.name] = Math.abs(proportion - seats) <= 0.99;
