@@ -294,6 +294,30 @@ function handleStaleSituation(
 }
 
 /**
+ * Calculates proportional seats for every calculation group.
+ *
+ * @param calculationGroups calculation data
+ * @param committeeSize size of the target committee
+ */
+function calculateProportionalSeats(
+  calculationGroups: CalculationGroup[],
+  committeeSize: number
+): CalculationGroup[] {
+  const totalSeatsOrVotes = calculationGroups.reduce(
+    (partialSum, calculationGroup) =>
+      partialSum + calculationGroup.seatsOrVotes,
+    0
+  );
+  const divisor = totalSeatsOrVotes / committeeSize;
+  return calculationGroups.map((calculationGroup) => {
+    return {
+      ...calculationGroup,
+      proportion: calculationGroup.seatsOrVotes / divisor,
+    };
+  });
+}
+
+/**
  * Checks whether the calculation of a method is valid.
  * This is the case, when the difference between calculated seats and proportional seats is less than 1.
  *
@@ -323,4 +347,5 @@ export const exportForTesting = {
   calculateHareNiemeyer,
   calculateSainteLagueSchepers,
   calculateMethodValidity,
+  calculateProportionalSeats,
 };

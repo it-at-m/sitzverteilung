@@ -28,7 +28,7 @@ describe("D'Hondt calculation test", () => {
       CalculationMethod.D_HONDT
     ).map(({ fileName, data }) => [fileName, data])
   )("%s", (fileName, data) => {
-    const result = getComparableResult(
+    const result = getComparableMethodResult(
       exportForTesting.calculateDHondt(
         data.given.groups,
         data.given.committeeSize
@@ -46,7 +46,7 @@ describe("Hare/Niemeyer calculation tests", () => {
       CalculationMethod.HARE_NIEMEYER
     ).map(({ fileName, data }) => [fileName, data])
   )("%s", (fileName, data) => {
-    const result = getComparableResult(
+    const result = getComparableMethodResult(
       exportForTesting.calculateHareNiemeyer(
         data.given.groups,
         data.given.committeeSize
@@ -64,7 +64,7 @@ describe("Sainte Lague calculation tests", () => {
       CalculationMethod.SAINTE_LAGUE_SCHEPERS
     ).map(({ fileName, data }) => [fileName, data])
   )("%s", (fileName, data) => {
-    const result = getComparableResult(
+    const result = getComparableMethodResult(
       exportForTesting.calculateSainteLagueSchepers(
         data.given.groups,
         data.given.committeeSize
@@ -135,7 +135,70 @@ describe("Method validity overrounding tests", () => {
   });
 });
 
-function getComparableResult(
+describe("Proportional seats calculation tests", () => {
+  test("totalSeatsOrVotes larger than committeeSize", () => {
+    const calculationGroups: CalculationGroup[] = [
+      {
+        name: "Test 1",
+        seatsOrVotes: 14,
+      },
+      {
+        name: "Test 2",
+        seatsOrVotes: 23,
+      },
+      {
+        name: "Test 3",
+        seatsOrVotes: 7,
+      },
+    ];
+    const committeeSize = 10;
+    const expected = [
+      3.1818181818181817, 5.227272727272727, 1.5909090909090908,
+    ];
+
+    const newCalculationGroups = exportForTesting.calculateProportionalSeats(
+      calculationGroups,
+      committeeSize
+    );
+    const proportions = newCalculationGroups.map(
+      (calculationGroups) => calculationGroups.proportion
+    );
+
+    expect(proportions).toEqual(expected);
+  });
+  test("totalSeatsOrVotes smaller than committeeSize", () => {
+    const calculationGroups: CalculationGroup[] = [
+      {
+        name: "Test 1",
+        seatsOrVotes: 14,
+      },
+      {
+        name: "Test 2",
+        seatsOrVotes: 23,
+      },
+      {
+        name: "Test 3",
+        seatsOrVotes: 7,
+      },
+    ];
+    const committeeSize = 100;
+    const expected = [
+      31.818181818181817, 52.27272727272727, 15.909090909090908,
+    ];
+
+    const newCalculationGroups = exportForTesting.calculateProportionalSeats(
+      calculationGroups,
+      committeeSize
+    );
+    const proportions = newCalculationGroups.map(
+      (calculationGroups) => calculationGroups.proportion
+    );
+
+    expect(proportions).toEqual(expected);
+  });
+});
+
+function getComparableMethodResult(
   result: CalculationMethodResult
 ): CalculationMethodResult {
   const order = result.order.map((order: CalculationGroupRatio) => {
