@@ -12,6 +12,7 @@ import { CalculationMethod } from "../../src/types/calculation/CalculationMethod
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { CalculationValidation } from "../../src/types/calculation/internal/CalculationValidation";
 import { exportForTesting } from "../../src/utility/calculator";
+import { getTestBaseDataWithoutUnion, getTestBaseDataWithUnion } from "../TestData";
 
 interface CalculationTestData {
   given: {
@@ -196,6 +197,48 @@ describe("Proportional seats calculation tests", () => {
 
     expect(proportions).toEqual(expected);
   });
+});
+
+describe("Extract calculation groups tests", () => {
+  test("Extract calculation groups no unions", () => {
+    const baseData = getTestBaseDataWithoutUnion();
+    const expected: CalculationGroup[] = [
+      {
+        name: "Testgroup 1",
+        seatsOrVotes: 10
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30
+      },
+    ];
+
+    const calculationGroups = exportForTesting.extractCalculationGroups(baseData);
+
+    expect(calculationGroups).toEqual(expected);
+  });
+
+  test("Extract calculation groups with unions", () => {
+    const baseData = getTestBaseDataWithUnion();
+    const expected: CalculationGroup[] = [
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30
+      },
+      {
+        name: "Example fraction union",
+        seatsOrVotes: 30
+      }
+    ];
+
+    const calculationGroups = exportForTesting.extractCalculationGroups(baseData);
+
+    expect(calculationGroups).toEqual(expected);
+  })
 });
 
 function getComparableMethodResult(
