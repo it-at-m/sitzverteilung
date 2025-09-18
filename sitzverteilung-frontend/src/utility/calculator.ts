@@ -20,7 +20,7 @@ import {
  *
  * @param baseData input data to use for calculation
  */
-function calculate(baseData: BaseData): CalculationResult {
+export function calculate(baseData: BaseData): CalculationResult {
   const committeeSize = baseData.targetSize;
   if (committeeSize === undefined) {
     throw new Error(
