@@ -134,6 +134,12 @@ function calculateDHondt(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
+  if (calculationGroups.length === 0) {
+    throw new Error("calculationGroups cannot be empty");
+  }
+  if (committeeSize <= 0) {
+    throw new Error("committeeSize must be positive");
+  }
   const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
     calculationGroups,
     committeeSize,
@@ -160,6 +166,12 @@ function calculateSainteLagueSchepers(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
+  if (calculationGroups.length === 0) {
+    throw new Error("calculationGroups cannot be empty");
+  }
+  if (committeeSize <= 0) {
+    throw new Error("committeeSize must be positive");
+  }
   const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
     calculationGroups,
     committeeSize,
@@ -186,6 +198,12 @@ function calculateHareNiemeyer(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
+  if (calculationGroups.length === 0) {
+    throw new Error("calculationGroups cannot be empty");
+  }
+  if (committeeSize <= 0) {
+    throw new Error("committeeSize must be positive");
+  }
   const seatDistribution: CalculationSeatDistribution = {};
 
   // Initialize distributions with 0 seats for every group
@@ -267,6 +285,12 @@ function calculateDivisorMethod(
   ratios: CalculationGroupRatio[];
   topRatios: CalculationGroupRatio[];
 } {
+  if (calculationGroups.length === 0) {
+    throw new Error("calculationGroups cannot be empty");
+  }
+  if (committeeSize <= 0) {
+    throw new Error("committeeSize must be positive");
+  }
   const seatDistribution: CalculationSeatDistribution = {};
   const seatOrder: CalculationSeatOrder = [];
 
@@ -377,11 +401,22 @@ function calculateProportions(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationProportions {
+  if (calculationGroups.length === 0) {
+    throw new Error("calculationGroups cannot be empty");
+  }
+  if (committeeSize <= 0) {
+    throw new Error("committeeSize must be positive");
+  }
   const totalSeatsOrVotes = calculationGroups.reduce(
     (partialSum, calculationGroup) =>
       partialSum + calculationGroup.seatsOrVotes,
     0
   );
+  if (totalSeatsOrVotes <= 0) {
+    throw new Error(
+      "totalSeatsOrVotes must be positive to compute proportions"
+    );
+  }
   const divisor = totalSeatsOrVotes / committeeSize;
   return calculationGroups.reduce(
     (obj: CalculationProportions, group: CalculationGroup) => {
