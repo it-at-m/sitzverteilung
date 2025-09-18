@@ -9,6 +9,8 @@ import type { CalculationMethodResult } from "../../src/types/calculation/intern
 import type { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
+import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
+import { CalculationValidation } from "../../src/types/calculation/internal/CalculationValidation";
 import { exportForTesting } from "../../src/utility/calculator";
 
 interface CalculationTestData {
@@ -70,6 +72,66 @@ describe("Sainte Lague calculation tests", () => {
     );
 
     expect(result).toEqual(data.expected);
+  });
+});
+
+describe("Method validity overrounding tests", () => {
+  test("Test method validation", () => {
+    // given
+    const calculationGroups: CalculationGroup[] = [
+      {
+        name: "Test 1",
+        proportion: 3.56,
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Test 2",
+        proportion: 3.56,
+        seatsOrVotes: 0,
+      },
+    ];
+    const distribution: CalculationSeatDistribution = {
+      "Test 1": 4,
+      "Test 2": 5,
+    };
+    const expected: CalculationValidation = {
+      "Test 1": true,
+      "Test 2": false,
+    };
+
+    const validation = exportForTesting.calculateMethodValidity(
+      calculationGroups,
+      distribution
+    );
+
+    expect(validation).toEqual(expected);
+  });
+
+  test("Test method validation with undefined proportions", () => {
+    const calculationGroups: CalculationGroup[] = [
+      {
+        name: "Test 1",
+        proportion: undefined,
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Test 2",
+        proportion: undefined,
+        seatsOrVotes: 0,
+      },
+    ];
+    const distribution: CalculationSeatDistribution = {
+      "Test 1": 4,
+      "Test 2": 5,
+    };
+    const expected: CalculationValidation = {};
+
+    const validation = exportForTesting.calculateMethodValidity(
+      calculationGroups,
+      distribution
+    );
+
+    expect(validation).toEqual(expected);
   });
 });
 
