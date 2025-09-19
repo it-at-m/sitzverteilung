@@ -81,7 +81,17 @@ function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
         seatsOrVotes: singleGroup.seatsOrVotes,
       } as CalculationGroup;
     });
-  return [...singleCalculationGroups, ...unionCalculationGroups];
+  const calculationGroups = [
+    ...singleCalculationGroups,
+    ...unionCalculationGroups,
+  ];
+  const names = new Set(calculationGroups.map((g) => g.name));
+  if (names.size !== calculationGroups.length) {
+    throw new Error(
+      "Calculation group names must be unique across singles and unions."
+    );
+  }
+  return calculationGroups;
 }
 
 /**
