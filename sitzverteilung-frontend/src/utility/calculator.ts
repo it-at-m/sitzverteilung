@@ -21,14 +21,15 @@ import {
  * @param baseData input data to use for calculation
  */
 export function calculate(baseData: BaseData): CalculationResult {
-  const committeeSize = baseData.targetSize;
-  if (committeeSize === undefined) {
-    throw new Error(
-      "Cannot execute calculation because target size is missing."
-    );
+  const targetCommitteeSize = baseData.targetSize;
+  if (targetCommitteeSize === undefined || targetCommitteeSize <= 0) {
+    throw new Error("Invalid or missing target size. Must be positive.");
   }
   const calculationGroups = extractCalculationGroups(baseData);
-  const proportions = calculateProportions(calculationGroups, committeeSize);
+  const proportions = calculateProportions(
+    calculationGroups,
+    targetCommitteeSize
+  );
 
   const methods: Partial<Record<CalculationMethod, CalculationMethodResult>> =
     {};
@@ -37,7 +38,7 @@ export function calculate(baseData: BaseData): CalculationResult {
       method,
       calculationGroups,
       proportions,
-      committeeSize
+      targetCommitteeSize
     );
   });
 
@@ -60,6 +61,11 @@ function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
         name: union.name,
         seatsOrVotes: union.groups
           .map((groupIndex) => {
+            if (groupIndex < 0 || groupIndex >= baseData.groups.length) {
+              throw new Error(
+                `Union "${union.name}" references invalid group index ${groupIndex}.`
+              );
+            }
             groupIndexesInUnion.add(groupIndex);
             return baseData.groups[groupIndex];
           })
@@ -112,6 +118,8 @@ function calculateMethod(
     case CalculationMethod.HARE_NIEMEYER:
       result = calculateHareNiemeyer(calculationGroups, committeeSize);
       break;
+    default:
+      throw new Error("CalculationMethod not implemented yet.");
   }
 
   result.validation = calculateMethodValidity(

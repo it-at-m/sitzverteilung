@@ -50,6 +50,11 @@ export function getTestBaseDataWithUnion(): BaseData {
         unionType: UnionType.FRACTION,
         groups: [0, 1],
       },
+      {
+        name: "Example committee union",
+        unionType: UnionType.COMMITTEE,
+        groups: [0, 1],
+      },
     ],
   };
 }

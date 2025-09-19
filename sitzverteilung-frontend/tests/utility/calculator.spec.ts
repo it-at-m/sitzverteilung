@@ -603,6 +603,10 @@ describe("Extract calculation groups tests", () => {
         name: "Example fraction union",
         seatsOrVotes: 30,
       },
+      {
+        name: "Example committee union",
+        seatsOrVotes: 30,
+      },
     ];
 
     const calculationGroups =
