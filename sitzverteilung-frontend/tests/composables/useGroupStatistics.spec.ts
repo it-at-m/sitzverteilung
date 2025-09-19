@@ -3,17 +3,17 @@ import { ref } from "vue";
 
 import { useGroupStatistics } from "../../src/composables/useGroupStatistics";
 import {
-  getTestBaseData,
   getTestBaseDataEmptyGroups,
   getTestBaseDataNotEnoughSeats,
   getTestBaseDataTooManyGroups,
   getTestBaseDataTooManySeats,
   getTestBaseDataUndefinedVoteMode,
+  getTestBaseDataWithUnion,
 } from "../TestData";
 
 describe("useGroupStatistics composable", () => {
   test("correctly calculates statistics", () => {
-    const testBaseData = getTestBaseData();
+    const testBaseData = getTestBaseDataWithUnion();
     const groups = ref(testBaseData.groups);
     const expectedSeats = ref(testBaseData.committeeSize);
     const limitGroups = ref(10);
@@ -29,7 +29,7 @@ describe("useGroupStatistics composable", () => {
   });
 
   test.each([
-    [getTestBaseData(), false, false, false],
+    [getTestBaseDataWithUnion(), false, false, false],
     [getTestBaseDataEmptyGroups(), false, false, false],
     [getTestBaseDataTooManyGroups(), true, false, false],
     [getTestBaseDataTooManySeats(), false, true, false],
