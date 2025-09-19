@@ -101,11 +101,11 @@ function calculateMethod(
   if (calculationGroups.length === 0) {
     throw new Error("calculationGroups cannot be empty");
   }
-  if (committeeSize <= 0) {
-    throw new Error("committeeSize must be positive");
-  }
   if (calculationGroups.some((group) => group.seatsOrVotes <= 0)) {
     throw new Error("All groups must have positive seatsOrVotes");
+  }
+  if (committeeSize <= 0) {
+    throw new Error("committeeSize must be positive");
   }
   let result: CalculationMethodResult;
   switch (method) {
@@ -142,12 +142,6 @@ function calculateDHondt(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
-  if (calculationGroups.length === 0) {
-    throw new Error("calculationGroups cannot be empty");
-  }
-  if (committeeSize <= 0) {
-    throw new Error("committeeSize must be positive");
-  }
   const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
     calculationGroups,
     committeeSize,
@@ -174,12 +168,6 @@ function calculateSainteLagueSchepers(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
-  if (calculationGroups.length === 0) {
-    throw new Error("calculationGroups cannot be empty");
-  }
-  if (committeeSize <= 0) {
-    throw new Error("committeeSize must be positive");
-  }
   const { distribution, order, ratios, topRatios } = calculateDivisorMethod(
     calculationGroups,
     committeeSize,
@@ -206,12 +194,6 @@ function calculateHareNiemeyer(
   calculationGroups: CalculationGroup[],
   committeeSize: number
 ): CalculationMethodResult {
-  if (calculationGroups.length === 0) {
-    throw new Error("calculationGroups cannot be empty");
-  }
-  if (committeeSize <= 0) {
-    throw new Error("committeeSize must be positive");
-  }
   const seatDistribution: CalculationSeatDistribution = {};
 
   // Initialize distributions with 0 seats for every group
@@ -296,12 +278,6 @@ function calculateDivisorMethod(
   ratios: CalculationGroupRatio[];
   topRatios: CalculationGroupRatio[];
 } {
-  if (calculationGroups.length === 0) {
-    throw new Error("calculationGroups cannot be empty");
-  }
-  if (committeeSize <= 0) {
-    throw new Error("committeeSize must be positive");
-  }
   const seatDistribution: CalculationSeatDistribution = {};
   const seatOrder: CalculationSeatOrder = [];
 
