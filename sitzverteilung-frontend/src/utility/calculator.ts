@@ -222,6 +222,9 @@ function calculateHareNiemeyer(
     (sum, group) => sum + group.seatsOrVotes,
     0
   );
+  if (totalSeatsOrVotes <= 0) {
+    throw new Error("totalSeatsOrVotes must be positive.");
+  }
   const remainders: CalculationGroupRatio[] = [];
   calculationGroups.forEach((group) => {
     const exactQuota = (group.seatsOrVotes * committeeSize) / totalSeatsOrVotes;
