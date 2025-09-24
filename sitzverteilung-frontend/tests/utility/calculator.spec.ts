@@ -42,11 +42,11 @@ describe("Full calculation tests", () => {
         },
         {
           name: "Group 2",
-          seatsOrVotes: 16,
+          seatsOrVotes: 8,
         },
         {
           name: "Group 3",
-          seatsOrVotes: 10,
+          seatsOrVotes: 8,
         },
         {
           name: "Group 4",
@@ -54,11 +54,11 @@ describe("Full calculation tests", () => {
         },
         {
           name: "Group 5",
-          seatsOrVotes: 3,
+          seatsOrVotes: 10,
         },
         {
           name: "Group 6",
-          seatsOrVotes: 2,
+          seatsOrVotes: 3,
         },
         {
           name: "Group 7",
@@ -78,18 +78,17 @@ describe("Full calculation tests", () => {
         },
         {
           name: "Group 11",
+          seatsOrVotes: 2,
+        },
+        {
+          name: "Group 12",
           seatsOrVotes: 1,
         },
       ],
       unions: [
         {
           name: "Union 1",
-          groups: [5, 7],
-          unionType: UnionType.COMMITTEE,
-        },
-        {
-          name: "Union 2",
-          groups: [6, 8, 10],
+          groups: [1, 2],
           unionType: UnionType.COMMITTEE,
         },
       ],
@@ -97,25 +96,31 @@ describe("Full calculation tests", () => {
     const expected: CalculationResult = {
       proportions: {
         "Group 1": 3.714285714285714,
-        "Group 2": 2.971428571428571,
-        "Group 3": 1.857142857142857,
         "Group 4": 1.857142857142857,
-        "Group 5": 0.557142857142857,
+        "Group 5": 1.857142857142857,
+        "Group 6": 0.557142857142857,
+        "Group 7": 0.3714285714285714,
+        "Group 8": 0.3714285714285714,
+        "Group 9": 0.3714285714285714,
         "Group 10": 0.3714285714285714,
-        "Union 1": 0.7428571428571428,
-        "Union 2": 0.9285714285714285,
+        "Group 11": 0.3714285714285714,
+        "Group 12": 0.1857142857142857,
+        "Union 1": 2.971428571428571,
       },
       methods: {
         [CalculationMethod.D_HONDT]: {
           distribution: {
-            "Group 1": 4,
-            "Group 2": 3,
-            "Group 3": 2,
+            "Group 1": 5,
             "Group 4": 2,
-            "Group 5": 0,
+            "Group 5": 2,
+            "Group 6": 0,
+            "Group 7": 0,
+            "Group 8": 0,
+            "Group 9": 0,
             "Group 10": 0,
-            "Union 1": 0,
-            "Union 2": 1,
+            "Group 11": 0,
+            "Group 12": 0,
+            "Union 1": 4,
           },
           order: [
             {
@@ -123,7 +128,7 @@ describe("Full calculation tests", () => {
               value: 20,
             },
             {
-              groupName: "Group 2",
+              groupName: "Union 1",
               value: 16,
             },
             {
@@ -131,15 +136,15 @@ describe("Full calculation tests", () => {
               value: 10,
             },
             {
-              groupName: "Group 3",
-              value: 10,
-            },
-            {
               groupName: "Group 4",
               value: 10,
             },
             {
-              groupName: "Group 2",
+              groupName: "Group 5",
+              value: 10,
+            },
+            {
+              groupName: "Union 1",
               value: 8,
             },
             {
@@ -147,7 +152,7 @@ describe("Full calculation tests", () => {
               value: 6.666666666666667,
             },
             {
-              groupName: "Group 2",
+              groupName: "Union 1",
               value: 5.333333333333333,
             },
             {
@@ -155,44 +160,49 @@ describe("Full calculation tests", () => {
               value: 5,
             },
             {
-              groupName: "Group 3",
-              value: 5,
-            },
-            {
               groupName: "Group 4",
               value: 5,
             },
             {
-              groupName: "Union 2",
+              groupName: "Group 5",
               value: 5,
             },
+            {
+              groupName: "Group 1",
+              value: 4,
+            },
+            {
+              groupName: "Union 1",
+              value: 4,
+            },
           ],
-          stale: {
-            amountSeats: 1,
-            groupNames: ["Group 1", "Group 2", "Union 1"],
-            ratio: 4,
-          },
           validation: {
             "Group 1": false,
-            "Group 2": false,
-            "Group 3": true,
             "Group 4": true,
             "Group 5": true,
+            "Group 6": true,
+            "Group 7": true,
+            "Group 8": true,
+            "Group 9": true,
             "Group 10": true,
-            "Union 1": true,
-            "Union 2": true,
+            "Group 11": true,
+            "Group 12": true,
+            "Union 1": false,
           },
         } as CalculationMethodResult,
         [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
           distribution: {
-            "Group 1": 3,
-            "Group 2": 3,
-            "Group 3": 2,
+            "Group 1": 4,
             "Group 4": 2,
-            "Group 5": 1,
+            "Group 5": 2,
+            "Group 6": 1,
+            "Group 7": 0,
+            "Group 8": 0,
+            "Group 9": 0,
             "Group 10": 0,
-            "Union 1": 1,
-            "Union 2": 1,
+            "Group 11": 0,
+            "Group 12": 0,
+            "Union 1": 4,
           },
           order: [
             {
@@ -200,15 +210,15 @@ describe("Full calculation tests", () => {
               value: 20,
             },
             {
-              groupName: "Group 2",
+              groupName: "Union 1",
               value: 16,
             },
             {
-              groupName: "Group 3",
+              groupName: "Group 4",
               value: 10,
             },
             {
-              groupName: "Group 4",
+              groupName: "Group 5",
               value: 10,
             },
             {
@@ -216,59 +226,65 @@ describe("Full calculation tests", () => {
               value: 6.666666666666667,
             },
             {
-              groupName: "Group 2",
+              groupName: "Union 1",
               value: 5.333333333333333,
             },
             {
-              groupName: "Union 2",
-              value: 5.0,
-            },
-            {
               groupName: "Group 1",
-              value: 4.0,
-            },
-            {
-              groupName: "Union 1",
-              value: 4.0,
-            },
-            {
-              groupName: "Group 3",
-              value: 3.3333333333333335,
+              value: 4,
             },
             {
               groupName: "Group 4",
               value: 3.3333333333333335,
             },
             {
-              groupName: "Group 2",
+              groupName: "Group 5",
+              value: 3.3333333333333335,
+            },
+            {
+              groupName: "Union 1",
               value: 3.2,
             },
             {
-              groupName: "Group 5",
-              value: 3.0,
+              groupName: "Group 6",
+              value: 3,
+            },
+            {
+              groupName: "Group 1",
+              value: 2.857142857142857,
+            },
+            {
+              groupName: "Union 1",
+              value: 2.2857142857142856,
             },
           ],
           validation: {
             "Group 1": true,
-            "Group 2": true, // TODO FIX should actually be false
-            "Group 3": true,
             "Group 4": true,
             "Group 5": true,
+            "Group 6": true,
+            "Group 7": true,
+            "Group 8": true,
+            "Group 9": true,
             "Group 10": true,
-            "Union 1": true,
-            "Union 2": true,
+            "Group 11": true,
+            "Group 12": true,
+            "Union 1": false,
           },
         } as CalculationMethodResult,
         [CalculationMethod.HARE_NIEMEYER]: {
           distribution: {
             "Group 1": 4,
-            "Group 2": 3,
-            "Group 3": 2,
             "Group 4": 2,
-            "Group 5": 0,
+            "Group 5": 2,
+            "Group 6": 1,
+            "Group 7": 0,
+            "Group 8": 0,
+            "Group 9": 0,
             "Group 10": 0,
-            "Union 1": 1,
-            "Union 2": 1,
+            "Group 11": 0,
+            "Group 12": 0,
+            "Union 1": 3,
           },
           order: [
             {
@@ -276,7 +292,7 @@ describe("Full calculation tests", () => {
               value: 4,
             },
             {
-              groupName: "Group 2",
+              groupName: "Union 1",
               value: 3,
             },
             {
@@ -284,15 +300,15 @@ describe("Full calculation tests", () => {
               value: 2,
             },
             {
-              groupName: "Group 3",
-              value: 2,
-            },
-            {
               groupName: "Group 4",
               value: 2,
             },
             {
-              groupName: "Group 2",
+              groupName: "Group 5",
+              value: 2,
+            },
+            {
+              groupName: "Union 1",
               value: 1.5,
             },
             {
@@ -304,35 +320,45 @@ describe("Full calculation tests", () => {
               value: 1.0,
             },
             {
-              groupName: "Group 2",
-              value: 1.0,
-            },
-            {
-              groupName: "Group 3",
-              value: 1.0,
-            },
-            {
               groupName: "Group 4",
+              value: 1.0,
+            },
+            {
+              groupName: "Group 5",
+              value: 1.0,
+            },
+            {
+              groupName: "Group 6",
               value: 1.0,
             },
             {
               groupName: "Union 1",
               value: 1.0,
             },
-            {
-              groupName: "Union 2",
-              value: 1.0,
-            },
           ],
+          stale: {
+            amountSeats: 1,
+            groupNames: [
+              "Group 7",
+              "Group 8",
+              "Group 9",
+              "Group 10",
+              "Group 11",
+            ],
+            ratio: 0.37142857142857144,
+          },
           validation: {
             "Group 1": true,
-            "Group 2": true,
-            "Group 3": true,
             "Group 4": true,
             "Group 5": true,
+            "Group 6": true,
+            "Group 7": true,
+            "Group 8": true,
+            "Group 9": true,
             "Group 10": true,
+            "Group 11": true,
+            "Group 12": true,
             "Union 1": true,
-            "Union 2": true,
           },
         } as CalculationMethodResult,
       },
@@ -350,7 +376,7 @@ describe("D'Hondt calculation test", () => {
       join(__dirname, "../data/dHondt"),
       CalculationMethod.D_HONDT
     ).map(({ fileName, data }) => [fileName, data])
-  )("%s", (fileName, data) => {
+  )("%s", (_, data) => {
     const result = getComparableMethodResult(
       exportForTesting.calculateDHondt(
         data.given.groups,
@@ -368,7 +394,7 @@ describe("Hare/Niemeyer calculation tests", () => {
       join(__dirname, "../data/hareNiemeyer"),
       CalculationMethod.HARE_NIEMEYER
     ).map(({ fileName, data }) => [fileName, data])
-  )("%s", (fileName, data) => {
+  )("%s", (_, data) => {
     const result = getComparableMethodResult(
       exportForTesting.calculateHareNiemeyer(
         data.given.groups,
@@ -386,7 +412,7 @@ describe("Sainte Lague calculation tests", () => {
       join(__dirname, "../data/sainteLague"),
       CalculationMethod.SAINTE_LAGUE_SCHEPERS
     ).map(({ fileName, data }) => [fileName, data])
-  )("%s", (fileName, data) => {
+  )("%s", (_, data) => {
     const result = getComparableMethodResult(
       exportForTesting.calculateSainteLagueSchepers(
         data.given.groups,
