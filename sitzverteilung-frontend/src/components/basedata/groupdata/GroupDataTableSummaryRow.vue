@@ -27,7 +27,7 @@
         >
       </p>
     </td>
-    <td/>
+    <td />
   </tr>
 </template>
 
