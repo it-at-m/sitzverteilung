@@ -222,5 +222,6 @@ function goToDetail(
   detailTitle.value = selectedCalculationMethod;
   dialog.value = true;
 }
+
 </script>
 
