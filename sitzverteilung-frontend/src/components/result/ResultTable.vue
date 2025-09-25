@@ -12,49 +12,44 @@
         <v-btn
           variant="text"
           @click="dialog = false"
-          >Schließen</v-btn
-        >
+          text="Schließen"
+        />
       </v-card-actions>
     </v-card>
   </v-dialog>
   <v-toolbar flat>
     <v-toolbar-title>Detailansicht zu:</v-toolbar-title>
     <v-btn
+      v-for="method in AVAILABLE_METHODS"
+      :key="method"
       variant="outlined"
       class="mx-2"
-      @click="goToDetail('Hare/Niemeyer')"
-      >Hare/Niemeyer</v-btn
-    >
-    <v-btn
-      variant="outlined"
-      class="mx-2"
-      @click="goToDetail('Sainte-Laguë/Schepers')"
-      >Sainte-Laguë/Schepers</v-btn
-    >
-    <v-btn
-      variant="outlined"
-      class="mx-2"
-      @click="goToDetail(`D'Hondt`)"
-      >D'Hondt</v-btn
-    >
+      @click="goToDetail(method)"
+      :text="method"
+    />
   </v-toolbar>
   <v-data-table
     :headers="headers"
     :items="results"
     hide-default-footer
+    no-filter
+    disable-sort
     density="compact"
     no-data-text="Keine Berechnungsdaten vorhanden."
     :items-per-page="-1"
-  >
-  </v-data-table>
+  />
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 
+import {
+  AVAILABLE_METHODS,
+  CALCULATION_METHOD_SHORT_FORMS,
+} from "@/types/calculation/CalculationMethod.ts";
+
 const headers = [
   {
     title: "Zusammensetzung",
-    width: 250,
     children: [
       {
         title: "Name",
@@ -66,107 +61,58 @@ const headers = [
         key: "seatsOrVotes",
         width: 50,
       },
+      {
+        title: "Proporz",
+        key: "proportion",
+        width: 50,
+      },
     ],
   },
   {
     title: "Zulässigkeit",
-    width: 250,
-    children: [
-      {
-        title: "Proporz",
-        key: "committee",
-        width: 50,
-      },
-      {
-        title: "Quotenkriterium",
-        key: "quota",
-        width: 50,
-      },
-      {
-        title: "H/N",
-        key: "hN",
-        width: 50,
-      },
-      {
-        title: "SL/S",
-        key: "sls",
-        width: 50,
-      },
-      {
-        title: "d/H",
-        key: "dH",
-        width: 50,
-      },
-    ],
+    children: getValidationColumns(),
   },
   {
     title: "Ergebnisse",
-    width: 250,
-    children: [
-      {
-        title: "Hare/Niemeyer",
-        key: "hareNiemeyer",
-        width: 200,
-        children: [
-          {
-            title: "Sitze",
-            key: "hareSeats",
-            width: 50,
-          },
-          {
-            title: "Patt",
-            key: "harePatt",
-            width: 50,
-          },
-        ],
-      },
-      {
-        title: "Sainte-Laguë/Schepers",
-        key: "sainteLague",
-        width: 50,
-        children: [
-          {
-            title: "Sitze",
-            key: "sainteSeats",
-            width: 50,
-          },
-          {
-            title: "Patt",
-            key: "saintePatt",
-            width: 50,
-          },
-        ],
-      },
-      {
-        title: "D'Hondt",
-        key: "dHondt",
-        width: 50,
-        children: [
-          {
-            title: "Sitze",
-            key: "dHSeats",
-            width: 50,
-          },
-          {
-            title: "Patt",
-            key: "dHPatt",
-            width: 50,
-          },
-        ],
-      },
-    ],
+    children: getResultColumns(),
   },
   {
     title: "Dokumentation",
-    width: 50,
-    children: [
-      {
-        key: "documentation",
-        width: 200,
-      },
-    ],
+    width: 200,
+    key: "documentation",
   },
 ];
+
+function getResultColumns() {
+  return AVAILABLE_METHODS.map((method) => {
+    return {
+      title: method,
+      key: method,
+      children: [
+        {
+          title: "Sitze",
+          key: "seats",
+          width: 50,
+        },
+        {
+          title: "Patt",
+          key: "stale",
+          width: 50,
+        },
+      ],
+    };
+  });
+}
+
+function getValidationColumns() {
+  return AVAILABLE_METHODS.map((method) => {
+    return {
+      title: CALCULATION_METHOD_SHORT_FORMS[method],
+      key: method,
+      width: 50,
+    };
+  });
+}
 
 const results = ref<unknown[]>([]);
 const dialog = ref(false);
