@@ -69,7 +69,7 @@ import { UnionType } from "@/types/basedata/Union.ts";
 
 const headers = computed(() => [
   {
-    title: `Name (max. ${props.limitName} Zeichen)`,
+    title: "Name",
     key: "name",
     width: 200,
   },
