@@ -159,8 +159,8 @@
               basedataNameIsNotChanged
             "
             @click="createBaseData"
-            >Anlegen
-          </v-btn>
+            text="Anlegen"
+          />
           <v-btn
             variant="flat"
             color="green"
@@ -169,8 +169,8 @@
             :prepend-icon="mdiContentSaveEdit"
             :disabled="!isBaseDataSelected || !isValid || !dirty"
             @click="updateBaseData"
-            >Ändern
-          </v-btn>
+            text="Ändern"
+          />
           <v-btn
             variant="flat"
             color="red"
@@ -179,9 +179,8 @@
             :prepend-icon="mdiDelete"
             :disabled="!isBaseDataSelected"
             @click="showDeleteConfirmation"
-          >
-            Löschen
-          </v-btn>
+            text="Löschen"
+          />
           <v-btn
             variant="flat"
             color="blue"
@@ -190,9 +189,8 @@
             :prepend-icon="mdiShare"
             :disabled="!isBaseDataSelected || dirty"
             @click="share"
-          >
-            Teilen
-          </v-btn>
+            text="Teilen"
+          />
         </v-col>
       </v-row>
     </v-toolbar>

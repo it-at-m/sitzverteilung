@@ -45,6 +45,7 @@ import { ref } from "vue";
 import {
   AVAILABLE_METHODS,
   CALCULATION_METHOD_SHORT_FORMS,
+  CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
 
 const headers = [
@@ -86,7 +87,7 @@ const headers = [
 function getResultColumns() {
   return AVAILABLE_METHODS.map((method) => {
     return {
-      title: method,
+      title: CALCULATION_METHOD_SHORT_FORMS[method],
       key: method,
       children: [
         {
@@ -109,7 +110,7 @@ function getValidationColumns() {
     return {
       title: CALCULATION_METHOD_SHORT_FORMS[method],
       key: `${method}-validation`,
-      width: 50,
+      width: 60,
     };
   });
 }
@@ -121,12 +122,7 @@ const detailTitle = ref("");
 // Placeholder for future content, currently unused
 const detailInfo = ref<string>("");
 
-function goToDetail(
-  selectedCalculationMethod:
-    | "Hare/Niemeyer"
-    | "Sainte-Laguë/Schepers"
-    | "D'Hondt"
-) {
+function goToDetail(selectedCalculationMethod: CalculationMethod) {
   detailTitle.value = selectedCalculationMethod;
   dialog.value = true;
 }

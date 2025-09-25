@@ -11,9 +11,8 @@
       color="primary"
       variant="text"
       @click="hide"
-    >
-      Schließen
-    </v-btn>
+      text="Schließen"
+    />
   </v-snackbar>
 </template>
 
