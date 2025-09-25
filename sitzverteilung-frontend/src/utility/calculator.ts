@@ -262,12 +262,8 @@ function calculateHareNiemeyer(
       seatsOrVotes: value,
     };
   });
-  const { order: dHondtOrder } = calculateDHondt(
-    dHondtCalculationGroups,
-    committeeSize
-  );
   const seatsInOrder = committeeSize - (stale?.amountSeats ?? 0);
-  const order = dHondtOrder.slice(0, seatsInOrder);
+  const { order } = calculateDHondt(dHondtCalculationGroups, seatsInOrder);
 
   return {
     distribution: seatDistribution,
