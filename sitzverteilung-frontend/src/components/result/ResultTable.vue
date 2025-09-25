@@ -53,102 +53,102 @@ import { ref } from "vue";
 
 const headers = [
   {
-    title: `Zusammensetzung`,
+    title: "Zusammensetzung",
     width: 250,
     children: [
       {
-        title: `Partei/Wählergruppe`,
+        title: "Name",
         key: "name",
         width: 200,
       },
       {
-        title: `Sitze`,
+        title: "Sitze",
         key: "seatsOrVotes",
         width: 50,
       },
     ],
   },
   {
-    title: `Zulässigkeit des Verfahrens`,
+    title: "Zulässigkeit",
     width: 250,
     children: [
       {
-        title: `Proporzgenaue Zahl Ausschuss`,
+        title: "Proporz",
         key: "committee",
         width: 50,
       },
       {
-        title: `Quotenkriterium`,
+        title: "Quotenkriterium",
         key: "quota",
         width: 50,
       },
       {
-        title: `H/N`,
+        title: "H/N",
         key: "hN",
         width: 50,
       },
       {
-        title: `SL/S`,
+        title: "SL/S",
         key: "sls",
         width: 50,
       },
       {
-        title: `d/H`,
+        title: "d/H",
         key: "dH",
         width: 50,
       },
     ],
   },
   {
-    title: `Ergebnisse`,
+    title: "Ergebnisse",
     width: 250,
     children: [
       {
-        title: `Hare/Niemeyer`,
+        title: "Hare/Niemeyer",
         key: "hareNiemeyer",
         width: 200,
         children: [
           {
-            title: `Sitze`,
+            title: "Sitze",
             key: "hareSeats",
             width: 50,
           },
           {
-            title: `Patt`,
+            title: "Patt",
             key: "harePatt",
             width: 50,
           },
         ],
       },
       {
-        title: `Sainte-Laguë/Schepers`,
+        title: "Sainte-Laguë/Schepers",
         key: "sainteLague",
         width: 50,
         children: [
           {
-            title: `Sitze`,
+            title: "Sitze",
             key: "sainteSeats",
             width: 50,
           },
           {
-            title: `Patt`,
+            title: "Patt",
             key: "saintePatt",
             width: 50,
           },
         ],
       },
       {
-        title: `D'Hondt`,
+        title: "D'Hondt",
         key: "dHondt",
         width: 50,
         children: [
           {
-            title: `Sitze`,
+            title: "Sitze",
             key: "dHSeats",
             width: 50,
           },
           {
-            title: `Patt`,
+            title: "Patt",
             key: "dHPatt",
             width: 50,
           },
@@ -157,11 +157,10 @@ const headers = [
     ],
   },
   {
-    title: `Pattauflösung/Dokumentation`,
+    title: "Dokumentation",
     width: 50,
     children: [
       {
-        title: ``,
         key: "documentation",
         width: 200,
       },

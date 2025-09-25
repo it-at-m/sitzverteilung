@@ -14,7 +14,7 @@
           ]"
           hide-details="auto"
           validate-on="input"
-          :label="`Name (max. ${limitName} Zeichen)`"
+          label="Name"
           :prepend-inner-icon="mdiLabel"
           glow
         />
@@ -27,7 +27,7 @@
           validate-on="input"
           :error-messages="seatFieldValidationError"
           :min="1"
-          :label="`Größe des Hauptorgans (max. ${limitCommitteeSize})`"
+          label="Größe des Hauptorgans"
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />
@@ -40,7 +40,7 @@
           :max="limitCommitteeSize"
           hide-details="auto"
           validate-on="input"
-          :label="`Ausschussgröße (max. ${limitCommitteeSize})`"
+          label="Ausschussgröße"
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />

@@ -168,11 +168,10 @@ import GroupDataTableAddRow from "@/components/basedata/groupdata/GroupDataTable
 import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
 import { UnionType } from "@/types/basedata/Union.ts";
-import { numberFormatter } from "@/utility/numberFormatter.ts";
 
 const headers = computed(() => [
   {
-    title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
+    title: "Name",
     key: "name",
     width: 400,
   },
@@ -207,13 +206,9 @@ const committeeGroups = computed(() => getUnionGroups(props.committees));
 const unionGroups = computed(() =>
   getUnionGroups([...props.fractions, ...props.committees])
 );
-const displaySeatsOrVotesAsHeader = computed(() => {
-  if (props.expectedSeats > 0) {
-    return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
-  } else {
-    return `Anzahl der Stimmen (max. ${numberFormatter(props.limitVotes)})`;
-  }
-});
+const displaySeatsOrVotesAsHeader = computed(() =>
+  props.expectedSeats > 0 ? "Sitze" : "Stimmen"
+);
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
