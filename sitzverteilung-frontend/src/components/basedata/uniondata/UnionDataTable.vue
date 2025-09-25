@@ -69,7 +69,7 @@ import { UnionType } from "@/types/basedata/Union.ts";
 
 const headers = computed(() => [
   {
-    title: `${nameHeaderTitle.value} (max. ${props.limitName} Zeichen)`,
+    title: `Name (max. ${props.limitName} Zeichen)`,
     key: "name",
     width: 200,
   },
@@ -80,11 +80,6 @@ const headers = computed(() => [
   },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ]);
-const nameHeaderTitle = computed(() =>
-  props.unionType == UnionType.FRACTION
-    ? "Name der Fraktionsgemeinschaft"
-    : "Name der Ausschussgemeinschaft"
-);
 const dataTableTitle = computed(() =>
   props.unionType == UnionType.FRACTION
     ? "Fraktionsgemeinschaften"

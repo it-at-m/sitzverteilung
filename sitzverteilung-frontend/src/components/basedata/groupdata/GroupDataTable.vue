@@ -172,7 +172,7 @@ import { numberFormatter } from "@/utility/numberFormatter.ts";
 
 const headers = computed(() => [
   {
-    title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
+    title: `Name (max. ${numberFormatter(props.limitName)} Zeichen)`,
     key: "name",
     width: 400,
   },
@@ -209,9 +209,9 @@ const unionGroups = computed(() =>
 );
 const displaySeatsOrVotesAsHeader = computed(() => {
   if (props.expectedSeats > 0) {
-    return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
+    return `Sitze (max. ${numberFormatter(props.expectedSeats)})`;
   } else {
-    return `Anzahl der Stimmen (max. ${numberFormatter(props.limitVotes)})`;
+    return `Stimmen (max. ${numberFormatter(props.limitVotes)})`;
   }
 });
 
