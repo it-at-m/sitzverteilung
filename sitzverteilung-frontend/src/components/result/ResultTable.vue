@@ -91,12 +91,12 @@ function getResultColumns() {
       children: [
         {
           title: "Sitze",
-          key: "seats",
+          key: `${method}-seats`,
           width: 50,
         },
         {
           title: "Patt",
-          key: "stale",
+          key: `${method}-stale`,
           width: 50,
         },
       ],
@@ -108,7 +108,7 @@ function getValidationColumns() {
   return AVAILABLE_METHODS.map((method) => {
     return {
       title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: method,
+      key: `${method}-validation`,
       width: 50,
     };
   });
