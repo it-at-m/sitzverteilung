@@ -27,6 +27,7 @@
         >
       </p>
     </td>
+    <td />
   </tr>
 </template>
 
