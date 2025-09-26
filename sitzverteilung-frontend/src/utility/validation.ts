@@ -11,7 +11,7 @@ export const FieldValidationRules = {
     value.length <= limit || `Die maximale Länge beträgt ${limit} Zeichen.`,
   IsNotUnionName: (value: string) =>
     Object.values(UNION_TYPE_PREFIXES).every(
-      (prefix) => !value.startsWith(prefix.trim())
+      (prefix) => !value.trim().startsWith(prefix.trim())
     ) ||
     "Fraktions- und Ausschussgemeinschaften müssen über die entsprechenden Schaltflächen gebildet werden.",
 };

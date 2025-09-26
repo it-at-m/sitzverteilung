@@ -63,7 +63,7 @@ import { computed, useTemplateRef } from "vue";
 import { UNION_TYPE_PREFIXES, UnionType } from "@/types/basedata/Union.ts";
 import { FieldValidationRules } from "@/utility/validation.ts";
 
-const { unions, groupNames, limitName } = defineProps<{
+const { unions, groupNames, limitName, unionType } = defineProps<{
   unions: Union[];
   unionType: UnionType;
   groupNames: string[];

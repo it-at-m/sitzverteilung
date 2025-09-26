@@ -74,4 +74,17 @@ describe("FieldValidationRules tests", () => {
       "Fraktions- und Ausschussgemeinschaften müssen über die entsprechenden Schaltflächen gebildet werden."
     );
   });
+
+  test("IsNotUnionName negative 2", () => {
+    // given
+    const unitUnderTest = "    AG: Hello";
+
+    // when
+    const result = FieldValidationRules.IsNotUnionName(unitUnderTest);
+
+    // then
+    expect(result).toEqual(
+      "Fraktions- und Ausschussgemeinschaften müssen über die entsprechenden Schaltflächen gebildet werden."
+    );
+  });
 });
