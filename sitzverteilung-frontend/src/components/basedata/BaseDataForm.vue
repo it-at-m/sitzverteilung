@@ -151,8 +151,9 @@ const seatFieldValidationError = computed(() => {
     return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
   if (isSeatsTooHigh.value && expectedSeats.value > 0)
     return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
-  if (isTooManyGroups.value)
-    return "Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den angegebenen Wert.";
+  if (isTooManyGroups.value) {
+    return `Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den ${expectedSeats.value > 0 && !(expectedSeats.value > limitCommitteeSize) && expectedSeats.value !== totalSeatsOrVotes.value ? "angegebenen" : "maximalen"} Wert.`;
+  }
   return "";
 });
 
@@ -204,6 +205,13 @@ function deletedGroup(newLength: number, removeList: GroupIndex[]) {
     removeList
   );
 }
+
+const totalSeatsOrVotes = computed(() => {
+  return groups.value.reduce(
+    (sum, group) => sum + (group.seatsOrVotes ?? 0),
+    0
+  );
+});
 
 defineExpose({
   reset,
