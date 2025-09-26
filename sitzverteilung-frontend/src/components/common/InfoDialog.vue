@@ -2,8 +2,9 @@
   <div>
     <v-btn
       @click="openDialog"
-      :icon="mdiInformation"
-      variant="text"
+      :prepend-icon="mdiInformation"
+      variant="tonal"
+      text="Informationen"
       aria-label="Informationen anzeigen"
     />
     <v-dialog

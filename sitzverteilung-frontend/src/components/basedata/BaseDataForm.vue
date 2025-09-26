@@ -14,8 +14,8 @@
           ]"
           hide-details="auto"
           validate-on="input"
-          label="Name"
-          :prepend-inner-icon="mdiLabel"
+          label="Name der Vorlage"
+          :prepend-inner-icon="mdiFileDocument"
           glow
         />
       </v-col>
@@ -89,7 +89,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 import type { GroupIndex, Union } from "@/types/basedata/Union.ts";
 import type { VForm, VTextField } from "vuetify/components";
 
-import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
+import { mdiAccountSwitch, mdiFileDocument } from "@mdi/js";
 import { computed, toRef, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
