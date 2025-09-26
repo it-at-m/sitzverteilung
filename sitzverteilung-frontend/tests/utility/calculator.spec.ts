@@ -105,7 +105,7 @@ describe("Full calculation tests", () => {
         "Group 10": 0.3714285714285714,
         "Group 11": 0.3714285714285714,
         "Group 12": 0.1857142857142857,
-        "Union 1": 2.971428571428571,
+        "AG: Union 1": 2.971428571428571,
       },
       methods: {
         [CalculationMethod.D_HONDT]: {
@@ -120,7 +120,7 @@ describe("Full calculation tests", () => {
             "Group 10": 0,
             "Group 11": 0,
             "Group 12": 0,
-            "Union 1": 4,
+            "AG: Union 1": 4,
           },
           order: [
             {
@@ -128,7 +128,7 @@ describe("Full calculation tests", () => {
               value: 20,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 16,
             },
             {
@@ -144,7 +144,7 @@ describe("Full calculation tests", () => {
               value: 10,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 8,
             },
             {
@@ -152,7 +152,7 @@ describe("Full calculation tests", () => {
               value: 6.666666666666667,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 5.333333333333333,
             },
             {
@@ -172,7 +172,7 @@ describe("Full calculation tests", () => {
               value: 4,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 4,
             },
           ],
@@ -187,7 +187,7 @@ describe("Full calculation tests", () => {
             "Group 10": true,
             "Group 11": true,
             "Group 12": true,
-            "Union 1": false,
+            "AG: Union 1": false,
           },
         } as CalculationMethodResult,
         [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
@@ -202,7 +202,7 @@ describe("Full calculation tests", () => {
             "Group 10": 0,
             "Group 11": 0,
             "Group 12": 0,
-            "Union 1": 4,
+            "AG: Union 1": 4,
           },
           order: [
             {
@@ -210,7 +210,7 @@ describe("Full calculation tests", () => {
               value: 20,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 16,
             },
             {
@@ -226,7 +226,7 @@ describe("Full calculation tests", () => {
               value: 6.666666666666667,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 5.333333333333333,
             },
             {
@@ -242,7 +242,7 @@ describe("Full calculation tests", () => {
               value: 3.3333333333333335,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 3.2,
             },
             {
@@ -254,7 +254,7 @@ describe("Full calculation tests", () => {
               value: 2.857142857142857,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 2.2857142857142856,
             },
           ],
@@ -269,7 +269,7 @@ describe("Full calculation tests", () => {
             "Group 10": true,
             "Group 11": true,
             "Group 12": true,
-            "Union 1": false,
+            "AG: Union 1": false,
           },
         } as CalculationMethodResult,
         [CalculationMethod.HARE_NIEMEYER]: {
@@ -284,7 +284,7 @@ describe("Full calculation tests", () => {
             "Group 10": 0,
             "Group 11": 0,
             "Group 12": 0,
-            "Union 1": 3,
+            "AG: Union 1": 3,
           },
           order: [
             {
@@ -292,7 +292,7 @@ describe("Full calculation tests", () => {
               value: 4,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 3,
             },
             {
@@ -308,7 +308,7 @@ describe("Full calculation tests", () => {
               value: 2,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 1.5,
             },
             {
@@ -332,7 +332,7 @@ describe("Full calculation tests", () => {
               value: 1.0,
             },
             {
-              groupName: "Union 1",
+              groupName: "AG: Union 1",
               value: 1.0,
             },
           ],
@@ -358,7 +358,7 @@ describe("Full calculation tests", () => {
             "Group 10": true,
             "Group 11": true,
             "Group 12": true,
-            "Union 1": true,
+            "AG: Union 1": true,
           },
         } as CalculationMethodResult,
       },
@@ -626,11 +626,11 @@ describe("Extract calculation groups tests", () => {
         seatsOrVotes: 30,
       },
       {
-        name: "Example fraction union",
+        name: "FG: Example fraction union",
         seatsOrVotes: 30,
       },
       {
-        name: "Example committee union",
+        name: "AG: Example committee union",
         seatsOrVotes: 30,
       },
     ];
