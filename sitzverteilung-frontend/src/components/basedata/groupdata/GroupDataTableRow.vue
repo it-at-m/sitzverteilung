@@ -13,6 +13,7 @@
                 FieldValidationRules.Required,
                 FieldValidationRules.IsUnique(groupNames),
                 FieldValidationRules.MaxLength(limitName),
+                FieldValidationRules.IsNotUnionName,
               ]
             : []
         "

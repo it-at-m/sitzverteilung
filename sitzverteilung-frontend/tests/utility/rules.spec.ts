@@ -50,4 +50,41 @@ describe("FieldValidationRules tests", () => {
     // then
     expect(result).toEqual("Es gibt andere Einträge mit identischem Wert.");
   });
+
+  test("IsNotUnionName positive", () => {
+    // given
+    const unitUnderTest = "Hello";
+
+    // when
+    const result = FieldValidationRules.IsNotUnionName(unitUnderTest);
+
+    // then
+    expect(result).toBe(true);
+  });
+
+  test("IsNotUnionName negative", () => {
+    // given
+    const unitUnderTest = "AG: Hello";
+
+    // when
+    const result = FieldValidationRules.IsNotUnionName(unitUnderTest);
+
+    // then
+    expect(result).toEqual(
+      "Fraktions- und Ausschussgemeinschaften müssen über die entsprechenden Schaltflächen gebildet werden."
+    );
+  });
+
+  test("IsNotUnionName negative 2", () => {
+    // given
+    const unitUnderTest = "    AG: Hello";
+
+    // when
+    const result = FieldValidationRules.IsNotUnionName(unitUnderTest);
+
+    // then
+    expect(result).toEqual(
+      "Fraktions- und Ausschussgemeinschaften müssen über die entsprechenden Schaltflächen gebildet werden."
+    );
+  });
 });
