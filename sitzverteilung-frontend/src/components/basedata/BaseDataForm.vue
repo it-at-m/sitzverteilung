@@ -147,6 +147,8 @@ function validChanged(valid: boolean | null) {
 }
 
 const seatFieldValidationError = computed(() => {
+  if (isMoreGroupsThanCommitteeSize.value && expectedSeats.value > 0)
+    return "Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt die Größe des Hauptorgans.";
   if (isSeatsTooLow.value)
     return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
   if (isSeatsTooHigh.value && expectedSeats.value > 0)
@@ -168,11 +170,12 @@ const comparedBaseDataNames = computed(() => {
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const limitGroupsRef = toRef(() => limitGroups);
-const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
-  groups,
-  limitGroupsRef,
-  expectedSeats
-);
+const {
+  isTooManyGroups,
+  isSeatsTooLow,
+  isSeatsTooHigh,
+  isMoreGroupsThanCommitteeSize,
+} = useGroupStatistics(groups, limitGroupsRef, expectedSeats);
 
 const baseDataFormRef = useTemplateRef<VForm>("baseDataFormRef");
 function reset() {
