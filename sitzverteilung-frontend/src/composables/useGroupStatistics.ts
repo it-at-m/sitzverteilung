@@ -36,6 +36,9 @@ export const useGroupStatistics = (
     () =>
       totalSeatsOrVotes.value < expectedSeats.value && expectedSeats.value > 0
   );
+  const isMoreGroupsThanCommitteeSize = computed(
+    () => amountOfGroups.value > expectedSeats.value
+  );
 
   return {
     amountOfGroups,
@@ -43,6 +46,7 @@ export const useGroupStatistics = (
     isTooManyGroups,
     isSeatsTooHigh,
     isSeatsTooLow,
+    isMoreGroupsThanCommitteeSize,
     totalSeatsOrVotes,
   };
 };
