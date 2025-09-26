@@ -20,9 +20,8 @@
           <v-btn
             variant="flat"
             @click="closeDialog"
-          >
-            Schließen
-          </v-btn>
+            text="Schließen"
+          />
         </v-card-actions>
       </v-card>
     </v-dialog>

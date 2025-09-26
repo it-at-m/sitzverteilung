@@ -20,9 +20,8 @@
             size="large"
             class="ml-5"
             :prepend-icon="isExpanded ? mdiClose : mdiContentSaveEdit"
-          >
-            {{ isExpanded ? "Schließen" : "Ändern" }}
-          </v-btn>
+            :text="isExpanded ? 'Schließen' : 'Ändern'"
+          />
         </v-col>
       </v-row>
     </v-toolbar>
