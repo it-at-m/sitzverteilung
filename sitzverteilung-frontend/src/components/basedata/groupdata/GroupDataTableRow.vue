@@ -19,8 +19,11 @@
         hide-details="auto"
         validate-on="input"
         @input="editedName"
-        variant="underlined"
+        :variant="underlined ? 'underlined' : 'solo'"
+        flat
         density="compact"
+        placeholder="Name"
+        glow
         class="py-3"
         @keydown.enter="hitEnter"
         :disabled="disabled"
@@ -35,8 +38,11 @@
         :max="maxSeatsOrVotes"
         hide-details="auto"
         validate-on="input"
-        variant="underlined"
+        :variant="underlined ? 'underlined' : 'solo'"
+        flat
         density="compact"
+        :placeholder="limitSeats > 0 ? 'Sitze' : 'Stimmen'"
+        glow
         class="py-3"
         @keydown.enter="hitEnter"
         :disabled="disabled"
@@ -61,6 +67,7 @@ import { FieldValidationRules } from "@/utility/validation.ts";
 
 const {
   isValidatingOnEmpty = true,
+  underlined = true,
   disabled = false,
   groupNames,
   limitSeats,
@@ -73,6 +80,7 @@ const {
   limitSeats: number;
   limitName: number;
   limitVotes: number;
+  underlined?: boolean;
 }>();
 
 const group = defineModel<Group>({ required: true });
