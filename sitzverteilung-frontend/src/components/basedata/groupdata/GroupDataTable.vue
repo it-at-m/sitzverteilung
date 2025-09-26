@@ -195,7 +195,10 @@ const props = defineProps<{
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
 const isGroupLimitReached = computed(() => {
-  return props.expectedSeats > 0 && groups.value.length >= Math.min(props.expectedSeats, props.limitGroups);
+  return (
+    props.expectedSeats > 0 &&
+    groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
+  );
 });
 function getUnionGroups(unions: Union[]) {
   const flattenedGroups = unions.map((union) => union.groups).flat();
