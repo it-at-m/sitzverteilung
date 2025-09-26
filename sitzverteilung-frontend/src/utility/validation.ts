@@ -1,3 +1,5 @@
+import { UNION_TYPE_PREFIXES } from "@/types/basedata/Union.ts";
+
 export const FieldValidationRules = {
   Required: (value: string) =>
     (value !== null && value !== undefined && value !== "") ||
@@ -7,6 +9,11 @@ export const FieldValidationRules = {
     "Es gibt andere Einträge mit identischem Wert.",
   MaxLength: (limit: number) => (value: string) =>
     value.length <= limit || `Die maximale Länge beträgt ${limit} Zeichen.`,
+  IsNotUnionName: (value: string) =>
+    Object.values(UNION_TYPE_PREFIXES).every(
+      (prefix) => !value.trim().startsWith(prefix.trim())
+    ) ||
+    "Fraktions- und Ausschussgemeinschaften müssen über die entsprechenden Schaltflächen gebildet werden.",
 };
 
 export const LimitConfiguration = {

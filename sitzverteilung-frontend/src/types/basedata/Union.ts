@@ -5,6 +5,11 @@ export enum UnionType {
   FRACTION,
 }
 
+export const UNION_TYPE_PREFIXES: Record<UnionType, string> = {
+  [UnionType.FRACTION]: "FG: ",
+  [UnionType.COMMITTEE]: "AG: ",
+};
+
 export interface Union {
   name: string;
   unionType: UnionType;
