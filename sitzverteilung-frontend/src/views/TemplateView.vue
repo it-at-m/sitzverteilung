@@ -21,7 +21,7 @@
     />
     <v-row>
       <v-col class="d-flex align-center">
-        <h1 class="mr-2">Verwaltung der Vorlagen</h1>
+        <h1 class="mr-5">Verwaltung der Vorlagen</h1>
         <info-dialog>
           <template #dialog-text>
             <div class="pa-4 text-justify">
