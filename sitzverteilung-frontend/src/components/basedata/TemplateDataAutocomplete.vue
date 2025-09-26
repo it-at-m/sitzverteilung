@@ -40,7 +40,11 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 
-import { mdiFileDocument, mdiFileDocumentMultiple, mdiInformation } from "@mdi/js";
+import {
+  mdiFileDocument,
+  mdiFileDocumentMultiple,
+  mdiInformation,
+} from "@mdi/js";
 import { computed } from "vue";
 
 const selectedBaseData = defineModel<BaseData | null>();
