@@ -152,7 +152,7 @@ const seatFieldValidationError = computed(() => {
   if (isSeatsTooHigh.value && expectedSeats.value > 0)
     return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
   if (isTooManyGroups.value) {
-    return `Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den ${expectedSeats.value > 0 && !(expectedSeats.value > limitCommitteeSize) && expectedSeats.value !== totalSeatsOrVotes.value? "angegebenen" : "maximalen"} Wert.`;
+    return `Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den ${expectedSeats.value > 0 && !(expectedSeats.value > limitCommitteeSize) && expectedSeats.value !== totalSeatsOrVotes.value ? "angegebenen" : "maximalen"} Wert.`;
   }
   return "";
 });
@@ -169,11 +169,11 @@ const comparedBaseDataNames = computed(() => {
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const limitGroupsRef = toRef(() => limitGroups);
-const {
-  isTooManyGroups,
-  isSeatsTooLow,
-  isSeatsTooHigh,
-} = useGroupStatistics(groups, limitGroupsRef, expectedSeats);
+const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
+  groups,
+  limitGroupsRef,
+  expectedSeats
+);
 
 const baseDataFormRef = useTemplateRef<VForm>("baseDataFormRef");
 function reset() {
@@ -208,8 +208,8 @@ function deletedGroup(newLength: number, removeList: GroupIndex[]) {
 
 const totalSeatsOrVotes = computed(() => {
   return groups.value.reduce(
-      (sum, group) => sum + (group.seatsOrVotes ?? 0),
-      0
+    (sum, group) => sum + (group.seatsOrVotes ?? 0),
+    0
   );
 });
 
