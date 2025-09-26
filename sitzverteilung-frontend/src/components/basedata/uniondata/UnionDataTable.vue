@@ -47,6 +47,7 @@
         v-model="unions[index]"
         :ref="unionDataTableRowsRef.set"
         :unions="unions"
+        :union-type="unionType"
         :group-names="groupNames"
         :limit-name="limitName"
         @edited-name="validateNameFields"
