@@ -10,6 +10,7 @@ import type { CalculationSeatOrder } from "@/types/calculation/internal/Calculat
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 import type { CalculationValidation } from "@/types/calculation/internal/CalculationValidation.ts";
 
+import { UNION_TYPE_PREFIXES } from "@/types/basedata/Union.ts";
 import {
   AVAILABLE_METHODS,
   CalculationMethod,
@@ -58,7 +59,7 @@ function extractCalculationGroups(baseData: BaseData): CalculationGroup[] {
   const unionCalculationGroups: CalculationGroup[] = baseData.unions.map(
     (union) => {
       return {
-        name: union.name,
+        name: `${UNION_TYPE_PREFIXES[union.unionType]}${union.name}`,
         seatsOrVotes: union.groups
           .map((groupIndex) => {
             if (groupIndex < 0 || groupIndex >= baseData.groups.length) {
