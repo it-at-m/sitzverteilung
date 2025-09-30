@@ -35,7 +35,7 @@
       <v-col>
         <v-number-input
           v-model="baseData.targetSize"
-          :rules="[FieldValidationRules.Required]"
+          :rules="[...getRuleRequired]"
           :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
@@ -129,6 +129,7 @@ const {
   limitName,
   limitGroups,
   limitCommitteeSize,
+  isTemplateview,
 } = defineProps<{
   limitName: number;
   limitGroups: number;
@@ -137,6 +138,7 @@ const {
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
   showNameColumn: boolean;
+  isTemplateview: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -185,6 +187,15 @@ const fractionsDataTableRef = useTemplateRef<typeof UnionDataTable>(
 const committeesDataTableRef = useTemplateRef<typeof UnionDataTable>(
   "committeesDataTableRef"
 );
+
+const getRuleRequired = computed(() => {
+  const validationRules = [];
+
+  if (!isTemplateview) {
+    validationRules.push(FieldValidationRules.Required);
+  }
+  return validationRules;
+});
 
 function createUnion(groupIdx: GroupIndex[], type: UnionType) {
   if (type === UnionType.FRACTION) {
