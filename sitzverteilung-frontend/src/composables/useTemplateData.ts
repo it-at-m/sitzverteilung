@@ -64,6 +64,10 @@ export function useTemplateData() {
     currentBaseData.value = getEmptyBaseData();
   }
 
+  const areAllNecessaryFieldsEmpty = computed(() => {
+    return !(currentBaseData.value.targetSize != null && currentBaseData.value.targetSize > 0 && currentBaseData.value.groups.length > 0);
+  });
+
   return {
     storedBaseData,
     selectedBaseData,
@@ -76,5 +80,6 @@ export function useTemplateData() {
     isDataEntered,
     baseDataFormRef,
     reset,
+    areAllNecessaryFieldsEmpty,
   };
 }

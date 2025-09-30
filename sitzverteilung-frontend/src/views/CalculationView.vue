@@ -34,6 +34,15 @@
         />
       </v-col>
     </v-row>
+    <v-row v-if="areAllNecessaryFieldsEmpty">
+      <v-col>
+        <v-alert
+            text="Keine Berechnung möglich, da Daten fehlen."
+            type="error"
+            variant="tonal"
+        />
+      </v-col>
+    </v-row>
     <base-data-form
       class="mt-5"
       v-show="isExpanded"
@@ -72,5 +81,6 @@ const {
   updateIsValid,
   isDataEntered,
   baseDataFormRef,
+  areAllNecessaryFieldsEmpty,
 } = useTemplateData();
 </script>
