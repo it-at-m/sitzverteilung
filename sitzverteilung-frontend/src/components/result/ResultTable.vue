@@ -39,7 +39,7 @@
     :items-per-page="-1"
   >
   </v-data-table>
-  <v-row v-if="areNecessaryFieldsEmpty && !isValid">
+  <v-row v-if="areNecessaryFieldsEmpty || !isValid">
     <v-col>
       <v-alert
         text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
