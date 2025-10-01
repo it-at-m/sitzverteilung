@@ -152,8 +152,6 @@ const seatFieldValidationError = computed(() => {
   }
   if (isSeatsTooLow.value)
     return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
-  if (isSeatsTooHigh.value && expectedSeats.value > 0)
-    return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
   return "";
 });
 
@@ -169,7 +167,7 @@ const comparedBaseDataNames = computed(() => {
 
 const expectedSeats = computed(() => baseData.value.committeeSize ?? 0);
 const limitGroupsRef = toRef(() => limitGroups);
-const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } = useGroupStatistics(
+const { isTooManyGroups, isSeatsTooLow } = useGroupStatistics(
   groups,
   limitGroupsRef,
   expectedSeats
