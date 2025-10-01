@@ -64,8 +64,12 @@ export function useTemplateData() {
     currentBaseData.value = getEmptyBaseData();
   }
 
-  const areAllNecessaryFieldsEmpty = computed(() => {
-    return !(currentBaseData.value.targetSize != null && currentBaseData.value.targetSize > 0 && currentBaseData.value.groups.length > 0);
+  const areNecessaryFieldsEmpty = computed(() => {
+    return !(
+      currentBaseData.value.targetSize != null &&
+      currentBaseData.value.targetSize > 0 &&
+      currentBaseData.value.groups.length > 0
+    );
   });
 
   return {
@@ -80,6 +84,6 @@ export function useTemplateData() {
     isDataEntered,
     baseDataFormRef,
     reset,
-    areAllNecessaryFieldsEmpty,
+    areNecessaryFieldsEmpty,
   };
 }
