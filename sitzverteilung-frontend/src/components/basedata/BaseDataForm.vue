@@ -148,7 +148,7 @@ function validChanged(valid: boolean | null) {
 
 const seatFieldValidationError = computed(() => {
   if (isTooManyGroups.value) {
-    return `Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den ${expectedSeats.value > groups.value.length ? "maximalen" : "angegebenen/maximalen"} Wert.`;
+    return `Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den ${expectedSeats.value > 0 ? "angegebenen / maximalen" : "maximalen"} Wert.`;
   }
   if (isSeatsTooHigh.value && expectedSeats.value > 0)
     return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
