@@ -149,12 +149,13 @@ function validChanged(valid: boolean | null) {
 }
 
 const seatFieldValidationError = computed(() => {
-  if (isSeatsTooLow.value)
-    return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
+  if (isTooManyGroups.value) {
+    return `Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den ${expectedSeats.value > 0 ? "angegebenen / maximalen" : "maximalen"} Wert.`;
+  }
   if (isSeatsTooHigh.value && expectedSeats.value > 0)
     return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
-  if (isTooManyGroups.value)
-    return "Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den angegebenen Wert.";
+  if (isSeatsTooLow.value)
+    return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
   return "";
 });
 
