@@ -35,7 +35,7 @@
       <v-col>
         <v-number-input
           v-model="baseData.targetSize"
-          :rules="[...getRuleRequired]"
+          :rules="[...getTargetSizeRules]"
           :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
@@ -129,7 +129,7 @@ const {
   limitName,
   limitGroups,
   limitCommitteeSize,
-  usesRuleRequired,
+  targetSizeRequired,
 } = defineProps<{
   limitName: number;
   limitGroups: number;
@@ -138,7 +138,7 @@ const {
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
   showNameColumn: boolean;
-  usesRuleRequired: boolean;
+  targetSizeRequired: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -188,10 +188,10 @@ const committeesDataTableRef = useTemplateRef<typeof UnionDataTable>(
   "committeesDataTableRef"
 );
 
-const getRuleRequired = computed(() => {
+const getTargetSizeRules = computed(() => {
   const validationRules = [];
 
-  if (!usesRuleRequired) {
+  if (targetSizeRequired) {
     validationRules.push(FieldValidationRules.Required);
   }
   return validationRules;
