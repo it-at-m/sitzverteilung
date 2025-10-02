@@ -49,7 +49,7 @@
       :show-name-column="false"
     />
     <result-table />
-    <v-row v-if="areNecessaryFieldsEmpty || !isValid">
+    <v-row v-if="isLessThanTwoGroups || !isValid">
       <v-col>
         <v-alert
           text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
@@ -70,6 +70,7 @@ import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomp
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
+import {computed} from "vue";
 
 const [isExpanded, toggleExpansion] = useToggle();
 
@@ -80,8 +81,9 @@ const {
   currentBaseData,
   updateIsValid,
   isDataEntered,
-  baseDataFormRef,
-  areNecessaryFieldsEmpty,
   isValid,
 } = useTemplateData();
+
+const isLessThanTwoGroups = computed(() =>
+    currentBaseData.value.groups.length < 2);
 </script>
