@@ -48,16 +48,7 @@
       :base-data-names="baseDataNames"
       :show-name-column="false"
     />
-    <result-table />
-    <v-row v-if="isLessThanTwoGroups || !isValid">
-      <v-col>
-        <v-alert
-          text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
-          type="error"
-          variant="tonal"
-        />
-      </v-col>
-    </v-row>
+    <result-table :has-valid-data="hasValidData" />
   </v-container>
 </template>
 
@@ -85,7 +76,11 @@ const {
   isValid,
 } = useTemplateData();
 
-const isLessThanTwoGroups = computed(
-  () => currentBaseData.value.groups.length < 2
+const hasValidData = computed<boolean>(
+  () => isAtLeastTwoGroups.value && isValid.value
+);
+
+const isAtLeastTwoGroups = computed(
+  () => currentBaseData.value.groups.length >= 2
 );
 </script>
