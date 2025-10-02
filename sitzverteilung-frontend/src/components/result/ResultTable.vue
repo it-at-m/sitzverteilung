@@ -37,22 +37,11 @@
     density="compact"
     no-data-text=""
     :items-per-page="-1"
-  >
-  </v-data-table>
-  <v-row v-if="areNecessaryFieldsEmpty || !isValid">
-    <v-col>
-      <v-alert
-        text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
-        type="error"
-        variant="tonal"
-      />
-    </v-col>
-  </v-row>
+  />
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { useTemplateData } from "@/composables/useTemplateData.ts";
 import {
   AVAILABLE_METHODS,
   CALCULATION_METHOD_SHORT_FORMS,
@@ -129,8 +118,6 @@ function getValidationColumns() {
 const results = ref<unknown[]>([]);
 const dialog = ref(false);
 const detailTitle = ref("");
-
-const { areNecessaryFieldsEmpty, isValid } = useTemplateData();
 
 // Placeholder for future content, currently unused
 const detailInfo = ref<string>("");

@@ -65,11 +65,7 @@ export function useTemplateData() {
   }
 
   const areNecessaryFieldsEmpty = computed(() => {
-    return !(
-      currentBaseData.value.targetSize != null &&
-      currentBaseData.value.targetSize > 0 &&
-      currentBaseData.value.groups.length > 0
-    );
+    return !(currentBaseData.value.groups.length >= 2);
   });
 
   return {

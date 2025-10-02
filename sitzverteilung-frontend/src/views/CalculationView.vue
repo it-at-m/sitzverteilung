@@ -49,6 +49,15 @@
       :show-name-column="false"
     />
     <result-table />
+    <v-row v-if="areNecessaryFieldsEmpty || !isValid">
+      <v-col>
+        <v-alert
+          text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
+          type="error"
+          variant="tonal"
+        />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -72,5 +81,7 @@ const {
   updateIsValid,
   isDataEntered,
   baseDataFormRef,
+  areNecessaryFieldsEmpty,
+  isValid,
 } = useTemplateData();
 </script>
