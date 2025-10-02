@@ -207,7 +207,7 @@
           :selected-base-data-name="selectedBaseData?.name"
           :base-data-names="baseDataNames"
           :show-name-column="true"
-          :is-templateview="true"
+          :uses-rule-required="true"
         />
       </v-col>
     </v-row>

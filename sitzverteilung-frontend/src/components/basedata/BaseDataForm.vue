@@ -129,7 +129,7 @@ const {
   limitName,
   limitGroups,
   limitCommitteeSize,
-  isTemplateview,
+  usesRuleRequired,
 } = defineProps<{
   limitName: number;
   limitGroups: number;
@@ -138,7 +138,7 @@ const {
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
   showNameColumn: boolean;
-  isTemplateview: boolean;
+  usesRuleRequired: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -191,7 +191,7 @@ const committeesDataTableRef = useTemplateRef<typeof UnionDataTable>(
 const getRuleRequired = computed(() => {
   const validationRules = [];
 
-  if (!isTemplateview) {
+  if (!usesRuleRequired) {
     validationRules.push(FieldValidationRules.Required);
   }
   return validationRules;
