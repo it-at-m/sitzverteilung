@@ -35,7 +35,9 @@
       <v-col>
         <v-number-input
           v-model="baseData.targetSize"
-          :rules="[FieldValidationRules.Required]"
+          :rules="[
+            ...(areFieldsRequired ? [FieldValidationRules.Required] : []),
+          ]"
           :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
@@ -129,6 +131,7 @@ const {
   limitName,
   limitGroups,
   limitCommitteeSize,
+  areFieldsRequired = false,
 } = defineProps<{
   limitName: number;
   limitGroups: number;
@@ -137,6 +140,7 @@ const {
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
   showNameColumn: boolean;
+  areFieldsRequired?: boolean;
 }>();
 
 const emit = defineEmits<{
