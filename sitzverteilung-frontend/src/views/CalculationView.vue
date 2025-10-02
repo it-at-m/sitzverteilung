@@ -47,7 +47,6 @@
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :show-name-column="false"
-      :target-size-required="false"
     />
     <result-table />
   </v-container>
