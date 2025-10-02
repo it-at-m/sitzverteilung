@@ -428,7 +428,6 @@ function calculateProportions(
 
 /**
  * Checks whether the calculation of a method is valid.
- * This is the case, when the difference between distributed seats (plus pending seats by stale situations) and proportional seats is less than 1.
  *
  * @param calculationGroups calculation data used to calculate the specific method
  * @param proportions pre-calculated proportions for the calculation groups
@@ -442,26 +441,54 @@ function calculateMethodValidity(
   stale?: CalculationStale
 ): CalculationValidation {
   return calculationGroups.reduce(
-    (obj: CalculationValidation, currentObj: CalculationGroup) => {
+    (validation: CalculationValidation, currentObj: CalculationGroup) => {
       const groupName = currentObj.name;
       const distributedSeats = distribution[groupName] ?? 0;
-      const staleSeats = stale?.groupNames.includes(groupName) ? 1 : 0;
-      const seats = distributedSeats + staleSeats;
-      const proportion = proportions[groupName];
-      if (proportion !== undefined) {
-        obj[currentObj.name] = Math.abs(proportion - seats) <= 0.99;
-      }
-      return obj;
+      validation[groupName] = {
+        overRounding: checkOverroundingForGroup(
+          groupName,
+          proportions,
+          distributedSeats,
+          stale
+        ),
+        lostSafeSeat: false, // TODO
+        committeeInvalid: [], // TODO
+      };
+      return validation;
     },
     {}
   );
+}
+
+/**
+ * Checks whether overrounding happened during the calculation of a method.
+ * This is the case, when the difference between distributed seats (plus pending seats by stale situations) and proportional seats is less than 1.
+ *
+ * @param groupName groupName to check
+ * @param proportions proportions pre-calculated for given calculation groups
+ * @param distributedSeats seats distributed to the specified group
+ * @param stale optional stale to consider for checking
+ */
+function checkOverroundingForGroup(
+  groupName: string,
+  proportions: CalculationProportions,
+  distributedSeats: number,
+  stale?: CalculationStale
+): boolean {
+  const staleSeats = stale?.groupNames.includes(groupName) ? 1 : 0;
+  const seats = distributedSeats + staleSeats;
+  const proportion = proportions[groupName];
+  if (proportion === undefined) {
+    throw new Error("Missing proportion, cannot check for overrounding.");
+  }
+  return Math.abs(proportion - seats) > 0.99;
 }
 
 export const exportForTesting = {
   calculateDHondt,
   calculateHareNiemeyer,
   calculateSainteLagueSchepers,
-  calculateMethodValidity,
+  checkOverroundingForGroup,
   calculateProportions,
   extractCalculationGroups,
 };
