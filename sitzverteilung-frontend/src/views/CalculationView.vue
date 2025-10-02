@@ -64,13 +64,13 @@
 <script setup lang="ts">
 import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
+import { computed } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
-import {computed} from "vue";
 
 const [isExpanded, toggleExpansion] = useToggle();
 
@@ -81,9 +81,11 @@ const {
   currentBaseData,
   updateIsValid,
   isDataEntered,
+  baseDataFormRef,
   isValid,
 } = useTemplateData();
 
-const isLessThanTwoGroups = computed(() =>
-    currentBaseData.value.groups.length < 2);
+const isLessThanTwoGroups = computed(
+  () => currentBaseData.value.groups.length < 2
+);
 </script>
