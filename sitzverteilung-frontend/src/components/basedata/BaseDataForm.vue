@@ -35,9 +35,7 @@
       <v-col>
         <v-number-input
           v-model="baseData.targetSize"
-          :rules="[
-            ...(areFieldsRequired ? [FieldValidationRules.Required] : []),
-          ]"
+          :rules="areFieldsRequired ? [FieldValidationRules.Required] : []"
           :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
