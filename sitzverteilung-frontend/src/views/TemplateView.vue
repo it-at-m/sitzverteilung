@@ -383,7 +383,6 @@ function isValidBaseData(x: any): x is BaseData {
     x &&
     typeof x.name === "string" &&
     typeof x.committeeSize === "number" &&
-    typeof x.targetSize === "number" &&
     Array.isArray(x.groups) &&
     Array.isArray(x.unions) &&
     x.groups.every((group: any) => group && typeof group.name === "string") &&
