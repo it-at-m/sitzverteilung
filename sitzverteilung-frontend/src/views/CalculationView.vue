@@ -47,6 +47,7 @@
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :show-name-column="false"
+      are-fields-required
     />
     <result-table :has-valid-data="hasValidData" />
   </v-container>
