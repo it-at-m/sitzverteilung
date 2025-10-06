@@ -22,7 +22,7 @@
     <template #item="{ props }">
       <v-list-item v-bind="props">
         <template #prepend>
-          <v-icon :icon="mdiFileDocumentMultiple" />
+          <v-icon :icon="mdiFileDocument" />
         </template>
       </v-list-item>
     </template>
@@ -40,7 +40,11 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 
-import { mdiFileDocumentMultiple, mdiInformation } from "@mdi/js";
+import {
+  mdiFileDocument,
+  mdiFileDocumentMultiple,
+  mdiInformation,
+} from "@mdi/js";
 import { computed } from "vue";
 
 const selectedBaseData = defineModel<BaseData | null>();

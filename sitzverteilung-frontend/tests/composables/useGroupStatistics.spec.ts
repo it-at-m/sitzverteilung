@@ -3,38 +3,37 @@ import { ref } from "vue";
 
 import { useGroupStatistics } from "../../src/composables/useGroupStatistics";
 import {
-  getTestBaseData,
   getTestBaseDataEmptyGroups,
   getTestBaseDataNotEnoughSeats,
   getTestBaseDataTooManyGroups,
   getTestBaseDataTooManySeats,
-  getTestBaseDataUndefinedTooManySeats,
+  getTestBaseDataUndefinedVoteMode,
+  getTestBaseDataWithUnion,
 } from "../TestData";
 
 describe("useGroupStatistics composable", () => {
   test("correctly calculates statistics", () => {
-    const testBaseData = getTestBaseData();
+    const testBaseData = getTestBaseDataWithUnion();
     const groups = ref(testBaseData.groups);
     const expectedSeats = ref(testBaseData.committeeSize);
     const limitGroups = ref(10);
 
-    const { amountOfGroups, totalSeats, totalVotes } = useGroupStatistics(
+    const { amountOfGroups, totalSeatsOrVotes } = useGroupStatistics(
       groups,
       limitGroups,
       expectedSeats
     );
 
     expect(amountOfGroups.value).toBe(3);
-    expect(totalSeats.value).toBe(60);
-    expect(totalVotes.value).toBe(350);
+    expect(totalSeatsOrVotes.value).toBe(60);
   });
 
   test.each([
-    [getTestBaseData(), false, false, false],
+    [getTestBaseDataWithUnion(), false, false, false],
     [getTestBaseDataEmptyGroups(), false, false, false],
     [getTestBaseDataTooManyGroups(), true, false, false],
     [getTestBaseDataTooManySeats(), false, true, false],
-    [getTestBaseDataUndefinedTooManySeats(), true, true, false],
+    [getTestBaseDataUndefinedVoteMode(), false, false, false],
     [getTestBaseDataNotEnoughSeats(), false, false, true],
   ])(
     "correctly calculates validation",
@@ -48,7 +47,7 @@ describe("useGroupStatistics composable", () => {
       const limitGroups = ref(10);
       const expectedSeats = ref(testBaseData.committeeSize);
 
-      const { isTooManyGroups, isSeatsTooLow, isSeatsTooHigh } =
+      const { isTooManyGroups, isSeatsTooHigh, isSeatsTooLow } =
         useGroupStatistics(groups, limitGroups, expectedSeats);
 
       expect(isTooManyGroups.value).toBe(expectedTooManyGroups);

@@ -20,9 +20,8 @@
             size="large"
             class="ml-5"
             :prepend-icon="isExpanded ? mdiClose : mdiContentSaveEdit"
-          >
-            {{ isExpanded ? "Schließen" : "Ändern" }}
-          </v-btn>
+            :text="isExpanded ? 'Schließen' : 'Ändern'"
+          />
         </v-col>
       </v-row>
     </v-toolbar>
@@ -48,14 +47,16 @@
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :show-name-column="false"
+      are-fields-required
     />
-    <result-table />
+    <result-table :has-valid-data="hasValidData" />
   </v-container>
 </template>
 
 <script setup lang="ts">
 import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
+import { computed } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -73,5 +74,14 @@ const {
   updateIsValid,
   isDataEntered,
   baseDataFormRef,
+  isValid,
 } = useTemplateData();
+
+const hasValidData = computed<boolean>(
+  () => isAtLeastTwoGroups.value && isValid.value
+);
+
+const isAtLeastTwoGroups = computed(
+  () => currentBaseData.value.groups.length >= 2
+);
 </script>

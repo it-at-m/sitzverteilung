@@ -21,7 +21,7 @@
     />
     <v-row>
       <v-col class="d-flex align-center">
-        <h1 class="mr-2">Verwaltung der Vorlagen</h1>
+        <h1 class="mr-5">Verwaltung der Vorlagen</h1>
         <info-dialog>
           <template #dialog-text>
             <div class="pa-4 text-justify">
@@ -52,17 +52,19 @@
                 Neue Vorlagen können über das Ausfüllen des Formulars angelegt
                 werden. Bereits angelegte Vorlagen lassen sich durch ein
                 Drop-Down-Menü in die Übersicht übernehmen. Die ausgewählten
-                Vorlagen lassen sich dann aktualisieren, löschen und über einen
-                Link teilen.
+                Vorlagen lassen sich dann ändern, löschen und über einen Link
+                teilen. Außerdem lässt sich auf Basis einer bestehenden Vorlage
+                mit "Anlegen" auch eine neue Vorlage erzeugen.
               </p>
 
               <h3 class="mt-4 mb-2">Eingabebeschränkungen</h3>
               <p class="mb-3">
-                Ein Anlegen neuer Daten ist nur dann möglich, wenn:
+                Das Anlegen oder Ändern einer Vorlage ist nur dann möglich,
+                wenn:
               </p>
               <ul class="pl-4 mb-3">
                 <li>
-                  Der Name der Vorlage und die Größe des Hauptorgans eingegeben
+                  Der Name der Vorlage sowie die Ausschussgröße eingegeben
                   wurden.
                 </li>
                 <li>
@@ -74,10 +76,14 @@
               <p class="mb-3">
                 Der Name ist auf
                 {{ numberFormatter(LimitConfiguration.limitName) }} Zeichen
-                beschränkt, die Größe des Hauptorgans auf
+                beschränkt, die Größe des Hauptorgans sowie die Ausschussgröße
+                auf
                 {{ numberFormatter(LimitConfiguration.limitCommitteeSize) }}
                 Sitze und die Stimmen auf
                 {{ numberFormatter(LimitConfiguration.limitVotes) }} Stimmen.
+                Ist eine Größe für das Hauptorgan angegeben, sind Sitze
+                einzugeben. Andernfalls wird von Stimmen als Eingabe
+                ausgegangen.
               </p>
 
               <p class="mb-3">
@@ -153,8 +159,8 @@
               basedataNameIsNotChanged
             "
             @click="createBaseData"
-            >Anlegen
-          </v-btn>
+            text="Anlegen"
+          />
           <v-btn
             variant="flat"
             color="green"
@@ -163,8 +169,8 @@
             :prepend-icon="mdiContentSaveEdit"
             :disabled="!isBaseDataSelected || !isValid || !dirty"
             @click="updateBaseData"
-            >Ändern
-          </v-btn>
+            text="Ändern"
+          />
           <v-btn
             variant="flat"
             color="red"
@@ -173,9 +179,8 @@
             :prepend-icon="mdiDelete"
             :disabled="!isBaseDataSelected"
             @click="showDeleteConfirmation"
-          >
-            Löschen
-          </v-btn>
+            text="Löschen"
+          />
           <v-btn
             variant="flat"
             color="blue"
@@ -184,9 +189,8 @@
             :prepend-icon="mdiShare"
             :disabled="!isBaseDataSelected || dirty"
             @click="share"
-          >
-            Teilen
-          </v-btn>
+            text="Teilen"
+          />
         </v-col>
       </v-row>
     </v-toolbar>

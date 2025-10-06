@@ -43,9 +43,11 @@
 
     <template #item="{ index }">
       <union-data-table-row
-        :ref="unionDataTableRowsRef.set"
+        v-if="unions[index]"
         v-model="unions[index]"
+        :ref="unionDataTableRowsRef.set"
         :unions="unions"
+        :union-type="unionType"
         :group-names="groupNames"
         :limit-name="limitName"
         @edited-name="validateNameFields"
@@ -68,7 +70,7 @@ import { UnionType } from "@/types/basedata/Union.ts";
 
 const headers = computed(() => [
   {
-    title: `${nameHeaderTitle.value} (max. ${props.limitName} Zeichen)`,
+    title: "Name",
     key: "name",
     width: 200,
   },
@@ -79,11 +81,6 @@ const headers = computed(() => [
   },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
 ]);
-const nameHeaderTitle = computed(() =>
-  props.unionType == UnionType.FRACTION
-    ? "Name der Fraktionsgemeinschaft"
-    : "Name der Ausschussgemeinschaft"
-);
 const dataTableTitle = computed(() =>
   props.unionType == UnionType.FRACTION
     ? "Fraktionsgemeinschaften"
@@ -122,13 +119,15 @@ function deleteUnion(idx: number) {
 }
 
 function removeGroup(unionIdx: number, groupIdx: GroupIndex) {
-  const remainingGroups = unions.value[unionIdx].groups.filter(
-    (group) => group !== groupIdx
-  );
-  if (remainingGroups.length < 2) {
-    deleteUnion(unionIdx);
-  } else {
-    unions.value[unionIdx].groups = remainingGroups;
+  const union = unions.value[unionIdx];
+  if (union) {
+    const remainingGroups = union.groups.filter((group) => group !== groupIdx);
+    if (remainingGroups.length < 2) {
+      deleteUnion(unionIdx);
+    } else {
+      union.groups = remainingGroups;
+      unions.value[unionIdx] = union;
+    }
   }
 }
 

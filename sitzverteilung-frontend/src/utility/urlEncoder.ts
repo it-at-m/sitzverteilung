@@ -1,3 +1,5 @@
+import { LimitConfiguration } from "@/utility/validation.ts";
+
 export async function writeToUrlParam<T>(
   object: T,
   url: string
@@ -23,9 +25,9 @@ export async function writeToUrlParam<T>(
     .replace(/\//g, "_")
     .replace(/=+$/, "");
   const totalLength = result.length + url.length;
-  if (totalLength > 2048) {
+  if (totalLength > LimitConfiguration.limitURLEncoderSize) {
     throw new Error(
-      `The amount of data to be url encoded is too high. Maximum is 2048, but was ${totalLength}`
+      `The amount of data to be url encoded is too high. Maximum is ${LimitConfiguration.limitURLEncoderSize}, but was ${totalLength}`
     );
   }
   return result;

@@ -14,35 +14,33 @@
           ]"
           hide-details="auto"
           validate-on="input"
-          :label="`Name (max. ${limitName} Zeichen)`"
-          :prepend-inner-icon="mdiLabel"
+          label="Name der Vorlage"
+          :prepend-inner-icon="mdiFileDocument"
           glow
         />
       </v-col>
       <v-col>
         <v-number-input
           v-model="baseData.committeeSize"
-          :rules="[FieldValidationRules.Required]"
-          :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
           validate-on="input"
           :error-messages="seatFieldValidationError"
-          :label="`Größe des Hauptorgans (max. ${limitCommitteeSize})`"
+          :min="1"
+          label="Größe des Hauptorgans"
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />
       </v-col>
       <v-col>
         <v-number-input
-          v-model="baseData.committeeSize"
-          :rules="[FieldValidationRules.Required]"
+          v-model="baseData.targetSize"
+          :rules="areFieldsRequired ? [FieldValidationRules.Required] : []"
           :min="1"
           :max="limitCommitteeSize"
           hide-details="auto"
           validate-on="input"
-          :error-messages="seatFieldValidationError"
-          :label="`Ausschussgröße`"
+          label="Ausschussgröße"
           :prepend-inner-icon="mdiAccountSwitch"
           glow
         />
@@ -91,7 +89,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 import type { GroupIndex, Union } from "@/types/basedata/Union.ts";
 import type { VForm, VTextField } from "vuetify/components";
 
-import { mdiAccountSwitch, mdiLabel } from "@mdi/js";
+import { mdiAccountSwitch, mdiFileDocument } from "@mdi/js";
 import { computed, toRef, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
@@ -130,16 +128,17 @@ const {
   selectedBaseDataName,
   limitName,
   limitGroups,
-  limitVotes,
   limitCommitteeSize,
+  areFieldsRequired = false,
 } = defineProps<{
   limitName: number;
   limitGroups: number;
-  limitVotes: number;
   limitCommitteeSize: number;
+  limitVotes: number;
   selectedBaseDataName?: string | null;
   baseDataNames?: string[];
   showNameColumn: boolean;
+  areFieldsRequired?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -150,12 +149,13 @@ function validChanged(valid: boolean | null) {
 }
 
 const seatFieldValidationError = computed(() => {
+  if (isTooManyGroups.value) {
+    return `Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den ${expectedSeats.value > 0 ? "angegebenen / maximalen" : "maximalen"} Wert.`;
+  }
+  if (isSeatsTooHigh.value && expectedSeats.value > 0)
+    return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
   if (isSeatsTooLow.value)
     return "Die Gesamtsumme der Sitze unterschreitet den angegebenen Wert.";
-  if (isSeatsTooHigh.value)
-    return "Die Gesamtsumme der Sitze überschreitet den angegebenen Wert.";
-  if (isTooManyGroups.value)
-    return "Die Anzahl an Parteien / Gruppierungen / Einzelmitglieder übersteigt den angegebenen Wert.";
   return "";
 });
 

@@ -94,20 +94,10 @@
       </div>
     </template>
 
-    <template #header.committeeSeats="{ column }">
+    <template #header.seatsOrVotes="{ column }">
       <div class="d-flex">
         <v-icon
-          :icon="mdiSeat"
-          class="mx-1"
-        />
-        <p>{{ column.title }}</p>
-      </div>
-    </template>
-
-    <template #header.votes="{ column }">
-      <div class="d-flex">
-        <v-icon
-          :icon="mdiVote"
+          :icon="expectedSeats > 0 ? mdiSeat : mdiVote"
           class="mx-1"
         />
         <p>{{ column.title }}</p>
@@ -116,8 +106,9 @@
 
     <template #item="{ index, toggleSelect, internalItem }">
       <group-data-table-row
-        :ref="groupDataTableRowsRef.set"
+        v-if="groups[index]"
         v-model="groups[index]"
+        :ref="groupDataTableRowsRef.set"
         :group-names="groupNames"
         :limit-name="limitName"
         :limit-seats="expectedSeats"
@@ -177,22 +168,16 @@ import GroupDataTableAddRow from "@/components/basedata/groupdata/GroupDataTable
 import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
 import { UnionType } from "@/types/basedata/Union.ts";
-import { numberFormatter } from "@/utility/numberFormatter.ts";
 
 const headers = computed(() => [
   {
-    title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
+    title: "Name",
     key: "name",
     width: 400,
   },
   {
-    title: `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`,
-    key: "committeeSeats",
-    width: 200,
-  },
-  {
-    title: `Anzahl der Stimmen (optional, max. ${numberFormatter(props.limitVotes)})`,
-    key: "votes",
+    title: displaySeatsOrVotesAsHeader.value,
+    key: "seatsOrVotes",
     width: 200,
   },
   { title: "Aktionen", key: "actions", align: "center", width: 100 },
@@ -209,9 +194,13 @@ const props = defineProps<{
 
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
-const isGroupLimitReached = computed(
-  () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
-);
+const isGroupLimitReached = computed(() => {
+  const limits = [props.limitGroups, props.expectedSeats].filter(
+    (value) => value > 0
+  );
+  if (limits.length === 0) return false;
+  return groups.value.length >= Math.min(...limits);
+});
 function getUnionGroups(unions: Union[]) {
   const flattenedGroups = unions.map((union) => union.groups).flat();
   return [...new Set(flattenedGroups)];
@@ -220,6 +209,9 @@ const fractionGroups = computed(() => getUnionGroups(props.fractions));
 const committeeGroups = computed(() => getUnionGroups(props.committees));
 const unionGroups = computed(() =>
   getUnionGroups([...props.fractions, ...props.committees])
+);
+const displaySeatsOrVotesAsHeader = computed(() =>
+  props.expectedSeats > 0 ? "Sitze" : "Stimmen"
 );
 
 function addNewGroup(group: Group) {

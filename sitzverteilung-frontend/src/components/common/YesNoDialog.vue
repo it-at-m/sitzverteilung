@@ -17,17 +17,15 @@
           id="yesnodialog-btn-no"
           variant="flat"
           @click="no"
-        >
-          {{ noText }}
-        </v-btn>
+          :text="noText"
+        />
         <v-btn
           id="yesnodialog-btn-yes"
           :color="yesColor"
           variant="flat"
           @click="yes"
-        >
-          {{ yesText }}
-        </v-btn>
+          :text="yesText"
+        />
       </v-card-actions>
     </v-card>
   </v-dialog>

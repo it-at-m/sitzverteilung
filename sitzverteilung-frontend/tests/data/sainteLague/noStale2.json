@@ -1,0 +1,88 @@
+{
+  "given": {
+    "committeeSize": 15,
+    "groups": [
+      {
+        "name": "Partei A",
+        "seatsOrVotes": 5200
+      },
+      {
+        "name": "Partei B",
+        "seatsOrVotes": 1700
+      },
+      {
+        "name": "Partei C",
+        "seatsOrVotes": 3100
+      }
+    ]
+  },
+  "expected": {
+    "distribution": {
+      "Partei A": 8,
+      "Partei B": 2,
+      "Partei C": 5
+    },
+    "order": [
+      {
+        "groupName": "Partei A",
+        "value": 5200
+      },
+      {
+        "groupName": "Partei C",
+        "value": 3100
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1733.333
+      },
+      {
+        "groupName": "Partei B",
+        "value": 1700
+      },
+      {
+        "groupName": "Partei A",
+        "value": 1040
+      },
+      {
+        "groupName": "Partei C",
+        "value": 1033.333
+      },
+      {
+        "groupName": "Partei A",
+        "value": 742.857
+      },
+      {
+        "groupName": "Partei C",
+        "value": 620
+      },
+      {
+        "groupName": "Partei A",
+        "value": 577.777
+      },
+      {
+        "groupName": "Partei B",
+        "value": 566.666
+      },
+      {
+        "groupName": "Partei A",
+        "value": 472.727
+      },
+      {
+        "groupName": "Partei C",
+        "value": 442.857
+      },
+      {
+        "groupName": "Partei A",
+        "value": 400
+      },
+      {
+        "groupName": "Partei A",
+        "value": 346.666
+      },
+      {
+        "groupName": "Partei C",
+        "value": 344.444
+      }
+    ]
+  }
+}
