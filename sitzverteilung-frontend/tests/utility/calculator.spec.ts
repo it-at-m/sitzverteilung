@@ -13,8 +13,6 @@ import { UnionType } from "../../src/types/basedata/Union";
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
 import { CalculationProportions } from "../../src/types/calculation/internal/CalculationProportions";
 import { CalculationResult } from "../../src/types/calculation/internal/CalculationResult";
-import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
-import { CalculationValidation } from "../../src/types/calculation/internal/CalculationValidation";
 import { calculate, exportForTesting } from "../../src/utility/calculator";
 import {
   getTestBaseDataWithoutUnion,
@@ -425,111 +423,63 @@ describe("Sainte Lague calculation tests", () => {
 });
 
 describe("Method validity overrounding tests", () => {
-  test("Test method validation", () => {
+  test("Calculate overrounding negative", () => {
     // given
-    const calculationGroups: CalculationGroup[] = [
-      {
-        name: "Test 1",
-        seatsOrVotes: 0,
-      },
-      {
-        name: "Test 2",
-        seatsOrVotes: 0,
-      },
-    ];
+    const groupName = "Test 1";
+    const distributedSeats = 4;
     const proportions: CalculationProportions = {
       "Test 1": 3.56,
       "Test 2": 3.56,
     };
-    const distribution: CalculationSeatDistribution = {
-      "Test 1": 4,
-      "Test 2": 5,
-    };
-    const expected: CalculationValidation = {
-      "Test 1": true,
-      "Test 2": false,
-    };
 
-    const validation = exportForTesting.calculateMethodValidity(
-      calculationGroups,
+    const result = exportForTesting.checkOverroundingForGroup(
+      groupName,
       proportions,
-      distribution
+      distributedSeats
     );
 
-    expect(validation).toEqual(expected);
+    expect(result).toBeFalsy();
   });
 
-  test("Test method validation with stale situation", () => {
-    const calculationGroups: CalculationGroup[] = [
-      {
-        name: "Test 1",
-        seatsOrVotes: 0,
-      },
-      {
-        name: "Test 2",
-        seatsOrVotes: 0,
-      },
-      {
-        name: "Test 3",
-        seatsOrVotes: 0,
-      },
-    ];
+  test("Calculate overrounding positive", () => {
+    // given
+    const groupName = "Test 1";
+    const distributedSeats = 5;
     const proportions: CalculationProportions = {
       "Test 1": 3.56,
       "Test 2": 3.56,
-      "Test 3": 3.56,
     };
-    const distribution: CalculationSeatDistribution = {
-      "Test 1": 4,
-      "Test 2": 4,
-      "Test 3": 5,
+
+    const result = exportForTesting.checkOverroundingForGroup(
+      groupName,
+      proportions,
+      distributedSeats
+    );
+
+    expect(result).toBeTruthy();
+  });
+
+  test("Calculate overrounding with stale situation", () => {
+    const groupName = "Test 2";
+    const distributedSeats = 4;
+    const proportions: CalculationProportions = {
+      "Test 2": 3.56,
     };
+
     const stale: CalculationStale = {
       groupNames: ["Test 2", "Test 3"],
       amountSeats: 1,
       ratio: 0.0,
     };
-    const expected: CalculationValidation = {
-      "Test 1": true,
-      "Test 2": false,
-      "Test 3": false,
-    };
 
-    const validation = exportForTesting.calculateMethodValidity(
-      calculationGroups,
+    const result = exportForTesting.checkOverroundingForGroup(
+      groupName,
       proportions,
-      distribution,
+      distributedSeats,
       stale
     );
 
-    expect(validation).toEqual(expected);
-  });
-
-  test("Test method validation with undefined proportions", () => {
-    const calculationGroups: CalculationGroup[] = [
-      {
-        name: "Test 1",
-        seatsOrVotes: 0,
-      },
-      {
-        name: "Test 2",
-        seatsOrVotes: 0,
-      },
-    ];
-    const proportions: CalculationProportions = {};
-    const distribution: CalculationSeatDistribution = {
-      "Test 1": 4,
-      "Test 2": 5,
-    };
-    const expected: CalculationValidation = {};
-
-    const validation = exportForTesting.calculateMethodValidity(
-      calculationGroups,
-      proportions,
-      distribution
-    );
-
-    expect(validation).toEqual(expected);
+    expect(result).toBeTruthy();
   });
 });
 
