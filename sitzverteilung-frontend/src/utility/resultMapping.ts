@@ -75,14 +75,12 @@ function mapMethodResultToResultData(
   const stale = methodResult.stale;
   const validation = methodResult.validation;
 
-  const methodPrefix =
-    method === CalculationMethod.D_HONDT
-      ? "D'Hondt"
-      : method === CalculationMethod.HARE_NIEMEYER
-        ? "Hare/Niemeyer"
-        : method === CalculationMethod.SAINTE_LAGUE_SCHEPERS
-          ? "Sainte-Laguë/Schepers"
-          : "";
+  const METHOD_PREFIX_MAP: Record<CalculationMethod, string> = {
+    [CalculationMethod.D_HONDT]: "D'Hondt",
+    [CalculationMethod.HARE_NIEMEYER]: "Hare/Niemeyer",
+    [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: "Sainte-Laguë/Schepers",
+  };
+  const methodPrefix = METHOD_PREFIX_MAP[method];
 
   const seatKey = `${methodPrefix}-seats` as ResultDataKeys;
   const staleKey = `${methodPrefix}-stale` as ResultDataKeys;
