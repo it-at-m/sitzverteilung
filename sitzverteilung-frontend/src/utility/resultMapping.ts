@@ -22,11 +22,10 @@ export function mapCalculationResultToResultData(
       "Hare/Niemeyer-stale": 0,
       "Sainte-Laguë/Schepers-seats": 0,
       "Sainte-Laguë/Schepers-stale": 0,
-      "D'Hondt-validation": 0, // Standardwert
-      "Hare/Niemeyer-validation": 0, // Standardwert
-      "Sainte-Laguë/Schepers-validation": 0, // Standardwert
+      "D'Hondt-validation": 0,
+      "Hare/Niemeyer-validation": 0,
+      "Sainte-Laguë/Schepers-validation": 0,
       staleResults: {
-        // Neues Feld für das stale-Objekt
         [CalculationMethod.D_HONDT]: {
           groupNames: [],
           amountSeats: 0,
@@ -63,7 +62,7 @@ export function mapCalculationResultToResultData(
             resultData["D'Hondt-validation"] =
               !validationData.overRounding && !validationData.lostSafeSeat
                 ? 1
-                : 0; // Anpassung der Validierung
+                : 0;
           }
           resultData.staleResults[CalculationMethod.D_HONDT] = {
             groupNames: stale ? stale.groupNames : [],
@@ -78,7 +77,7 @@ export function mapCalculationResultToResultData(
             resultData["Hare/Niemeyer-validation"] =
               !validationData.overRounding && !validationData.lostSafeSeat
                 ? 1
-                : 0; // Anpassung der Validierung
+                : 0;
           }
           resultData.staleResults[CalculationMethod.HARE_NIEMEYER] = {
             groupNames: stale ? stale.groupNames : [],
@@ -94,7 +93,7 @@ export function mapCalculationResultToResultData(
             resultData["Sainte-Laguë/Schepers-validation"] =
               !validationData.overRounding && !validationData.lostSafeSeat
                 ? 1
-                : 0; // Anpassung der Validierung
+                : 0;
           }
           resultData.staleResults[CalculationMethod.SAINTE_LAGUE_SCHEPERS] = {
             groupNames: stale ? stale.groupNames : [],
