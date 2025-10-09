@@ -9,12 +9,12 @@ export function mapCalculationResultToResultData(
   const resultDataArray: ResultData[] = [];
 
   for (const groupName in calculationResult.proportions) {
-    const seatsOrVotes = calculationResult.proportions[groupName];
+    const proportion = calculationResult.proportions[groupName];
 
     const resultData: ResultData = {
       name: groupName,
-      seatsOrVotes: seatsOrVotes,
-      proportion: seatsOrVotes,
+      seatsOrVotes: 0,
+      proportion: proportion ?? 0,
       documentation: "",
       "D'Hondt-seats": 0,
       "D'Hondt-stale": 0,

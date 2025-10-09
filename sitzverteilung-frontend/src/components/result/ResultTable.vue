@@ -153,9 +153,8 @@ function updateSeatsOrVotes(
     }
   }
 
-  // Durchlaufe das resultDataArray und aktualisiere die seatsOrVotes
   for (const resultData of resultDataArray) {
-    resultData.seatsOrVotes = seatsMapping[resultData.name]; // Setze den Wert aus baseData
+    resultData.seatsOrVotes = seatsMapping[resultData.name] ?? 0;
   }
   return resultDataArray;
 }

@@ -17,7 +17,7 @@ describe("mapCalculationResultToResultData", () => {
     const firstGroup = result[0];
 
     expect(firstGroup.name).toBeDefined();
-    expect(firstGroup.seatsOrVotes).toBeGreaterThan(0);
+    expect(firstGroup.seatsOrVotes).toBe(0);
     expect(firstGroup.proportion).toBeGreaterThan(0);
     expect(firstGroup.documentation).toBe("");
   });
