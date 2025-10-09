@@ -65,6 +65,12 @@ export function mapCalculationResultToResultData(
   return resultDataArray;
 }
 
+const METHOD_PREFIX_MAP: Record<CalculationMethod, string> = {
+  [CalculationMethod.D_HONDT]: "D'Hondt",
+  [CalculationMethod.HARE_NIEMEYER]: "Hare/Niemeyer",
+  [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: "Sainte-Laguë/Schepers",
+};
+
 function mapMethodResultToResultData(
   resultData: ResultData,
   method: CalculationMethod,
@@ -74,12 +80,6 @@ function mapMethodResultToResultData(
   const distribution = methodResult.distribution;
   const stale = methodResult.stale;
   const validation = methodResult.validation;
-
-  const METHOD_PREFIX_MAP: Record<CalculationMethod, string> = {
-    [CalculationMethod.D_HONDT]: "D'Hondt",
-    [CalculationMethod.HARE_NIEMEYER]: "Hare/Niemeyer",
-    [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: "Sainte-Laguë/Schepers",
-  };
   const methodPrefix = METHOD_PREFIX_MAP[method];
 
   const seatKey = `${methodPrefix}-seats` as ResultDataKeys;
@@ -87,7 +87,7 @@ function mapMethodResultToResultData(
   const validationKey = `${methodPrefix}-validation` as ResultDataKeys;
 
   resultData[seatKey] = distribution[groupName] || 0;
-  resultData[staleKey] = stale ? 1 : 0;
+  resultData[staleKey] = stale?.groupNames.includes(groupName) ? 1 : 0;
 
   if (validation && validation[groupName]) {
     const validationData = validation[groupName];
@@ -95,9 +95,9 @@ function mapMethodResultToResultData(
       !validationData.overRounding && !validationData.lostSafeSeat ? 1 : 0;
   }
 
-  resultData.staleResults[method] = {
-    groupNames: stale ? stale.groupNames : [],
-    amountSeats: stale ? stale.amountSeats : 0,
-    ratio: stale ? stale.ratio : 0,
+  resultData.staleResults[method] = stale ?? {
+    groupNames: [],
+    amountSeats: 0,
+    ratio: 0,
   };
 }
