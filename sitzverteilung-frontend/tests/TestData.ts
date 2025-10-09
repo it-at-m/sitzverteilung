@@ -1,8 +1,8 @@
 import { BaseData } from "../src/types/basedata/BaseData";
 import { UnionType } from "../src/types/basedata/Union";
+import { CalculationMethod } from "../src/types/calculation/CalculationMethod";
+import { CalculationResult } from "../src/types/calculation/internal/CalculationResult";
 import { LimitConfiguration } from "../src/utility/validation";
-import {CalculationResult} from "../src/types/calculation/internal/CalculationResult";
-import {CalculationMethod} from "../src/types/calculation/CalculationMethod";
 
 export function getTestBaseDataWithoutUnion(): BaseData {
   return {
@@ -190,45 +190,45 @@ export function getTestBaseDataInputTooLarge(): BaseData {
 export function getTestCalculationResult(): CalculationResult {
   return {
     proportions: {
-      'Testgroup 1': 1,
-      'Testgroup 2': 1.5,
+      "Testgroup 1": 1,
+      "Testgroup 2": 1.5,
     },
     methods: {
       [CalculationMethod.D_HONDT]: {
         distribution: {
-          'Testgroup 1': 2,
-          'Testgroup 2': 3,
+          "Testgroup 1": 2,
+          "Testgroup 2": 3,
         },
         stale: null,
         validation: {
-          'Testgroup 1': { overRounding: false, lostSafeSeat: false },
-          'Testgroup 2': { overRounding: false, lostSafeSeat: false },
-        }
+          "Testgroup 1": { overRounding: false, lostSafeSeat: false },
+          "Testgroup 2": { overRounding: false, lostSafeSeat: false },
+        },
       },
       [CalculationMethod.HARE_NIEMEYER]: {
         distribution: {
-          'Testgroup 1': 4,
-          'Testgroup 2': 5,
+          "Testgroup 1": 4,
+          "Testgroup 2": 5,
         },
         stale: null,
         validation: {
-          'Testgroup 1': { overRounding: false, lostSafeSeat: false },
-          'Testgroup 2': { overRounding: false, lostSafeSeat: false },
-        }
+          "Testgroup 1": { overRounding: false, lostSafeSeat: false },
+          "Testgroup 2": { overRounding: false, lostSafeSeat: false },
+        },
       },
       [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
         distribution: {
-          'Testgroup 1': 6,
-          'Testgroup 2': 7,
+          "Testgroup 1": 6,
+          "Testgroup 2": 7,
         },
         stale: null,
         validation: {
-          'Testgroup 1': { overRounding: true, lostSafeSeat: false },
-          'Testgroup 2': { overRounding: false, lostSafeSeat: false },
-        }
-      }
-    }
-  }
+          "Testgroup 1": { overRounding: true, lostSafeSeat: false },
+          "Testgroup 2": { overRounding: false, lostSafeSeat: false },
+        },
+      },
+    },
+  };
 }
 
 function generateUniqueString(

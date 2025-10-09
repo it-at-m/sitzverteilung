@@ -50,8 +50,8 @@
       are-fields-required
     />
     <result-table
-        :has-valid-data="hasValidData"
-        :current-base-data="currentBaseData"
+      :has-valid-data="hasValidData"
+      :current-base-data="currentBaseData"
     />
   </v-container>
 </template>

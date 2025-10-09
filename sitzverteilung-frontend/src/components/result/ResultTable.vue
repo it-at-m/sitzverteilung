@@ -30,15 +30,15 @@
     />
   </v-toolbar>
   <v-data-table
-      v-if="hasValidData"
-      :headers="headers"
-      :items="startCalculate"
-      hide-default-footer
-      no-filter
-      disable-sort
-      density="compact"
-      no-data-text=""
-      :items-per-page="-1"
+    v-if="hasValidData"
+    :headers="headers"
+    :items="startCalculate"
+    hide-default-footer
+    no-filter
+    disable-sort
+    density="compact"
+    no-data-text=""
+    :items-per-page="-1"
   />
   <v-row v-if="!hasValidData">
     <v-col>
@@ -51,17 +51,18 @@
   </v-row>
 </template>
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
+import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
+
+import { computed, ref } from "vue";
 
 import {
   AVAILABLE_METHODS,
   CALCULATION_METHOD_SHORT_FORMS,
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
-import {calculate} from "@/utility/calculator.ts";
-import {mapCalculationResultToResultData} from "@/utility/resultMapping.ts";
-import type {ResultData} from "@/types/calculation/ui/ResultData.ts";
-import type {BaseData} from "@/types/basedata/BaseData.ts";
+import { calculate } from "@/utility/calculator.ts";
+import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 
 const props = defineProps<{
   hasValidData: boolean;
@@ -136,12 +137,15 @@ function getValidationColumns() {
 }
 
 const startCalculate = computed(() => {
-    const resultToMap = calculate(props.currentBaseData);
-    const resultToShow = mapCalculationResultToResultData(resultToMap);
-    return updateSeatsOrVotes(resultToShow, props.currentBaseData);
-  });
+  const resultToMap = calculate(props.currentBaseData);
+  const resultToShow = mapCalculationResultToResultData(resultToMap);
+  return updateSeatsOrVotes(resultToShow, props.currentBaseData);
+});
 
-function updateSeatsOrVotes(resultDataArray: ResultData[], baseData: BaseData): ResultData[] {
+function updateSeatsOrVotes(
+  resultDataArray: ResultData[],
+  baseData: BaseData
+): ResultData[] {
   const seatsMapping: Record<string, number> = {};
   for (const group of baseData.groups) {
     if (group.seatsOrVotes != undefined) {
@@ -151,7 +155,7 @@ function updateSeatsOrVotes(resultDataArray: ResultData[], baseData: BaseData): 
 
   // Durchlaufe das resultDataArray und aktualisiere die seatsOrVotes
   for (const resultData of resultDataArray) {
-      resultData.seatsOrVotes = seatsMapping[resultData.name]; // Setze den Wert aus baseData
+    resultData.seatsOrVotes = seatsMapping[resultData.name]; // Setze den Wert aus baseData
   }
   return resultDataArray;
 }
