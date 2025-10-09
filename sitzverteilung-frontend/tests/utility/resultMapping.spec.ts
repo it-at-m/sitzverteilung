@@ -26,10 +26,7 @@ describe("mapCalculationResultToResultData", () => {
     const result = mapCalculationResultToResultData(getTestCalculationResult());
     const group1 = result.find((r) => r.name === "Testgroup 1");
 
-    if (!group1) {
-      throw new Error("Testgroup 1 not found");
-    }
-
+    expect(group1).toBeDefined();
     expect(group1["D'Hondt-seats"]).toBe(2);
     expect(group1["Hare/Niemeyer-seats"]).toBe(4);
     expect(group1["Sainte-Laguë/Schepers-seats"]).toBe(6);
@@ -39,10 +36,7 @@ describe("mapCalculationResultToResultData", () => {
     const result = mapCalculationResultToResultData(getTestCalculationResult());
     const group1 = result.find((r) => r.name === "Testgroup 1");
 
-    if (!group1) {
-      throw new Error("Testgroup 1 not found");
-    }
-
+    expect(group1).toBeDefined();
     expect(group1["D'Hondt-validation"]).toBe(1);
     expect(group1["Hare/Niemeyer-validation"]).toBe(1);
     expect(group1["Sainte-Laguë/Schepers-validation"]).toBe(0);

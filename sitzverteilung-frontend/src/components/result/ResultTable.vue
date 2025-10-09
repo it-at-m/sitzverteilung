@@ -153,10 +153,10 @@ function updateSeatsOrVotes(
     }
   }
 
-  for (const resultData of resultDataArray) {
-    resultData.seatsOrVotes = seatsMapping[resultData.name] ?? 0;
-  }
-  return resultDataArray;
+  return resultDataArray.map((r) => ({
+    ...r,
+    seatsOrVotes: seatsMapping[r.name] ?? r.seatsOrVotes ?? 0,
+  }));
 }
 
 const dialog = ref(false);

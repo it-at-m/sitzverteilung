@@ -1,5 +1,7 @@
+import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
+import type { ResultDataKeys } from "@/types/calculation/ui/ResultDataKeys.ts";
 
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
@@ -48,63 +50,56 @@ export function mapCalculationResultToResultData(
       calculationResult.methods
     ) as CalculationMethod[]) {
       const methodResult = calculationResult.methods[method];
-
       if (methodResult) {
-        const distribution = methodResult.distribution;
-        const stale = methodResult.stale;
-        const validation = methodResult.validation;
-
-        if (method === CalculationMethod.D_HONDT) {
-          resultData["D'Hondt-seats"] = distribution[groupName] || 0;
-          resultData["D'Hondt-stale"] = stale ? 1 : 0;
-          if (validation && validation[groupName]) {
-            const validationData = validation[groupName];
-            resultData["D'Hondt-validation"] =
-              !validationData.overRounding && !validationData.lostSafeSeat
-                ? 1
-                : 0;
-          }
-          resultData.staleResults[CalculationMethod.D_HONDT] = {
-            groupNames: stale ? stale.groupNames : [],
-            amountSeats: stale ? stale.amountSeats : 0,
-            ratio: stale ? stale.ratio : 0,
-          };
-        } else if (method === CalculationMethod.HARE_NIEMEYER) {
-          resultData["Hare/Niemeyer-seats"] = distribution[groupName] || 0;
-          resultData["Hare/Niemeyer-stale"] = stale ? 1 : 0;
-          if (validation && validation[groupName]) {
-            const validationData = validation[groupName];
-            resultData["Hare/Niemeyer-validation"] =
-              !validationData.overRounding && !validationData.lostSafeSeat
-                ? 1
-                : 0;
-          }
-          resultData.staleResults[CalculationMethod.HARE_NIEMEYER] = {
-            groupNames: stale ? stale.groupNames : [],
-            amountSeats: stale ? stale.amountSeats : 0,
-            ratio: stale ? stale.ratio : 0,
-          };
-        } else if (method === CalculationMethod.SAINTE_LAGUE_SCHEPERS) {
-          resultData["Sainte-Laguë/Schepers-seats"] =
-            distribution[groupName] || 0;
-          resultData["Sainte-Laguë/Schepers-stale"] = stale ? 1 : 0;
-          if (validation && validation[groupName]) {
-            const validationData = validation[groupName];
-            resultData["Sainte-Laguë/Schepers-validation"] =
-              !validationData.overRounding && !validationData.lostSafeSeat
-                ? 1
-                : 0;
-          }
-          resultData.staleResults[CalculationMethod.SAINTE_LAGUE_SCHEPERS] = {
-            groupNames: stale ? stale.groupNames : [],
-            amountSeats: stale ? stale.amountSeats : 0,
-            ratio: stale ? stale.ratio : 0,
-          };
-        }
+        mapMethodResultToResultData(
+          resultData,
+          method,
+          methodResult,
+          groupName
+        );
       }
     }
 
     resultDataArray.push(resultData);
   }
   return resultDataArray;
+}
+
+function mapMethodResultToResultData(
+  resultData: ResultData,
+  method: CalculationMethod,
+  methodResult: CalculationMethodResult,
+  groupName: string
+) {
+  const distribution = methodResult.distribution;
+  const stale = methodResult.stale;
+  const validation = methodResult.validation;
+
+  const methodPrefix =
+    method === CalculationMethod.D_HONDT
+      ? "D'Hondt"
+      : method === CalculationMethod.HARE_NIEMEYER
+        ? "Hare/Niemeyer"
+        : method === CalculationMethod.SAINTE_LAGUE_SCHEPERS
+          ? "Sainte-Laguë/Schepers"
+          : "";
+
+  const seatKey = `${methodPrefix}-seats` as ResultDataKeys;
+  const staleKey = `${methodPrefix}-stale` as ResultDataKeys;
+  const validationKey = `${methodPrefix}-validation` as ResultDataKeys;
+
+  resultData[seatKey] = distribution[groupName] || 0;
+  resultData[staleKey] = stale ? 1 : 0;
+
+  if (validation && validation[groupName]) {
+    const validationData = validation[groupName];
+    resultData[validationKey] =
+      !validationData.overRounding && !validationData.lostSafeSeat ? 1 : 0;
+  }
+
+  resultData.staleResults[method] = {
+    groupNames: stale ? stale.groupNames : [],
+    amountSeats: stale ? stale.amountSeats : 0,
+    ratio: stale ? stale.ratio : 0,
+  };
 }
