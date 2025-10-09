@@ -30,14 +30,15 @@
     />
   </v-toolbar>
   <v-data-table
-    :headers="headers"
-    :items="results"
-    hide-default-footer
-    no-filter
-    disable-sort
-    density="compact"
-    no-data-text=""
-    :items-per-page="-1"
+      v-if="hasValidData"
+      :headers="headers"
+      :items="startCalculate"
+      hide-default-footer
+      no-filter
+      disable-sort
+      density="compact"
+      no-data-text=""
+      :items-per-page="-1"
   />
   <v-row v-if="!hasValidData">
     <v-col>
@@ -50,16 +51,21 @@
   </v-row>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import {computed, ref} from "vue";
 
 import {
   AVAILABLE_METHODS,
   CALCULATION_METHOD_SHORT_FORMS,
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
+import {calculate} from "@/utility/calculator.ts";
+import {mapCalculationResultToResultData} from "@/utility/resultMapping.ts";
+import type {ResultData} from "@/types/calculation/ui/ResultData.ts";
+import type {BaseData} from "@/types/basedata/BaseData.ts";
 
-const { hasValidData = false } = defineProps<{
+const props = defineProps<{
   hasValidData: boolean;
+  currentBaseData: BaseData;
 }>();
 
 const headers = [
@@ -129,7 +135,27 @@ function getValidationColumns() {
   });
 }
 
-const results = ref<unknown[]>([]);
+const startCalculate = computed(() => {
+    const resultToMap = calculate(props.currentBaseData);
+    const resultToShow = mapCalculationResultToResultData(resultToMap);
+    return updateSeatsOrVotes(resultToShow, props.currentBaseData);
+  });
+
+function updateSeatsOrVotes(resultDataArray: ResultData[], baseData: BaseData): ResultData[] {
+  const seatsMapping: Record<string, number> = {};
+  for (const group of baseData.groups) {
+    if (group.seatsOrVotes != undefined) {
+      seatsMapping[group.name] = group.seatsOrVotes;
+    }
+  }
+
+  // Durchlaufe das resultDataArray und aktualisiere die seatsOrVotes
+  for (const resultData of resultDataArray) {
+      resultData.seatsOrVotes = seatsMapping[resultData.name]; // Setze den Wert aus baseData
+  }
+  return resultDataArray;
+}
+
 const dialog = ref(false);
 const detailTitle = ref("");
 
