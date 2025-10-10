@@ -26,6 +26,7 @@
       class="mx-2"
       @click="goToDetail(method)"
       :text="method"
+      :disabled="!hasValidData"
     />
   </v-toolbar>
   <v-data-table
@@ -35,9 +36,18 @@
     no-filter
     disable-sort
     density="compact"
-    no-data-text="Keine Berechnungsdaten vorhanden."
+    no-data-text=""
     :items-per-page="-1"
   />
+  <v-row v-if="!hasValidData">
+    <v-col>
+      <v-alert
+        text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
+        type="error"
+        variant="tonal"
+      />
+    </v-col>
+  </v-row>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
@@ -47,6 +57,10 @@ import {
   CALCULATION_METHOD_SHORT_FORMS,
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
+
+const { hasValidData = false } = defineProps<{
+  hasValidData: boolean;
+}>();
 
 const headers = [
   {
