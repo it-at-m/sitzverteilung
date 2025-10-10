@@ -72,7 +72,7 @@ function mapMethodResultToResultData(
   if (validation && validation[groupName]) {
     const validationData = validation[groupName];
     resultData[validationKey] =
-      validationData.committeeInvalid.length == 0 &&
+      validationData.committeeInvalid.length === 0 &&
       !validationData.overRounding &&
       !validationData.lostSafeSeat
         ? 1

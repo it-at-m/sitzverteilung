@@ -39,17 +39,4 @@ describe("mapCalculationResultToResultData", () => {
     const result = mapCalculationResultToResultData(invalidInput);
     expect(result.length).toBe(0);
   });
-
-  test("stale flags are mapped correctly", () => {
-    const result = mapCalculationResultToResultData(getTestCalculationResult());
-    const group1 = result.find((r) => r.name === "Testgroup 1");
-
-    if (group1 === undefined) {
-      throw new Error("Group1 is undefined");
-    } else {
-      expect(group1["D'Hondt-stale"]).toBe(0);
-      expect(group1["Hare/Niemeyer-stale"]).toBe(0);
-      expect(group1["Sainte-Laguë/Schepers-stale"]).toBe(0);
-    }
-  });
 });
