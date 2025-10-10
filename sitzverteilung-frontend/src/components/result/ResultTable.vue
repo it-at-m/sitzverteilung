@@ -30,9 +30,8 @@
     />
   </v-toolbar>
   <v-data-table
-    v-if="hasValidData"
     :headers="headers"
-    :items="startCalculate"
+    :items="calculationResults"
     hide-default-footer
     no-filter
     disable-sort
@@ -54,20 +53,20 @@
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 import {
   AVAILABLE_METHODS,
   CALCULATION_METHOD_SHORT_FORMS,
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
-import { calculate } from "@/utility/calculator.ts";
-import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
+import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
-const props = defineProps<{
+defineProps<{
   hasValidData: boolean;
   currentBaseData: BaseData;
 }>();
+const calculationResults = defineModel<ResultData[]>({ required: true });
 
 const headers = [
   {
@@ -113,12 +112,12 @@ function getResultColumns() {
       children: [
         {
           title: "Sitze",
-          key: `${method}-seats`,
+          key: `${method}` + ResultDataSuffix.seatsSuffix,
           width: 50,
         },
         {
           title: "Patt",
-          key: `${method}-stale`,
+          key: `${method}` + ResultDataSuffix.staleSuffix,
           width: 50,
         },
       ],
@@ -130,33 +129,10 @@ function getValidationColumns() {
   return AVAILABLE_METHODS.map((method) => {
     return {
       title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: `${method}-validation`,
+      key: `${method}` + ResultDataSuffix.validationSuffix,
       width: 60,
     };
   });
-}
-
-const startCalculate = computed(() => {
-  const resultToMap = calculate(props.currentBaseData);
-  const resultToShow = mapCalculationResultToResultData(resultToMap);
-  return updateSeatsOrVotes(resultToShow, props.currentBaseData);
-});
-
-function updateSeatsOrVotes(
-  resultDataArray: ResultData[],
-  baseData: BaseData
-): ResultData[] {
-  const seatsMapping: Record<string, number> = {};
-  for (const group of baseData.groups) {
-    if (group.seatsOrVotes != undefined) {
-      seatsMapping[group.name] = group.seatsOrVotes;
-    }
-  }
-
-  return resultDataArray.map((r) => ({
-    ...r,
-    seatsOrVotes: seatsMapping[r.name] ?? r.seatsOrVotes ?? 0,
-  }));
 }
 
 const dialog = ref(false);
