@@ -76,6 +76,17 @@ describe("Full calculation tests", () => {
       unions: [],
     };
     const expected: CalculationResult = {
+      seats: {
+        "Group 1": 23,
+        "Group 2": 23,
+        "Group 3": 17,
+        "Group 4": 4,
+        "Group 5": 4,
+        "Group 6": 4,
+        "Group 7": 3,
+        "Group 8": 1,
+        "Group 9": 1,
+      },
       proportions: {
         "Group 1": 4.0249999999999995,
         "Group 2": 4.0249999999999995,
@@ -505,6 +516,15 @@ describe("Full calculation tests", () => {
       ],
     };
     const expected: CalculationResult = {
+      seats: {
+        "Group 1": 21,
+        "Group 2": 21,
+        "Group 3": 21,
+        "Group 5": 3,
+        "Group 6": 3,
+        "Group 7": 4,
+        "AG: Test": 7,
+      },
       proportions: {
         "Group 1": 4.2,
         "Group 2": 4.2,
