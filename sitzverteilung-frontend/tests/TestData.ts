@@ -294,8 +294,16 @@ export function getTestCalculationResult(): CalculationResult {
         },
         stale: null,
         validation: {
-          "Testgroup 1": { overRounding: false, lostSafeSeat: false ,committeeInvalid: [] },
-          "Testgroup 2": { overRounding: false, lostSafeSeat: false ,committeeInvalid: [] },
+          "Testgroup 1": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
         },
       },
       [CalculationMethod.HARE_NIEMEYER]: {
@@ -307,8 +315,16 @@ export function getTestCalculationResult(): CalculationResult {
           groupNames: ["Testgroup 1"],
         },
         validation: {
-          "Testgroup 1": { overRounding: false, lostSafeSeat: false ,committeeInvalid: [] },
-          "Testgroup 2": { overRounding: false, lostSafeSeat: false ,committeeInvalid: [] },
+          "Testgroup 1": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
         },
       },
       [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
@@ -318,8 +334,16 @@ export function getTestCalculationResult(): CalculationResult {
         },
         stale: null,
         validation: {
-          "Testgroup 1": { overRounding: true, lostSafeSeat: false ,committeeInvalid: [] },
-          "Testgroup 2": { overRounding: false, lostSafeSeat: false ,committeeInvalid: [] },
+          "Testgroup 1": {
+            overRounding: true,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
         },
       },
     },
