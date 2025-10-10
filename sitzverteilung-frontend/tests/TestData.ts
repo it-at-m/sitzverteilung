@@ -59,6 +59,95 @@ export function getTestBaseDataWithUnion(): BaseData {
   };
 }
 
+export function getTestBaseDataWithOverlapCommitteeFraction(): BaseData {
+  return {
+    name: "TestData 1",
+    committeeSize: 120,
+    targetSize: 10,
+    groups: [
+      {
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20,
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 5",
+        seatsOrVotes: 30,
+      },
+    ],
+    unions: [
+      {
+        name: "Fraction 1",
+        unionType: UnionType.FRACTION,
+        groups: [1, 2],
+      },
+      {
+        name: "Committee 1",
+        unionType: UnionType.COMMITTEE,
+        groups: [0, 1],
+      },
+      {
+        name: "Committee 2",
+        unionType: UnionType.COMMITTEE,
+        groups: [3, 4],
+      },
+    ],
+  };
+}
+
+export function getTestBaseDataWithNoOverlap(): BaseData {
+  return {
+    name: "TestData 1",
+    committeeSize: 120,
+    targetSize: 10,
+    groups: [
+      {
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20,
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 5",
+        seatsOrVotes: 30,
+      },
+    ],
+    unions: [
+      {
+        name: "Fraction 1",
+        unionType: UnionType.FRACTION,
+        groups: [0, 1],
+      },
+      {
+        name: "Committee 1",
+        unionType: UnionType.COMMITTEE,
+        groups: [3, 4],
+      },
+    ],
+  };
+}
+
 export function getTestBaseDataEmptyGroups(): BaseData {
   return {
     name: "TestData Empty Groups",
