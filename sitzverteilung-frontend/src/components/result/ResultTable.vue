@@ -31,7 +31,7 @@
   </v-toolbar>
   <v-data-table
     :headers="headers"
-    :items="results"
+    :items="calculationResults"
     hide-default-footer
     no-filter
     disable-sort
@@ -50,6 +50,9 @@
   </v-row>
 </template>
 <script setup lang="ts">
+import type { BaseData } from "@/types/basedata/BaseData.ts";
+import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
+
 import { ref } from "vue";
 
 import {
@@ -57,10 +60,13 @@ import {
   CALCULATION_METHOD_SHORT_FORMS,
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
+import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
-const { hasValidData = false } = defineProps<{
+defineProps<{
   hasValidData: boolean;
+  currentBaseData: BaseData;
 }>();
+const calculationResults = defineModel<ResultData[]>({ required: true });
 
 const headers = [
   {
@@ -106,12 +112,12 @@ function getResultColumns() {
       children: [
         {
           title: "Sitze",
-          key: `${method}-seats`,
+          key: `${method}` + ResultDataSuffix.seatsSuffix,
           width: 50,
         },
         {
           title: "Patt",
-          key: `${method}-stale`,
+          key: `${method}` + ResultDataSuffix.staleSuffix,
           width: 50,
         },
       ],
@@ -123,13 +129,12 @@ function getValidationColumns() {
   return AVAILABLE_METHODS.map((method) => {
     return {
       title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: `${method}-validation`,
+      key: `${method}` + ResultDataSuffix.validationSuffix,
       width: 60,
     };
   });
 }
 
-const results = ref<unknown[]>([]);
 const dialog = ref(false);
 const detailTitle = ref("");
 
