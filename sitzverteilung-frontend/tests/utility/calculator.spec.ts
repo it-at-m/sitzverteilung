@@ -9,6 +9,7 @@ import type { CalculationMethodResult } from "../../src/types/calculation/intern
 import type { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 
 import { BaseData } from "../../src/types/basedata/BaseData";
+import { UnionType } from "../../src/types/basedata/Union";
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
 import { CalculationProportions } from "../../src/types/calculation/internal/CalculationProportions";
 import { CalculationResult } from "../../src/types/calculation/internal/CalculationResult";
@@ -438,6 +439,421 @@ describe("Full calculation tests", () => {
               overRounding: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+            },
+          },
+        } as CalculationMethodResult,
+      },
+    };
+
+    const calculationResult = calculate(baseData);
+
+    expect(calculationResult).toEqual(expected);
+  });
+  test("Full test with lost seats and invalid committee", () => {
+    const baseData: BaseData = {
+      name: "Test lost seats and invalid committee",
+      targetSize: 16,
+      committeeSize: 80,
+      groups: [
+        {
+          name: "Group 1",
+          seatsOrVotes: 21,
+        },
+        {
+          name: "Group 2",
+          seatsOrVotes: 21,
+        },
+        {
+          name: "Group 3",
+          seatsOrVotes: 21,
+        },
+        {
+          name: "Group 4",
+          seatsOrVotes: 3,
+        },
+        {
+          name: "Group 5",
+          seatsOrVotes: 3,
+        },
+        {
+          name: "Group 6",
+          seatsOrVotes: 3,
+        },
+        {
+          name: "Group 7",
+          seatsOrVotes: 4,
+        },
+        {
+          name: "Group 8",
+          seatsOrVotes: 2,
+        },
+        {
+          name: "Group 9",
+          seatsOrVotes: 1,
+        },
+        {
+          name: "Group 10",
+          seatsOrVotes: 1,
+        },
+      ],
+      unions: [
+        {
+          name: "Test",
+          unionType: UnionType.COMMITTEE,
+          groups: [3, 7, 8, 9],
+        },
+      ],
+    };
+    const expected: CalculationResult = {
+      proportions: {
+        "Group 1": 4.2,
+        "Group 2": 4.2,
+        "Group 3": 4.2,
+        "Group 5": 0.6,
+        "Group 6": 0.6,
+        "Group 7": 0.8,
+        "AG: Test": 1.4,
+      },
+      methods: {
+        [CalculationMethod.D_HONDT]: {
+          distribution: {
+            "Group 1": 5,
+            "Group 2": 5,
+            "Group 3": 5,
+            "Group 5": 0,
+            "Group 6": 0,
+            "Group 7": 0,
+            "AG: Test": 1,
+          },
+          order: [
+            {
+              groupName: "Group 1",
+              value: 21,
+            },
+            {
+              groupName: "Group 2",
+              value: 21,
+            },
+            {
+              groupName: "Group 3",
+              value: 21,
+            },
+            {
+              groupName: "Group 1",
+              value: 10.5,
+            },
+            {
+              groupName: "Group 2",
+              value: 10.5,
+            },
+            {
+              groupName: "Group 3",
+              value: 10.5,
+            },
+            {
+              groupName: "Group 1",
+              value: 7,
+            },
+            {
+              groupName: "Group 2",
+              value: 7,
+            },
+            {
+              groupName: "Group 3",
+              value: 7,
+            },
+            {
+              groupName: "AG: Test",
+              value: 7,
+            },
+            {
+              groupName: "Group 1",
+              value: 5.25,
+            },
+            {
+              groupName: "Group 2",
+              value: 5.25,
+            },
+            {
+              groupName: "Group 3",
+              value: 5.25,
+            },
+            {
+              groupName: "Group 1",
+              value: 4.2,
+            },
+            {
+              groupName: "Group 2",
+              value: 4.2,
+            },
+            {
+              groupName: "Group 3",
+              value: 4.2,
+            },
+          ],
+          validation: {
+            "Group 1": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 2": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 3": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 5": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 6": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 7": {
+              overRounding: false,
+              lostSafeSeat: true,
+              committeeInvalid: [],
+            },
+            "AG: Test": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+          },
+        } as CalculationMethodResult,
+        [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
+          distribution: {
+            "Group 1": 4,
+            "Group 2": 4,
+            "Group 3": 4,
+            "Group 5": 1,
+            "Group 6": 1,
+            "Group 7": 1,
+            "AG: Test": 1,
+          },
+          order: [
+            {
+              groupName: "Group 1",
+              value: 21,
+            },
+            {
+              groupName: "Group 2",
+              value: 21,
+            },
+            {
+              groupName: "Group 3",
+              value: 21,
+            },
+            {
+              groupName: "Group 1",
+              value: 7,
+            },
+            {
+              groupName: "Group 2",
+              value: 7,
+            },
+            {
+              groupName: "Group 3",
+              value: 7,
+            },
+            {
+              groupName: "AG: Test",
+              value: 7,
+            },
+            {
+              groupName: "Group 1",
+              value: 4.2,
+            },
+            {
+              groupName: "Group 2",
+              value: 4.2,
+            },
+            {
+              groupName: "Group 3",
+              value: 4.2,
+            },
+            {
+              groupName: "Group 7",
+              value: 4,
+            },
+            {
+              groupName: "Group 1",
+              value: 3,
+            },
+            {
+              groupName: "Group 2",
+              value: 3,
+            },
+            {
+              groupName: "Group 3",
+              value: 3,
+            },
+            {
+              groupName: "Group 5",
+              value: 3,
+            },
+            {
+              groupName: "Group 6",
+              value: 3,
+            },
+          ],
+          validation: {
+            "Group 1": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 2": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 3": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 5": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 6": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 7": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "AG: Test": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [], // TODO ["Group 4"]
+            },
+          },
+        } as CalculationMethodResult,
+        [CalculationMethod.HARE_NIEMEYER]: {
+          distribution: {
+            "Group 1": 4,
+            "Group 2": 4,
+            "Group 3": 4,
+            "Group 5": 1,
+            "Group 6": 1,
+            "Group 7": 1,
+            "AG: Test": 1,
+          },
+          order: [
+            {
+              groupName: "Group 1",
+              value: 4,
+            },
+            {
+              groupName: "Group 2",
+              value: 4,
+            },
+            {
+              groupName: "Group 3",
+              value: 4,
+            },
+            {
+              groupName: "Group 1",
+              value: 2,
+            },
+            {
+              groupName: "Group 2",
+              value: 2,
+            },
+            {
+              groupName: "Group 3",
+              value: 2,
+            },
+            {
+              groupName: "Group 1",
+              value: 1.3333333333333333,
+            },
+            {
+              groupName: "Group 2",
+              value: 1.3333333333333333,
+            },
+            {
+              groupName: "Group 3",
+              value: 1.3333333333333333,
+            },
+            {
+              groupName: "Group 1",
+              value: 1,
+            },
+            {
+              groupName: "Group 2",
+              value: 1,
+            },
+            {
+              groupName: "Group 3",
+              value: 1,
+            },
+            {
+              groupName: "Group 5",
+              value: 1,
+            },
+            {
+              groupName: "Group 6",
+              value: 1,
+            },
+            {
+              groupName: "Group 7",
+              value: 1,
+            },
+            {
+              groupName: "AG: Test",
+              value: 1,
+            },
+          ],
+          validation: {
+            "Group 1": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 2": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 3": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 5": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 6": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 7": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "AG: Test": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [], // TODO ["Group 4"]
             },
           },
         } as CalculationMethodResult,
