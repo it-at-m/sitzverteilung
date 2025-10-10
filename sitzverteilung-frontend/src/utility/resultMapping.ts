@@ -22,7 +22,7 @@ export function mapCalculationResultToResultData(
 
     const resultData: ResultData = {
       name: groupName,
-      seatsOrVotes: seatsOrVotes,
+      seatsOrVotes: seatsOrVotes ?? 0,
       proportion: proportion ?? 0,
       documentation: "",
     };
