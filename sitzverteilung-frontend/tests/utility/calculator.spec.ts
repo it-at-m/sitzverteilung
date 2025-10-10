@@ -9,13 +9,14 @@ import type { CalculationMethodResult } from "../../src/types/calculation/intern
 import type { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";
 
 import { BaseData } from "../../src/types/basedata/BaseData";
-import { UnionType } from "../../src/types/basedata/Union";
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
 import { CalculationProportions } from "../../src/types/calculation/internal/CalculationProportions";
 import { CalculationResult } from "../../src/types/calculation/internal/CalculationResult";
 import { calculate, exportForTesting } from "../../src/utility/calculator";
 import {
+  getTestBaseDataWithNoOverlap,
   getTestBaseDataWithoutUnion,
+  getTestBaseDataWithOverlapCommitteeFraction,
   getTestBaseDataWithUnion,
 } from "../TestData";
 
@@ -28,261 +29,311 @@ interface CalculationTestData {
 }
 
 describe("Full calculation tests", () => {
-  test("Full test with over rounding", () => {
+  test("Full test with over rounding in d'H", () => {
     const baseData: BaseData = {
-      name: "Test 1",
-      targetSize: 13,
-      committeeSize: 70,
+      name: "Test overrounding d'H",
+      targetSize: 14,
+      committeeSize: 80,
       groups: [
         {
           name: "Group 1",
-          seatsOrVotes: 20,
+          seatsOrVotes: 23,
         },
         {
           name: "Group 2",
-          seatsOrVotes: 8,
+          seatsOrVotes: 23,
         },
         {
           name: "Group 3",
-          seatsOrVotes: 8,
+          seatsOrVotes: 17,
         },
         {
           name: "Group 4",
-          seatsOrVotes: 10,
+          seatsOrVotes: 4,
         },
         {
           name: "Group 5",
-          seatsOrVotes: 10,
+          seatsOrVotes: 4,
         },
         {
           name: "Group 6",
-          seatsOrVotes: 3,
+          seatsOrVotes: 4,
         },
         {
           name: "Group 7",
-          seatsOrVotes: 2,
+          seatsOrVotes: 3,
         },
         {
           name: "Group 8",
-          seatsOrVotes: 2,
+          seatsOrVotes: 1,
         },
         {
           name: "Group 9",
-          seatsOrVotes: 2,
-        },
-        {
-          name: "Group 10",
-          seatsOrVotes: 2,
-        },
-        {
-          name: "Group 11",
-          seatsOrVotes: 2,
-        },
-        {
-          name: "Group 12",
           seatsOrVotes: 1,
         },
       ],
-      unions: [
-        {
-          name: "Union 1",
-          groups: [1, 2],
-          unionType: UnionType.COMMITTEE,
-        },
-      ],
+      unions: [],
     };
     const expected: CalculationResult = {
       proportions: {
-        "Group 1": 3.714285714285714,
-        "Group 4": 1.857142857142857,
-        "Group 5": 1.857142857142857,
-        "Group 6": 0.557142857142857,
-        "Group 7": 0.3714285714285714,
-        "Group 8": 0.3714285714285714,
-        "Group 9": 0.3714285714285714,
-        "Group 10": 0.3714285714285714,
-        "Group 11": 0.3714285714285714,
-        "Group 12": 0.1857142857142857,
-        "AG: Union 1": 2.971428571428571,
+        "Group 1": 4.0249999999999995,
+        "Group 2": 4.0249999999999995,
+        "Group 3": 2.975,
+        "Group 4": 0.7,
+        "Group 5": 0.7,
+        "Group 6": 0.7,
+        "Group 7": 0.525,
+        "Group 8": 0.175,
+        "Group 9": 0.175,
       },
       methods: {
         [CalculationMethod.D_HONDT]: {
           distribution: {
             "Group 1": 5,
-            "Group 4": 2,
-            "Group 5": 2,
+            "Group 2": 5,
+            "Group 3": 4,
+            "Group 4": 0,
+            "Group 5": 0,
             "Group 6": 0,
             "Group 7": 0,
             "Group 8": 0,
             "Group 9": 0,
-            "Group 10": 0,
-            "Group 11": 0,
-            "Group 12": 0,
-            "AG: Union 1": 4,
           },
           order: [
             {
               groupName: "Group 1",
-              value: 20,
+              value: 23,
             },
             {
-              groupName: "AG: Union 1",
-              value: 16,
+              groupName: "Group 2",
+              value: 23,
             },
             {
-              groupName: "Group 1",
-              value: 10,
-            },
-            {
-              groupName: "Group 4",
-              value: 10,
-            },
-            {
-              groupName: "Group 5",
-              value: 10,
-            },
-            {
-              groupName: "AG: Union 1",
-              value: 8,
+              groupName: "Group 3",
+              value: 17,
             },
             {
               groupName: "Group 1",
-              value: 6.666666666666667,
+              value: 11.5,
             },
             {
-              groupName: "AG: Union 1",
-              value: 5.333333333333333,
+              groupName: "Group 2",
+              value: 11.5,
             },
             {
-              groupName: "Group 1",
-              value: 5,
-            },
-            {
-              groupName: "Group 4",
-              value: 5,
-            },
-            {
-              groupName: "Group 5",
-              value: 5,
+              groupName: "Group 3",
+              value: 8.5,
             },
             {
               groupName: "Group 1",
-              value: 4,
+              value: 7.666666666666667,
             },
             {
-              groupName: "AG: Union 1",
-              value: 4,
+              groupName: "Group 2",
+              value: 7.666666666666667,
+            },
+            {
+              groupName: "Group 1",
+              value: 5.75,
+            },
+            {
+              groupName: "Group 2",
+              value: 5.75,
+            },
+            {
+              groupName: "Group 3",
+              value: 5.666666666666667,
+            },
+            {
+              groupName: "Group 1",
+              value: 4.6,
+            },
+            {
+              groupName: "Group 2",
+              value: 4.6,
+            },
+            {
+              groupName: "Group 3",
+              value: 4.25,
             },
           ],
           validation: {
-            "Group 1": false,
-            "Group 4": true,
-            "Group 5": true,
-            "Group 6": true,
-            "Group 7": true,
-            "Group 8": true,
-            "Group 9": true,
-            "Group 10": true,
-            "Group 11": true,
-            "Group 12": true,
-            "AG: Union 1": false,
+            "Group 1": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 2": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 3": {
+              overRounding: true,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 4": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 5": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 6": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 7": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 8": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 9": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
           },
         } as CalculationMethodResult,
         [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
           distribution: {
             "Group 1": 4,
-            "Group 4": 2,
-            "Group 5": 2,
+            "Group 2": 4,
+            "Group 3": 3,
+            "Group 4": 1,
+            "Group 5": 1,
             "Group 6": 1,
             "Group 7": 0,
             "Group 8": 0,
             "Group 9": 0,
-            "Group 10": 0,
-            "Group 11": 0,
-            "Group 12": 0,
-            "AG: Union 1": 4,
           },
           order: [
             {
               groupName: "Group 1",
-              value: 20,
+              value: 23,
             },
             {
-              groupName: "AG: Union 1",
-              value: 16,
+              groupName: "Group 2",
+              value: 23,
+            },
+            {
+              groupName: "Group 3",
+              value: 17,
+            },
+            {
+              groupName: "Group 1",
+              value: 7.666666666666667,
+            },
+            {
+              groupName: "Group 2",
+              value: 7.666666666666667,
+            },
+            {
+              groupName: "Group 3",
+              value: 5.666666666666667,
+            },
+            {
+              groupName: "Group 1",
+              value: 4.6,
+            },
+            {
+              groupName: "Group 2",
+              value: 4.6,
             },
             {
               groupName: "Group 4",
-              value: 10,
-            },
-            {
-              groupName: "Group 5",
-              value: 10,
-            },
-            {
-              groupName: "Group 1",
-              value: 6.666666666666667,
-            },
-            {
-              groupName: "AG: Union 1",
-              value: 5.333333333333333,
-            },
-            {
-              groupName: "Group 1",
               value: 4,
             },
             {
-              groupName: "Group 4",
-              value: 3.3333333333333335,
-            },
-            {
               groupName: "Group 5",
-              value: 3.3333333333333335,
-            },
-            {
-              groupName: "AG: Union 1",
-              value: 3.2,
+              value: 4,
             },
             {
               groupName: "Group 6",
-              value: 3,
+              value: 4,
+            },
+            {
+              groupName: "Group 3",
+              value: 3.4,
             },
             {
               groupName: "Group 1",
-              value: 2.857142857142857,
+              value: 3.2857142857142856,
             },
             {
-              groupName: "AG: Union 1",
-              value: 2.2857142857142856,
+              groupName: "Group 2",
+              value: 3.2857142857142856,
             },
           ],
           validation: {
-            "Group 1": true,
-            "Group 4": true,
-            "Group 5": true,
-            "Group 6": true,
-            "Group 7": true,
-            "Group 8": true,
-            "Group 9": true,
-            "Group 10": true,
-            "Group 11": true,
-            "Group 12": true,
-            "AG: Union 1": false,
+            "Group 1": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 2": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 3": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 4": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 5": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 6": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 7": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 8": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 9": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
           },
         } as CalculationMethodResult,
         [CalculationMethod.HARE_NIEMEYER]: {
           distribution: {
             "Group 1": 4,
-            "Group 4": 2,
-            "Group 5": 2,
+            "Group 2": 4,
+            "Group 3": 3,
+            "Group 4": 1,
+            "Group 5": 1,
             "Group 6": 1,
             "Group 7": 0,
             "Group 8": 0,
             "Group 9": 0,
-            "Group 10": 0,
-            "Group 11": 0,
-            "Group 12": 0,
-            "AG: Union 1": 3,
           },
           order: [
             {
@@ -290,7 +341,11 @@ describe("Full calculation tests", () => {
               value: 4,
             },
             {
-              groupName: "AG: Union 1",
+              groupName: "Group 2",
+              value: 4,
+            },
+            {
+              groupName: "Group 3",
               value: 3,
             },
             {
@@ -298,15 +353,11 @@ describe("Full calculation tests", () => {
               value: 2,
             },
             {
-              groupName: "Group 4",
+              groupName: "Group 2",
               value: 2,
             },
             {
-              groupName: "Group 5",
-              value: 2,
-            },
-            {
-              groupName: "AG: Union 1",
+              groupName: "Group 3",
               value: 1.5,
             },
             {
@@ -314,49 +365,80 @@ describe("Full calculation tests", () => {
               value: 1.3333333333333333,
             },
             {
+              groupName: "Group 2",
+              value: 1.3333333333333333,
+            },
+            {
               groupName: "Group 1",
-              value: 1.0,
+              value: 1,
+            },
+            {
+              groupName: "Group 2",
+              value: 1,
+            },
+            {
+              groupName: "Group 3",
+              value: 1,
             },
             {
               groupName: "Group 4",
-              value: 1.0,
+              value: 1,
             },
             {
               groupName: "Group 5",
-              value: 1.0,
+              value: 1,
             },
             {
               groupName: "Group 6",
-              value: 1.0,
-            },
-            {
-              groupName: "AG: Union 1",
-              value: 1.0,
+              value: 1,
             },
           ],
-          stale: {
-            amountSeats: 1,
-            groupNames: [
-              "Group 7",
-              "Group 8",
-              "Group 9",
-              "Group 10",
-              "Group 11",
-            ],
-            ratio: 0.37142857142857144,
-          },
           validation: {
-            "Group 1": true,
-            "Group 4": true,
-            "Group 5": true,
-            "Group 6": true,
-            "Group 7": true,
-            "Group 8": true,
-            "Group 9": true,
-            "Group 10": true,
-            "Group 11": true,
-            "Group 12": true,
-            "AG: Union 1": true,
+            "Group 1": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 2": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 3": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 4": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 5": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 6": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 7": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 8": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
+            "Group 9": {
+              overRounding: false,
+              lostSafeSeat: false,
+              committeeInvalid: [],
+            },
           },
         } as CalculationMethodResult,
       },
@@ -483,6 +565,42 @@ describe("Method validity overrounding tests", () => {
   });
 });
 
+describe("Method validity lost safe seat tests", () => {
+  test("Check lost safe seat when seat without committee", () => {
+    const distributedSeats = 0;
+    const seatsWithoutCommittee = 2;
+
+    const result = exportForTesting.checkLostSafeSeatForGroup(
+      distributedSeats,
+      seatsWithoutCommittee
+    );
+
+    expect(result).toBeTruthy();
+  });
+  test("Check lost safe seat when no seat without committee", () => {
+    const distributedSeats = 0;
+    const seatsWithoutCommittee = 0;
+
+    const result = exportForTesting.checkLostSafeSeatForGroup(
+      distributedSeats,
+      seatsWithoutCommittee
+    );
+
+    expect(result).toBeFalsy();
+  });
+  test("Check lost safe seat when lost only some seats", () => {
+    const distributedSeats = 1;
+    const seatsWithoutCommittee = 2;
+
+    const result = exportForTesting.checkLostSafeSeatForGroup(
+      distributedSeats,
+      seatsWithoutCommittee
+    );
+
+    expect(result).toBeFalsy();
+  });
+});
+
 describe("Proportional seats calculation tests", () => {
   test("totalSeatsOrVotes larger than committeeSize", () => {
     const calculationGroups: CalculationGroup[] = [
@@ -590,6 +708,85 @@ describe("Extract calculation groups tests", () => {
 
     expect(calculationGroups).toEqual(expected);
   });
+
+  test("Extract calculation groups no include committees full overlap", () => {
+    const baseData = getTestBaseDataWithUnion();
+    const expected: CalculationGroup[] = [
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "FG: Example fraction union",
+        seatsOrVotes: 30,
+      },
+    ];
+
+    const calculationGroups = exportForTesting.extractCalculationGroups(
+      baseData,
+      false
+    );
+
+    expect(calculationGroups).toEqual(expected);
+  });
+});
+
+test("Extract calculation groups no include committees with partial overlap", () => {
+  const baseData = getTestBaseDataWithOverlapCommitteeFraction();
+  const expected: CalculationGroup[] = [
+    {
+      name: "Testgroup 1",
+      seatsOrVotes: 10,
+    },
+    {
+      name: "Testgroup 4",
+      seatsOrVotes: 30,
+    },
+    {
+      name: "Testgroup 5",
+      seatsOrVotes: 30,
+    },
+    {
+      name: "FG: Fraction 1",
+      seatsOrVotes: 50,
+    },
+  ];
+
+  const calculationGroups = exportForTesting.extractCalculationGroups(
+    baseData,
+    false
+  );
+
+  expect(calculationGroups).toEqual(expected);
+});
+
+test("Extract calculation groups no include committees with no overlap", () => {
+  const baseData = getTestBaseDataWithNoOverlap();
+  const expected: CalculationGroup[] = [
+    {
+      name: "Testgroup 3",
+      seatsOrVotes: 30,
+    },
+    {
+      name: "Testgroup 4",
+      seatsOrVotes: 30,
+    },
+    {
+      name: "Testgroup 5",
+      seatsOrVotes: 30,
+    },
+    {
+      name: "FG: Fraction 1",
+      seatsOrVotes: 30,
+    },
+  ];
+
+  const calculationGroups = exportForTesting.extractCalculationGroups(
+    baseData,
+    false
+  );
+
+  expect(calculationGroups).toEqual(expected);
 });
 
 function getComparableMethodResult(
