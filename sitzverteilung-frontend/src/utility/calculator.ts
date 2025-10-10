@@ -30,6 +30,13 @@ export function calculate(baseData: BaseData): CalculationResult {
     throw new Error("Invalid or missing target size. Must be positive.");
   }
   const calculationGroups = extractCalculationGroups(baseData);
+  const seats = calculationGroups.reduce(
+    (acc, group) => {
+      acc[group.name] = group.seatsOrVotes;
+      return acc;
+    },
+    {} as Record<CalculationGroupName, number>
+  );
   const proportions = calculateProportions(
     calculationGroups,
     targetCommitteeSize
@@ -52,6 +59,7 @@ export function calculate(baseData: BaseData): CalculationResult {
   });
 
   return {
+    seats,
     proportions,
     methods,
   };
