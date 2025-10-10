@@ -1,6 +1,9 @@
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 import type { GroupIndex } from "@/types/basedata/Union.ts";
-import type { CalculationGroup } from "@/types/calculation/internal/CalculationGroup.ts";
+import type {
+  CalculationGroup,
+  CalculationGroupName,
+} from "@/types/calculation/internal/CalculationGroup.ts";
 import type { CalculationGroupRatio } from "@/types/calculation/internal/CalculationGroupRatio.ts";
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationProportions } from "@/types/calculation/internal/CalculationProportions.ts";
@@ -505,7 +508,7 @@ function calculateMethodValidity(
  * @param stale optional stale to consider for checking
  */
 function checkOverroundingForGroup(
-  groupName: string,
+  groupName: CalculationGroupName,
   proportions: CalculationProportions,
   distributedSeats: number,
   stale?: CalculationStale

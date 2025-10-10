@@ -3,7 +3,7 @@ import type { CalculationGroupName } from "@/types/calculation/internal/Calculat
 export interface ValidationData {
   overRounding: boolean;
   lostSafeSeat: boolean;
-  committeeInvalid: string[];
+  committeeInvalid: CalculationGroupName[];
 }
 
 export type CalculationValidation = Record<
