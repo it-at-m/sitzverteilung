@@ -312,13 +312,13 @@ export function getTestCalculationResult(): CalculationResult {
           "Testgroup 2": 5,
         },
         stale: {
-          groupNames: ["Testgroup 1"],
+          groupNames: ["Testgroup 1", "Testgroup 2"],
         },
         validation: {
           "Testgroup 1": {
             overRounding: false,
             lostSafeSeat: false,
-            committeeInvalid: [],
+            committeeInvalid: ["Testgroup 1"],
           },
           "Testgroup 2": {
             overRounding: false,
@@ -337,7 +337,7 @@ export function getTestCalculationResult(): CalculationResult {
           "Testgroup 1": {
             overRounding: true,
             lostSafeSeat: false,
-            committeeInvalid: [],
+            committeeInvalid: ["Testgroup 1"],
           },
           "Testgroup 2": {
             overRounding: false,

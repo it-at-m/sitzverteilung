@@ -11,22 +11,25 @@ describe("mapCalculationResultToResultData", () => {
     if (group1 === undefined) {
       throw new Error("Group1 is undefined");
     } else {
-      expect(group1.name).toBeDefined();
-      expect(group1.seatsOrVotes).toBe(12);
-      expect(group1.proportion).toBeGreaterThan(0);
-      expect(group1.documentation).toBe("");
+      const expectedGroup = {
+        name: "Testgroup 1",
+        seatsOrVotes: 12,
+        proportion: expect.any(Number),
+        documentation: "",
 
-      expect(group1["D'Hondt-seats"]).toBe(2);
-      expect(group1["Hare/Niemeyer-seats"]).toBe(4);
-      expect(group1["Sainte-Laguë/Schepers-seats"]).toBe(6);
+        "D'Hondt-seats": 2,
+        "Hare/Niemeyer-seats": 4,
+        "Sainte-Laguë/Schepers-seats": 6,
 
-      expect(group1["D'Hondt-stale"]).toBe(false);
-      expect(group1["Hare/Niemeyer-stale"]).toBe(true);
-      expect(group1["Sainte-Laguë/Schepers-stale"]).toBe(false);
+        "D'Hondt-stale": false,
+        "Hare/Niemeyer-stale": true,
+        "Sainte-Laguë/Schepers-stale": false,
 
-      expect(group1["D'Hondt-validation"]).toBe(1);
-      expect(group1["Hare/Niemeyer-validation"]).toBe(1);
-      expect(group1["Sainte-Laguë/Schepers-validation"]).toBe(0);
+        "D'Hondt-validation": true,
+        "Hare/Niemeyer-validation": false,
+        "Sainte-Laguë/Schepers-validation": false,
+      };
+      expect(group1).toEqual(expectedGroup);
     }
   });
 

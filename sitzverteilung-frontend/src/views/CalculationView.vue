@@ -49,11 +49,7 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table
-      v-model="calculationResults"
-      :has-valid-data="hasValidData"
-      :current-base-data="currentBaseData"
-    />
+    <result-table v-model="calculationResults" />
   </v-container>
 </template>
 

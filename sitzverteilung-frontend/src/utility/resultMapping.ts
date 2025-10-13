@@ -8,15 +8,10 @@ import {
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
-type Method = (typeof AVAILABLE_METHODS)[number];
-type ResultDataKeys = `${Method}${ResultDataSuffix}`;
-
 export function mapCalculationResultToResultData(
   calculationResult: CalculationResult
 ): ResultData[] {
-  const resultDataArray: ResultData[] = [];
-
-  for (const groupName in calculationResult.proportions) {
+  return Object.keys(calculationResult.proportions).map((groupName) => {
     const proportion = calculationResult.proportions[groupName];
     const seatsOrVotes = calculationResult.seats[groupName];
 
@@ -27,12 +22,12 @@ export function mapCalculationResultToResultData(
       documentation: "",
     };
 
-    for (const method of AVAILABLE_METHODS) {
+    AVAILABLE_METHODS.forEach((method) => {
       const prefix = method;
-      resultData[`${prefix}` + ResultDataSuffix.seatsSuffix] = 0;
-      resultData[`${prefix}` + ResultDataSuffix.staleSuffix] = false;
-      resultData[`${prefix}` + ResultDataSuffix.validationSuffix] = 0;
-    }
+      resultData[`${prefix}${ResultDataSuffix.seatsSuffix}`] = 0;
+      resultData[`${prefix}${ResultDataSuffix.staleSuffix}`] = false;
+      resultData[`${prefix}${ResultDataSuffix.validationSuffix}`] = false;
+    });
 
     AVAILABLE_METHODS.forEach((method) => {
       const methodResult = calculationResult.methods[method];
@@ -46,9 +41,8 @@ export function mapCalculationResultToResultData(
       }
     });
 
-    resultDataArray.push(resultData);
-  }
-  return resultDataArray;
+    return resultData;
+  });
 }
 
 function mapMethodResultToResultData(
@@ -59,23 +53,20 @@ function mapMethodResultToResultData(
 ) {
   const { distribution, stale, validation } = methodResult;
 
-  const seatKey = (`${method}` +
-    ResultDataSuffix.seatsSuffix) as ResultDataKeys;
-  const staleKey = (`${method}` +
-    ResultDataSuffix.staleSuffix) as ResultDataKeys;
-  const validationKey = (`${method}` +
-    ResultDataSuffix.validationSuffix) as ResultDataKeys;
+  const seatKey: ResultDataKeys =
+    `${method}${ResultDataSuffix.seatsSuffix}` as ResultDataKeys;
+  const staleKey: ResultDataKeys =
+    `${method}${ResultDataSuffix.staleSuffix}` as ResultDataKeys;
+  const validationKey: ResultDataKeys =
+    `${method}${ResultDataSuffix.validationSuffix}` as ResultDataKeys;
 
   resultData[seatKey] = distribution[groupName] || 0;
   resultData[staleKey] = stale?.groupNames.includes(groupName) ?? false;
 
-  if (validation && validation[groupName]) {
-    const validationData = validation[groupName];
-    resultData[validationKey] =
-      validationData.committeeInvalid.length === 0 &&
+  const validationData = validation[groupName];
+  resultData[validationKey] =
+    (validationData.committeeInvalid.length === 0 &&
       !validationData.overRounding &&
-      !validationData.lostSafeSeat
-        ? 1
-        : 0;
-  }
+      !validationData.lostSafeSeat) ??
+    false;
 }

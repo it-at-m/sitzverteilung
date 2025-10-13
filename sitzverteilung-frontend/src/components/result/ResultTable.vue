@@ -26,7 +26,7 @@
       class="mx-2"
       @click="goToDetail(method)"
       :text="method"
-      :disabled="!hasValidData"
+      :disabled="calculationResults.length == 0"
     />
   </v-toolbar>
   <v-data-table
@@ -39,7 +39,7 @@
     no-data-text=""
     :items-per-page="-1"
   />
-  <v-row v-if="!hasValidData">
+  <v-row v-if="calculationResults.length == 0">
     <v-col>
       <v-alert
         text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
@@ -50,7 +50,6 @@
   </v-row>
 </template>
 <script setup lang="ts">
-import type { BaseData } from "@/types/basedata/BaseData.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
 import { ref } from "vue";
@@ -62,10 +61,6 @@ import {
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
-defineProps<{
-  hasValidData: boolean;
-  currentBaseData: BaseData;
-}>();
 const calculationResults = defineModel<ResultData[]>({ required: true });
 
 const headers = [

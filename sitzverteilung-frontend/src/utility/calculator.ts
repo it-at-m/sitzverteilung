@@ -3,7 +3,7 @@ import type { GroupIndex } from "@/types/basedata/Union.ts";
 import type {
   CalculationGroup,
   CalculationGroupName,
-} from "@/types/calculation/internal/CalculationGroup.ts";
+} from "@/types/calculation/CalculationGroup.ts";
 import type { CalculationGroupRatio } from "@/types/calculation/internal/CalculationGroupRatio.ts";
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationProportions } from "@/types/calculation/internal/CalculationProportions.ts";
