@@ -8,6 +8,9 @@ import {
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
+type Method = (typeof AVAILABLE_METHODS)[number];
+type ResultDataKeys = `${Method}${ResultDataSuffix}`;
+
 export function mapCalculationResultToResultData(
   calculationResult: CalculationResult
 ): ResultData[] {
