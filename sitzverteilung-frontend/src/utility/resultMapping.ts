@@ -61,10 +61,11 @@ function mapMethodResultToResultData(
   const staleKey: ResultDataKeys =
     `${method}${ResultDataSuffix.staleSuffix}` as ResultDataKeys;
   const validationKey: ResultDataKeys =
-    `${method}${ResultDataSuffix.validationSuffix}`as ResultDataKeys;
+    `${method}${ResultDataSuffix.validationSuffix}` as ResultDataKeys;
 
   resultData[seatKey as keyof ResultData] = distribution[groupName] ?? 0;
-  resultData[staleKey as keyof ResultData] = stale?.groupNames.includes(groupName) ?? false;
+  resultData[staleKey as keyof ResultData] =
+    stale?.groupNames.includes(groupName) ?? false;
 
   const validationData = validation?.[groupName];
   resultData[validationKey as keyof ResultData] = validationData
