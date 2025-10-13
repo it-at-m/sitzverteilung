@@ -26,13 +26,6 @@ export function mapCalculationResultToResultData(
     };
 
     AVAILABLE_METHODS.forEach((method) => {
-      const prefix = method;
-      resultData[`${prefix}${ResultDataSuffix.seatsSuffix}`] = 0;
-      resultData[`${prefix}${ResultDataSuffix.staleSuffix}`] = false;
-      resultData[`${prefix}${ResultDataSuffix.validationSuffix}`] = false;
-    });
-
-    AVAILABLE_METHODS.forEach((method) => {
       const methodResult = calculationResult.methods[method];
       if (methodResult) {
         mapMethodResultToResultData(
@@ -69,7 +62,7 @@ function mapMethodResultToResultData(
 
   const validationData = validation?.[groupName];
   resultData[validationKey as keyof ResultData] = validationData
-    ? validationData.committeeInvalid.length === 0 &&
+    ? !validationData.committeeInvalid.length &&
       !validationData.overRounding &&
       !validationData.lostSafeSeat
     : false;
