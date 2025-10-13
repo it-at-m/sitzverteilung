@@ -292,7 +292,6 @@ export function getTestCalculationResult(): CalculationResult {
           "Testgroup 1": 2,
           "Testgroup 2": 3,
         },
-        stale: null,
         validation: {
           "Testgroup 1": {
             overRounding: false,
@@ -313,6 +312,8 @@ export function getTestCalculationResult(): CalculationResult {
         },
         stale: {
           groupNames: ["Testgroup 1", "Testgroup 2"],
+          amountSeats: 12,
+          ratio: 4,
         },
         validation: {
           "Testgroup 1": {
@@ -332,7 +333,6 @@ export function getTestCalculationResult(): CalculationResult {
           "Testgroup 1": 6,
           "Testgroup 2": 7,
         },
-        stale: null,
         validation: {
           "Testgroup 1": {
             overRounding: true,

@@ -26,7 +26,7 @@
       class="mx-2"
       @click="goToDetail(method)"
       :text="method"
-      :disabled="calculationResults.length == 0"
+      :disabled="calculationResults.length === 0"
     />
   </v-toolbar>
   <v-data-table
@@ -39,7 +39,7 @@
     no-data-text=""
     :items-per-page="-1"
   />
-  <v-row v-if="calculationResults.length == 0">
+  <v-row v-if="calculationResults.length === 0">
     <v-col>
       <v-alert
         text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."

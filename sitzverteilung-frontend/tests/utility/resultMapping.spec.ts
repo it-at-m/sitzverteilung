@@ -37,6 +37,20 @@ describe("mapCalculationResultToResultData", () => {
     const invalidInput = {
       proportions: {},
       methods: {},
+      seats: {},
+      documentation: "",
+
+      "D'Hondt-seats": 2,
+      "Hare/Niemeyer-seats": 4,
+      "Sainte-Laguë/Schepers-seats": 6,
+
+      "D'Hondt-stale": false,
+      "Hare/Niemeyer-stale": true,
+      "Sainte-Laguë/Schepers-stale": false,
+
+      "D'Hondt-validation": true,
+      "Hare/Niemeyer-validation": false,
+      "Sainte-Laguë/Schepers-validation": false,
     };
 
     const result = mapCalculationResultToResultData(invalidInput);

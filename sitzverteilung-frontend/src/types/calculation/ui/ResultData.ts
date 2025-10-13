@@ -1,6 +1,12 @@
 import type { CalculationGroupName } from "@/types/calculation/CalculationGroup.ts";
 import type { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
+/**
+ * Per-method fields:
+ * - `${method}-seats`: assigned seats (number)
+ * - `${method}-stale`: whether any stale occurred (boolean)
+ * - `${method}-validation`: true if the result is valid (no issues), false otherwise
+ */
 type CalculationKeys = {
   [method in CalculationMethod as `${method}-seats`]?: number;
 } & {
