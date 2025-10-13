@@ -57,17 +57,17 @@ function mapMethodResultToResultData(
   const { distribution, stale, validation } = methodResult;
 
   const seatKey: ResultDataKeys =
-    `${method}${ResultDataSuffix.seatsSuffix}` as keyof ResultDataKeys;
+    `${method}${ResultDataSuffix.seatsSuffix}` as ResultDataKeys;
   const staleKey: ResultDataKeys =
-    `${method}${ResultDataSuffix.staleSuffix}` as keyof ResultDataKeys;
+    `${method}${ResultDataSuffix.staleSuffix}` as ResultDataKeys;
   const validationKey: ResultDataKeys =
-    `${method}${ResultDataSuffix.validationSuffix}` as keyof ResultDataKeys;
+    `${method}${ResultDataSuffix.validationSuffix}`as ResultDataKeys;
 
-  resultData[seatKey] = distribution[groupName] ?? 0;
-  resultData[staleKey] = stale?.groupNames.includes(groupName) ?? false;
+  resultData[seatKey as keyof ResultData] = distribution[groupName] ?? 0;
+  resultData[staleKey as keyof ResultData] = stale?.groupNames.includes(groupName) ?? false;
 
   const validationData = validation?.[groupName];
-  resultData[validationKey] = validationData
+  resultData[validationKey as keyof ResultData] = validationData
     ? validationData.committeeInvalid.length === 0 &&
       !validationData.overRounding &&
       !validationData.lostSafeSeat
