@@ -28,7 +28,7 @@ export function mapCalculationResultToResultData(
     AVAILABLE_METHODS.forEach((method) => {
       const methodResult = calculationResult.methods[method];
       if (methodResult) {
-        mapMethodResultToResultData(
+        setMethodResultDataOfResultData(
           resultData,
           method,
           methodResult,
@@ -41,7 +41,7 @@ export function mapCalculationResultToResultData(
   });
 }
 
-function mapMethodResultToResultData(
+function setMethodResultDataOfResultData(
   resultData: ResultData,
   method: CalculationMethod,
   methodResult: CalculationMethodResult,

@@ -107,12 +107,12 @@ function getResultColumns() {
       children: [
         {
           title: "Sitze",
-          key: `${method}` + ResultDataSuffix.seatsSuffix,
+          key: `${method}${ResultDataSuffix.seatsSuffix}`,
           width: 50,
         },
         {
           title: "Patt",
-          key: `${method}` + ResultDataSuffix.staleSuffix,
+          key: `${method}${ResultDataSuffix.staleSuffix}`,
           width: 50,
         },
       ],
@@ -124,7 +124,7 @@ function getValidationColumns() {
   return AVAILABLE_METHODS.map((method) => {
     return {
       title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: `${method}` + ResultDataSuffix.validationSuffix,
+      key: `${method}${ResultDataSuffix.validationSuffix}`,
       width: 60,
     };
   });
