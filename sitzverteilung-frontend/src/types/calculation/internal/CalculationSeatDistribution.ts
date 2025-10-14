@@ -1,3 +1,3 @@
-import type { CalculationGroupName } from "@/types/calculation/internal/CalculationGroup.ts";
+import type { CalculationGroupName } from "@/types/calculation/CalculationGroup.ts";
 
 export type CalculationSeatDistribution = Record<CalculationGroupName, number>;

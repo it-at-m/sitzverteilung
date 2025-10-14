@@ -3,7 +3,7 @@ import { join } from "path";
 
 import { describe, expect, test } from "vitest";
 
-import type { CalculationGroup } from "../../src/types/calculation/internal/CalculationGroup";
+import type { CalculationGroup } from "../../src/types/calculation/CalculationGroup";
 import type { CalculationGroupRatio } from "../../src/types/calculation/internal/CalculationGroupRatio";
 import type { CalculationMethodResult } from "../../src/types/calculation/internal/CalculationMethodResult";
 import type { CalculationStale } from "../../src/types/calculation/internal/CalculationStale";

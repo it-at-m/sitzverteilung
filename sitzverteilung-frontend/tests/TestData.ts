@@ -1,5 +1,7 @@
 import { BaseData } from "../src/types/basedata/BaseData";
 import { UnionType } from "../src/types/basedata/Union";
+import { CalculationMethod } from "../src/types/calculation/CalculationMethod";
+import { CalculationResult } from "../src/types/calculation/internal/CalculationResult";
 import { LimitConfiguration } from "../src/utility/validation";
 
 export function getTestBaseDataWithoutUnion(): BaseData {
@@ -271,6 +273,80 @@ export function getTestBaseDataInputTooLarge(): BaseData {
       name: generateUniqueString(999),
     })),
     unions: [],
+  };
+}
+
+export function getTestCalculationResult(): CalculationResult {
+  return {
+    proportions: {
+      "Testgroup 1": 1,
+      "Testgroup 2": 1.5,
+    },
+    seats: {
+      "Testgroup 1": 12,
+      "Testgroup 2": 14,
+    },
+    methods: {
+      [CalculationMethod.D_HONDT]: {
+        distribution: {
+          "Testgroup 1": 2,
+          "Testgroup 2": 3,
+        },
+        validation: {
+          "Testgroup 1": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+        },
+      },
+      [CalculationMethod.HARE_NIEMEYER]: {
+        distribution: {
+          "Testgroup 1": 4,
+          "Testgroup 2": 5,
+        },
+        stale: {
+          groupNames: ["Testgroup 1", "Testgroup 2"],
+          amountSeats: 12,
+          ratio: 4,
+        },
+        validation: {
+          "Testgroup 1": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: ["Testgroup 1"],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+        },
+      },
+      [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
+        distribution: {
+          "Testgroup 1": 6,
+          "Testgroup 2": 7,
+        },
+        validation: {
+          "Testgroup 1": {
+            overRounding: true,
+            lostSafeSeat: false,
+            committeeInvalid: ["Testgroup 1"],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+        },
+      },
+    },
   };
 }
 

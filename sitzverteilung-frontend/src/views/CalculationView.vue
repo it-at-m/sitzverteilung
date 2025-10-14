@@ -49,7 +49,7 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table :has-valid-data="hasValidData" />
+    <result-table v-model="calculationResults" />
   </v-container>
 </template>
 
@@ -62,6 +62,8 @@ import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
+import { calculate } from "@/utility/calculator.ts";
+import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
@@ -76,6 +78,14 @@ const {
   baseDataFormRef,
   isValid,
 } = useTemplateData();
+
+const calculationResults = computed(() => {
+  if (!hasValidData.value) {
+    return [];
+  }
+  const resultToMap = calculate(currentBaseData.value);
+  return mapCalculationResultToResultData(resultToMap);
+});
 
 const hasValidData = computed<boolean>(
   () => isAtLeastTwoGroups.value && isValid.value
