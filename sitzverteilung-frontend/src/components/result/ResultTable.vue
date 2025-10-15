@@ -38,7 +38,51 @@
     density="compact"
     no-data-text=""
     :items-per-page="-1"
-  />
+  >
+    <template
+      v-for="method in AVAILABLE_METHODS"
+      :key="method"
+      v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
+    >
+      <v-tooltip>
+        <template v-slot:activator="{ props }">
+          <v-icon
+            :color="
+              item[`${method}${ResultDataSuffix.validationSuffix}`]
+                ? 'green'
+                : 'red'
+            "
+            :icon="
+              item[`${method}${ResultDataSuffix.validationSuffix}`]
+                ? mdiCheck
+                : mdiAlphaX
+            "
+            v-bind="props"
+          />
+        </template>
+        <span>{{ generateValidationText(item, method) }}</span>
+      </v-tooltip>
+    </template>
+    <template
+      v-for="method in AVAILABLE_METHODS"
+      :key="method"
+      v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
+    >
+      <v-tooltip>
+        <template v-slot:activator="{ props }">
+          <v-icon
+            :icon="
+              item[`${method}${ResultDataSuffix.staleSuffix}`]
+                ? mdiHandBackRight
+                : undefined
+            "
+            v-bind="props"
+          />
+        </template>
+        <span>{{ generateStaleText(item, method) }}</span>
+      </v-tooltip>
+    </template>
+  </v-data-table>
   <v-row v-if="!calculationResults.length">
     <v-col>
       <v-alert
@@ -49,9 +93,12 @@
     </v-col>
   </v-row>
 </template>
+
 <script setup lang="ts">
+import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
+import { mdiAlphaX, mdiCheck, mdiHandBackRight } from "@mdi/js";
 import { ref } from "vue";
 
 import {
@@ -62,6 +109,9 @@ import {
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
 const calculationResults = defineModel<ResultData[]>({ required: true });
+const props = defineProps<{
+  unmappedResults: CalculationResult;
+}>();
 
 const headers = [
   {
@@ -86,24 +136,15 @@ const headers = [
   },
   {
     title: "Zulässigkeit",
-    children: getValidationColumns(),
+    children: AVAILABLE_METHODS.map((method) => ({
+      title: CALCULATION_METHOD_SHORT_FORMS[method],
+      key: `${method}${ResultDataSuffix.validationSuffix}`,
+    })),
   },
   {
     title: "Ergebnisse",
-    children: getResultColumns(),
-  },
-  {
-    title: "Dokumentation",
-    width: 200,
-    key: "documentation",
-  },
-];
-
-function getResultColumns() {
-  return AVAILABLE_METHODS.map((method) => {
-    return {
+    children: AVAILABLE_METHODS.map((method) => ({
       title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: method,
       children: [
         {
           title: "Sitze",
@@ -116,28 +157,59 @@ function getResultColumns() {
           width: 50,
         },
       ],
-    };
-  });
-}
-
-function getValidationColumns() {
-  return AVAILABLE_METHODS.map((method) => {
-    return {
-      title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: `${method}${ResultDataSuffix.validationSuffix}`,
-      width: 60,
-    };
-  });
-}
+    })),
+  },
+  {
+    title: "Dokumentation",
+    width: 200,
+    key: "documentation",
+  },
+];
 
 const dialog = ref(false);
 const detailTitle = ref("");
-
-// Placeholder for future content, currently unused
 const detailInfo = ref<string>("");
 
 function goToDetail(selectedCalculationMethod: CalculationMethod) {
   detailTitle.value = selectedCalculationMethod;
   dialog.value = true;
+}
+
+function generateStaleText(item: ResultData, method: CalculationMethod) {
+  if (props.unmappedResults !== null) {
+    const staleInfo = props.unmappedResults.methods[method]?.stale;
+    if (!staleInfo || !staleInfo.groupNames.length) {
+      return "Kein Patt";
+    }
+
+    if (staleInfo.groupNames.includes(item.name)) {
+      return "Patt zwischen: " + staleInfo.groupNames.join(", ");
+    } else {
+      return "Kein Patt";
+    }
+  }
+}
+
+function generateValidationText(
+  item: ResultData,
+  method: CalculationMethod
+): string {
+  const validationData =
+    props.unmappedResults?.methods[method]?.validation?.[item.name];
+  if (!validationData) return "Keine Validierungsdaten vorhanden";
+
+  const reasons = [
+    ...(validationData.overRounding ? ["Ungültig wegen Überrundung"] : []),
+    ...(validationData.lostSafeSeat ? ["Verlust eines sicheren Sitzes"] : []),
+    ...((validationData.committeeInvalid?.length ?? 0) > 0
+      ? [
+          `Ungültige Ausschussgruppen: ${validationData.committeeInvalid.join(", ")}`,
+        ]
+      : []),
+  ];
+
+  return reasons.length === 0
+    ? "Berechnungsmethode zulässig"
+    : `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
 </script>

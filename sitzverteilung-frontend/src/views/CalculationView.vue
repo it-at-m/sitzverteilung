@@ -49,11 +49,16 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table v-model="calculationResults" />
+    <result-table
+      :unmapped-results="unmappedResults"
+      v-model="calculationResults"
+    />
   </v-container>
 </template>
 
 <script setup lang="ts">
+import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+
 import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
 import { computed } from "vue";
@@ -85,6 +90,13 @@ const calculationResults = computed(() => {
   }
   const resultToMap = calculate(currentBaseData.value);
   return mapCalculationResultToResultData(resultToMap);
+});
+
+const unmappedResults = computed(() => {
+  if (!hasValidData.value) {
+    return {} as CalculationResult;
+  }
+  return calculate(currentBaseData.value);
 });
 
 const hasValidData = computed<boolean>(
