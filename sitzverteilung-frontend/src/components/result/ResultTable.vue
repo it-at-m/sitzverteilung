@@ -53,7 +53,9 @@
               v-bind="props"
             />
           </template>
-          <span>{{ generateValidationText(item, method) }}</span>
+          <span style="white-space: pre-line">{{
+            generateValidationText(item, method)
+          }}</span>
         </v-tooltip>
       </template>
       <template v-else>
@@ -78,9 +80,6 @@
           </template>
           <span>{{ generateStaleText(item, method) }}</span>
         </v-tooltip>
-      </template>
-      <template v-else>
-        <v-icon />
       </template>
     </template>
   </v-data-table>
@@ -195,7 +194,7 @@ function generateValidationText(
   if (!validationData) return "Keine Validierungsdaten vorhanden";
 
   const reasons = [
-    ...(validationData.overRounding ? ["Ungültig wegen Überrundung"] : []),
+    ...(validationData.overRounding ? ["Überrundung"] : []),
     ...(validationData.lostSafeSeat ? ["Verlust eines sicheren Sitzes"] : []),
     ...((validationData.committeeInvalid?.length ?? 0) > 0
       ? [
