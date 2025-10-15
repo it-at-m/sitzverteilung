@@ -94,10 +94,16 @@ const calculationResults = computed(() => {
 
 const unmappedResults = computed(() => {
   if (!hasValidData.value) {
-    return {} as CalculationResult;
+    return EMPTY_RESULT;
   }
   return calculate(currentBaseData.value);
 });
+
+const EMPTY_RESULT: CalculationResult = {
+  methods: {},
+  proportions: {},
+  seats: {},
+};
 
 const hasValidData = computed<boolean>(
   () => isAtLeastTwoGroups.value && isValid.value

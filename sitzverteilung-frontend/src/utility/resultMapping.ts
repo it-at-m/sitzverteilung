@@ -21,7 +21,7 @@ export function mapCalculationResultToResultData(
     const resultData: ResultData = {
       name: groupName,
       seatsOrVotes: seatsOrVotes ?? 0,
-      proportion: formatToThreeDecimals(proportion) ?? 0,
+      proportion: formatToThreeDecimals(proportion ?? 0),
       documentation: "",
     };
 
@@ -68,6 +68,7 @@ function setMethodResultDataOfResultData(
     : false;
 }
 
-function formatToThreeDecimals(num: number): number {
-  return Number((Math.round(num * 1000) / 1000).toFixed(3));
+function formatToThreeDecimals(num?: number): number {
+  if (!Number.isFinite(num)) return 0;
+  return Math.round(((num as number) + Number.EPSILON) * 1000) / 1000;
 }

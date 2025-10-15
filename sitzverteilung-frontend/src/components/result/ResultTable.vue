@@ -44,43 +44,44 @@
       :key="method"
       v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
     >
-      <v-tooltip>
-        <template v-slot:activator="{ props }">
-          <v-icon
-            :color="
-              item[`${method}${ResultDataSuffix.validationSuffix}`]
-                ? 'green'
-                : 'red'
-            "
-            :icon="
-              item[`${method}${ResultDataSuffix.validationSuffix}`]
-                ? mdiCheck
-                : mdiAlphaX
-            "
-            v-bind="props"
-          />
-        </template>
-        <span>{{ generateValidationText(item, method) }}</span>
-      </v-tooltip>
+      <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
+        <v-tooltip>
+          <template v-slot:activator="{ props }">
+            <v-icon
+              :color="'red'"
+              :icon="mdiAlphaX"
+              v-bind="props"
+            />
+          </template>
+          <span>{{ generateValidationText(item, method) }}</span>
+        </v-tooltip>
+      </template>
+      <template v-else>
+        <v-icon
+          color="green"
+          :icon="mdiCheck"
+        />
+      </template>
     </template>
     <template
       v-for="method in AVAILABLE_METHODS"
       :key="method"
       v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
     >
-      <v-tooltip>
-        <template v-slot:activator="{ props }">
-          <v-icon
-            :icon="
-              item[`${method}${ResultDataSuffix.staleSuffix}`]
-                ? mdiHandBackRight
-                : undefined
-            "
-            v-bind="props"
-          />
-        </template>
-        <span>{{ generateStaleText(item, method) }}</span>
-      </v-tooltip>
+      <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
+        <v-tooltip>
+          <template v-slot:activator="{ props }">
+            <v-icon
+              :icon="mdiHandBackRight"
+              v-bind="props"
+            />
+          </template>
+          <span>{{ generateStaleText(item, method) }}</span>
+        </v-tooltip>
+      </template>
+      <template v-else>
+        <v-icon />
+      </template>
     </template>
   </v-data-table>
   <v-row v-if="!calculationResults.length">
@@ -176,16 +177,11 @@ function goToDetail(selectedCalculationMethod: CalculationMethod) {
 }
 
 function generateStaleText(item: ResultData, method: CalculationMethod) {
-  if (props.unmappedResults !== null) {
-    const staleInfo = props.unmappedResults.methods[method]?.stale;
-    if (!staleInfo || !staleInfo.groupNames.length) {
-      return "Kein Patt";
-    }
+  const staleInfo = props.unmappedResults.methods[method]?.stale;
 
+  if (staleInfo !== undefined) {
     if (staleInfo.groupNames.includes(item.name)) {
       return "Patt zwischen: " + staleInfo.groupNames.join(", ");
-    } else {
-      return "Kein Patt";
     }
   }
 }
@@ -208,8 +204,6 @@ function generateValidationText(
       : []),
   ];
 
-  return reasons.length === 0
-    ? "Berechnungsmethode zulässig"
-    : `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
+  return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
 </script>
