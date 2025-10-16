@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
+import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
 import { mdiCheck, mdiClose, mdiHandBackRight } from "@mdi/js";
@@ -110,7 +110,7 @@ import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
 const calculationResults = defineModel<ResultData[]>({ required: true });
 const props = defineProps<{
-  unmappedResults: CalculationMethodResult;
+  unmappedResults: CalculationResult;
 }>();
 
 const headers = [
