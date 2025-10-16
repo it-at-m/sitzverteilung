@@ -48,14 +48,14 @@
         <v-tooltip>
           <template v-slot:activator="{ props }">
             <v-icon
-              :color="'red'"
-              :icon="mdiAlphaX"
+              color="red"
+              :icon="mdiClose"
               v-bind="props"
             />
           </template>
-          <span style="white-space: pre-line">{{
-            generateValidationText(item, method)
-          }}</span>
+          <span style="white-space: pre-line">
+            {{ generateValidationText(item, method) }}
+          </span>
         </v-tooltip>
       </template>
       <template v-else>
@@ -95,10 +95,10 @@
 </template>
 
 <script setup lang="ts">
-import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
-import { mdiAlphaX, mdiCheck, mdiHandBackRight } from "@mdi/js";
+import { mdiCheck, mdiClose, mdiHandBackRight } from "@mdi/js";
 import { ref } from "vue";
 
 import {
@@ -110,7 +110,7 @@ import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 
 const calculationResults = defineModel<ResultData[]>({ required: true });
 const props = defineProps<{
-  unmappedResults: CalculationResult;
+  unmappedResults: CalculationMethodResult;
 }>();
 
 const headers = [
@@ -168,6 +168,8 @@ const headers = [
 
 const dialog = ref(false);
 const detailTitle = ref("");
+
+// Placeholder for future content, currently unused
 const detailInfo = ref<string>("");
 
 function goToDetail(selectedCalculationMethod: CalculationMethod) {
@@ -194,11 +196,11 @@ function generateValidationText(
   if (!validationData) return "Keine Validierungsdaten vorhanden";
 
   const reasons = [
-    ...(validationData.overRounding ? ["Überrundung"] : []),
-    ...(validationData.lostSafeSeat ? ["Verlust eines sicheren Sitzes"] : []),
+    ...(validationData.overRounding ? ["Überaufrundung"] : []),
+    ...(validationData.lostSafeSeat ? ["Verlust letzter sicheren Sitzes"] : []),
     ...((validationData.committeeInvalid?.length ?? 0) > 0
       ? [
-          `Ungültige Ausschussgruppen: ${validationData.committeeInvalid.join(", ")}`,
+          `Konstellation ungültig, wegen: ${validationData.committeeInvalid.join(", ")}`,
         ]
       : []),
   ];

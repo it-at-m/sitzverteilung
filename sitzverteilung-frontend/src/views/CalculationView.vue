@@ -85,11 +85,10 @@ const {
 } = useTemplateData();
 
 const calculationResults = computed(() => {
-  if (!hasValidData.value) {
+  if (!hasValidData.value || !unmappedResults.value) {
     return [];
   }
-  const resultToMap = calculate(currentBaseData.value);
-  return mapCalculationResultToResultData(resultToMap);
+  return mapCalculationResultToResultData(unmappedResults.value);
 });
 
 const unmappedResults = computed(() => {
