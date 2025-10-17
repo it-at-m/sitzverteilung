@@ -49,7 +49,7 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table v-model="calculationResults" />
+    <result-table :calculation-result="calculationResult" />
   </v-container>
 </template>
 
@@ -63,7 +63,6 @@ import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomp
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { calculate } from "@/utility/calculator.ts";
-import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
@@ -79,12 +78,11 @@ const {
   isValid,
 } = useTemplateData();
 
-const calculationResults = computed(() => {
+const calculationResult = computed(() => {
   if (!hasValidData.value) {
-    return [];
+    return undefined;
   }
-  const resultToMap = calculate(currentBaseData.value);
-  return mapCalculationResultToResultData(resultToMap);
+  return calculate(currentBaseData.value);
 });
 
 const hasValidData = computed<boolean>(
