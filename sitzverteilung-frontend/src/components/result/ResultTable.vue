@@ -26,12 +26,12 @@
       class="mx-2"
       @click="goToDetail(method)"
       :text="method"
-      :disabled="!calculationResults.length"
+      :disabled="!mappedResult.length"
     />
   </v-toolbar>
   <v-data-table
     :headers="headers"
-    :items="calculationResults"
+    :items="mappedResult"
     hide-default-footer
     no-filter
     disable-sort
@@ -83,7 +83,7 @@
       </template>
     </template>
   </v-data-table>
-  <v-row v-if="!calculationResults.length">
+  <v-row v-if="!mappedResult.length">
     <v-col>
       <v-alert
         text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
@@ -110,7 +110,7 @@ import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 
 const props = defineProps<{
-  unmappedResults: CalculationResult;
+  calculationResult?: CalculationResult;
 }>();
 
 const headers = [
@@ -166,11 +166,11 @@ const headers = [
   },
 ];
 
-const calculationResults = computed(() => {
-  if (!props.unmappedResults) {
+const mappedResult = computed(() => {
+  if (!props.calculationResult) {
     return [];
   }
-  return mapCalculationResultToResultData(props.unmappedResults);
+  return mapCalculationResultToResultData(props.calculationResult);
 });
 
 const dialog = ref(false);
@@ -185,11 +185,13 @@ function goToDetail(selectedCalculationMethod: CalculationMethod) {
 }
 
 function generateStaleText(item: ResultData, method: CalculationMethod) {
-  const staleInfo = props.unmappedResults.methods[method]?.stale;
+  if (props.calculationResult !== undefined) {
+    const staleInfo = props.calculationResult.methods[method]?.stale;
 
-  if (staleInfo !== undefined) {
-    if (staleInfo.groupNames.includes(item.name)) {
-      return "Patt zwischen: " + staleInfo.groupNames.join(", ");
+    if (staleInfo !== undefined) {
+      if (staleInfo.groupNames.includes(item.name)) {
+        return "Patt zwischen: " + staleInfo.groupNames.join(", ");
+      }
     }
   }
 }
@@ -199,7 +201,7 @@ function generateValidationText(
   method: CalculationMethod
 ): string {
   const validationData =
-    props.unmappedResults?.methods[method]?.validation?.[item.name];
+    props.calculationResult?.methods[method]?.validation?.[item.name];
   if (!validationData) return "Keine Validierungsdaten vorhanden";
 
   const reasons = [

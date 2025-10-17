@@ -49,13 +49,11 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table :unmapped-results="unmappedResults" />
+    <result-table :calculation-result="calculationResult" />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
-
 import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
 import { computed } from "vue";
@@ -80,18 +78,12 @@ const {
   isValid,
 } = useTemplateData();
 
-const unmappedResults = computed(() => {
+const calculationResult = computed(() => {
   if (!hasValidData.value) {
-    return EMPTY_RESULT;
+    return undefined;
   }
   return calculate(currentBaseData.value);
 });
-
-const EMPTY_RESULT: CalculationResult = {
-  methods: {},
-  proportions: {},
-  seats: {},
-};
 
 const hasValidData = computed<boolean>(
   () => isAtLeastTwoGroups.value && isValid.value
