@@ -99,7 +99,7 @@ import type { CalculationResult } from "@/types/calculation/internal/Calculation
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
 import { mdiCheck, mdiClose, mdiHandBackRight } from "@mdi/js";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import {
   AVAILABLE_METHODS,
@@ -107,8 +107,8 @@ import {
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
+import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 
-const calculationResults = defineModel<ResultData[]>({ required: true });
 const props = defineProps<{
   unmappedResults: CalculationResult;
 }>();
@@ -165,6 +165,13 @@ const headers = [
     key: "documentation",
   },
 ];
+
+const calculationResults = computed(() => {
+  if (!props.unmappedResults) {
+    return [];
+  }
+  return mapCalculationResultToResultData(props.unmappedResults);
+});
 
 const dialog = ref(false);
 const detailTitle = ref("");

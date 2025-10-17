@@ -49,10 +49,7 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table
-      :unmapped-results="unmappedResults"
-      v-model="calculationResults"
-    />
+    <result-table :unmapped-results="unmappedResults" />
   </v-container>
 </template>
 
@@ -68,7 +65,6 @@ import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomp
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { calculate } from "@/utility/calculator.ts";
-import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
@@ -83,13 +79,6 @@ const {
   baseDataFormRef,
   isValid,
 } = useTemplateData();
-
-const calculationResults = computed(() => {
-  if (!hasValidData.value || !unmappedResults.value) {
-    return [];
-  }
-  return mapCalculationResultToResultData(unmappedResults.value);
-});
 
 const unmappedResults = computed(() => {
   if (!hasValidData.value) {
