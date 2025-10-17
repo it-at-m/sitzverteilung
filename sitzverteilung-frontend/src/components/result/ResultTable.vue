@@ -197,7 +197,7 @@ function generateValidationText(
 
   const reasons = [
     ...(validationData.overRounding ? ["Überaufrundung"] : []),
-    ...(validationData.lostSafeSeat ? ["Verlust letzter sicheren Sitzes"] : []),
+    ...(validationData.lostSafeSeat ? ["Verlust letzter sicherer Sitz"] : []),
     ...((validationData.committeeInvalid?.length ?? 0) > 0
       ? [
           `Konstellation ungültig, wegen: ${validationData.committeeInvalid.join(", ")}`,
