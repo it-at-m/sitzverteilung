@@ -82,6 +82,12 @@
         </v-tooltip>
       </template>
     </template>
+    <template v-for="method in AVAILABLE_METHODS" :key="method" v-slot:[`header.${method}Title`]>
+    <span>
+      {{ method }}
+      <v-icon v-if="!isMethodValid(method)" small color="red">{{ mdiClose }}</v-icon>
+    </span>
+    </template>
   </v-data-table>
   <v-row v-if="!mappedResult.length">
     <v-col>
@@ -103,7 +109,6 @@ import { computed, ref } from "vue";
 
 import {
   AVAILABLE_METHODS,
-  CALCULATION_METHOD_SHORT_FORMS,
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
@@ -113,7 +118,21 @@ const props = defineProps<{
   calculationResult?: CalculationResult;
 }>();
 
-const headers = [
+const mappedResult = computed(() => {
+  if (!props.calculationResult) {
+    return [];
+  }
+  return mapCalculationResultToResultData(props.calculationResult);
+});
+
+function isMethodValid(method: CalculationMethod): boolean {
+  const anyInvalid = mappedResult.value.some(result =>
+      generateValidationText(result, method).startsWith("Nicht zulässig wegen:")
+  );
+  return !anyInvalid;
+}
+
+const headers = computed(() => [
   {
     title: "Zusammensetzung",
     children: [
@@ -127,24 +146,13 @@ const headers = [
         key: "seatsOrVotes",
         width: 50,
       },
-      {
-        title: "Proporz",
-        key: "proportion",
-        width: 50,
-      },
     ],
-  },
-  {
-    title: "Zulässigkeit",
-    children: AVAILABLE_METHODS.map((method) => ({
-      title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: `${method}${ResultDataSuffix.validationSuffix}`,
-    })),
   },
   {
     title: "Ergebnisse",
     children: AVAILABLE_METHODS.map((method) => ({
-      title: CALCULATION_METHOD_SHORT_FORMS[method],
+      title: "",
+      key: `${method}Title`,
       children: [
         {
           title: "Sitze",
@@ -156,22 +164,20 @@ const headers = [
           key: `${method}${ResultDataSuffix.staleSuffix}`,
           width: 50,
         },
+        {
+          title: "Zulässigkeit",
+          key: `${method}${ResultDataSuffix.validationSuffix}`,
+          width: 50,
+        }
       ],
     })),
   },
   {
-    title: "Dokumentation",
-    width: 200,
-    key: "documentation",
+    title: "Proporz",
+    key: "proportion",
+    width: 50,
   },
-];
-
-const mappedResult = computed(() => {
-  if (!props.calculationResult) {
-    return [];
-  }
-  return mapCalculationResultToResultData(props.calculationResult);
-});
+]);
 
 const dialog = ref(false);
 const detailTitle = ref("");
@@ -197,23 +203,36 @@ function generateStaleText(item: ResultData, method: CalculationMethod) {
 }
 
 function generateValidationText(
-  item: ResultData,
-  method: CalculationMethod
+    item: ResultData,
+    method: CalculationMethod
 ): string {
   const validationData =
-    props.calculationResult?.methods[method]?.validation?.[item.name];
+      props.calculationResult?.methods[method]?.validation?.[item.name];
   if (!validationData) return "Keine Validierungsdaten vorhanden";
 
   const reasons = [
     ...(validationData.overRounding ? ["Überaufrundung"] : []),
     ...(validationData.lostSafeSeat ? ["Verlust letzter sicherer Sitz"] : []),
     ...((validationData.committeeInvalid?.length ?? 0) > 0
-      ? [
-          `Konstellation ungültig, wegen: ${validationData.committeeInvalid.join(", ")}`,
-        ]
-      : []),
+        ? [`Konstellation ungültig, wegen: ${validationData.committeeInvalid.join(", ")}`]
+        : []),
   ];
+
+  if (reasons.length === 0) {
+    return "gültig";
+  }
 
   return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
 </script>
+<style>
+.v-data-table td,
+.v-data-table th {
+  border-right: 1px solid #000;
+}
+
+.v-data-table td:last-child,
+.v-data-table th:last-child {
+  border-right: 1px solid #000;
+}
+</style>

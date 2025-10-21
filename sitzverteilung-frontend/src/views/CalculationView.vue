@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed } from "vue";
+import {computed, watch} from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -77,6 +77,20 @@ const {
   baseDataFormRef,
   isValid,
 } = useTemplateData();
+
+watch(
+    isValid,
+    () => {
+      if (isExpanded.value) return;
+
+      setTimeout(() => {
+        if (!isValid.value && currentBaseData.value.groups.length < 2) {
+          toggleExpansion();
+        }
+      }, 100);
+    },
+    { immediate: true }
+);
 
 const calculationResult = computed(() => {
   if (!hasValidData.value) {
