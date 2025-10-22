@@ -29,6 +29,7 @@
       :disabled="!mappedResult.length"
     />
   </v-toolbar>
+  <div class="result-table">
   <v-data-table
     :headers="headers"
     :items="mappedResult"
@@ -82,13 +83,17 @@
         </v-tooltip>
       </template>
     </template>
-    <template v-for="method in AVAILABLE_METHODS" :key="method" v-slot:[`header.${method}Title`]>
-    <span>
-      {{ method }}
-      <v-icon v-if="!isMethodValid(method)" small color="red">{{ mdiClose }}</v-icon>
+    <template v-for="method in AVAILABLE_METHODS" :key="method" v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]>
+      <td style="text-align: center;">
+    <span :class="{ 'bg-red': !isMethodValid(method) }" style="padding: 7px 7px; border-radius: 5px;">
+      Zulässigkeit
     </span>
+        <v-icon v-if="isMethodValid(method)" small color="green">{{ mdiCheck }}</v-icon>
+        <v-icon v-else small color="red">{{ mdiClose }}</v-icon>
+      </td>
     </template>
   </v-data-table>
+  </div>
   <v-row v-if="!mappedResult.length">
     <v-col>
       <v-alert
@@ -151,7 +156,7 @@ const headers = computed(() => [
   {
     title: "Ergebnisse",
     children: AVAILABLE_METHODS.map((method) => ({
-      title: "",
+      title: `${method}`,
       key: `${method}Title`,
       children: [
         {
@@ -165,7 +170,7 @@ const headers = computed(() => [
           width: 50,
         },
         {
-          title: "Zulässigkeit",
+          title: "",
           key: `${method}${ResultDataSuffix.validationSuffix}`,
           width: 50,
         }
@@ -226,13 +231,8 @@ function generateValidationText(
 }
 </script>
 <style>
-.v-data-table td,
-.v-data-table th {
-  border-right: 1px solid #000;
-}
-
-.v-data-table td:last-child,
-.v-data-table th:last-child {
-  border-right: 1px solid #000;
+.result-table .v-data-table td:not(:last-child),
+.result-table .v-data-table th {
+  border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 </style>
