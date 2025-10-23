@@ -91,26 +91,20 @@
         :key="method"
         v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]
       >
-        <td style="text-align: center">
+        <div class="d-flex justify-center align-center ga-2">
           <span
-            :class="{ 'bg-red': !isMethodValid(method) }"
-            style="padding: 7px 7px; border-radius: 5px"
+            :class="{ 'bg-error': !isMethodValid(method) }"
+            class="px-2 py-1 rounded-sm"
           >
             Zulässigkeit
           </span>
           <v-icon
-            v-if="isMethodValid(method)"
-            small
-            color="green"
-            >{{ mdiCheck }}</v-icon
-          >
-          <v-icon
-            v-else
-            small
-            color="red"
-            >{{ mdiClose }}</v-icon
-          >
-        </td>
+            :icon="isMethodValid(method) ? mdiCheck : mdiClose"
+            :color="isMethodValid(method) ? 'success' : 'error'"
+            :size="18"
+            aria-label="Zulässigkeit"
+          />
+        </div>
       </template>
     </v-data-table>
   </div>
@@ -143,18 +137,17 @@ const props = defineProps<{
   calculationResult?: CalculationResult;
 }>();
 
-const mappedResult = computed(() => {
-  if (!props.calculationResult) {
-    return [];
-  }
-  return mapCalculationResultToResultData(props.calculationResult);
-});
+const mappedResult = computed<ResultData[]>(() =>
+  props.calculationResult
+    ? mapCalculationResultToResultData(props.calculationResult)
+    : ([] as ResultData[])
+);
 
-function isMethodValid(method: CalculationMethod): boolean {
-  const anyInvalid = mappedResult.value.some((result) =>
-    generateValidationText(result, method).startsWith("Nicht zulässig wegen:")
+function isMethodValid(method: CalculationMethod): boolean | null {
+  if (mappedResult.value.length === 0) return null;
+  return mappedResult.value.every((row) =>
+    Boolean(row[`${method}${ResultDataSuffix.validationSuffix}`])
   );
-  return !anyInvalid;
 }
 
 const headers = computed(() => [

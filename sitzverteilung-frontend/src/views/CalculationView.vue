@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, watch } from "vue";
+import { computed, onBeforeUnmount, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -78,12 +78,15 @@ const {
   isValid,
 } = useTemplateData();
 
+let expandTimer: ReturnType<typeof setTimeout> | null = null;
+
 watch(
   isValid,
   () => {
     if (isExpanded.value) return;
 
-    setTimeout(() => {
+    if (expandTimer) clearTimeout(expandTimer);
+    expandTimer = setTimeout(() => {
       if (!isValid.value && currentBaseData.value.groups.length < 2) {
         toggleExpansion();
       }
@@ -91,6 +94,10 @@ watch(
   },
   { immediate: true }
 );
+
+onBeforeUnmount(() => {
+  if (expandTimer) clearTimeout(expandTimer);
+});
 
 const calculationResult = computed(() => {
   if (!hasValidData.value) {
