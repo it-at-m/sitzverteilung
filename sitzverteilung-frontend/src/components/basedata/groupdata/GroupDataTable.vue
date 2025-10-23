@@ -72,7 +72,7 @@
           </v-tooltip>
           <v-tooltip
               :disabled="!isDeletionDisabled"
-              :text="selectedIndexes.length === 0 ? 'Zum Löschen mindestens zwei Einträge auswählen' : 'Mindestens ein gewählter Eintrag befindet sich noch in einer Gemeinschaft'"
+              :text="selectedIndexes.length === 0 ? 'Zum Löschen mindestens einen Eintrag auswählen' : 'Mindestens ein gewählter Eintrag befindet sich noch in einer Gemeinschaft'"
               location="top"
           >
             <template #activator="{ props }">
