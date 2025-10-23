@@ -22,16 +22,25 @@
             :prepend-icon="isExpanded ? mdiClose : mdiContentSaveEdit"
             :text="isExpanded ? 'Schließen' : 'Ändern'"
           />
-          <v-btn
-            variant="flat"
-            color="blue"
-            size="large"
-            class="mx-5"
-            :prepend-icon="mdiShare"
+          <v-tooltip
+            text="Eingegebene Daten teilen"
             :disabled="!hasValidData"
-            @click="share"
-            text="Teilen"
-          />
+            location="top"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                variant="flat"
+                color="blue"
+                size="large"
+                class="mx-5"
+                :prepend-icon="mdiShare"
+                :disabled="!hasValidData"
+                @click="share"
+                text="Teilen"
+              />
+            </template>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-toolbar>

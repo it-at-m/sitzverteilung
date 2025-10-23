@@ -181,16 +181,25 @@
             @click="showDeleteConfirmation"
             text="Löschen"
           />
-          <v-btn
-            variant="flat"
-            color="blue"
-            size="large"
-            class="mx-5"
-            :prepend-icon="mdiShare"
+          <v-tooltip
+            text="Ausgewählte Vorlage teilen"
             :disabled="!selectedBaseData || dirty"
-            @click="share"
-            text="Teilen"
-          />
+            location="top"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                variant="flat"
+                color="blue"
+                size="large"
+                class="mx-5"
+                :prepend-icon="mdiShare"
+                :disabled="!selectedBaseData || dirty"
+                @click="share"
+                text="Teilen"
+              />
+            </template>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-toolbar>
