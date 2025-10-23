@@ -71,24 +71,28 @@
             </template>
           </v-tooltip>
           <v-tooltip
-              :disabled="!isDeletionDisabled"
-              :text="selectedIndexes.length === 0 ? 'Zum Löschen mindestens einen Eintrag auswählen' : 'Mindestens ein gewählter Eintrag befindet sich noch in einer Gemeinschaft'"
-              location="top"
+            :disabled="!isDeletionDisabled"
+            :text="
+              selectedIndexes.length === 0
+                ? 'Zum Löschen mindestens einen Eintrag auswählen'
+                : 'Mindestens ein gewählter Eintrag befindet sich noch in einer Gemeinschaft'
+            "
+            location="top"
           >
             <template #activator="{ props }">
               <span
-                  v-bind="props"
-                  tabindex="0"
+                v-bind="props"
+                tabindex="0"
               >
                 <v-btn
-                    :disabled="isDeletionDisabled"
-                    @click="deleteGroups"
-                    :prepend-icon="mdiDelete"
-                    variant="tonal"
-                    color="error"
-                    size="small"
-                    class="mx-2"
-                    text="Zeilen löschen"
+                  :disabled="isDeletionDisabled"
+                  @click="deleteGroups"
+                  :prepend-icon="mdiDelete"
+                  variant="tonal"
+                  color="error"
+                  size="small"
+                  class="mx-2"
+                  text="Zeilen löschen"
                 />
               </span>
             </template>
@@ -137,28 +141,27 @@
         <template #append>
           <div class="d-flex justify-center">
             <v-tooltip
-                :disabled="!isSingleDeletionDisabled(index)"
-                text="Zum Löschen muss der Eintrag aus allen Gemeinschaften entfernt werden"
-                location="top"
+              :disabled="!isSingleDeletionDisabled(index)"
+              text="Zum Löschen muss der Eintrag aus allen Gemeinschaften entfernt werden"
+              location="top"
             >
               <template #activator="{ props }">
                 <span
-                    v-bind="props"
-                    tabindex="0"
+                  v-bind="props"
+                  tabindex="0"
                 >
                   <v-btn
-                      @click="deleteGroup(index)"
-                      :disabled="isSingleDeletionDisabled(index)"
-                      :icon="mdiDelete"
-                      size="small"
-                      color="red"
-                      variant="text"
-                      aria-label="Zeile löschen"
+                    @click="deleteGroup(index)"
+                    :disabled="isSingleDeletionDisabled(index)"
+                    :icon="mdiDelete"
+                    size="small"
+                    color="red"
+                    variant="text"
+                    aria-label="Zeile löschen"
                   />
                 </span>
               </template>
             </v-tooltip>
-
           </div>
         </template>
       </group-data-table-row>
