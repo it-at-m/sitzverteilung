@@ -22,10 +22,20 @@
             :prepend-icon="isExpanded ? mdiClose : mdiContentSaveEdit"
             :text="isExpanded ? 'Schließen' : 'Ändern'"
           />
+          <v-btn
+            variant="flat"
+            color="blue"
+            size="large"
+            class="mx-5"
+            :prepend-icon="mdiShare"
+            :disabled="!hasValidData"
+            @click="share"
+            text="Teilen"
+          />
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-row v-if="isDataEntered">
+    <v-row v-if="isDataEntered && selectedBaseData">
       <v-col>
         <v-alert
           text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert."
@@ -54,13 +64,16 @@
 </template>
 
 <script setup lang="ts">
-import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
+
+import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
 import { computed } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
+import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { calculate } from "@/utility/calculator.ts";
 import { LimitConfiguration } from "@/utility/validation.ts";
@@ -78,6 +91,14 @@ const {
   isValid,
 } = useTemplateData();
 
+const { share } = useShareData<BaseData>(
+  false,
+  currentBaseData,
+  isValidBaseData,
+  currentBaseData,
+  "Die Daten wurden erfolgreich aus dem Link übertragen."
+);
+
 const calculationResult = computed(() => {
   if (!hasValidData.value) {
     return undefined;
@@ -88,6 +109,21 @@ const calculationResult = computed(() => {
 const hasValidData = computed<boolean>(
   () => isAtLeastTwoGroups.value && isValid.value
 );
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function isValidBaseData(x: any): x is BaseData {
+  return (
+    x &&
+    typeof x.name === "string" &&
+    typeof x.committeeSize === "number" &&
+    typeof x.targetSize === "number" &&
+    Array.isArray(x.groups) &&
+    Array.isArray(x.unions) &&
+    x.groups.length >= 2 &&
+    x.groups.every((group: any) => group && typeof group.name === "string") &&
+    x.unions.every((union: any) => union && Array.isArray(union.groups))
+  );
+}
 
 const isAtLeastTwoGroups = computed(
   () => currentBaseData.value.groups.length >= 2
