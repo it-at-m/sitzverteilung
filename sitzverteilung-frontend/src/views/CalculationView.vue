@@ -47,14 +47,14 @@
     <v-row v-if="isDataEntered && selectedBaseData">
       <v-col>
         <v-alert
-          text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert."
+          text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert. Die Berechnung und das Teilen per Link basiert auf den geänderten Daten."
           type="info"
           variant="tonal"
         />
       </v-col>
     </v-row>
     <base-data-form
-      class="mt-5"
+      class="mt-3"
       v-show="isExpanded"
       ref="baseDataFormRef"
       v-model="currentBaseData"
@@ -68,7 +68,7 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table :calculation-result="calculationResult" />
+    <result-table class="mt-2" :calculation-result="calculationResult" />
   </v-container>
 </template>
 
