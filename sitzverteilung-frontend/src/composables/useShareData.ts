@@ -63,7 +63,9 @@ export function useShareData<T>(
   watch(
     () => route.query.import,
     async (newImport) => {
-      const importParam = newImport?.toString() ?? "";
+      const importParam = Array.isArray(newImport)
+        ? (newImport[0]?.toString() ?? "")
+        : (newImport?.toString() ?? "");
       if (importParam) {
         try {
           const data = await writeUrlParamToObject<T>(importParam);

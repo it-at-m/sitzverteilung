@@ -88,7 +88,10 @@ import ResultTable from "@/components/result/ResultTable.vue";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { calculate } from "@/utility/calculator.ts";
-import { LimitConfiguration } from "@/utility/validation.ts";
+import {
+  isValidCalculationData,
+  LimitConfiguration,
+} from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
 
@@ -106,7 +109,7 @@ const {
 const { share } = useShareData<BaseData>(
   false,
   currentBaseData,
-  isValidBaseData,
+  isValidCalculationData,
   currentBaseData,
   "Die Daten wurden erfolgreich aus dem Link übertragen."
 );
@@ -121,21 +124,6 @@ const calculationResult = computed(() => {
 const hasValidData = computed<boolean>(
   () => isAtLeastTwoGroups.value && isValid.value
 );
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function isValidBaseData(x: any): x is BaseData {
-  return (
-    x &&
-    typeof x.name === "string" &&
-    typeof x.committeeSize === "number" &&
-    typeof x.targetSize === "number" &&
-    Array.isArray(x.groups) &&
-    Array.isArray(x.unions) &&
-    x.groups.length >= 2 &&
-    x.groups.every((group: any) => group && typeof group.name === "string") &&
-    x.unions.every((union: any) => union && Array.isArray(union.groups))
-  );
-}
 
 const isAtLeastTwoGroups = computed(
   () => currentBaseData.value.groups.length >= 2

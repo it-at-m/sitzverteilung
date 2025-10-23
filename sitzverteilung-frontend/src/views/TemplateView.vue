@@ -243,7 +243,7 @@ import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
 import { numberFormatter } from "@/utility/numberFormatter.ts";
-import { LimitConfiguration } from "@/utility/validation.ts";
+import { isValidBaseData, LimitConfiguration } from "@/utility/validation.ts";
 
 const store = useTemplateDataStore();
 const snackbar = useSnackbarStore();
@@ -312,18 +312,4 @@ const { share } = useShareData<BaseData>(
   currentBaseData,
   "Die Daten wurden aus dem Link übertragen. ACHTUNG: Erst nach dem Klick auf 'Anlegen' werden diese permanent gespeichert."
 );
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function isValidBaseData(x: any): x is BaseData {
-  return (
-    x &&
-    typeof x.name === "string" &&
-    typeof x.committeeSize === "number" &&
-    Array.isArray(x.groups) &&
-    Array.isArray(x.unions) &&
-    x.groups.every((group: any) => group && typeof group.name === "string") &&
-    x.unions.every((union: any) => union && Array.isArray(union.groups))
-  );
-}
-/* eslint-enable @typescript-eslint/no-explicit-any */
 </script>
