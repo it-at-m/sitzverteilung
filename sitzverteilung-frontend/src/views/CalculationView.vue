@@ -22,20 +22,39 @@
             :prepend-icon="isExpanded ? mdiClose : mdiContentSaveEdit"
             :text="isExpanded ? 'Schließen' : 'Ändern'"
           />
+          <v-tooltip
+            text="Eingegebene Daten teilen"
+            :disabled="!hasValidData"
+            location="top"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                variant="flat"
+                color="blue"
+                size="large"
+                class="mx-5"
+                :prepend-icon="mdiShare"
+                :disabled="!hasValidData"
+                @click="share"
+                text="Teilen"
+              />
+            </template>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-row v-if="isDataEntered">
+    <v-row v-if="isDataEntered && selectedBaseData">
       <v-col>
         <v-alert
-          text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert."
+          text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert. Die Berechnung und das Teilen per Link basiert auf den geänderten Daten."
           type="info"
           variant="tonal"
         />
       </v-col>
     </v-row>
     <base-data-form
-      class="mt-5"
+      class="mt-3"
       v-show="isExpanded"
       ref="baseDataFormRef"
       v-model="currentBaseData"
@@ -49,21 +68,30 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table :calculation-result="calculationResult" />
+    <result-table
+      class="mt-2"
+      :calculation-result="calculationResult"
+    />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
+
+import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
 import { computed, onBeforeUnmount, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
+import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { calculate } from "@/utility/calculator.ts";
-import { LimitConfiguration } from "@/utility/validation.ts";
+import {
+  isValidCalculationData,
+  LimitConfiguration,
+} from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
 
@@ -77,6 +105,14 @@ const {
   baseDataFormRef,
   isValid,
 } = useTemplateData();
+
+const { share } = useShareData<BaseData>(
+  false,
+  currentBaseData,
+  isValidCalculationData,
+  currentBaseData,
+  "Die Daten wurden erfolgreich aus dem Link übertragen."
+);
 
 let expandTimer: ReturnType<typeof setTimeout> | null = null;
 
