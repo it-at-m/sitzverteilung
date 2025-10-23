@@ -1,6 +1,6 @@
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 
-import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
@@ -11,7 +11,9 @@ export function useTemplateData() {
 
   onMounted(() => {
     if (selectedBaseData.value) {
-      currentBaseData.value = JSON.parse(JSON.stringify(selectedBaseData.value));
+      currentBaseData.value = JSON.parse(
+        JSON.stringify(selectedBaseData.value)
+      );
     }
   });
 
@@ -62,15 +64,15 @@ export function useTemplateData() {
     useTemplateRef<typeof BaseDataForm>("baseDataFormRef");
 
   watch(
-      selectedBaseData,
-      (newBaseData) => {
-        if (!newBaseData) {
-          reset();
-        } else {
-          currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-        }
-      },
-      { deep: true }
+    selectedBaseData,
+    (newBaseData) => {
+      if (!newBaseData) {
+        reset();
+      } else {
+        currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
+      }
+    },
+    { deep: true }
   );
 
   function reset() {

@@ -30,69 +30,86 @@
     />
   </v-toolbar>
   <div class="result-table">
-  <v-data-table
-    :headers="headers"
-    :items="mappedResult"
-    hide-default-footer
-    no-filter
-    disable-sort
-    density="compact"
-    no-data-text=""
-    :items-per-page="-1"
-  >
-    <template
-      v-for="method in AVAILABLE_METHODS"
-      :key="method"
-      v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
+    <v-data-table
+      :headers="headers"
+      :items="mappedResult"
+      hide-default-footer
+      no-filter
+      disable-sort
+      density="compact"
+      no-data-text=""
+      :items-per-page="-1"
     >
-      <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
-        <v-tooltip>
-          <template v-slot:activator="{ props }">
-            <v-icon
-              color="red"
-              :icon="mdiClose"
-              v-bind="props"
-            />
-          </template>
-          <span style="white-space: pre-line">
-            {{ generateValidationText(item, method) }}
+      <template
+        v-for="method in AVAILABLE_METHODS"
+        :key="method"
+        v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
+      >
+        <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
+          <v-tooltip>
+            <template v-slot:activator="{ props }">
+              <v-icon
+                color="red"
+                :icon="mdiClose"
+                v-bind="props"
+              />
+            </template>
+            <span style="white-space: pre-line">
+              {{ generateValidationText(item, method) }}
+            </span>
+          </v-tooltip>
+        </template>
+        <template v-else>
+          <v-icon
+            color="green"
+            :icon="mdiCheck"
+          />
+        </template>
+      </template>
+      <template
+        v-for="method in AVAILABLE_METHODS"
+        :key="method"
+        v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
+      >
+        <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
+          <v-tooltip>
+            <template v-slot:activator="{ props }">
+              <v-icon
+                :icon="mdiHandBackRight"
+                v-bind="props"
+              />
+            </template>
+            <span>{{ generateStaleText(item, method) }}</span>
+          </v-tooltip>
+        </template>
+      </template>
+      <template
+        v-for="method in AVAILABLE_METHODS"
+        :key="method"
+        v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]
+      >
+        <td style="text-align: center">
+          <span
+            :class="{ 'bg-red': !isMethodValid(method) }"
+            style="padding: 7px 7px; border-radius: 5px"
+          >
+            Zulässigkeit
           </span>
-        </v-tooltip>
+          <v-icon
+            v-if="isMethodValid(method)"
+            small
+            color="green"
+            >{{ mdiCheck }}</v-icon
+          >
+          <v-icon
+            v-else
+            small
+            color="red"
+            >{{ mdiClose }}</v-icon
+          >
+        </td>
       </template>
-      <template v-else>
-        <v-icon
-          color="green"
-          :icon="mdiCheck"
-        />
-      </template>
-    </template>
-    <template
-      v-for="method in AVAILABLE_METHODS"
-      :key="method"
-      v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
-    >
-      <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
-        <v-tooltip>
-          <template v-slot:activator="{ props }">
-            <v-icon
-              :icon="mdiHandBackRight"
-              v-bind="props"
-            />
-          </template>
-          <span>{{ generateStaleText(item, method) }}</span>
-        </v-tooltip>
-      </template>
-    </template>
-    <template v-for="method in AVAILABLE_METHODS" :key="method" v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]>
-      <td style="text-align: center;">
-    <span :class="{ 'bg-red': !isMethodValid(method) }" style="padding: 7px 7px; border-radius: 5px;">
-      Zulässigkeit
-    </span>
-        <v-icon v-if="isMethodValid(method)" small color="green">{{ mdiCheck }}</v-icon>
-        <v-icon v-else small color="red">{{ mdiClose }}</v-icon>
-      </td>
-    </template>
-  </v-data-table>
+    </v-data-table>
   </div>
   <v-row v-if="!mappedResult.length">
     <v-col>
@@ -131,8 +148,8 @@ const mappedResult = computed(() => {
 });
 
 function isMethodValid(method: CalculationMethod): boolean {
-  const anyInvalid = mappedResult.value.some(result =>
-      generateValidationText(result, method).startsWith("Nicht zulässig wegen:")
+  const anyInvalid = mappedResult.value.some((result) =>
+    generateValidationText(result, method).startsWith("Nicht zulässig wegen:")
   );
   return !anyInvalid;
 }
@@ -173,7 +190,7 @@ const headers = computed(() => [
           title: "",
           key: `${method}${ResultDataSuffix.validationSuffix}`,
           width: 50,
-        }
+        },
       ],
     })),
   },
@@ -208,19 +225,21 @@ function generateStaleText(item: ResultData, method: CalculationMethod) {
 }
 
 function generateValidationText(
-    item: ResultData,
-    method: CalculationMethod
+  item: ResultData,
+  method: CalculationMethod
 ): string {
   const validationData =
-      props.calculationResult?.methods[method]?.validation?.[item.name];
+    props.calculationResult?.methods[method]?.validation?.[item.name];
   if (!validationData) return "Keine Validierungsdaten vorhanden";
 
   const reasons = [
     ...(validationData.overRounding ? ["Überaufrundung"] : []),
     ...(validationData.lostSafeSeat ? ["Verlust letzter sicherer Sitz"] : []),
     ...((validationData.committeeInvalid?.length ?? 0) > 0
-        ? [`Konstellation ungültig, wegen: ${validationData.committeeInvalid.join(", ")}`]
-        : []),
+      ? [
+          `Konstellation ungültig, wegen: ${validationData.committeeInvalid.join(", ")}`,
+        ]
+      : []),
   ];
 
   if (reasons.length === 0) {
