@@ -79,7 +79,10 @@
                 v-bind="props"
               />
             </template>
-            <span>{{ generateStaleText(item, method) }}</span>
+
+            <span style="white-space: pre-line">
+              {{ generateStaleText(item, method) }}
+            </span>
           </v-tooltip>
         </template>
       </template>
@@ -216,12 +219,11 @@ function generateStaleText(item: ResultData, method: CalculationMethod) {
   if (props.calculationResult !== undefined) {
     const staleInfo = props.calculationResult.methods[method]?.stale;
 
-    if (staleInfo !== undefined) {
-      if (staleInfo.groupNames.includes(item.name)) {
-        return "Patt zwischen: " + staleInfo.groupNames.join(", ");
-      }
+    if (staleInfo !== undefined && staleInfo.groupNames.includes(item.name)) {
+      return `Patt von ${staleInfo.amountSeats} Sitzen, zwischen: ${staleInfo.groupNames.join(", ")}\nProporz von ${staleInfo.ratio}`;
     }
   }
+  return "";
 }
 
 function generateValidationText(
