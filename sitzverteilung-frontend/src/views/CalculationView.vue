@@ -123,7 +123,7 @@ watch(
 
     if (expandTimer) clearTimeout(expandTimer);
     expandTimer = setTimeout(() => {
-      if (!isValid.value && currentBaseData.value.groups.length < 2) {
+      if (!isExpanded.value && !isValid.value && currentBaseData.value.groups.length < 2) {
         toggleExpansion();
       }
     }, 100);
