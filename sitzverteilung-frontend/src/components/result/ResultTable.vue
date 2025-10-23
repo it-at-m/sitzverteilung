@@ -26,9 +26,10 @@
         variant="outlined"
         class="mx-2"
         @click="goToDetail(method)"
-        :text="method"
         :disabled="!mappedResult.length"
-      />
+      >
+        {{ method }}
+      </v-btn>
     </v-toolbar>
     <div class="result-table">
       <v-data-table
@@ -54,8 +55,9 @@
             <v-tooltip>
               <template v-slot:activator="{ props }">
                 <v-icon
-                  color="red"
                   :icon="mdiClose"
+                  color="error"
+                  :size="18"
                   v-bind="props"
                 />
               </template>
@@ -66,8 +68,9 @@
           </template>
           <template v-else>
             <v-icon
-              color="green"
               :icon="mdiCheck"
+              color="success"
+              :size="18"
             />
           </template>
         </template>
