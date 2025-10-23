@@ -68,7 +68,10 @@
       :show-name-column="false"
       are-fields-required
     />
-    <result-table class="mt-2" :calculation-result="calculationResult" />
+    <result-table
+      class="mt-2"
+      :calculation-result="calculationResult"
+    />
   </v-container>
 </template>
 
