@@ -43,7 +43,10 @@ export function useShareData<T>(
           path: route.path,
           query: { ...route.query, import: importParam },
         }).href;
-        const fullShareUrl = new URL(shareUrl, window.location.origin).toString();
+        const fullShareUrl = new URL(
+          shareUrl,
+          window.location.origin
+        ).toString();
 
         await copy(fullShareUrl);
         snackbar.showMessage({
