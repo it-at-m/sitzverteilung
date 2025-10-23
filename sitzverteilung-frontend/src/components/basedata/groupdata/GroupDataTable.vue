@@ -26,7 +26,7 @@
         <template #append>
           <v-tooltip
             :disabled="!isFractionDisabled"
-            text="Zum Anlegen mind. 2 Parteien auswählen."
+            text="Zum Anlegen mindestens zwei zulässige Einträge auswählen"
             location="top"
           >
             <template #activator="{ props }">
@@ -49,7 +49,7 @@
           </v-tooltip>
           <v-tooltip
             :disabled="!isCommitteeDisabled"
-            text="Zum Anlegen mind. 2 Parteien auswählen."
+            text="Zum Anlegen mindestens zwei zulässige Einträge auswählen"
             location="top"
           >
             <template #activator="{ props }">
@@ -70,16 +70,29 @@
               </span>
             </template>
           </v-tooltip>
-          <v-btn
-            :disabled="isDeletionDisabled"
-            @click="deleteGroups"
-            :prepend-icon="mdiDelete"
-            variant="tonal"
-            color="error"
-            size="small"
-            class="mx-2"
-            text="Zeilen löschen"
-          />
+          <v-tooltip
+              :disabled="!isDeletionDisabled"
+              :text="selectedIndexes.length === 0 ? 'Zum Löschen mindestens zwei Einträge auswählen' : 'Mindestens ein gewählter Eintrag befindet sich noch in einer Gemeinschaft'"
+              location="top"
+          >
+            <template #activator="{ props }">
+              <span
+                  v-bind="props"
+                  tabindex="0"
+              >
+                <v-btn
+                    :disabled="isDeletionDisabled"
+                    @click="deleteGroups"
+                    :prepend-icon="mdiDelete"
+                    variant="tonal"
+                    color="error"
+                    size="small"
+                    class="mx-2"
+                    text="Zeilen löschen"
+                />
+              </span>
+            </template>
+          </v-tooltip>
         </template>
       </v-toolbar>
     </template>
@@ -123,15 +136,29 @@
         </template>
         <template #append>
           <div class="d-flex justify-center">
-            <v-btn
-              @click="deleteGroup(index)"
-              :disabled="isSingleDeletionDisabled(index)"
-              :icon="mdiDelete"
-              size="small"
-              color="red"
-              variant="text"
-              aria-label="Zeile löschen"
-            />
+            <v-tooltip
+                :disabled="!isSingleDeletionDisabled(index)"
+                text="Zum Löschen muss der Eintrag aus allen Gemeinschaften entfernt werden"
+                location="top"
+            >
+              <template #activator="{ props }">
+                <span
+                    v-bind="props"
+                    tabindex="0"
+                >
+                  <v-btn
+                      @click="deleteGroup(index)"
+                      :disabled="isSingleDeletionDisabled(index)"
+                      :icon="mdiDelete"
+                      size="small"
+                      color="red"
+                      variant="text"
+                      aria-label="Zeile löschen"
+                  />
+                </span>
+              </template>
+            </v-tooltip>
+
           </div>
         </template>
       </group-data-table-row>
