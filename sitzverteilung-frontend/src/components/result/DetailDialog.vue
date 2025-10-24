@@ -1,12 +1,20 @@
 <template>
   <v-dialog
     v-model="isDialogShown"
-    max-width="1200"
+    width="auto"
+    scrollable
   >
     <v-card
       :title="`Detaillierte Informationen zum ${calculationMethod}-Verfahren`"
+      :prepend-icon="mdiInformation"
     >
       <v-card-text>
+        <p>
+          Größe des Hauptorgans: <b>{{ committeeSize ?? "keine Angabe" }}</b>
+        </p>
+        <p>
+          Größe des Ausschusses: <b>{{ targetSize ?? "keine Angabe" }}</b>
+        </p>
         <result-table
           class="mt-2"
           :calculation-result="calculationResult"
@@ -28,11 +36,15 @@
 import type { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 
+import { mdiInformation } from "@mdi/js";
+
 import ResultTable from "@/components/result/ResultTable.vue";
 
 const isDialogShown = defineModel<boolean>({ required: true });
-const { calculationMethod } = defineProps<{
+defineProps<{
   calculationMethod: CalculationMethod;
+  targetSize?: number;
+  committeeSize?: number;
   calculationResult?: CalculationResult;
 }>();
 </script>

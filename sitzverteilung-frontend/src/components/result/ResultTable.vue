@@ -179,12 +179,10 @@ const headers = computed(() => [
       {
         title: "Name",
         key: "name",
-        width: 200,
       },
       {
         title: "Sitze",
         key: "seatsOrVotes",
-        width: 50,
       },
     ],
   },
@@ -195,24 +193,20 @@ const headers = computed(() => [
       {
         title: "Sitze",
         key: `${method}${ResultDataSuffix.seatsSuffix}`,
-        width: 50,
       },
       {
         title: "Patt",
         key: `${method}${ResultDataSuffix.staleSuffix}`,
-        width: 50,
       },
       {
         title: "",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
-        width: 50,
       },
     ],
   })),
   {
     title: "Proporz",
     key: "proportion",
-    width: 50,
   },
 ]);
 

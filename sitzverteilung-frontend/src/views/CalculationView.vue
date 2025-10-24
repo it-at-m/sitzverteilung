@@ -4,6 +4,8 @@
     v-if="detailDialogMethod"
     :calculation-method="detailDialogMethod"
     :calculation-result="calculationResult"
+    :target-size="currentBaseData.targetSize"
+    :committee-size="currentBaseData.committeeSize"
   />
   <v-container>
     <v-row>
