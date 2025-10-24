@@ -22,7 +22,6 @@ export function mapCalculationResultToResultData(
       name: groupName,
       seatsOrVotes: seatsOrVotes ?? 0,
       proportion: formatToThreeDecimals(proportion ?? 0),
-      documentation: "",
     };
 
     AVAILABLE_METHODS.forEach((method) => {

@@ -15,7 +15,6 @@ describe("mapCalculationResultToResultData", () => {
         name: "Testgroup 1",
         seatsOrVotes: 12,
         proportion: expect.any(Number),
-        documentation: "",
 
         "D'Hondt-seats": 2,
         "Hare/Niemeyer-seats": 4,
