@@ -3,6 +3,7 @@
     v-model="showDetailDialog"
     v-if="detailDialogMethod"
     :calculation-method="detailDialogMethod"
+    :calculation-result="calculationResult"
   />
   <v-container>
     <v-row>

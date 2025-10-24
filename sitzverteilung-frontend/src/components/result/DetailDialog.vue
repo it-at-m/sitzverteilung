@@ -1,31 +1,38 @@
 <template>
   <v-dialog
     v-model="isDialogShown"
-    transition="dialog-bottom-transition"
-    fullscreen
+    max-width="1200"
   >
-    <v-card>
-      <v-toolbar>
+    <v-card
+      :title="`Detaillierte Informationen zum ${calculationMethod}-Verfahren`"
+    >
+      <v-card-text>
+        <result-table
+          class="mt-2"
+          :calculation-result="calculationResult"
+          :method-to-display="calculationMethod"
+        />
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
         <v-btn
-          :icon="mdiClose"
+          text="Schließen"
           @click="isDialogShown = false"
         />
-
-        <v-toolbar-title>
-          Detaillierte Informationen zum {{ calculationMethod }}-Verfahren
-        </v-toolbar-title>
-      </v-toolbar>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
 import type { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 
-import { mdiClose } from "@mdi/js";
+import ResultTable from "@/components/result/ResultTable.vue";
 
 const isDialogShown = defineModel<boolean>({ required: true });
 const { calculationMethod } = defineProps<{
   calculationMethod: CalculationMethod;
+  calculationResult?: CalculationResult;
 }>();
 </script>
