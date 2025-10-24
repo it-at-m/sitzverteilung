@@ -12,7 +12,7 @@
         :items-per-page="-1"
       >
         <template
-          v-for="method in AVAILABLE_METHODS"
+          v-for="method in methodsToDisplay"
           :key="method"
           v-slot:[`header.${method}Title`]="{ column }"
         >
@@ -20,6 +20,7 @@
             text="Detaillierte Informationen anzeigen"
             :disabled="!mappedResult.length"
             location="top"
+            v-if="!methodToDisplay"
           >
             <template v-slot:activator="{ props }">
               <v-btn
@@ -35,61 +36,12 @@
               />
             </template>
           </v-tooltip>
-        </template>
-        <template
-          v-for="method in AVAILABLE_METHODS"
-          :key="method"
-          v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{
-            item,
-          }"
-        >
-          <template
-            v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]"
-          >
-            <v-tooltip>
-              <template v-slot:activator="{ props }">
-                <v-icon
-                  :icon="mdiClose"
-                  color="error"
-                  :size="18"
-                  v-bind="props"
-                />
-              </template>
-              <span style="white-space: pre-line">
-                {{ generateValidationText(item, method) }}
-              </span>
-            </v-tooltip>
-          </template>
           <template v-else>
-            <v-icon
-              :icon="mdiCheck"
-              color="success"
-              :size="18"
-            />
+            <span> {{ column.title }}</span>
           </template>
         </template>
         <template
-          v-for="method in AVAILABLE_METHODS"
-          :key="method"
-          v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
-        >
-          <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
-            <v-tooltip>
-              <template v-slot:activator="{ props }">
-                <v-icon
-                  :icon="mdiHandBackRight"
-                  v-bind="props"
-                />
-              </template>
-
-              <span style="white-space: pre-line">
-                {{ generateStaleText(item, method) }}
-              </span>
-            </v-tooltip>
-          </template>
-        </template>
-        <template
-          v-for="method in AVAILABLE_METHODS"
+          v-for="method in methodsToDisplay"
           :key="method"
           v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]
         >
@@ -107,6 +59,68 @@
               aria-label="Zulässigkeit"
             />
           </div>
+        </template>
+        <template
+          v-for="method in methodsToDisplay"
+          :key="method"
+          v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
+        >
+          <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
+            <v-tooltip v-if="!methodToDisplay">
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  :icon="mdiHandBackRight"
+                  v-bind="props"
+                />
+              </template>
+
+              <span style="white-space: pre-line">
+                {{ generateStaleText(item, method) }}
+              </span>
+            </v-tooltip>
+            <template v-else>
+              <span style="white-space: pre-line">
+                {{ generateStaleText(item, method) }}
+              </span>
+            </template>
+          </template>
+        </template>
+        <template
+          v-for="method in methodsToDisplay"
+          :key="method"
+          v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{
+            item,
+          }"
+        >
+          <template
+            v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]"
+          >
+            <v-tooltip v-if="!methodToDisplay">
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  :icon="mdiClose"
+                  color="error"
+                  :size="18"
+                  v-bind="props"
+                />
+              </template>
+              <span style="white-space: pre-line">
+                {{ generateValidationText(item, method) }}
+              </span>
+            </v-tooltip>
+            <template v-else>
+              <span style="white-space: pre-line">
+                {{ generateValidationText(item, method) }}
+              </span>
+            </template>
+          </template>
+          <template v-else>
+            <v-icon
+              :icon="mdiCheck"
+              color="success"
+              :size="18"
+            />
+          </template>
         </template>
       </v-data-table>
     </div>
@@ -136,13 +150,18 @@ import {
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 
-const props = defineProps<{
+const { calculationResult, methodToDisplay } = defineProps<{
   calculationResult?: CalculationResult;
+  methodToDisplay?: CalculationMethod;
 }>();
 
+const methodsToDisplay = computed(() =>
+  methodToDisplay ? [methodToDisplay] : AVAILABLE_METHODS
+);
+
 const mappedResult = computed<ResultData[]>(() =>
-  props.calculationResult
-    ? mapCalculationResultToResultData(props.calculationResult)
+  calculationResult
+    ? mapCalculationResultToResultData(calculationResult)
     : ([] as ResultData[])
 );
 
@@ -169,7 +188,7 @@ const headers = computed(() => [
       },
     ],
   },
-  ...AVAILABLE_METHODS.map((method) => ({
+  ...methodsToDisplay.value.map((method) => ({
     title: `${method}`,
     key: `${method}Title`,
     children: [
@@ -198,8 +217,8 @@ const headers = computed(() => [
 ]);
 
 function generateStaleText(item: ResultData, method: CalculationMethod) {
-  if (props.calculationResult !== undefined) {
-    const staleInfo = props.calculationResult.methods[method]?.stale;
+  if (calculationResult !== undefined) {
+    const staleInfo = calculationResult.methods[method]?.stale;
 
     if (staleInfo !== undefined && staleInfo.groupNames.includes(item.name)) {
       return `Patt von ${staleInfo.amountSeats} Sitzen, zwischen: ${staleInfo.groupNames.join(", ")}\nProporz von ${staleInfo.ratio}`;
@@ -213,7 +232,7 @@ function generateValidationText(
   method: CalculationMethod
 ): string {
   const validationData =
-    props.calculationResult?.methods[method]?.validation?.[item.name];
+    calculationResult?.methods[method]?.validation?.[item.name];
   if (!validationData) return "Keine Validierungsdaten vorhanden";
 
   const reasons = [
