@@ -1,36 +1,5 @@
 <template>
   <v-container class="px-0">
-    <v-dialog
-      v-model="dialog"
-      max-width="600px"
-    >
-      <v-card>
-        <v-card-title>{{ detailTitle }}</v-card-title>
-        <v-card-text>
-          <p>Detailinformationen {{ detailInfo }}</p>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            variant="text"
-            @click="dialog = false"
-            text="Schließen"
-          />
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-toolbar flat>
-      <v-toolbar-title>Detailansicht zu:</v-toolbar-title>
-      <v-btn
-        v-for="method in AVAILABLE_METHODS"
-        :key="method"
-        variant="outlined"
-        class="mx-2"
-        @click="goToDetail(method)"
-        :disabled="!mappedResult.length"
-      >
-        {{ method }}
-      </v-btn>
-    </v-toolbar>
     <div class="result-table">
       <v-data-table
         :headers="headers"
@@ -42,6 +11,31 @@
         no-data-text=""
         :items-per-page="-1"
       >
+        <template
+          v-for="method in AVAILABLE_METHODS"
+          :key="method"
+          v-slot:[`header.${method}Title`]="{ column }"
+        >
+          <v-tooltip
+            text="Detaillierte Informationen anzeigen"
+            :disabled="!mappedResult.length"
+            location="top"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                :disabled="!mappedResult.length"
+                @click="emit('clickedCalculationMethod', method)"
+                :text="column.title"
+                class="my-3"
+                :prepend-icon="mdiInformation"
+                variant="flat"
+                color="primary"
+                block
+              />
+            </template>
+          </v-tooltip>
+        </template>
         <template
           v-for="method in AVAILABLE_METHODS"
           :key="method"
@@ -132,8 +126,8 @@
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
-import { mdiCheck, mdiClose, mdiHandBackRight } from "@mdi/js";
-import { computed, ref } from "vue";
+import { mdiCheck, mdiClose, mdiHandBackRight, mdiInformation } from "@mdi/js";
+import { computed } from "vue";
 
 import {
   AVAILABLE_METHODS,
@@ -175,47 +169,33 @@ const headers = computed(() => [
       },
     ],
   },
-  {
-    title: "Ergebnisse",
-    children: AVAILABLE_METHODS.map((method) => ({
-      title: `${method}`,
-      key: `${method}Title`,
-      children: [
-        {
-          title: "Sitze",
-          key: `${method}${ResultDataSuffix.seatsSuffix}`,
-          width: 50,
-        },
-        {
-          title: "Patt",
-          key: `${method}${ResultDataSuffix.staleSuffix}`,
-          width: 50,
-        },
-        {
-          title: "",
-          key: `${method}${ResultDataSuffix.validationSuffix}`,
-          width: 50,
-        },
-      ],
-    })),
-  },
+  ...AVAILABLE_METHODS.map((method) => ({
+    title: `${method}`,
+    key: `${method}Title`,
+    children: [
+      {
+        title: "Sitze",
+        key: `${method}${ResultDataSuffix.seatsSuffix}`,
+        width: 50,
+      },
+      {
+        title: "Patt",
+        key: `${method}${ResultDataSuffix.staleSuffix}`,
+        width: 50,
+      },
+      {
+        title: "",
+        key: `${method}${ResultDataSuffix.validationSuffix}`,
+        width: 50,
+      },
+    ],
+  })),
   {
     title: "Proporz",
     key: "proportion",
     width: 50,
   },
 ]);
-
-const dialog = ref(false);
-const detailTitle = ref("");
-
-// Placeholder for future content, currently unused
-const detailInfo = ref<string>("");
-
-function goToDetail(selectedCalculationMethod: CalculationMethod) {
-  detailTitle.value = selectedCalculationMethod;
-  dialog.value = true;
-}
 
 function generateStaleText(item: ResultData, method: CalculationMethod) {
   if (props.calculationResult !== undefined) {
@@ -252,6 +232,11 @@ function generateValidationText(
 
   return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
+
+const emit = defineEmits<{
+  clickedCalculationMethod: [calculationMethod: CalculationMethod]; // named tuple syntax
+  update: [value: string];
+}>();
 </script>
 <style>
 .result-table .v-data-table td:not(:last-child),

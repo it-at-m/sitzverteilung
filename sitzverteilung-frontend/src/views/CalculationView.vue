@@ -1,4 +1,9 @@
 <template>
+  <detail-dialog
+    v-model="showDetailDialog"
+    v-if="detailDialogMethod"
+    :calculation-method="detailDialogMethod"
+  />
   <v-container>
     <v-row>
       <v-col>
@@ -71,6 +76,7 @@
     <result-table
       class="mt-2"
       :calculation-result="calculationResult"
+      @clicked-calculation-method="(method) => openDetailDialog(method)"
     />
   </v-container>
 </template>
@@ -80,13 +86,15 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, onBeforeUnmount, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
+import DetailDialog from "@/components/result/DetailDialog.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
+import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import { calculate } from "@/utility/calculator.ts";
 import {
   isValidCalculationData,
@@ -153,4 +161,17 @@ const hasValidData = computed<boolean>(
 const isAtLeastTwoGroups = computed(
   () => currentBaseData.value.groups.length >= 2
 );
+
+const showDetailDialog = ref(false);
+const detailDialogMethod = ref<CalculationMethod | null>(null);
+
+async function openDetailDialog(calculationMethod: CalculationMethod) {
+  detailDialogMethod.value = calculationMethod;
+  showDetailDialog.value = true;
+}
+watch(showDetailDialog, (isShown) => {
+  if (!isShown) {
+    detailDialogMethod.value = null;
+  }
+});
 </script>
