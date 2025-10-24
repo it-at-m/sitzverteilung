@@ -1,6 +1,6 @@
 <template>
   <v-autocomplete
-    v-model="selectedBaseData"
+    v-model="model"
     :items="sortedBaseDataList"
     item-title="name"
     item-value="name"
@@ -26,6 +26,7 @@
         </template>
       </v-list-item>
     </template>
+
     <template #no-data>
       <v-list-item>
         <template #prepend>
@@ -47,16 +48,14 @@ import {
 } from "@mdi/js";
 import { computed } from "vue";
 
-const selectedBaseData = defineModel<BaseData | null>();
-
 const props = defineProps<{
   baseDataList: BaseData[];
   limitName: number;
 }>();
 
+const model = defineModel<BaseData | null>();
+
 const sortedBaseDataList = computed(() =>
-  [...props.baseDataList].sort((a: BaseData, b: BaseData) =>
-    a.name.localeCompare(b.name)
-  )
+  [...props.baseDataList].sort((a, b) => a.name.localeCompare(b.name))
 );
 </script>

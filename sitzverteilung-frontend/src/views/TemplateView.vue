@@ -301,7 +301,7 @@ function deleteSelectedBaseData() {
     snackbar.showMessage({
       message: `Die Vorlage '${selectedBaseData.value.name}' wurde gelöscht.`,
     });
-    selectedBaseData.value = null;
+    store.setSelectedBaseData(null);
   }
 }
 

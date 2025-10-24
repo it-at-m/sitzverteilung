@@ -57,7 +57,6 @@
                 <v-icon
                   :icon="mdiClose"
                   color="error"
-                  :size="18"
                   v-bind="props"
                 />
               </template>
@@ -70,7 +69,6 @@
             <v-icon
               :icon="mdiCheck"
               color="success"
-              :size="18"
             />
           </template>
         </template>
@@ -99,7 +97,7 @@
           :key="method"
           v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]
         >
-          <div class="d-flex justify-center align-center ga-2">
+          <div class="d-flex align-center ga-2">
             <span
               :class="{ 'bg-error': !isMethodValid(method) }"
               class="px-2 py-1 rounded-sm"
@@ -109,7 +107,6 @@
             <v-icon
               :icon="isMethodValid(method) ? mdiCheck : mdiClose"
               :color="isMethodValid(method) ? 'success' : 'error'"
-              :size="18"
               aria-label="Zulässigkeit"
             />
           </div>
@@ -179,7 +176,6 @@ const headers = computed(() => [
     title: "Ergebnisse",
     children: AVAILABLE_METHODS.map((method) => ({
       title: `${method}`,
-      key: `${method}Title`,
       children: [
         {
           title: "Sitze",
@@ -222,7 +218,7 @@ function generateStaleText(item: ResultData, method: CalculationMethod) {
     const staleInfo = props.calculationResult.methods[method]?.stale;
 
     if (staleInfo !== undefined && staleInfo.groupNames.includes(item.name)) {
-      return `Patt von ${staleInfo.amountSeats} Sitzen, zwischen: ${staleInfo.groupNames.join(", ")}\nProporz von ${staleInfo.ratio}`;
+      return `Anzahl betroffener Sitze: ${staleInfo.amountSeats}\nBeteiligt: ${staleInfo.groupNames.join(", ")}\nQuotient: ${staleInfo.ratio}`;
     }
   }
   return "";
@@ -245,10 +241,6 @@ function generateValidationText(
         ]
       : []),
   ];
-
-  if (reasons.length === 0) {
-    return "gültig";
-  }
 
   return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }

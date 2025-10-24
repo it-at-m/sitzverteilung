@@ -24,7 +24,7 @@
           />
           <v-tooltip
             text="Eingegebene Daten teilen"
-            :disabled="!hasValidData"
+            :disabled="!hasValidCalculationData"
             location="top"
           >
             <template v-slot:activator="{ props }">
@@ -35,7 +35,7 @@
                 size="large"
                 class="mx-5"
                 :prepend-icon="mdiShare"
-                :disabled="!hasValidData"
+                :disabled="!hasValidCalculationData"
                 @click="share"
                 text="Teilen"
               />
@@ -80,7 +80,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, onBeforeUnmount, watch } from "vue";
+import { computed, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -114,40 +114,39 @@ const { share } = useShareData<BaseData>(
   "Die Daten wurden erfolgreich aus dem Link übertragen."
 );
 
-let expandTimer: ReturnType<typeof setTimeout> | null = null;
-
 watch(
-  isValid,
-  () => {
-    if (isExpanded.value) return;
+  selectedBaseData,
+  (newBaseData) => {
+    if (!newBaseData) {
+      toggleExpansion();
+      return;
+    }
+    const isMissingData =
+      !newBaseData.targetSize ||
+      !newBaseData.groups ||
+      newBaseData.groups.length < 2;
 
-    if (expandTimer) clearTimeout(expandTimer);
-    expandTimer = setTimeout(() => {
-      if (
-        !isExpanded.value &&
-        !isValid.value &&
-        currentBaseData.value.groups.length < 2
-      ) {
-        toggleExpansion();
-      }
-    }, 100);
+    if (isMissingData && !isExpanded.value) {
+      toggleExpansion();
+    }
+
+    currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
   },
   { immediate: true }
 );
 
-onBeforeUnmount(() => {
-  if (expandTimer) clearTimeout(expandTimer);
-});
-
 const calculationResult = computed(() => {
-  if (!hasValidData.value) {
+  if (!hasValidCalculationData.value) {
     return undefined;
   }
   return calculate(currentBaseData.value);
 });
 
-const hasValidData = computed<boolean>(
-  () => isAtLeastTwoGroups.value && isValid.value
+const hasValidCalculationData = computed(
+  () =>
+    isAtLeastTwoGroups.value &&
+    isValid.value &&
+    currentBaseData.value.targetSize
 );
 
 const isAtLeastTwoGroups = computed(
