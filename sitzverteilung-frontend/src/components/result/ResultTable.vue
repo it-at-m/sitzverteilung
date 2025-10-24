@@ -13,8 +13,8 @@
           <v-btn
             variant="text"
             @click="dialog = false"
-            text="Schließen"
-          />
+            >Schließen</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
