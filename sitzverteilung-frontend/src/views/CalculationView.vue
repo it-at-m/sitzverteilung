@@ -138,9 +138,13 @@ const hasValidCalculationData = computed(() => {
   return false;
 });
 
-watch(hasValidCalculationData, (isValid) => {
-  if (!isValid && !isExpanded.value) {
-    isExpanded.value = true;
-  }
-});
+watch(
+  hasValidCalculationData,
+  (isValid) => {
+    if (!isValid && !isExpanded.value) {
+      isExpanded.value = true;
+    }
+  },
+  { immediate: true }
+);
 </script>
