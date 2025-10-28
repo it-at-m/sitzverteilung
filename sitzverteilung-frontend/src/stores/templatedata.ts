@@ -26,6 +26,10 @@ export const useTemplateDataStore = defineStore("template-data", () => {
     }
   }
 
+  function updateSelectedBaseData(baseData: BaseData | null) {
+    selectedBaseData.value = baseData;
+  }
+
   function deleteBaseData(name: string) {
     internalBaseDatas.value = internalBaseDatas.value.filter(
       (baseData) => baseData.name !== name
@@ -40,6 +44,7 @@ export const useTemplateDataStore = defineStore("template-data", () => {
     internalBaseDatas,
     baseDatas,
     selectedBaseData,
+    updateSelectedBaseData,
     addBaseData,
     updateBaseData,
     deleteBaseData,

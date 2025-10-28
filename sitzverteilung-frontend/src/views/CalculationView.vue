@@ -118,18 +118,9 @@ watch(
   selectedBaseData,
   (newBaseData) => {
     if (!newBaseData) {
-      toggleExpansion();
+      currentBaseData.value = { ...useTemplateData().getEmptyBaseData() };
       return;
     }
-    const isMissingData =
-      !newBaseData.targetSize ||
-      !newBaseData.groups ||
-      newBaseData.groups.length < 2;
-
-    if (isMissingData && !isExpanded.value) {
-      toggleExpansion();
-    }
-
     currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
   },
   { immediate: true }
@@ -142,14 +133,26 @@ const calculationResult = computed(() => {
   return calculate(currentBaseData.value);
 });
 
-const hasValidCalculationData = computed(
-  () =>
-    isAtLeastTwoGroups.value &&
-    isValid.value &&
-    currentBaseData.value.targetSize
-);
+const isAtLeastTwoGroups = computed(() => {
+  return !!(
+    currentBaseData.value?.groups && currentBaseData.value.groups.length >= 2
+  );
+});
 
-const isAtLeastTwoGroups = computed(
-  () => currentBaseData.value.groups.length >= 2
-);
+const hasValidCalculationData = computed(() => {
+  if (isAtLeastTwoGroups.value) {
+    return (
+      isAtLeastTwoGroups.value &&
+      isValid.value &&
+      currentBaseData.value.targetSize
+    );
+  }
+  return false;
+});
+
+watch(hasValidCalculationData, (isValid) => {
+  if (!isValid && !isExpanded.value) {
+    isExpanded.value = true;
+  }
+});
 </script>

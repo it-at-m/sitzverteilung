@@ -210,9 +210,7 @@ function deletedGroup(newLength: number, removeList: GroupIndex[]) {
 
 watch(baseData, async () => {
   if (areFieldsRequired) {
-    const result = await baseDataFormRef.value?.validate();
-    const isValid = result?.valid ?? false;
-    validChanged(isValid);
+    await baseDataFormRef.value?.validate();
   }
 });
 

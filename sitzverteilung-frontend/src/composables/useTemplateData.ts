@@ -19,7 +19,7 @@ export function useTemplateData() {
 
   const selectedBaseData = computed({
     get: () => store.selectedBaseData,
-    set: (val) => (store.selectedBaseData = val),
+    set: (val) => store.updateSelectedBaseData(val),
   });
 
   const baseDataNames = computed(() =>
@@ -81,6 +81,7 @@ export function useTemplateData() {
   }
 
   return {
+    getEmptyBaseData,
     storedBaseData,
     selectedBaseData,
     baseDataNames,
