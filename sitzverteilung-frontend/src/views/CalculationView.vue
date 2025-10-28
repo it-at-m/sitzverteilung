@@ -114,18 +114,6 @@ const { share } = useShareData<BaseData>(
   "Die Daten wurden erfolgreich aus dem Link übertragen."
 );
 
-watch(
-  selectedBaseData,
-  (newBaseData) => {
-    if (!newBaseData) {
-      currentBaseData.value = { ...useTemplateData().getEmptyBaseData() };
-      return;
-    }
-    currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-  },
-  { immediate: true }
-);
-
 const calculationResult = computed(() => {
   if (!hasValidCalculationData.value) {
     return undefined;

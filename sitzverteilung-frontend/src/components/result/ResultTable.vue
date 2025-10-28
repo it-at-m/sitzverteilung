@@ -31,7 +31,6 @@
     </v-btn>
   </v-toolbar>
   <v-data-table
-    class="result-table"
     :headers="headers"
     :items="mappedResult"
     hide-default-footer
@@ -92,9 +91,12 @@
       :key="method"
       v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]
     >
-      <div class="d-flex align-center ga-2">
+      <div
+        v-if="mappedResult.length"
+        class="d-flex align-center ga-2"
+      >
         <span
-          :class="{ 'bg-error': !isMethodValid(method) }"
+          :class="{ 'bg-error': isMethodValid(method) === false }"
           class="px-2 py-1 rounded-sm"
         >
           Zulässigkeit
