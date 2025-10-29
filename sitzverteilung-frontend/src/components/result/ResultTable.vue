@@ -94,7 +94,7 @@
       >
         <div
           v-if="mappedResult.length"
-          class="d-flex ga-2"
+          class="d-flex flex-row align-center ga-2"
         >
           <span
             :class="{ 'bg-error': !isMethodValid(method) }"
