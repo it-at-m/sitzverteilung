@@ -114,6 +114,18 @@ const { share } = useShareData<BaseData>(
   "Die Daten wurden erfolgreich aus dem Link übertragen."
 );
 
+const isAtLeastTwoGroups = computed(
+  () => (currentBaseData.value?.groups?.length ?? 0) >= 2
+);
+
+const hasValidCalculationData = computed(() => {
+  return (
+    isAtLeastTwoGroups.value &&
+    isValid.value &&
+    currentBaseData.value.targetSize
+  );
+});
+
 const calculationResult = computed(() => {
   if (!hasValidCalculationData.value) {
     return undefined;
@@ -121,30 +133,15 @@ const calculationResult = computed(() => {
   return calculate(currentBaseData.value);
 });
 
-const isAtLeastTwoGroups = computed(() => {
-  return !!(
-    currentBaseData.value?.groups && currentBaseData.value.groups.length >= 2
-  );
-});
-
-const hasValidCalculationData = computed(() => {
-  if (isAtLeastTwoGroups.value) {
-    return (
-      isAtLeastTwoGroups.value &&
-      isValid.value &&
-      currentBaseData.value.targetSize
-    );
-  }
-  return false;
-});
-
 watch(
-  hasValidCalculationData,
-  (isValid) => {
-    if (!isValid && !isExpanded.value) {
-      isExpanded.value = true;
+  () => hasValidCalculationData.value,
+  (isCalculationValid) => {
+    console.debug(!isCalculationValid);
+    console.debug(!isExpanded);
+    console.debug(!isCalculationValid && !isExpanded.value);
+    if (!isCalculationValid && !isExpanded.value) {
+      toggleExpansion();
     }
-  },
-  { immediate: true }
+  }
 );
 </script>
