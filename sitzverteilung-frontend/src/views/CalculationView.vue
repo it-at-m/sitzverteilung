@@ -126,16 +126,16 @@ const { share } = useShareData<BaseData>(
 );
 
 const isAtLeastTwoGroups = computed(
-    () => (currentBaseData.value?.groups?.length ?? 0) >= 2
+  () => (currentBaseData.value?.groups?.length ?? 0) >= 2
 );
 
 const hasValidCalculationData = computed(() => {
   return (
-      isAtLeastTwoGroups.value &&
-      isValid.value &&
-      !!currentBaseData.value.targetSize
+    isAtLeastTwoGroups.value &&
+    isValid.value &&
+    !!currentBaseData.value.targetSize
   );
-})
+});
 
 const calculationResult = computed(() => {
   if (!hasValidCalculationData.value) {

@@ -44,7 +44,7 @@
           v-for="method in methodsToDisplay"
           :key="method"
           v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]="{
-          column,
+            column,
           }"
         >
           <div
@@ -64,9 +64,9 @@
           </div>
         </template>
         <template
-            v-for="method in methodsToDisplay"
-            :key="method"
-            v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
+          v-for="method in methodsToDisplay"
+          :key="method"
+          v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
         >
           <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
             <v-tooltip v-if="!methodToDisplay">
@@ -90,9 +90,13 @@
         <template
           v-for="method in methodsToDisplay"
           :key="method"
-          v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
+          v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{
+            item,
+          }"
         >
-          <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
+          <template
+            v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]"
+          >
             <v-tooltip v-if="!methodToDisplay">
               <template v-slot:activator="{ props }">
                 <v-icon
