@@ -188,6 +188,7 @@ const headers = computed(() => [
   },
   ...methodsToDisplay.value.map((method) => ({
     title: `${method}`,
+    key: `${method}Title`,
     children: [
       {
         title: "Sitze",
