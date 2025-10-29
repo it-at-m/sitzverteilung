@@ -90,7 +90,7 @@ import type { GroupIndex, Union } from "@/types/basedata/Union.ts";
 import type { VForm, VTextField } from "vuetify/components";
 
 import { mdiAccountSwitch, mdiFileDocument } from "@mdi/js";
-import { computed, toRef, useTemplateRef, watch } from "vue";
+import { computed, toRef, useTemplateRef } from "vue";
 
 import GroupDataTable from "@/components/basedata/groupdata/GroupDataTable.vue";
 import UnionDataTable from "@/components/basedata/uniondata/UnionDataTable.vue";
@@ -210,13 +210,12 @@ function deletedGroup(newLength: number, removeList: GroupIndex[]) {
   );
 }
 
-watch(baseData, async () => {
-  if (areFieldsRequired) {
-    await baseDataFormRef.value?.validate();
-  }
-});
+function validateAllInputs() {
+  baseDataFormRef.value?.validate();
+}
 
 defineExpose({
   reset,
+  validateAllInputs,
 });
 </script>

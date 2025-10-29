@@ -63,17 +63,13 @@ export function useTemplateData() {
   const baseDataFormRef =
     useTemplateRef<typeof BaseDataForm>("baseDataFormRef");
 
-  watch(
-    selectedBaseData,
-    (newBaseData) => {
-      if (!newBaseData) {
-        reset();
-      } else {
-        currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-      }
-    },
-    { deep: true }
-  );
+  watch(selectedBaseData, (newBaseData) => {
+    if (!newBaseData) {
+      reset();
+    } else {
+      currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
+    }
+  });
 
   function reset() {
     baseDataFormRef.value?.reset();
@@ -81,7 +77,6 @@ export function useTemplateData() {
   }
 
   return {
-    getEmptyBaseData,
     storedBaseData,
     selectedBaseData,
     baseDataNames,
