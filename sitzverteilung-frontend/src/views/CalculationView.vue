@@ -122,7 +122,7 @@ const hasValidCalculationData = computed(() => {
   return (
     isAtLeastTwoGroups.value &&
     isValid.value &&
-    currentBaseData.value.targetSize
+    !!currentBaseData.value.targetSize
   );
 });
 
@@ -133,15 +133,9 @@ const calculationResult = computed(() => {
   return calculate(currentBaseData.value);
 });
 
-watch(
-  () => hasValidCalculationData.value,
-  (isCalculationValid) => {
-    console.debug(!isCalculationValid);
-    console.debug(!isExpanded);
-    console.debug(!isCalculationValid && !isExpanded.value);
-    if (!isCalculationValid && !isExpanded.value) {
-      toggleExpansion();
-    }
+watch(hasValidCalculationData, (isCalculationValid) => {
+  if (!isCalculationValid && !isExpanded.value) {
+    toggleExpansion();
   }
-);
+});
 </script>

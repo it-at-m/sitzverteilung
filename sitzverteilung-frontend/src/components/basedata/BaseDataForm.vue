@@ -145,7 +145,9 @@ const emit = defineEmits<{
   "valid-changed": [isValid: boolean];
 }>();
 function validChanged(valid: boolean | null) {
-  emit("valid-changed", !!valid);
+  if (valid !== null) {
+    emit("valid-changed", valid);
+  }
 }
 
 const seatFieldValidationError = computed(() => {
