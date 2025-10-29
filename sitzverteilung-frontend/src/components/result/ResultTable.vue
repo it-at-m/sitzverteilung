@@ -43,27 +43,30 @@
         <template
           v-for="method in methodsToDisplay"
           :key="method"
-          v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]
+          v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]="{
+          column,
+          }"
         >
-          <div class="d-flex justify-center align-center ga-2">
+          <div
+            v-if="mappedResult.length"
+            class="d-flex flex-row align-center ga-2"
+          >
             <span
               :class="{ 'bg-error': !isMethodValid(method) }"
               class="px-2 py-1 rounded-sm"
             >
-              Zulässigkeit
+              {{ column.title }}
             </span>
             <v-icon
               :icon="isMethodValid(method) ? mdiCheck : mdiClose"
               :color="isMethodValid(method) ? 'success' : 'error'"
-              :size="18"
-              aria-label="Zulässigkeit"
             />
           </div>
         </template>
         <template
-          v-for="method in methodsToDisplay"
-          :key="method"
-          v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
+            v-for="method in methodsToDisplay"
+            :key="method"
+            v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
         >
           <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
             <v-tooltip v-if="!methodToDisplay">
@@ -73,7 +76,6 @@
                   v-bind="props"
                 />
               </template>
-
               <span style="white-space: pre-line">
                 {{ generateStaleText(item, method) }}
               </span>
@@ -88,19 +90,14 @@
         <template
           v-for="method in methodsToDisplay"
           :key="method"
-          v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{
-            item,
-          }"
+          v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
         >
-          <template
-            v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]"
-          >
+          <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
             <v-tooltip v-if="!methodToDisplay">
               <template v-slot:activator="{ props }">
                 <v-icon
                   :icon="mdiClose"
                   color="error"
-                  :size="18"
                   v-bind="props"
                 />
               </template>
@@ -118,7 +115,6 @@
             <v-icon
               :icon="mdiCheck"
               color="success"
-              :size="18"
             />
           </template>
         </template>
@@ -188,7 +184,6 @@ const headers = computed(() => [
   },
   ...methodsToDisplay.value.map((method) => ({
     title: `${method}`,
-    key: `${method}Title`,
     children: [
       {
         title: "Sitze",
@@ -199,7 +194,7 @@ const headers = computed(() => [
         key: `${method}${ResultDataSuffix.staleSuffix}`,
       },
       {
-        title: "",
+        title: "Zulässigkeit",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
       },
     ],
@@ -215,7 +210,7 @@ function generateStaleText(item: ResultData, method: CalculationMethod) {
     const staleInfo = calculationResult.methods[method]?.stale;
 
     if (staleInfo !== undefined && staleInfo.groupNames.includes(item.name)) {
-      return `Patt von ${staleInfo.amountSeats} Sitzen, zwischen: ${staleInfo.groupNames.join(", ")}\nProporz von ${staleInfo.ratio}`;
+      return `Anzahl betroffener Sitze: ${staleInfo.amountSeats}\nBeteiligt: ${staleInfo.groupNames.join(", ")}\nQuotient: ${staleInfo.ratio}`;
     }
   }
   return "";
@@ -239,16 +234,11 @@ function generateValidationText(
       : []),
   ];
 
-  if (reasons.length === 0) {
-    return "gültig";
-  }
-
   return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
 
 const emit = defineEmits<{
-  clickedCalculationMethod: [calculationMethod: CalculationMethod]; // named tuple syntax
-  update: [value: string];
+  clickedCalculationMethod: [calculationMethod: CalculationMethod];
 }>();
 </script>
 <style>

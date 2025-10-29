@@ -32,7 +32,7 @@
           />
           <v-tooltip
             text="Eingegebene Daten teilen"
-            :disabled="!hasValidData"
+            :disabled="!hasValidCalculationData"
             location="top"
           >
             <template v-slot:activator="{ props }">
@@ -43,7 +43,7 @@
                 size="large"
                 class="mx-5"
                 :prepend-icon="mdiShare"
-                :disabled="!hasValidData"
+                :disabled="!hasValidCalculationData"
                 @click="share"
                 text="Teilen"
               />
@@ -89,7 +89,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -125,45 +125,30 @@ const { share } = useShareData<BaseData>(
   "Die Daten wurden erfolgreich aus dem Link übertragen."
 );
 
-let expandTimer: ReturnType<typeof setTimeout> | null = null;
-
-watch(
-  isValid,
-  () => {
-    if (isExpanded.value) return;
-
-    if (expandTimer) clearTimeout(expandTimer);
-    expandTimer = setTimeout(() => {
-      if (
-        !isExpanded.value &&
-        !isValid.value &&
-        currentBaseData.value.groups.length < 2
-      ) {
-        toggleExpansion();
-      }
-    }, 100);
-  },
-  { immediate: true }
+const isAtLeastTwoGroups = computed(
+    () => (currentBaseData.value?.groups?.length ?? 0) >= 2
 );
 
-onBeforeUnmount(() => {
-  if (expandTimer) clearTimeout(expandTimer);
-});
+const hasValidCalculationData = computed(() => {
+  return (
+      isAtLeastTwoGroups.value &&
+      isValid.value &&
+      !!currentBaseData.value.targetSize
+  );
+})
 
 const calculationResult = computed(() => {
-  if (!hasValidData.value) {
+  if (!hasValidCalculationData.value) {
     return undefined;
   }
   return calculate(currentBaseData.value);
 });
 
-const hasValidData = computed<boolean>(
-  () => isAtLeastTwoGroups.value && isValid.value
-);
-
-const isAtLeastTwoGroups = computed(
-  () => currentBaseData.value.groups.length >= 2
-);
+watch(hasValidCalculationData, (isCalculationValid) => {
+  if (!isCalculationValid && !isExpanded.value) {
+    toggleExpansion();
+  }
+});
 
 const showDetailDialog = ref(false);
 const detailDialogMethod = ref<CalculationMethod | null>(null);
