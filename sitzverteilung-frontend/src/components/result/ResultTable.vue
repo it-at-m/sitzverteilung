@@ -1,133 +1,139 @@
 <template>
-  <div class="result-table">
-    <v-data-table
-      :headers="headers"
-      :items="mappedResult"
-      hide-default-footer
-      no-filter
-      disable-sort
-      density="compact"
-      no-data-text=""
-      :items-per-page="-1"
-    >
-      <template
-        v-for="method in methodsToDisplay"
-        :key="method"
-        v-slot:[`header.${method}Title`]="{ column }"
+  <v-container class="px-0">
+    <div class="result-table">
+      <v-data-table
+        :headers="headers"
+        :items="mappedResult"
+        hide-default-footer
+        no-filter
+        disable-sort
+        density="compact"
+        no-data-text=""
+        :items-per-page="-1"
       >
-        <v-tooltip
-          text="Detaillierte Informationen anzeigen"
-          :disabled="!mappedResult.length"
-          location="top"
-          v-if="!methodToDisplay"
+        <template
+          v-for="method in methodsToDisplay"
+          :key="method"
+          v-slot:[`header.${method}Title`]="{ column }"
         >
-          <template v-slot:activator="{ props }">
-            <v-btn
-              v-bind="props"
-              :disabled="!mappedResult.length"
-              @click="emit('clickedCalculationMethod', method)"
-              :text="column.title"
-              class="my-3"
-              :prepend-icon="mdiInformation"
-              variant="flat"
-              color="primary"
-              block
+          <v-tooltip
+            text="Detaillierte Informationen anzeigen"
+            :disabled="!mappedResult.length"
+            location="top"
+            v-if="!methodToDisplay"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                :disabled="!mappedResult.length"
+                @click="emit('clickedCalculationMethod', method)"
+                :text="column.title"
+                class="my-3"
+                :prepend-icon="mdiInformation"
+                variant="flat"
+                color="primary"
+                block
+              />
+            </template>
+          </v-tooltip>
+          <template v-else>
+            <span> {{ column.title }}</span>
+          </template>
+        </template>
+        <template
+          v-for="method in methodsToDisplay"
+          :key="method"
+          v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]="{
+            column,
+          }"
+        >
+          <div
+            v-if="mappedResult.length"
+            class="d-flex flex-row justify-center align-center ga-2"
+          >
+            <span
+              :class="{ 'bg-error': !isMethodValid(method) }"
+              class="px-2 py-1 rounded-sm"
+            >
+              {{ column.title }}
+            </span>
+            <v-icon
+              :icon="isMethodValid(method) ? mdiCheck : mdiClose"
+              :color="isMethodValid(method) ? 'success' : 'error'"
+            />
+          </div>
+        </template>
+        <template
+          v-for="method in methodsToDisplay"
+          :key="method"
+          v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
+        >
+          <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
+            <v-tooltip v-if="!methodToDisplay">
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  :icon="mdiHandBackRight"
+                  v-bind="props"
+                />
+              </template>
+              <span style="white-space: pre-line">
+                {{ generateStaleText(item, method) }}
+              </span>
+            </v-tooltip>
+            <template v-else>
+              <span style="white-space: pre-line">
+                {{ generateStaleText(item, method) }}
+              </span>
+            </template>
+          </template>
+        </template>
+        <template
+          v-for="method in methodsToDisplay"
+          :key="method"
+          v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{
+            item,
+          }"
+        >
+          <template
+            v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]"
+          >
+            <v-tooltip v-if="!methodToDisplay">
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  :icon="mdiClose"
+                  color="error"
+                  v-bind="props"
+                />
+              </template>
+              <span style="white-space: pre-line">
+                {{ generateValidationText(item, method) }}
+              </span>
+            </v-tooltip>
+            <template v-else>
+              <span style="white-space: pre-line">
+                {{ generateValidationText(item, method) }}
+              </span>
+            </template>
+          </template>
+          <template v-else>
+            <v-icon
+              :icon="mdiCheck"
+              color="success"
             />
           </template>
-        </v-tooltip>
-        <template v-else>
-          <span> {{ column.title }}</span>
         </template>
-      </template>
-      <template
-        v-for="method in methodsToDisplay"
-        :key="method"
-        v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]="{
-          column,
-        }"
-      >
-        <div
-          v-if="mappedResult.length"
-          class="d-flex flex-row justify-center align-center ga-2"
-        >
-          <span
-            :class="{ 'bg-error': !isMethodValid(method) }"
-            class="px-2 py-1 rounded-sm"
-          >
-            {{ column.title }}
-          </span>
-          <v-icon
-            :icon="isMethodValid(method) ? mdiCheck : mdiClose"
-            :color="isMethodValid(method) ? 'success' : 'error'"
-          />
-        </div>
-      </template>
-      <template
-        v-for="method in methodsToDisplay"
-        :key="method"
-        v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
-      >
-        <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
-          <v-tooltip v-if="!methodToDisplay">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                :icon="mdiHandBackRight"
-                v-bind="props"
-              />
-            </template>
-            <span style="white-space: pre-line">
-              {{ generateStaleText(item, method) }}
-            </span>
-          </v-tooltip>
-          <template v-else>
-            <span style="white-space: pre-line">
-              {{ generateStaleText(item, method) }}
-            </span>
-          </template>
-        </template>
-      </template>
-      <template
-        v-for="method in methodsToDisplay"
-        :key="method"
-        v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
-      >
-        <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
-          <v-tooltip v-if="!methodToDisplay">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                :icon="mdiClose"
-                color="error"
-                v-bind="props"
-              />
-            </template>
-            <span style="white-space: pre-line">
-              {{ generateValidationText(item, method) }}
-            </span>
-          </v-tooltip>
-          <template v-else>
-            <span style="white-space: pre-line">
-              {{ generateValidationText(item, method) }}
-            </span>
-          </template>
-        </template>
-        <template v-else>
-          <v-icon
-            :icon="mdiCheck"
-            color="success"
-          />
-        </template>
-      </template>
-    </v-data-table>
-  </div>
-  <v-row v-if="!mappedResult.length">
-    <v-col>
-      <v-alert
-        text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
-        type="error"
-        variant="tonal"
-      />
-    </v-col>
-  </v-row>
+      </v-data-table>
+    </div>
+    <v-row v-if="!mappedResult.length">
+      <v-col>
+        <v-alert
+          text="Keine Berechnung möglich, da Daten unvollständig oder nicht valide sind."
+          type="error"
+          variant="tonal"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
