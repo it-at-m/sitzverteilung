@@ -133,10 +133,13 @@ const calculationResult = computed(() => {
   return calculate(currentBaseData.value);
 });
 
-watch(hasValidCalculationData, (isCalculationValid) => {
-  if (!isCalculationValid && !isExpanded.value) {
-    toggleExpansion();
-    baseDataFormRef.value?.validateAllInputs();
-  }
-});
+watch(
+  hasValidCalculationData,
+  (isCalculationValid) => {
+    if (!isCalculationValid && !isExpanded.value) {
+      toggleExpansion();
+    }
+  },
+  { immediate: true }
+);
 </script>
