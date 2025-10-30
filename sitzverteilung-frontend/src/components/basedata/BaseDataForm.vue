@@ -211,6 +211,7 @@ function deletedGroup(newLength: number, removeList: GroupIndex[]) {
 }
 
 function validateAllInputs() {
+  console.debug("hier");
   baseDataFormRef.value?.validate();
 }
 
