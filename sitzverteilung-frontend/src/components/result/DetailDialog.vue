@@ -20,7 +20,11 @@
           :calculation-result="calculationResult"
           :method-to-display="calculationMethod"
         />
+        <p>
+          <b>Sitzreihung:</b>
+        </p>
         <seat-order-table
+          class="my-2"
           :seat-order="calculationResult?.methods[calculationMethod]?.order"
         />
       </v-card-text>
