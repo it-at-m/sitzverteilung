@@ -24,7 +24,7 @@
           />
           <v-tooltip
             text="Eingegebene Daten teilen"
-            :disabled="!hasValidData"
+            :disabled="!hasValidCalculationData"
             location="top"
           >
             <template v-slot:activator="{ props }">
@@ -35,7 +35,7 @@
                 size="large"
                 class="mx-5"
                 :prepend-icon="mdiShare"
-                :disabled="!hasValidData"
+                :disabled="!hasValidCalculationData"
                 @click="share"
                 text="Teilen"
               />
@@ -80,7 +80,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -102,8 +102,8 @@ const {
   currentBaseData,
   updateIsValid,
   isDataEntered,
-  baseDataFormRef,
   isValid,
+  baseDataFormRef,
 } = useTemplateData();
 
 const { share } = useShareData<BaseData>(
@@ -114,18 +114,32 @@ const { share } = useShareData<BaseData>(
   "Die Daten wurden erfolgreich aus dem Link übertragen."
 );
 
+const isAtLeastTwoGroups = computed(
+  () => (currentBaseData.value?.groups?.length ?? 0) >= 2
+);
+
+const hasValidCalculationData = computed(() => {
+  return (
+    isAtLeastTwoGroups.value &&
+    isValid.value &&
+    !!currentBaseData.value.targetSize
+  );
+});
+
 const calculationResult = computed(() => {
-  if (!hasValidData.value) {
+  if (!hasValidCalculationData.value) {
     return undefined;
   }
   return calculate(currentBaseData.value);
 });
 
-const hasValidData = computed<boolean>(
-  () => isAtLeastTwoGroups.value && isValid.value
-);
-
-const isAtLeastTwoGroups = computed(
-  () => currentBaseData.value.groups.length >= 2
+watch(
+  hasValidCalculationData,
+  (isCalculationValid) => {
+    if (!isCalculationValid && !isExpanded.value) {
+      toggleExpansion();
+    }
+  },
+  { immediate: true }
 );
 </script>

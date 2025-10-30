@@ -145,7 +145,9 @@ const emit = defineEmits<{
   "valid-changed": [isValid: boolean];
 }>();
 function validChanged(valid: boolean | null) {
-  emit("valid-changed", !!valid);
+  if (valid !== null) {
+    emit("valid-changed", valid);
+  }
 }
 
 const seatFieldValidationError = computed(() => {
@@ -208,7 +210,12 @@ function deletedGroup(newLength: number, removeList: GroupIndex[]) {
   );
 }
 
+function validateAllInputs() {
+  baseDataFormRef.value?.validate();
+}
+
 defineExpose({
   reset,
+  validateAllInputs,
 });
 </script>

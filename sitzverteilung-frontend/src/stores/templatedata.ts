@@ -6,6 +6,8 @@ import { computed, ref } from "vue";
 export const useTemplateDataStore = defineStore("template-data", () => {
   const internalBaseDatas = ref<BaseData[]>([]);
   const baseDatas = computed(() => internalBaseDatas.value);
+  const selectedBaseData = computed(() => internalSelectedBaseData.value);
+  const internalSelectedBaseData = ref<BaseData | null>(null);
 
   function addBaseData(baseData: BaseData) {
     const index = internalBaseDatas.value.findIndex(
@@ -25,6 +27,10 @@ export const useTemplateDataStore = defineStore("template-data", () => {
     }
   }
 
+  function updateSelectedBaseData(baseData: BaseData | null) {
+    internalSelectedBaseData.value = baseData;
+  }
+
   function deleteBaseData(name: string) {
     internalBaseDatas.value = internalBaseDatas.value.filter(
       (baseData) => baseData.name !== name
@@ -38,6 +44,9 @@ export const useTemplateDataStore = defineStore("template-data", () => {
   return {
     internalBaseDatas,
     baseDatas,
+    selectedBaseData,
+    internalSelectedBaseData,
+    updateSelectedBaseData,
     addBaseData,
     updateBaseData,
     deleteBaseData,

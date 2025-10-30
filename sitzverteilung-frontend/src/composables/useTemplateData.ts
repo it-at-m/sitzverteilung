@@ -9,7 +9,11 @@ export function useTemplateData() {
   const store = useTemplateDataStore();
   const storedBaseData = computed(() => store.baseDatas);
 
-  const selectedBaseData = ref<BaseData | null>(null);
+  const selectedBaseData = computed({
+    get: () => store.selectedBaseData,
+    set: (val) => store.updateSelectedBaseData(val),
+  });
+
   const baseDataNames = computed(() =>
     storedBaseData.value.map((baseData) => baseData.name)
   );
@@ -51,13 +55,17 @@ export function useTemplateData() {
   const baseDataFormRef =
     useTemplateRef<typeof BaseDataForm>("baseDataFormRef");
 
-  watch(selectedBaseData, (newBaseData) => {
-    if (!newBaseData) {
-      reset();
-    } else {
-      currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
-    }
-  });
+  watch(
+    selectedBaseData,
+    (newBaseData) => {
+      if (!newBaseData) {
+        reset();
+      } else {
+        currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
+      }
+    },
+    { immediate: true }
+  );
 
   function reset() {
     baseDataFormRef.value?.reset();

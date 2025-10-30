@@ -22,67 +22,94 @@
     <v-btn
       v-for="method in AVAILABLE_METHODS"
       :key="method"
+      :text="method"
       variant="outlined"
       class="mx-2"
       @click="goToDetail(method)"
-      :text="method"
       :disabled="!mappedResult.length"
     />
   </v-toolbar>
-  <v-data-table
-    :headers="headers"
-    :items="mappedResult"
-    hide-default-footer
-    no-filter
-    disable-sort
-    density="compact"
-    no-data-text=""
-    :items-per-page="-1"
-  >
-    <template
-      v-for="method in AVAILABLE_METHODS"
-      :key="method"
-      v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
+  <div class="result-table">
+    <v-data-table
+      :headers="headers"
+      :items="mappedResult"
+      hide-default-footer
+      no-filter
+      disable-sort
+      density="compact"
+      no-data-text=""
+      :items-per-page="-1"
     >
-      <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
-        <v-tooltip>
-          <template v-slot:activator="{ props }">
-            <v-icon
-              color="red"
-              :icon="mdiClose"
-              v-bind="props"
-            />
-          </template>
-          <span style="white-space: pre-line">
-            {{ generateValidationText(item, method) }}
+      <template
+        v-for="method in AVAILABLE_METHODS"
+        :key="method"
+        v-slot:[`item.${method}${ResultDataSuffix.validationSuffix}`]="{ item }"
+      >
+        <template v-if="!item[`${method}${ResultDataSuffix.validationSuffix}`]">
+          <v-tooltip>
+            <template v-slot:activator="{ props }">
+              <v-icon
+                :icon="mdiClose"
+                color="error"
+                v-bind="props"
+              />
+            </template>
+            <span style="white-space: pre-line">
+              {{ generateValidationText(item, method) }}
+            </span>
+          </v-tooltip>
+        </template>
+        <template v-else>
+          <v-icon
+            :icon="mdiCheck"
+            color="success"
+          />
+        </template>
+      </template>
+      <template
+        v-for="method in AVAILABLE_METHODS"
+        :key="method"
+        v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
+      >
+        <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
+          <v-tooltip>
+            <template v-slot:activator="{ props }">
+              <v-icon
+                :icon="mdiHandBackRight"
+                v-bind="props"
+              />
+            </template>
+            <span style="white-space: pre-line">
+              {{ generateStaleText(item, method) }}
+            </span>
+          </v-tooltip>
+        </template>
+      </template>
+      <template
+        v-for="method in AVAILABLE_METHODS"
+        :key="method"
+        v-slot:[`header.${method}${ResultDataSuffix.validationSuffix}`]="{
+          column,
+        }"
+      >
+        <div
+          v-if="mappedResult.length"
+          class="d-flex flex-row align-center ga-2"
+        >
+          <span
+            :class="{ 'bg-error': !isMethodValid(method) }"
+            class="px-2 py-1 rounded-sm"
+          >
+            {{ column.title }}
           </span>
-        </v-tooltip>
+          <v-icon
+            :icon="isMethodValid(method) ? mdiCheck : mdiClose"
+            :color="isMethodValid(method) ? 'success' : 'error'"
+          />
+        </div>
       </template>
-      <template v-else>
-        <v-icon
-          color="green"
-          :icon="mdiCheck"
-        />
-      </template>
-    </template>
-    <template
-      v-for="method in AVAILABLE_METHODS"
-      :key="method"
-      v-slot:[`item.${method}${ResultDataSuffix.staleSuffix}`]="{ item }"
-    >
-      <template v-if="item[`${method}${ResultDataSuffix.staleSuffix}`]">
-        <v-tooltip>
-          <template v-slot:activator="{ props }">
-            <v-icon
-              :icon="mdiHandBackRight"
-              v-bind="props"
-            />
-          </template>
-          <span>{{ generateStaleText(item, method) }}</span>
-        </v-tooltip>
-      </template>
-    </template>
-  </v-data-table>
+    </v-data-table>
+  </div>
   <v-row v-if="!mappedResult.length">
     <v-col>
       <v-alert
@@ -103,7 +130,6 @@ import { computed, ref } from "vue";
 
 import {
   AVAILABLE_METHODS,
-  CALCULATION_METHOD_SHORT_FORMS,
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
@@ -113,7 +139,20 @@ const props = defineProps<{
   calculationResult?: CalculationResult;
 }>();
 
-const headers = [
+const mappedResult = computed<ResultData[]>(() =>
+  props.calculationResult
+    ? mapCalculationResultToResultData(props.calculationResult)
+    : ([] as ResultData[])
+);
+
+function isMethodValid(method: CalculationMethod): boolean | null {
+  if (mappedResult.value.length === 0) return null;
+  return mappedResult.value.every((row) =>
+    Boolean(row[`${method}${ResultDataSuffix.validationSuffix}`])
+  );
+}
+
+const headers = computed(() => [
   {
     title: "Zusammensetzung",
     children: [
@@ -127,24 +166,12 @@ const headers = [
         key: "seatsOrVotes",
         width: 50,
       },
-      {
-        title: "Proporz",
-        key: "proportion",
-        width: 50,
-      },
     ],
-  },
-  {
-    title: "Zulässigkeit",
-    children: AVAILABLE_METHODS.map((method) => ({
-      title: CALCULATION_METHOD_SHORT_FORMS[method],
-      key: `${method}${ResultDataSuffix.validationSuffix}`,
-    })),
   },
   {
     title: "Ergebnisse",
     children: AVAILABLE_METHODS.map((method) => ({
-      title: CALCULATION_METHOD_SHORT_FORMS[method],
+      title: `${method}`,
       children: [
         {
           title: "Sitze",
@@ -156,22 +183,20 @@ const headers = [
           key: `${method}${ResultDataSuffix.staleSuffix}`,
           width: 50,
         },
+        {
+          title: "Zulässigkeit",
+          key: `${method}${ResultDataSuffix.validationSuffix}`,
+          width: 50,
+        },
       ],
     })),
   },
   {
-    title: "Dokumentation",
-    width: 200,
-    key: "documentation",
+    title: "Proporz",
+    key: "proportion",
+    width: 50,
   },
-];
-
-const mappedResult = computed(() => {
-  if (!props.calculationResult) {
-    return [];
-  }
-  return mapCalculationResultToResultData(props.calculationResult);
-});
+]);
 
 const dialog = ref(false);
 const detailTitle = ref("");
@@ -188,12 +213,11 @@ function generateStaleText(item: ResultData, method: CalculationMethod) {
   if (props.calculationResult !== undefined) {
     const staleInfo = props.calculationResult.methods[method]?.stale;
 
-    if (staleInfo !== undefined) {
-      if (staleInfo.groupNames.includes(item.name)) {
-        return "Patt zwischen: " + staleInfo.groupNames.join(", ");
-      }
+    if (staleInfo !== undefined && staleInfo.groupNames.includes(item.name)) {
+      return `Anzahl betroffener Sitze: ${staleInfo.amountSeats}\nBeteiligt: ${staleInfo.groupNames.join(", ")}\nQuotient: ${staleInfo.ratio}`;
     }
   }
+  return "";
 }
 
 function generateValidationText(
@@ -217,3 +241,9 @@ function generateValidationText(
   return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
 </script>
+<style>
+.result-table .v-data-table td:not(:last-child),
+.result-table .v-data-table th {
+  border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+</style>
