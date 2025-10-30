@@ -99,11 +99,13 @@
           >
             <v-tooltip v-if="!methodToDisplay">
               <template v-slot:activator="{ props }">
-                <v-icon
-                  :icon="mdiClose"
-                  color="error"
-                  v-bind="props"
-                />
+                <div class="d-flex flex-row justify-center">
+                  <v-icon
+                    :icon="mdiClose"
+                    color="error"
+                    v-bind="props"
+                  />
+                </div>
               </template>
               <span style="white-space: pre-line">
                 {{ generateValidationText(item, method) }}
@@ -115,12 +117,14 @@
               </span>
             </template>
           </template>
-          <template v-else>
-            <v-icon
-              :icon="mdiCheck"
-              color="success"
-            />
-          </template>
+          <v-template v-else>
+            <div class="d-flex flex-row justify-center">
+              <v-icon
+                  :icon="mdiCheck"
+                  color="success"
+              />
+            </div>
+          </v-template>
         </template>
       </v-data-table>
     </div>
@@ -197,14 +201,13 @@ const headers = computed(() => [
       {
         title: "Patt",
         key: `${method}${ResultDataSuffix.staleSuffix}`,
-        width: 50,
-        align: "center",
+        width: !methodToDisplay ? 50 : undefined,
+        align: !methodToDisplay ? "center" : "left",
       },
       {
         title: "Zulässigkeit",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
-        width: 150,
-        align: "center",
+        width: !methodToDisplay ? 150 : undefined,
       },
     ],
   })),
