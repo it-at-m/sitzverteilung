@@ -50,7 +50,7 @@ const headers = [
   {
     title: "Quotient",
     key: "ratio",
-    width: 100
+    width: 100,
   },
 ];
 </script>
