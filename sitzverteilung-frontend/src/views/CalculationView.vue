@@ -1,13 +1,13 @@
 <template>
-  <detail-dialog
-    v-model="showDetailDialog"
-    v-if="detailDialogMethod"
-    :calculation-method="detailDialogMethod"
-    :calculation-result="calculationResult"
-    :target-size="currentBaseData.targetSize"
-    :committee-size="currentBaseData.committeeSize"
-  />
   <v-container>
+    <detail-dialog
+      v-model="showDetailDialog"
+      v-if="detailDialogMethod"
+      :calculation-method="detailDialogMethod"
+      :calculation-result="calculationResult"
+      :target-size="currentBaseData.targetSize"
+      :committee-size="currentBaseData.committeeSize"
+    />
     <v-row>
       <v-col>
         <h1>Berechnung der Sitze</h1>
