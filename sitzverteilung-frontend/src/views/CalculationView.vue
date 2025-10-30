@@ -134,7 +134,7 @@ const calculationResult = computed(() => {
   return calculate(currentBaseData.value);
 });
 
-onMounted(async () => {
+onMounted(() => {
   toggleExpansion();
 });
 
@@ -153,7 +153,7 @@ watch(hasValidCalculationData, (isCalculationValid) => {
 
 watch(isExpanded, async () => {
   await nextTick();
-  if (isExpanded && baseDataFormRef.value) {
+  if (isExpanded.value && baseDataFormRef.value) {
     baseDataFormRef.value.validateAllInputs();
   }
 });
