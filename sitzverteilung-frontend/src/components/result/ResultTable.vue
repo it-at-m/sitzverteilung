@@ -49,7 +49,7 @@
         >
           <div
             v-if="mappedResult.length"
-            class="d-flex flex-row align-center ga-2"
+            class="d-flex flex-row justify-center align-center ga-2"
           >
             <span
               :class="{ 'bg-error': !isMethodValid(method) }"
@@ -197,10 +197,14 @@ const headers = computed(() => [
       {
         title: "Patt",
         key: `${method}${ResultDataSuffix.staleSuffix}`,
+        width: 50,
+        align: "center"
       },
       {
         title: "Zulässigkeit",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
+        width: 150,
+        align: "center"
       },
     ],
   })),
