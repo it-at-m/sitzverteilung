@@ -79,7 +79,7 @@
     <result-table
       class="mt-2"
       :calculation-result="calculationResult"
-      @clicked-calculation-method="(method) => openDetailDialog(method)"
+      @clicked-calculation-method="openDetailDialog"
     />
   </v-container>
 </template>
@@ -157,7 +157,7 @@ watch(
 const showDetailDialog = ref(false);
 const detailDialogMethod = ref<CalculationMethod | null>(null);
 
-async function openDetailDialog(calculationMethod: CalculationMethod) {
+function openDetailDialog(calculationMethod: CalculationMethod) {
   detailDialogMethod.value = calculationMethod;
   showDetailDialog.value = true;
 }
