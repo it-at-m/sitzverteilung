@@ -21,7 +21,14 @@
           :method-to-display="calculationMethod"
         />
         <p>
-          <b>Sitzreihung:</b>
+          <b
+            >Sitzreihung
+            {{
+              calculationMethod === CalculationMethod.HARE_NIEMEYER
+                ? `(nach ${CalculationMethod.D_HONDT}-Verfahren)`
+                : ""
+            }}</b
+          >
         </p>
         <seat-order-table
           class="my-2"
@@ -40,13 +47,13 @@
 </template>
 
 <script setup lang="ts">
-import type { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 
 import { mdiInformation } from "@mdi/js";
 
 import ResultTable from "@/components/result/ResultTable.vue";
 import SeatOrderTable from "@/components/result/SeatOrderTable.vue";
+import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
 const isDialogShown = defineModel<boolean>({ required: true });
 defineProps<{
