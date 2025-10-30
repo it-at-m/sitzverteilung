@@ -117,14 +117,14 @@
               </span>
             </template>
           </template>
-          <v-template v-else>
+          <template v-else>
             <div class="d-flex flex-row justify-center">
               <v-icon
                 :icon="mdiCheck"
                 color="success"
               />
             </div>
-          </v-template>
+          </template>
         </template>
       </v-data-table>
     </div>
