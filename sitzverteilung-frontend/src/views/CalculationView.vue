@@ -153,7 +153,6 @@ watch(hasValidCalculationData, (isCalculationValid) => {
 
 watch(isExpanded, async () => {
   await nextTick();
-  console.debug(isExpanded, baseDataFormRef.value);
   if (isExpanded && baseDataFormRef.value) {
     baseDataFormRef.value.validateAllInputs();
   }
