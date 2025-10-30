@@ -1,6 +1,6 @@
 <template>
   <v-container class="px-0">
-    <div class="result-table">
+    <div class="bordered-table">
       <v-data-table
         :headers="headers"
         :items="mappedResult"
@@ -99,11 +99,13 @@
           >
             <v-tooltip v-if="!methodToDisplay">
               <template v-slot:activator="{ props }">
-                <v-icon
-                  :icon="mdiClose"
-                  color="error"
-                  v-bind="props"
-                />
+                <div class="d-flex flex-row justify-center">
+                  <v-icon
+                    :icon="mdiClose"
+                    color="error"
+                    v-bind="props"
+                  />
+                </div>
               </template>
               <span style="white-space: pre-line">
                 {{ generateValidationText(item, method) }}
@@ -116,10 +118,12 @@
             </template>
           </template>
           <template v-else>
-            <v-icon
-              :icon="mdiCheck"
-              color="success"
-            />
+            <div class="d-flex flex-row justify-center">
+              <v-icon
+                :icon="mdiCheck"
+                color="success"
+              />
+            </div>
           </template>
         </template>
       </v-data-table>
@@ -197,14 +201,13 @@ const headers = computed(() => [
       {
         title: "Patt",
         key: `${method}${ResultDataSuffix.staleSuffix}`,
-        width: 50,
-        align: "center"
+        width: !methodToDisplay ? 50 : undefined,
+        align: !methodToDisplay ? "center" : "left",
       },
       {
         title: "Zulässigkeit",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
-        width: 150,
-        align: "center"
+        width: !methodToDisplay ? 150 : undefined,
       },
     ],
   })),
@@ -250,9 +253,3 @@ const emit = defineEmits<{
   clickedCalculationMethod: [calculationMethod: CalculationMethod];
 }>();
 </script>
-<style>
-.result-table .v-data-table td:not(:last-child),
-.result-table .v-data-table th {
-  border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-</style>

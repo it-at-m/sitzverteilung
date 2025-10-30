@@ -21,3 +21,10 @@ import { usePWA } from "@/composables/usePWA";
 
 usePWA();
 </script>
+
+<style>
+.bordered-table .v-data-table td:not(:last-child),
+.bordered-table .v-data-table th {
+  border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+</style>
