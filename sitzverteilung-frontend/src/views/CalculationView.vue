@@ -80,7 +80,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, useTemplateRef, watch } from "vue";
+import { computed, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -103,6 +103,7 @@ const {
   updateIsValid,
   isDataEntered,
   isValid,
+  baseDataFormRef,
 } = useTemplateData();
 
 const { share } = useShareData<BaseData>(
@@ -131,8 +132,6 @@ const calculationResult = computed(() => {
   }
   return calculate(currentBaseData.value);
 });
-
-const baseDataFormRef = useTemplateRef<typeof BaseDataForm>("baseDataFormRef");
 
 watch(hasValidCalculationData, (isCalculationValid) => {
   if (!isCalculationValid && !isExpanded.value) {
