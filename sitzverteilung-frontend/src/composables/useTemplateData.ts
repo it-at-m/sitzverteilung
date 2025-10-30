@@ -9,14 +9,6 @@ export function useTemplateData() {
   const store = useTemplateDataStore();
   const storedBaseData = computed(() => store.baseDatas);
 
-  onMounted(() => {
-    if (selectedBaseData.value) {
-      currentBaseData.value = JSON.parse(
-        JSON.stringify(selectedBaseData.value)
-      );
-    }
-  });
-
   const selectedBaseData = computed({
     get: () => store.selectedBaseData,
     set: (val) => store.updateSelectedBaseData(val),
@@ -72,7 +64,7 @@ export function useTemplateData() {
         currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
       }
     },
-    { deep: true }
+    { immediate: true }
   );
 
   function reset() {
@@ -81,7 +73,6 @@ export function useTemplateData() {
   }
 
   return {
-    getEmptyBaseData,
     storedBaseData,
     selectedBaseData,
     baseDataNames,

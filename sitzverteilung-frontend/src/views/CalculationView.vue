@@ -113,8 +113,8 @@ const {
   currentBaseData,
   updateIsValid,
   isDataEntered,
-  baseDataFormRef,
   isValid,
+  baseDataFormRef,
 } = useTemplateData();
 
 const { share } = useShareData<BaseData>(
@@ -144,11 +144,15 @@ const calculationResult = computed(() => {
   return calculate(currentBaseData.value);
 });
 
-watch(hasValidCalculationData, (isCalculationValid) => {
-  if (!isCalculationValid && !isExpanded.value) {
-    toggleExpansion();
-  }
-});
+watch(
+  hasValidCalculationData,
+  (isCalculationValid) => {
+    if (!isCalculationValid && !isExpanded.value) {
+      toggleExpansion();
+    }
+  },
+  { immediate: true }
+);
 
 const showDetailDialog = ref(false);
 const detailDialogMethod = ref<CalculationMethod | null>(null);
