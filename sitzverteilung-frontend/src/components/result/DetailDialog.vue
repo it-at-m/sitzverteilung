@@ -16,9 +16,12 @@
           Größe des Ausschusses: <b>{{ targetSize ?? "keine Angabe" }}</b>
         </p>
         <result-table
-          class="mt-2"
+          class="my-2"
           :calculation-result="calculationResult"
           :method-to-display="calculationMethod"
+        />
+        <seat-order-table
+          :seat-order="calculationResult?.methods[calculationMethod]?.order"
         />
       </v-card-text>
       <v-card-actions>
@@ -39,6 +42,7 @@ import type { CalculationResult } from "@/types/calculation/internal/Calculation
 import { mdiInformation } from "@mdi/js";
 
 import ResultTable from "@/components/result/ResultTable.vue";
+import SeatOrderTable from "@/components/result/SeatOrderTable.vue";
 
 const isDialogShown = defineModel<boolean>({ required: true });
 defineProps<{
