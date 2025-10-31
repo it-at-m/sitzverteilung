@@ -9,39 +9,52 @@
       density="compact"
       no-data-text="Es konnte kein Sitz eindeutig vergeben werden."
       :items-per-page="-1"
-    />
+    >
+      <template v-slot:[`item.name`]="{ value }">
+        <span style="white-space: pre-line">
+          {{ value }}
+        </span>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
+import type { SeatOrder } from "@/types/calculation/ui/MergedSeatOrder.ts";
 
 import { computed } from "vue";
 
 import { formatVisiblePrecision } from "@/utility/numberFormatter.ts";
+import { mapToMergedSeatOrders } from "@/utility/resultMapping.ts";
 
 const { seatOrder } = defineProps<{
   seatOrder?: CalculationSeatOrder;
 }>();
 
 const mappedSeatOrder = computed(() => {
+  if (!seatOrder) {
+    return [];
+  }
   const formattedRatios = formatVisiblePrecision(
     seatOrder.map((order) => order.value)
   );
-  return seatOrder?.map((order, index) => {
+  const formattedSeatOrders = seatOrder?.map((order, index) => {
     return {
       seatNumber: index + 1,
       name: order.groupName,
       ratio: formattedRatios[index],
-    };
+    } as SeatOrder;
   });
+  return mapToMergedSeatOrders(formattedSeatOrders);
 });
 
 const headers = [
   {
-    title: "Sitznummer",
+    title: "Sitznummer(n)",
     key: "seatNumber",
     width: 100,
+    align: "center",
   },
   {
     title: "Name",
