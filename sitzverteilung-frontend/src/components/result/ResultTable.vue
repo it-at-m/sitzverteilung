@@ -1,6 +1,6 @@
 <template>
   <v-container class="px-0">
-    <div class="result-table">
+    <div class="bordered-table">
       <v-data-table
         :headers="headers"
         :items="mappedResult"
@@ -253,9 +253,3 @@ const emit = defineEmits<{
   clickedCalculationMethod: [calculationMethod: CalculationMethod];
 }>();
 </script>
-<style>
-.result-table .v-data-table td:not(:last-child),
-.result-table .v-data-table th {
-  border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-</style>
