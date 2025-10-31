@@ -1,13 +1,13 @@
 <template>
-  <detail-dialog
-    v-model="showDetailDialog"
-    v-if="detailDialogMethod"
-    :calculation-method="detailDialogMethod"
-    :calculation-result="calculationResult"
-    :target-size="currentBaseData.targetSize"
-    :committee-size="currentBaseData.committeeSize"
-  />
   <v-container>
+    <detail-dialog
+      v-model="showDetailDialog"
+      v-if="detailDialogMethod"
+      :calculation-method="detailDialogMethod"
+      :calculation-result="calculationResult"
+      :target-size="currentBaseData.targetSize"
+      :committee-size="currentBaseData.committeeSize"
+    />
     <v-row>
       <v-col>
         <h1>Berechnung der Sitze</h1>
@@ -79,7 +79,7 @@
     <result-table
       class="mt-2"
       :calculation-result="calculationResult"
-      @clicked-calculation-method="(method) => openDetailDialog(method)"
+      @clicked-calculation-method="openDetailDialog"
     />
   </v-container>
 </template>
@@ -113,8 +113,8 @@ const {
   currentBaseData,
   updateIsValid,
   isDataEntered,
-  baseDataFormRef,
   isValid,
+  baseDataFormRef,
 } = useTemplateData();
 
 const { share } = useShareData<BaseData>(

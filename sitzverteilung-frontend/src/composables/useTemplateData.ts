@@ -1,6 +1,6 @@
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 
-import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
@@ -8,14 +8,6 @@ import { useTemplateDataStore } from "@/stores/templatedata.ts";
 export function useTemplateData() {
   const store = useTemplateDataStore();
   const storedBaseData = computed(() => store.baseDatas);
-
-  onMounted(() => {
-    if (selectedBaseData.value) {
-      currentBaseData.value = JSON.parse(
-        JSON.stringify(selectedBaseData.value)
-      );
-    }
-  });
 
   const selectedBaseData = computed({
     get: () => store.selectedBaseData,
@@ -72,7 +64,7 @@ export function useTemplateData() {
         currentBaseData.value = JSON.parse(JSON.stringify(newBaseData));
       }
     },
-    { deep: true }
+    { immediate: true }
   );
 
   function reset() {
@@ -81,7 +73,6 @@ export function useTemplateData() {
   }
 
   return {
-    getEmptyBaseData,
     storedBaseData,
     selectedBaseData,
     baseDataNames,
