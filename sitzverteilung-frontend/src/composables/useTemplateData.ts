@@ -19,10 +19,12 @@ export function useTemplateData() {
   );
 
   const currentBaseData = ref<BaseData>(getEmptyBaseData());
-  const isValid = ref(false);
+  const isValid = ref<boolean | null>(null);
 
-  function updateIsValid(newIsValid: boolean) {
-    isValid.value = newIsValid;
+  function updateIsValid(newIsValid: boolean | null) {
+    if (newIsValid !== null) {
+      isValid.value = newIsValid;
+    }
   }
 
   const isBaseDataSelected = computed(() => !!selectedBaseData.value);

@@ -80,7 +80,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, nextTick, onMounted, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -94,7 +94,6 @@ import {
 } from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
-let firstCall = true;
 
 const {
   storedBaseData,
@@ -121,8 +120,8 @@ const isAtLeastTwoGroups = computed(
 
 const hasValidCalculationData = computed(() => {
   return (
-    isAtLeastTwoGroups.value &&
     isValid.value &&
+    isAtLeastTwoGroups.value &&
     !!currentBaseData.value.targetSize
   );
 });
@@ -135,26 +134,16 @@ const calculationResult = computed(() => {
 });
 
 onMounted(() => {
-  toggleExpansion();
+  baseDataFormRef?.value?.validateAllInputs();
 });
 
-watch(hasValidCalculationData, (isCalculationValid) => {
-  if (!isCalculationValid && !isExpanded.value) {
-    toggleExpansion();
+watch(
+  hasValidCalculationData,
+  (isCalculationValid) => {
+    if (isValid.value !== null && !isCalculationValid && !isExpanded.value) {
+      toggleExpansion();
+    }
+    baseDataFormRef?.value?.validateAllInputs();
   }
-  if (firstCall) {
-    toggleExpansion();
-    firstCall = false;
-  }
-  if (!isCalculationValid && isExpanded.value && baseDataFormRef.value) {
-    baseDataFormRef.value.validateAllInputs();
-  }
-});
-
-watch(isExpanded, async () => {
-  await nextTick();
-  if (isExpanded.value && baseDataFormRef.value) {
-    baseDataFormRef.value.validateAllInputs();
-  }
-});
+);
 </script>
