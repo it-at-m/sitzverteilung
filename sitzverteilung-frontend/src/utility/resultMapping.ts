@@ -1,5 +1,9 @@
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+import type {
+  MergedSeatOrder,
+  SeatOrder,
+} from "@/types/calculation/ui/MergedSeatOrder.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
 import {
@@ -38,6 +42,42 @@ export function mapCalculationResultToResultData(
 
     return resultData;
   });
+}
+
+/**
+ * Merges seat orders by combining seats with same ratio into a single element and returning a combined index and name
+ * NOTE: seatOrders must be pre sorted by seatNumber!
+ *
+ * @param seatOrders seatOrders to merge
+ */
+export function mapToMergedSeatOrders(
+  seatOrders: SeatOrder[]
+): MergedSeatOrder[] {
+  return Object.values(
+    seatOrders.reduce<Record<string, MergedSeatOrder>>((acc, currentOrder) => {
+      const key = currentOrder.ratio;
+      if (!key) {
+        return acc;
+      }
+
+      if (!acc[key]) {
+        acc[key] = {
+          ratio: key,
+          seatNumber: `${currentOrder.seatNumber}`,
+          name: currentOrder.name,
+          minIndex: currentOrder.seatNumber,
+          maxIndex: currentOrder.seatNumber,
+        };
+      } else {
+        acc[key].seatNumber =
+          `${acc[key].minIndex} - ${currentOrder.seatNumber}`;
+        acc[key].maxIndex = currentOrder.seatNumber;
+        acc[key].name += `\n${currentOrder.name}`;
+      }
+
+      return acc;
+    }, {})
+  );
 }
 
 function setMethodResultDataOfResultData(
