@@ -89,7 +89,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, onMounted, watch, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -148,15 +148,12 @@ onMounted(() => {
   baseDataFormRef?.value?.validateAllInputs();
 });
 
-watch(
-    hasValidCalculationData,
-    (isCalculationValid) => {
-      if (isValid.value !== null && !isCalculationValid && !isExpanded.value) {
-        toggleExpansion();
-      }
-      baseDataFormRef?.value?.validateAllInputs();
-    }
-);
+watch(hasValidCalculationData, (isCalculationValid) => {
+  if (isValid.value !== null && !isCalculationValid && !isExpanded.value) {
+    toggleExpansion();
+  }
+  baseDataFormRef?.value?.validateAllInputs();
+});
 
 const showDetailDialog = ref(false);
 const detailDialogMethod = ref<CalculationMethod | null>(null);
