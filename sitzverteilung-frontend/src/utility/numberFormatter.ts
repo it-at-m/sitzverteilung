@@ -33,7 +33,7 @@ export function formatVisiblePrecision(numbers: number[]) {
  * @param a number
  * @param b number
  */
-function getDiffPrecision(a: number, b: number): number {
+function getDiffPrecision(a: number, b: number | undefined): number {
   if (b === undefined) return 0;
   const [aInt, aDec = ""] = a.toString().split(".");
   const [bInt, bDec = ""] = b.toString().split(".");
