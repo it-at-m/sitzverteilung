@@ -7,15 +7,15 @@ export function numberFormatter(number: number): string {
 
 /**
  * Formats an array of numbers to only display required decimals to differentiate between them
- * @param numbers numbers to format
+ * @param numbersToFormat numbers to format
  */
-export function formatVisiblePrecision(numbers: number[]) {
-  return numbers.map((number, index) => {
-    const previous = numbers[index - 1];
-    const next = numbers[index + 1];
+export function formatVisiblePrecision(numbersToFormat: number[]) {
+  return numbersToFormat.map((num, index) => {
+    const previous = numbersToFormat[index - 1];
+    const next = numbersToFormat[index + 1];
     const diffPrecision = Math.max(
-      getDiffPrecision(number, previous),
-      getDiffPrecision(number, next)
+      getDiffPrecision(num, previous),
+      getDiffPrecision(num, next)
     );
     const neededPrecision = Math.max(3, diffPrecision);
     const formatter = new Intl.NumberFormat("de-DE", {
@@ -25,7 +25,7 @@ export function formatVisiblePrecision(numbers: number[]) {
       // @ts-expect-error newer API is not picked up by TS compiler, but available in browser
       roundingMode: "trunc",
     });
-    return formatter.format(number);
+    return formatter.format(num);
   });
 }
 

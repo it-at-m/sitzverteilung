@@ -54,8 +54,8 @@ export function mapToMergedSeatOrders(
   seatOrders: SeatOrder[]
 ): MergedSeatOrder[] {
   return Object.values(
-    seatOrders.reduce<Record<string, MergedSeatOrder>>((acc, order) => {
-      const key = order.ratio;
+    seatOrders.reduce<Record<string, MergedSeatOrder>>((acc, currentOrder) => {
+      const key = currentOrder.ratio;
       if (!key) {
         return acc;
       }
@@ -63,15 +63,16 @@ export function mapToMergedSeatOrders(
       if (!acc[key]) {
         acc[key] = {
           ratio: key,
-          seatNumber: `${order.seatNumber}`,
-          name: order.name,
-          minIndex: order.seatNumber,
-          maxIndex: order.seatNumber,
+          seatNumber: `${currentOrder.seatNumber}`,
+          name: currentOrder.name,
+          minIndex: currentOrder.seatNumber,
+          maxIndex: currentOrder.seatNumber,
         };
       } else {
-        acc[key].seatNumber = `${acc[key].minIndex} - ${order.seatNumber}`;
-        acc[key].maxIndex = order.seatNumber;
-        acc[key].name += `\n${order.name}`;
+        acc[key].seatNumber =
+          `${acc[key].minIndex} - ${currentOrder.seatNumber}`;
+        acc[key].maxIndex = currentOrder.seatNumber;
+        acc[key].name += `\n${currentOrder.name}`;
       }
 
       return acc;
