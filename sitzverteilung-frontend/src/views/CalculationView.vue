@@ -153,7 +153,7 @@ watch(hasValidCalculationData, (isCalculationValid) => {
 const showDetailDialog = ref(false);
 const detailDialogMethod = ref<CalculationMethod | null>(null);
 
-async function openDetailDialog(calculationMethod: CalculationMethod) {
+function openDetailDialog(calculationMethod: CalculationMethod) {
   detailDialogMethod.value = calculationMethod;
   showDetailDialog.value = true;
 }
