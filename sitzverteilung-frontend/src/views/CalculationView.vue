@@ -149,10 +149,12 @@ onMounted(() => {
 });
 
 watch(hasValidCalculationData, (isCalculationValid) => {
-  if (isValid.value !== null && !isCalculationValid && !isExpanded.value) {
-    toggleExpansion();
+  if (isValid.value !== null && !isCalculationValid) {
+    if (!isExpanded.value) {
+      toggleExpansion();
+    }
+    baseDataFormRef?.value?.validateAllInputs();
   }
-  baseDataFormRef?.value?.validateAllInputs();
 });
 
 const showDetailDialog = ref(false);
