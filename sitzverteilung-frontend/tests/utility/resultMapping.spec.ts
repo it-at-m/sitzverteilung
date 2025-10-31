@@ -1,6 +1,13 @@
 import { describe, expect, test } from "vitest";
 
-import { mapCalculationResultToResultData } from "../../src/utility/resultMapping";
+import {
+  MergedSeatOrder,
+  SeatOrder,
+} from "../../src/types/calculation/ui/MergedSeatOrder";
+import {
+  mapCalculationResultToResultData,
+  mapToMergedSeatOrders,
+} from "../../src/utility/resultMapping";
 import { getTestCalculationResult } from "../TestData";
 
 describe("mapCalculationResultToResultData", () => {
@@ -41,5 +48,48 @@ describe("mapCalculationResultToResultData", () => {
 
     const result = mapCalculationResultToResultData(invalidInput);
     expect(result.length).toBe(0);
+  });
+});
+
+describe("mapToMergedSeatOrders", () => {
+  test("seats are merged correctly", () => {
+    const given: SeatOrder[] = [
+      {
+        name: "A",
+        seatNumber: 1,
+        ratio: "0,999",
+      },
+      {
+        name: "B",
+        seatNumber: 2,
+        ratio: "0,999",
+      },
+      {
+        name: "C",
+        seatNumber: 3,
+        ratio: "0,998",
+      },
+    ];
+
+    const result = mapToMergedSeatOrders(given);
+
+    const expected: MergedSeatOrder[] = [
+      {
+        seatNumber: "1 - 2",
+        ratio: "0,999",
+        name: "A\nB",
+        minIndex: 1,
+        maxIndex: 2,
+      },
+      {
+        seatNumber: "3",
+        ratio: "0,998",
+        name: "C",
+        minIndex: 3,
+        maxIndex: 3,
+      },
+    ];
+
+    expect(result).toEqual(expected);
   });
 });
