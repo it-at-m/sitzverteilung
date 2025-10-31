@@ -1,5 +1,9 @@
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+import type {
+  MergedSeatOrder,
+  SeatOrder,
+} from "@/types/calculation/ui/MergedSeatOrder.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
 import {
@@ -38,6 +42,44 @@ export function mapCalculationResultToResultData(
 
     return resultData;
   });
+}
+
+/**
+ * Merges seat orders by combining seats with same ratio into a single element and returning a combined index and name
+ *
+ * @param seatOrders seatOrders to merge
+ */
+export function mapToMergedSeatOrders(
+  seatOrders: SeatOrder[]
+): MergedSeatOrder[] {
+  return Object.values(
+    seatOrders.reduce<Record<string, MergedSeatOrder>>((acc, order) => {
+      const key = order.ratio;
+      if (!key) {
+        return acc;
+      }
+
+      if (!acc[key]) {
+        acc[key] = {
+          ratio: key,
+          seatNumber: `${order.seatNumber}`,
+          name: order.name,
+          minIndex: order.seatNumber,
+          maxIndex: order.seatNumber,
+        };
+      } else {
+        if (acc[key].maxIndex === acc[key].minIndex) {
+          acc[key].seatNumber = `${acc[key].minIndex} - ${order.seatNumber}`;
+        } else {
+          acc[key].seatNumber = `${acc[key].minIndex} - ${order.seatNumber}`;
+        }
+        acc[key].maxIndex = order.seatNumber;
+        acc[key].name += `\n${order.name}`;
+      }
+
+      return acc;
+    }, {})
+  );
 }
 
 function setMethodResultDataOfResultData(
