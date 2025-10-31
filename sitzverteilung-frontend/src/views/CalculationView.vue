@@ -89,7 +89,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -153,7 +153,9 @@ watch(hasValidCalculationData, (isCalculationValid) => {
     if (!isExpanded.value) {
       toggleExpansion();
     }
-    baseDataFormRef?.value?.validateAllInputs();
+    nextTick(() => {
+      baseDataFormRef?.value?.validateAllInputs();
+    });
   }
 });
 
