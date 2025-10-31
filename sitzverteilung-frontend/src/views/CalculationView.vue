@@ -89,7 +89,7 @@ import type { BaseData } from "@/types/basedata/BaseData.ts";
 
 import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -131,8 +131,8 @@ const isAtLeastTwoGroups = computed(
 
 const hasValidCalculationData = computed(() => {
   return (
-    isAtLeastTwoGroups.value &&
     isValid.value &&
+    isAtLeastTwoGroups.value &&
     !!currentBaseData.value.targetSize
   );
 });
@@ -144,9 +144,18 @@ const calculationResult = computed(() => {
   return calculate(currentBaseData.value);
 });
 
+onMounted(() => {
+  baseDataFormRef?.value?.validateAllInputs();
+});
+
 watch(hasValidCalculationData, (isCalculationValid) => {
-  if (!isCalculationValid && !isExpanded.value) {
-    toggleExpansion();
+  if (isValid.value !== null && !isCalculationValid) {
+    if (!isExpanded.value) {
+      toggleExpansion();
+    }
+    nextTick(() => {
+      baseDataFormRef?.value?.validateAllInputs();
+    });
   }
 });
 
