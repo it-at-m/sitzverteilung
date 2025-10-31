@@ -46,6 +46,7 @@ export function mapCalculationResultToResultData(
 
 /**
  * Merges seat orders by combining seats with same ratio into a single element and returning a combined index and name
+ * NOTE: seatOrders must be pre sorted by seatNumber!
  *
  * @param seatOrders seatOrders to merge
  */
@@ -68,11 +69,7 @@ export function mapToMergedSeatOrders(
           maxIndex: order.seatNumber,
         };
       } else {
-        if (acc[key].maxIndex === acc[key].minIndex) {
-          acc[key].seatNumber = `${acc[key].minIndex} - ${order.seatNumber}`;
-        } else {
-          acc[key].seatNumber = `${acc[key].minIndex} - ${order.seatNumber}`;
-        }
+        acc[key].seatNumber = `${acc[key].minIndex} - ${order.seatNumber}`;
         acc[key].maxIndex = order.seatNumber;
         acc[key].name += `\n${order.name}`;
       }

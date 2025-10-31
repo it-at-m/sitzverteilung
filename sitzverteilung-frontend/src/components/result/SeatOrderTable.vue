@@ -10,13 +10,8 @@
       no-data-text="Es konnte kein Sitz eindeutig vergeben werden."
       :items-per-page="-1"
     >
-      <template v-slot:[`item.staleOrder`]="{ index }">
-        <template
-          v-if="
-            mappedSeatOrder[index]?.minIndex !==
-            mappedSeatOrder[index]?.maxIndex
-          "
-        >
+      <template v-slot:[`item.staleOrder`]="{ item }">
+        <template v-if="item.minIndex !== item.maxIndex">
           <v-icon :icon="mdiHandBackRight" />
         </template>
       </template>
@@ -51,7 +46,7 @@ const mappedSeatOrder = computed(() => {
   const formattedRatios = formatVisiblePrecision(
     seatOrder.map((order) => order.value)
   );
-  const formattedSeatOrders = seatOrder?.map((order, index) => {
+  const formattedSeatOrders = seatOrder.map((order, index) => {
     return {
       seatNumber: index + 1,
       name: order.groupName,
