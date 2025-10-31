@@ -22,6 +22,7 @@ export function formatVisiblePrecision(numbers: number[]) {
       useGrouping: true,
       minimumFractionDigits: neededPrecision,
       maximumFractionDigits: neededPrecision,
+      // @ts-expect-error newer API is not picked up by TS compiler, but available in browser
       roundingMode: "trunc",
     });
     return formatter.format(number);

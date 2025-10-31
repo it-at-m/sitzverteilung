@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { SeatOrder } from "@/types/calculation/ui/MergedSeatOrder.ts";
+import type { DataTableHeader } from "vuetify/framework";
 
 import { computed } from "vue";
 
@@ -49,7 +50,7 @@ const mappedSeatOrder = computed(() => {
   return mapToMergedSeatOrders(formattedSeatOrders);
 });
 
-const headers = [
+const headers: DataTableHeader[] = [
   {
     title: "Sitznummer(n)",
     key: "seatNumber",
