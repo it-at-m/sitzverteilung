@@ -6,10 +6,10 @@
         :items="mappedResult"
         hide-default-footer
         no-filter
-        disable-sort
         density="compact"
         no-data-text=""
         :items-per-page="-1"
+        :sort-by="[{ key: 'seatsOrVotes', order: 'desc' }]"
       >
         <template
           v-for="method in methodsToDisplay"
@@ -154,9 +154,10 @@ import {
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 
-const { calculationResult, methodToDisplay } = defineProps<{
+const { calculationResult, methodToDisplay, isSeatsOrVotes } = defineProps<{
   calculationResult?: CalculationResult;
   methodToDisplay?: CalculationMethod;
+  isSeatsOrVotes?: boolean;
 }>();
 
 const methodsToDisplay = computed(() =>
@@ -185,7 +186,7 @@ const headers = computed(() => [
         key: "name",
       },
       {
-        title: "Sitze",
+        title: isSeatsOrVotes ? "Sitze" : "Stimmen",
         key: "seatsOrVotes",
       },
     ],
@@ -203,11 +204,13 @@ const headers = computed(() => [
         key: `${method}${ResultDataSuffix.staleSuffix}`,
         width: !methodToDisplay ? 50 : undefined,
         align: !methodToDisplay ? "center" : "left",
+        sortable: false,
       },
       {
         title: "Zulässigkeit",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
         width: !methodToDisplay ? 150 : undefined,
+        sortable: false,
       },
     ],
   })),
