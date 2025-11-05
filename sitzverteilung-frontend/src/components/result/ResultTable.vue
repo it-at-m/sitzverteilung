@@ -154,10 +154,10 @@ import {
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
 import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
 
-const { calculationResult, methodToDisplay, isSeatsOrVotes } = defineProps<{
+const { calculationResult, methodToDisplay, showSeats } = defineProps<{
   calculationResult?: CalculationResult;
   methodToDisplay?: CalculationMethod;
-  isSeatsOrVotes?: boolean;
+  showSeats?: boolean;
 }>();
 
 const methodsToDisplay = computed(() =>
@@ -186,7 +186,7 @@ const headers = computed(() => [
         key: "name",
       },
       {
-        title: isSeatsOrVotes ? "Sitze" : "Stimmen",
+        title: showSeats ? "Sitze" : "Stimmen",
         key: "seatsOrVotes",
       },
     ],
