@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test } from "vitest";
 
 import { useTemplateDataStore } from "../../src/stores/templatedata";
 import { BaseData } from "../../src/types/basedata/BaseData";
-import { getTestBaseData } from "../TestData";
+import { getTestBaseDataWithUnion } from "../TestData";
 
 describe("Template Data Store", () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe("Template Data Store", () => {
   test("Add new BaseData", () => {
     // given
     const store = useTemplateDataStore();
-    const testData = getTestBaseData();
+    const testData = getTestBaseDataWithUnion();
 
     // when
     store.addBaseData(testData);
@@ -31,7 +31,7 @@ describe("Template Data Store", () => {
   test("Update BaseData", () => {
     // given
     const store = useTemplateDataStore();
-    const testData = getTestBaseData();
+    const testData = getTestBaseDataWithUnion();
     store.addBaseData(testData);
     const newTestData: BaseData = {
       ...testData,
@@ -48,7 +48,7 @@ describe("Template Data Store", () => {
 
   test("Delete BaseData", () => {
     const store = useTemplateDataStore();
-    const testData = getTestBaseData();
+    const testData = getTestBaseDataWithUnion();
     store.addBaseData(testData);
     const testData2: BaseData = {
       ...testData,
@@ -67,7 +67,7 @@ describe("Template Data Store", () => {
   test("Delete all BaseData", () => {
     // given
     const store = useTemplateDataStore();
-    const testData = getTestBaseData();
+    const testData = getTestBaseDataWithUnion();
     store.addBaseData(testData);
     const testData2: BaseData = {
       ...testData,

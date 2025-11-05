@@ -1,5 +1,13 @@
 <template>
   <v-container>
+    <detail-dialog
+      v-model="showDetailDialog"
+      v-if="detailDialogMethod"
+      :calculation-method="detailDialogMethod"
+      :calculation-result="calculationResult"
+      :target-size="currentBaseData.targetSize"
+      :committee-size="currentBaseData.committeeSize"
+    />
     <v-row>
       <v-col>
         <h1>Berechnung der Sitze</h1>
@@ -20,23 +28,41 @@
             size="large"
             class="ml-5"
             :prepend-icon="isExpanded ? mdiClose : mdiContentSaveEdit"
+            :text="isExpanded ? 'Schließen' : 'Ändern'"
+          />
+          <v-tooltip
+            text="Eingegebene Daten teilen"
+            :disabled="!hasValidCalculationData"
+            location="top"
           >
-            {{ isExpanded ? "Schließen" : "Ändern" }}
-          </v-btn>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                variant="flat"
+                color="blue"
+                size="large"
+                class="mx-5"
+                :prepend-icon="mdiShare"
+                :disabled="!hasValidCalculationData"
+                @click="share"
+                text="Teilen"
+              />
+            </template>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-row v-if="isDataEntered">
+    <v-row v-if="isDataEntered && selectedBaseData">
       <v-col>
         <v-alert
-          text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert."
+          text="Die ursprünglichen Daten aus der gewählten Vorlage wurden verändert. Die Berechnung und das Teilen per Link basiert auf den geänderten Daten."
           type="info"
           variant="tonal"
         />
       </v-col>
     </v-row>
     <base-data-form
-      class="mt-5"
+      class="mt-3"
       v-show="isExpanded"
       ref="baseDataFormRef"
       v-model="currentBaseData"
@@ -48,20 +74,35 @@
       :selected-base-data-name="selectedBaseData?.name"
       :base-data-names="baseDataNames"
       :show-name-column="false"
+      are-fields-required
     />
-    <result-table />
+    <result-table
+      class="mt-2"
+      :calculation-result="calculationResult"
+      @clicked-calculation-method="openDetailDialog"
+    />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { mdiClose, mdiContentSaveEdit } from "@mdi/js";
+import type { BaseData } from "@/types/basedata/BaseData.ts";
+
+import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
 import { useToggle } from "@vueuse/core";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
+import DetailDialog from "@/components/result/DetailDialog.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
+import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
-import { LimitConfiguration } from "@/utility/validation.ts";
+import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import { calculate } from "@/utility/calculator.ts";
+import {
+  isValidCalculationData,
+  LimitConfiguration,
+} from "@/utility/validation.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
 
@@ -72,6 +113,62 @@ const {
   currentBaseData,
   updateIsValid,
   isDataEntered,
+  isValid,
   baseDataFormRef,
 } = useTemplateData();
+
+const { share } = useShareData<BaseData>(
+  false,
+  currentBaseData,
+  isValidCalculationData,
+  currentBaseData,
+  "Die Daten wurden erfolgreich aus dem Link übertragen."
+);
+
+const isAtLeastTwoGroups = computed(
+  () => (currentBaseData.value?.groups?.length ?? 0) >= 2
+);
+
+const hasValidCalculationData = computed(() => {
+  return (
+    isValid.value &&
+    isAtLeastTwoGroups.value &&
+    !!currentBaseData.value.targetSize
+  );
+});
+
+const calculationResult = computed(() => {
+  if (!hasValidCalculationData.value) {
+    return undefined;
+  }
+  return calculate(currentBaseData.value);
+});
+
+onMounted(() => {
+  baseDataFormRef?.value?.validateAllInputs();
+});
+
+watch(hasValidCalculationData, (isCalculationValid) => {
+  if (isValid.value !== null && !isCalculationValid) {
+    if (!isExpanded.value) {
+      toggleExpansion();
+    }
+    nextTick(() => {
+      baseDataFormRef?.value?.validateAllInputs();
+    });
+  }
+});
+
+const showDetailDialog = ref(false);
+const detailDialogMethod = ref<CalculationMethod | null>(null);
+
+function openDetailDialog(calculationMethod: CalculationMethod) {
+  detailDialogMethod.value = calculationMethod;
+  showDetailDialog.value = true;
+}
+watch(showDetailDialog, (isShown) => {
+  if (!isShown) {
+    detailDialogMethod.value = null;
+  }
+});
 </script>

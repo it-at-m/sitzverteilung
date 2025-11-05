@@ -21,7 +21,7 @@
     />
     <v-row>
       <v-col class="d-flex align-center">
-        <h1 class="mr-2">Verwaltung der Vorlagen</h1>
+        <h1 class="mr-5">Verwaltung der Vorlagen</h1>
         <info-dialog>
           <template #dialog-text>
             <div class="pa-4 text-justify">
@@ -155,44 +155,51 @@
             :prepend-icon="mdiContentSave"
             :disabled="
               !isValid ||
-              (isBaseDataSelected && !dirty) ||
+              (selectedBaseData && !dirty) ||
               basedataNameIsNotChanged
             "
             @click="createBaseData"
-            >Anlegen
-          </v-btn>
+            text="Anlegen"
+          />
           <v-btn
             variant="flat"
             color="green"
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSaveEdit"
-            :disabled="!isBaseDataSelected || !isValid || !dirty"
+            :disabled="!selectedBaseData || !isValid || !dirty"
             @click="updateBaseData"
-            >Ändern
-          </v-btn>
+            text="Ändern"
+          />
           <v-btn
             variant="flat"
             color="red"
             size="large"
             class="ml-5"
             :prepend-icon="mdiDelete"
-            :disabled="!isBaseDataSelected"
+            :disabled="!selectedBaseData"
             @click="showDeleteConfirmation"
+            text="Löschen"
+          />
+          <v-tooltip
+            text="Ausgewählte Vorlage teilen"
+            :disabled="!selectedBaseData || dirty"
+            location="top"
           >
-            Löschen
-          </v-btn>
-          <v-btn
-            variant="flat"
-            color="blue"
-            size="large"
-            class="mx-5"
-            :prepend-icon="mdiShare"
-            :disabled="!isBaseDataSelected || dirty"
-            @click="share"
-          >
-            Teilen
-          </v-btn>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                variant="flat"
+                color="blue"
+                size="large"
+                class="mx-5"
+                :prepend-icon="mdiShare"
+                :disabled="!selectedBaseData || dirty"
+                @click="share"
+                text="Teilen"
+              />
+            </template>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-toolbar>
@@ -224,30 +231,22 @@ import {
   mdiExclamation,
   mdiShare,
 } from "@mdi/js";
-import { useClipboard } from "@vueuse/core";
-import { computed, nextTick, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { computed, ref } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
 import InfoDialog from "@/components/common/InfoDialog.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
+import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
-import { STATUS_INDICATORS } from "@/constants.ts";
 import { useSnackbarStore } from "@/stores/snackbar.ts";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
 import { numberFormatter } from "@/utility/numberFormatter.ts";
-import {
-  writeToUrlParam,
-  writeUrlParamToObject,
-} from "@/utility/urlEncoder.ts";
-import { LimitConfiguration } from "@/utility/validation.ts";
+import { isValidBaseData, LimitConfiguration } from "@/utility/validation.ts";
 
 const store = useTemplateDataStore();
 const snackbar = useSnackbarStore();
-
-const isBaseDataSelected = computed(() => !!selectedBaseData.value);
 
 const {
   storedBaseData,
@@ -297,7 +296,7 @@ function hideDeleteConfirmation() {
 }
 function deleteSelectedBaseData() {
   hideDeleteConfirmation();
-  if (isBaseDataSelected.value && selectedBaseData.value) {
+  if (selectedBaseData.value) {
     store.deleteBaseData(selectedBaseData.value.name);
     snackbar.showMessage({
       message: `Die Vorlage '${selectedBaseData.value.name}' wurde gelöscht.`,
@@ -306,91 +305,11 @@ function deleteSelectedBaseData() {
   }
 }
 
-const { copy, isSupported } = useClipboard();
-
-async function share() {
-  if (isBaseDataSelected.value && selectedBaseData.value) {
-    if (!isSupported.value) {
-      snackbar.showMessage({
-        message: `Das Kopieren in die Zwischenablage war nicht möglich.`,
-        level: STATUS_INDICATORS.ERROR,
-      });
-      return;
-    }
-
-    try {
-      const importParam = await writeToUrlParam<BaseData>(
-        selectedBaseData.value,
-        window.location.toString()
-      );
-      // Create shareable URL
-      const shareUrl = router.resolve({
-        path: route.path,
-        query: { ...route.query, import: importParam },
-      }).href;
-      const fullShareUrl = `${window.location.origin}/${shareUrl}`;
-      // Copy to clipboard
-      await copy(fullShareUrl);
-      snackbar.showMessage({
-        message: `Die Vorlage '${selectedBaseData.value.name}' wurde als Link in die Zwischenablage kopiert.`,
-      });
-    } catch {
-      snackbar.showMessage({
-        message: `Die Vorlage '${selectedBaseData.value.name}' konnte nicht in einen Link umgewandelt werden.`,
-      });
-    }
-  }
-}
-
-const route = useRoute();
-const router = useRouter();
-watch(
-  () => route.query.import,
-  async (newImport) => {
-    const importParam = newImport?.toString() ?? "";
-    if (importParam) {
-      try {
-        const baseData = await writeUrlParamToObject<BaseData>(importParam);
-        if (!isValidBaseData(baseData)) {
-          snackbar.showMessage({
-            message: "Die Vorlage im Link ist ungültig.",
-            level: STATUS_INDICATORS.ERROR,
-          });
-        } else {
-          selectedBaseData.value = null;
-          await nextTick(() => {
-            currentBaseData.value = baseData;
-          });
-          snackbar.showMessage({
-            message: `Die Vorlage '${baseData.name}' wurde übertragen. ACHTUNG: Erst nach dem Klick auf 'Anlegen' wird diese permanent gespeichert.`,
-          });
-        }
-      } catch {
-        snackbar.showMessage({
-          message: "Die Vorlage im Link ist ungültig.",
-          level: STATUS_INDICATORS.ERROR,
-        });
-      }
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { import: _, ...nextQuery } = route.query;
-    await router.replace({ path: route.path, query: nextQuery });
-  },
-  { immediate: true }
+const { share } = useShareData<BaseData>(
+  true,
+  selectedBaseData,
+  isValidBaseData,
+  currentBaseData,
+  "Die Daten wurden aus dem Link übertragen. ACHTUNG: Erst nach dem Klick auf 'Anlegen' werden diese permanent gespeichert."
 );
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function isValidBaseData(x: any): x is BaseData {
-  return (
-    x &&
-    typeof x.name === "string" &&
-    typeof x.committeeSize === "number" &&
-    typeof x.targetSize === "number" &&
-    Array.isArray(x.groups) &&
-    Array.isArray(x.unions) &&
-    x.groups.every((group: any) => group && typeof group.name === "string") &&
-    x.unions.every((union: any) => union && Array.isArray(union.groups))
-  );
-}
-/* eslint-enable @typescript-eslint/no-explicit-any */
 </script>

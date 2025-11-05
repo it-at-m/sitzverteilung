@@ -1,15 +1,40 @@
 import { BaseData } from "../src/types/basedata/BaseData";
 import { UnionType } from "../src/types/basedata/Union";
+import { CalculationMethod } from "../src/types/calculation/CalculationMethod";
+import { CalculationResult } from "../src/types/calculation/internal/CalculationResult";
 import { LimitConfiguration } from "../src/utility/validation";
 
-export function getTestBaseData(): BaseData {
+export function getTestBaseDataWithoutUnion(): BaseData {
   return {
     name: "TestData 1",
     committeeSize: 60,
     targetSize: 10,
     groups: [
       {
-        name: "Testgroup 1 ä",
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20,
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+    ],
+    unions: [],
+  };
+}
+
+export function getTestBaseDataWithUnion(): BaseData {
+  return {
+    name: "TestData 1",
+    committeeSize: 60,
+    targetSize: 10,
+    groups: [
+      {
+        name: "Testgroup 1",
         seatsOrVotes: 10,
       },
       {
@@ -26,6 +51,100 @@ export function getTestBaseData(): BaseData {
         name: "Example fraction union",
         unionType: UnionType.FRACTION,
         groups: [0, 1],
+      },
+      {
+        name: "Example committee union",
+        unionType: UnionType.COMMITTEE,
+        groups: [0, 1],
+      },
+    ],
+  };
+}
+
+export function getTestBaseDataWithOverlapCommitteeFraction(): BaseData {
+  return {
+    name: "TestData 1",
+    committeeSize: 120,
+    targetSize: 10,
+    groups: [
+      {
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20,
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 5",
+        seatsOrVotes: 30,
+      },
+    ],
+    unions: [
+      {
+        name: "Fraction 1",
+        unionType: UnionType.FRACTION,
+        groups: [1, 2],
+      },
+      {
+        name: "Committee 1",
+        unionType: UnionType.COMMITTEE,
+        groups: [0, 1],
+      },
+      {
+        name: "Committee 2",
+        unionType: UnionType.COMMITTEE,
+        groups: [3, 4],
+      },
+    ],
+  };
+}
+
+export function getTestBaseDataWithNoOverlap(): BaseData {
+  return {
+    name: "TestData 1",
+    committeeSize: 120,
+    targetSize: 10,
+    groups: [
+      {
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20,
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 5",
+        seatsOrVotes: 30,
+      },
+    ],
+    unions: [
+      {
+        name: "Fraction 1",
+        unionType: UnionType.FRACTION,
+        groups: [0, 1],
+      },
+      {
+        name: "Committee 1",
+        unionType: UnionType.COMMITTEE,
+        groups: [3, 4],
       },
     ],
   };
@@ -154,6 +273,80 @@ export function getTestBaseDataInputTooLarge(): BaseData {
       name: generateUniqueString(999),
     })),
     unions: [],
+  };
+}
+
+export function getTestCalculationResult(): CalculationResult {
+  return {
+    proportions: {
+      "Testgroup 1": 1,
+      "Testgroup 2": 1.5,
+    },
+    seats: {
+      "Testgroup 1": 12,
+      "Testgroup 2": 14,
+    },
+    methods: {
+      [CalculationMethod.D_HONDT]: {
+        distribution: {
+          "Testgroup 1": 2,
+          "Testgroup 2": 3,
+        },
+        validation: {
+          "Testgroup 1": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+        },
+      },
+      [CalculationMethod.HARE_NIEMEYER]: {
+        distribution: {
+          "Testgroup 1": 4,
+          "Testgroup 2": 5,
+        },
+        stale: {
+          groupNames: ["Testgroup 1", "Testgroup 2"],
+          amountSeats: 12,
+          ratio: 4,
+        },
+        validation: {
+          "Testgroup 1": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: ["Testgroup 1"],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+        },
+      },
+      [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: {
+        distribution: {
+          "Testgroup 1": 6,
+          "Testgroup 2": 7,
+        },
+        validation: {
+          "Testgroup 1": {
+            overRounding: true,
+            lostSafeSeat: false,
+            committeeInvalid: ["Testgroup 1"],
+          },
+          "Testgroup 2": {
+            overRounding: false,
+            lostSafeSeat: false,
+            committeeInvalid: [],
+          },
+        },
+      },
+    },
   };
 }
 

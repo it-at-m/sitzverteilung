@@ -26,7 +26,7 @@
         <template #append>
           <v-tooltip
             :disabled="!isFractionDisabled"
-            text="Zum Anlegen mind. 2 Parteien auswählen."
+            text="Zum Anlegen mindestens zwei zulässige Einträge auswählen"
             location="top"
           >
             <template #activator="{ props }">
@@ -49,7 +49,7 @@
           </v-tooltip>
           <v-tooltip
             :disabled="!isCommitteeDisabled"
-            text="Zum Anlegen mind. 2 Parteien auswählen."
+            text="Zum Anlegen mindestens zwei zulässige Einträge auswählen"
             location="top"
           >
             <template #activator="{ props }">
@@ -70,16 +70,33 @@
               </span>
             </template>
           </v-tooltip>
-          <v-btn
-            :disabled="isDeletionDisabled"
-            @click="deleteGroups"
-            :prepend-icon="mdiDelete"
-            variant="tonal"
-            color="error"
-            size="small"
-            class="mx-2"
-            text="Zeilen löschen"
-          />
+          <v-tooltip
+            :disabled="!isDeletionDisabled"
+            :text="
+              selectedIndexes.length === 0
+                ? 'Zum Löschen mindestens einen Eintrag auswählen'
+                : 'Mindestens ein gewählter Eintrag befindet sich noch in einer Gemeinschaft'
+            "
+            location="top"
+          >
+            <template #activator="{ props }">
+              <span
+                v-bind="props"
+                tabindex="0"
+              >
+                <v-btn
+                  :disabled="isDeletionDisabled"
+                  @click="deleteGroups"
+                  :prepend-icon="mdiDelete"
+                  variant="tonal"
+                  color="error"
+                  size="small"
+                  class="mx-2"
+                  text="Zeilen löschen"
+                />
+              </span>
+            </template>
+          </v-tooltip>
         </template>
       </v-toolbar>
     </template>
@@ -123,15 +140,28 @@
         </template>
         <template #append>
           <div class="d-flex justify-center">
-            <v-btn
-              @click="deleteGroup(index)"
-              :disabled="isSingleDeletionDisabled(index)"
-              :icon="mdiDelete"
-              size="small"
-              color="red"
-              variant="text"
-              aria-label="Zeile löschen"
-            />
+            <v-tooltip
+              :disabled="!isSingleDeletionDisabled(index)"
+              text="Zum Löschen muss der Eintrag aus allen Gemeinschaften entfernt werden"
+              location="top"
+            >
+              <template #activator="{ props }">
+                <span
+                  v-bind="props"
+                  tabindex="0"
+                >
+                  <v-btn
+                    @click="deleteGroup(index)"
+                    :disabled="isSingleDeletionDisabled(index)"
+                    :icon="mdiDelete"
+                    size="small"
+                    color="red"
+                    variant="text"
+                    aria-label="Zeile löschen"
+                  />
+                </span>
+              </template>
+            </v-tooltip>
           </div>
         </template>
       </group-data-table-row>
@@ -168,11 +198,10 @@ import GroupDataTableAddRow from "@/components/basedata/groupdata/GroupDataTable
 import GroupDataTableRow from "@/components/basedata/groupdata/GroupDataTableRow.vue";
 import GroupDataTableSummaryRow from "@/components/basedata/groupdata/GroupDataTableSummaryRow.vue";
 import { UnionType } from "@/types/basedata/Union.ts";
-import { numberFormatter } from "@/utility/numberFormatter.ts";
 
 const headers = computed(() => [
   {
-    title: `Name der Partei / Gruppierung / Einzelmitglied (max. ${numberFormatter(props.limitName)} Zeichen)`,
+    title: "Name",
     key: "name",
     width: 400,
   },
@@ -195,9 +224,13 @@ const props = defineProps<{
 
 const groups = defineModel<Group[]>({ required: true });
 const groupNames = computed(() => groups.value.map((group) => group.name));
-const isGroupLimitReached = computed(
-  () => groups.value.length >= Math.min(props.expectedSeats, props.limitGroups)
-);
+const isGroupLimitReached = computed(() => {
+  const limits = [props.limitGroups, props.expectedSeats].filter(
+    (value) => value > 0
+  );
+  if (limits.length === 0) return false;
+  return groups.value.length >= Math.min(...limits);
+});
 function getUnionGroups(unions: Union[]) {
   const flattenedGroups = unions.map((union) => union.groups).flat();
   return [...new Set(flattenedGroups)];
@@ -207,13 +240,9 @@ const committeeGroups = computed(() => getUnionGroups(props.committees));
 const unionGroups = computed(() =>
   getUnionGroups([...props.fractions, ...props.committees])
 );
-const displaySeatsOrVotesAsHeader = computed(() => {
-  if (props.expectedSeats > 0) {
-    return `Anzahl der Sitze (max. ${numberFormatter(props.expectedSeats)})`;
-  } else {
-    return `Anzahl der Stimmen (max. ${numberFormatter(props.limitVotes)})`;
-  }
-});
+const displaySeatsOrVotesAsHeader = computed(() =>
+  props.expectedSeats > 0 ? "Sitze" : "Stimmen"
+);
 
 function addNewGroup(group: Group) {
   groups.value.push(group);
