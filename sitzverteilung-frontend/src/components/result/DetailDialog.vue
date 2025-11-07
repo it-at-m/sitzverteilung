@@ -38,6 +38,16 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
+          text="PDF generieren"
+          @click="
+            useGeneratePDF(
+              <BaseData>currentBaseData,
+              <CalculationResult>calculationResult,
+              calculationMethod
+            )
+          "
+        />
+        <v-btn
           text="Schließen"
           @click="isDialogShown = false"
         />
@@ -47,12 +57,14 @@
 </template>
 
 <script setup lang="ts">
+import type { BaseData } from "@/types/basedata/BaseData.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 
 import { mdiInformation } from "@mdi/js";
 
 import ResultTable from "@/components/result/ResultTable.vue";
 import SeatOrderTable from "@/components/result/SeatOrderTable.vue";
+import { useGeneratePDF } from "@/composables/useGeneratePDF.ts";
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
 const isDialogShown = defineModel<boolean>({ required: true });
@@ -61,5 +73,6 @@ defineProps<{
   targetSize?: number;
   committeeSize?: number;
   calculationResult?: CalculationResult;
+  currentBaseData?: BaseData;
 }>();
 </script>

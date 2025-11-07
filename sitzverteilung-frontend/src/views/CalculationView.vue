@@ -7,6 +7,7 @@
       :calculation-result="calculationResult"
       :target-size="currentBaseData.targetSize"
       :committee-size="currentBaseData.committeeSize"
+      :current-base-data="currentBaseData"
     />
     <v-row>
       <v-col>
