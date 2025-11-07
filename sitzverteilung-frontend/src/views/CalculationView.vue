@@ -146,7 +146,7 @@ const calculationResult = computed(() => {
 });
 
 const isCommitteeSizeEntered = computed(
-  () => currentBaseData.value.committeeSize !== undefined
+  () => !!currentBaseData.value.committeeSize
 );
 
 onMounted(() => {
