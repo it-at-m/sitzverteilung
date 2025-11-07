@@ -204,13 +204,11 @@ const headers = computed(() => [
         key: `${method}${ResultDataSuffix.staleSuffix}`,
         width: !methodToDisplay ? 50 : undefined,
         align: !methodToDisplay ? "center" : "left",
-        sortable: false,
       },
       {
         title: "Zulässigkeit",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
         width: !methodToDisplay ? 150 : undefined,
-        sortable: false,
       },
     ],
   })),
