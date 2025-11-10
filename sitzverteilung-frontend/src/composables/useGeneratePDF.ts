@@ -273,7 +273,10 @@ function generateQuotientBox(
     methodResult.order.length * lineHeight + boxPadding * 2 + 10;
 
   const pageHeight = doc.internal.pageSize.height;
-  if (seatCalculationY + seatCalculationHeight > pageHeight - 15) {
+  const bottomMargin = 25;
+  const maxY = pageHeight - bottomMargin;
+
+  if (seatCalculationY + seatCalculationHeight > maxY) {
     doc.addPage();
     seatCalculationY = 20;
   }
@@ -286,6 +289,7 @@ function generateQuotientBox(
     seatCalculationWidth,
     seatCalculationHeight
   );
+
   doc.setFontSize(headerSize);
   doc.text(
     "Sitzreihung (Quotient)",
@@ -304,6 +308,29 @@ function generateQuotientBox(
   doc.setFontSize(dataTextSize);
 
   methodResult.order.forEach((item, index) => {
+    if (y > maxY - 10) {
+      doc.addPage();
+      seatCalculationY = 20;
+      y = seatCalculationY + 16;
+
+      doc.setLineWidth(boxLine);
+      doc.rect(seatCalculationX, seatCalculationY, seatCalculationWidth, 12);
+      doc.setFontSize(headerSize);
+      doc.text(
+        "Sitzreihung (Fortsetzung)",
+        seatCalculationX + 2,
+        seatCalculationY + 8
+      );
+      doc.setLineWidth(headerLine);
+      doc.line(
+        seatCalculationX + 2,
+        seatCalculationY + 10,
+        seatCalculationX + 188,
+        seatCalculationY + 10
+      );
+      doc.setFontSize(dataTextSize);
+    }
+
     const seatNumber = index + 1;
     doc.text(
       `${seatNumber}. Sitz: ${item.groupName} (${item.value.toFixed(3)})`,
