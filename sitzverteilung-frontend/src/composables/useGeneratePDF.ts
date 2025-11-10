@@ -227,6 +227,7 @@ function generateSeatDistribution(
   let y = seatBoxY + 18;
   const seatBoxHeightPerItem = lineHeight + 3;
   const maxSeats = Math.max(...seatDistribution.map((s) => s.seats));
+  const validMaxSeats = maxSeats > 0 ? maxSeats : 1;
 
   seatDistribution.forEach((item) => {
     if (y + seatBoxHeightPerItem > maxY) {
@@ -241,7 +242,7 @@ function generateSeatDistribution(
     doc.text(String(item.seats), marginLeft + 55, y);
 
     const barMaxWidth = seatBoxWidth - 65;
-    const barWidth = (item.seats / maxSeats) * barMaxWidth;
+    const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
     doc.setFillColor(150, 150, 150);
     doc.rect(marginLeft + 60, y - 4, barWidth, 5, "F");
     y += seatBoxHeightPerItem;
