@@ -110,37 +110,37 @@ function generateParameterBox(
 function getAndSortGroupsFromBaseData(
   baseData: BaseData
 ): [PartyEntry[], PartyEntry[]] {
-    const groups = baseData.groups;
-    const sortedGroups = [...groups].sort((a, b) => {
-        const aSeatsOrVotes = a.seatsOrVotes || 0;
-        const bSeatsOrVotes = b.seatsOrVotes || 0;
-        return aSeatsOrVotes - bSeatsOrVotes;
-    });
+  const groups = baseData.groups;
+  const sortedGroups = [...groups].sort((a, b) => {
+    const aSeatsOrVotes = a.seatsOrVotes || 0;
+    const bSeatsOrVotes = b.seatsOrVotes || 0;
+    return aSeatsOrVotes - bSeatsOrVotes;
+  });
 
-    const partysLeft = [];
-    const partysRight = [];
+  const partysLeft = [];
+  const partysRight = [];
 
-    const totalGroups = sortedGroups.length;
-    const midIndex = Math.ceil(totalGroups / 2);
+  const totalGroups = sortedGroups.length;
+  const midIndex = Math.ceil(totalGroups / 2);
 
-        for (let i = 0; i < totalGroups; i++) {
-            const group = sortedGroups[i];
-            if (group) {
-                const entry = {
-                    nr: i + 1,
-                    name: group.name,
-                    votes: group.seatsOrVotes || 0,
-                };
+  for (let i = 0; i < totalGroups; i++) {
+    const group = sortedGroups[i];
+    if (group) {
+      const entry = {
+        nr: i + 1,
+        name: group.name,
+        votes: group.seatsOrVotes || 0,
+      };
 
-                if (i < midIndex) {
-                    partysLeft.push(entry);
-                } else {
-                    partysRight.push(entry);
-                }
-            }
-        }
-        return [partysLeft, partysRight];
+      if (i < midIndex) {
+        partysLeft.push(entry);
+      } else {
+        partysRight.push(entry);
+      }
     }
+  }
+  return [partysLeft, partysRight];
+}
 
 function generateLeftAndRightPartyBox(
   doc: jsPDF,
