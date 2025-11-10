@@ -28,54 +28,60 @@ export function useGeneratePDF(
   calculationResult: CalculationResult,
   usedCalculationMethod: CalculationMethod
 ) {
-  let doc = new jsPDF({
-    unit: "mm",
-    format: "a4",
-  });
+  try {
+    let doc = new jsPDF({
+      unit: "mm",
+      format: "a4",
+    });
 
-  // Header
-  doc.setFontSize(8);
-  doc.text(new Date().toLocaleDateString("de-DE"), 200, 5, { align: "right" });
-  doc.setFontSize(headerFontSize);
-  doc.text("Sitzverteilung", 105, 10, { align: "center" });
-  doc.setLineWidth(boxLine);
-  doc.line(marginLeft, parameterBoxHeight, marginRight, parameterBoxHeight);
+    // Header
+    doc.setFontSize(8);
+    doc.text(new Date().toLocaleDateString("de-DE"), 200, 5, {
+      align: "right",
+    });
+    doc.setFontSize(headerFontSize);
+    doc.text("Sitzverteilung", 105, 10, { align: "center" });
+    doc.setLineWidth(boxLine);
+    doc.line(marginLeft, parameterBoxHeight, marginRight, parameterBoxHeight);
 
-  // Parameter Box
-  doc.setFontSize(headerSize);
-  doc.text("Berechnung", marginLeft, 25);
-  doc = generateParameterBox(doc, baseData, usedCalculationMethod);
+    // Parameter Box
+    doc.setFontSize(headerSize);
+    doc.text("Berechnung", marginLeft, 25);
+    doc = generateParameterBox(doc, baseData, usedCalculationMethod);
 
-  // Parteien-Boxen
-  const [partysLeft, partysRight] = getAndSortGroupsFromBaseData(baseData);
-  const partysCount = Math.max(partysLeft.length, partysRight.length);
-  const partysBoxHeight = partysCount * lineHeight + boxPadding * 2 + 10;
+    // Parteien-Boxen
+    const [partysLeft, partysRight] = getAndSortGroupsFromBaseData(baseData);
+    const partysCount = Math.max(partysLeft.length, partysRight.length);
+    const partysBoxHeight = partysCount * lineHeight + boxPadding * 2 + 10;
 
-  doc = generateLeftAndRightPartyBox(
-    doc,
-    partysLeft,
-    partysRight,
-    partysBoxHeight
-  );
+    doc = generateLeftAndRightPartyBox(
+      doc,
+      partysLeft,
+      partysRight,
+      partysBoxHeight
+    );
 
-  let currentY = 70 + partysBoxHeight + parameterBoxHeight;
+    let currentY = 70 + partysBoxHeight + parameterBoxHeight;
 
-  ({ doc, currentY } = generateSeatDistribution(
-    doc,
-    calculationResult,
-    currentY
-  ));
+    ({ doc, currentY } = generateSeatDistribution(
+      doc,
+      calculationResult,
+      currentY
+    ));
 
-  ({ doc } = generateQuotientBox(
-    doc,
-    calculationResult,
-    usedCalculationMethod,
-    currentY
-  ));
+    ({ doc } = generateQuotientBox(
+      doc,
+      calculationResult,
+      usedCalculationMethod,
+      currentY
+    ));
 
-  // save pdf
-  const timestamp = new Date().toISOString().slice(0, 10);
-  doc.save(`Sitzverteilung_${usedCalculationMethod}_${timestamp}.pdf`);
+    // save pdf
+    const timestamp = new Date().toISOString().slice(0, 10);
+    doc.save(`Sitzverteilung_${usedCalculationMethod}_${timestamp}.pdf`);
+  } catch {
+    throw new Error("Failed to generate PDF.");
+  }
 }
 
 function generateParameterBox(
