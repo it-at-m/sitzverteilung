@@ -41,11 +41,15 @@
           text="PDF generieren"
           :disabled="!currentBaseData || !calculationResult"
           @click="
-currentBaseData &&
-calculationResult &&
- useGeneratePDF(currentBaseData, calculationResult, calculationMethod)
-"
-          />
+            currentBaseData &&
+            calculationResult &&
+            useGeneratePDF(
+              currentBaseData,
+              calculationResult,
+              calculationMethod
+            )
+          "
+        />
         <v-btn
           text="Schließen"
           @click="isDialogShown = false"
