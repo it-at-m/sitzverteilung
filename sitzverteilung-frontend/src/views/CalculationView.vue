@@ -80,6 +80,7 @@
     <result-table
       class="mt-2"
       :calculation-result="calculationResult"
+      :show-seats="isCommitteeSizeEntered"
       @clicked-calculation-method="openDetailDialog"
     />
   </v-container>
@@ -144,6 +145,10 @@ const calculationResult = computed(() => {
   }
   return calculate(currentBaseData.value);
 });
+
+const isCommitteeSizeEntered = computed(
+  () => !!currentBaseData.value.committeeSize
+);
 
 onMounted(() => {
   baseDataFormRef?.value?.validateAllInputs();
