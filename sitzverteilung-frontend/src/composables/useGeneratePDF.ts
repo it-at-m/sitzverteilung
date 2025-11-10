@@ -17,8 +17,6 @@ const dataTextSize = 9;
 const parameterBoxHeight = 15;
 const boxLine = 0.5;
 
-let currentY: number;
-
 interface PartyEntry {
   nr: number;
   name: string;
@@ -26,48 +24,44 @@ interface PartyEntry {
 }
 
 export function useGeneratePDF(
-  baseData: BaseData,
-  calculationResult: CalculationResult,
-  usedCalculationMethod: CalculationMethod
+    baseData: BaseData,
+    calculationResult: CalculationResult,
+    usedCalculationMethod: CalculationMethod
 ) {
-  let doc = new jsPDF({
-    unit: "mm",
-    format: "a4",
-  });
+    let doc = new jsPDF({
+        unit: "mm",
+        format: "a4",
+    });
 
-  // header mit Zeitstempel
-  doc.setFontSize(8);
-  doc.text(new Date().toLocaleDateString("de-DE"), 200, 5, { align: "right" });
+    // Header
+    doc.setFontSize(8);
+    doc.text(new Date().toLocaleDateString("de-DE"), 200, 5, { align: "right" });
+    doc.setFontSize(headerFontSize);
+    doc.text("Sitzverteilung", 105, 10, { align: "center" });
+    doc.setLineWidth(boxLine);
+    doc.line(marginLeft, parameterBoxHeight, marginRight, parameterBoxHeight);
 
-  // header
-  doc.setFontSize(headerFontSize);
-  doc.text("Sitzverteilung", 105, 10, { align: "center" });
-  doc.setLineWidth(boxLine);
-  doc.line(marginLeft, parameterBoxHeight, marginRight, parameterBoxHeight);
+    // Parameter Box
+    doc.setFontSize(headerSize);
+    doc.text("Berechnung", marginLeft, 25);
+    doc = generateParameterBox(doc, baseData, usedCalculationMethod);
 
-  // calculation
-  doc.setFontSize(headerSize);
-  doc.text("Berechnung", marginLeft, 25);
+    // Parteien-Boxen
+    const [partysLeft, partysRight] = getAndSortGroupsFromBaseData(baseData);
+    const partysCount = Math.max(partysLeft.length, partysRight.length);
+    const partysBoxHeight = partysCount * lineHeight + boxPadding * 2 + 10;
 
-  doc = generateParameterBox(doc, baseData, usedCalculationMethod);
+    doc = generateLeftAndRightPartyBox(doc, partysLeft, partysRight, partysBoxHeight);
 
-  const [partysLeft, partysRight] = getAndSortGroupsFromBaseData(baseData);
-  const partysCount = Math.max(partysLeft.length, partysRight.length);
-  const partysBoxHeight = partysCount * lineHeight + boxPadding * 2 + 10;
+    let currentY = 70 + partysBoxHeight + parameterBoxHeight;
 
-  doc = generateLeftAndRightPartyBox(
-    doc,
-    partysLeft,
-    partysRight,
-    partysBoxHeight
-  );
+    ({ doc, currentY } = generateSeatDistribution(doc, calculationResult, currentY));
 
-  doc = generateSeatDistribution(doc, calculationResult, partysBoxHeight);
+    ({ doc } = generateQuotientBox(doc, calculationResult, usedCalculationMethod, currentY));
 
-  doc = generateQuotientBox(doc, calculationResult, usedCalculationMethod);
-
-  // save pdf
-  doc.save("seatDistribution.pdf");
+    // save pdf
+    const timestamp = new Date().toISOString().slice(0, 10);
+    doc.save(`Sitzverteilung_${usedCalculationMethod}_${timestamp}.pdf`);
 }
 
 function generateParameterBox(
@@ -87,12 +81,12 @@ function generateParameterBox(
   doc.setLineWidth(boxLine);
 
   const paramText =
-    "Anzahl der Sitze:" +
+    "Anzahl der Sitze: " +
     (baseData.committeeSize !== undefined
       ? baseData.committeeSize
       : "Kein Hauptorgan angegeben") +
     "   " +
-    "Berechnungsverfahren:" +
+    "Berechnungsverfahren: " +
     usedCalculationMethod;
   doc.text(paramText, marginLeft + 2, 48);
 
@@ -103,7 +97,7 @@ function getAndSortGroupsFromBaseData(
   baseData: BaseData
 ): [PartyEntry[], PartyEntry[]] {
   const groups = baseData.groups;
-  const sortedGroups = groups.sort((a, b) => {
+  const sortedGroups = [...groups].sort((a, b) => {
     const aSeatsOrVotes = a.seatsOrVotes || 0;
     const bSeatsOrVotes = b.seatsOrVotes || 0;
     return aSeatsOrVotes - bSeatsOrVotes;
@@ -157,164 +151,124 @@ function generateLeftAndRightPartyBox(
 }
 
 function generatePartyBoxText(
-  doc: jsPDF,
-  partys: PartyEntry[],
-  x: number
+    doc: jsPDF,
+    partys: PartyEntry[],
+    x: number
 ): void {
-  doc.setFontSize(headerSize);
-  doc.text("Nr.", x + 2, 75);
-  doc.text("Name", x + 10, 75);
-  doc.text("Stimmen/Sitze", x + 60, 75);
-  doc.setLineWidth(0.1);
-  doc.line(x + 2, 77, x + 88, 77);
+    doc.setFontSize(headerSize);
+    doc.text("Nr.", x + 2, 75);
+    doc.text("Name", x + 10, 75);
+    doc.text("Stimmen/Sitze", x + 60, 75);
+    doc.setLineWidth(0.1);
+    doc.line(x + 2, 77, x + 88, 77);
 
-  let currentY = 85;
-  doc.setFontSize(dataTextSize);
-  partys.forEach((p) => {
-    doc.text(String(p.nr), x + 2, currentY);
-    doc.text(p.name, x + 10, currentY);
-    doc.text(String(p.votes), x + 60, currentY);
-    currentY += lineHeight;
-  });
+    let currentY = 85;
+    doc.setFontSize(dataTextSize);
+
+    partys.forEach((p) => {
+        doc.text(String(p.nr), x + 2, currentY);
+        doc.text(p.name, x + 10, currentY);
+        doc.text(String(p.votes), x + 60, currentY);
+        currentY += lineHeight;
+    });
 }
 
 function generateSeatDistribution(
-  doc: jsPDF,
-  calculationResult: CalculationResult,
-  partysBoxHeight: number
-): jsPDF {
-  const seatDistribution = Object.entries(calculationResult.seats)
-    .map(([groupName, seats]) => ({
-      name: groupName,
-      seats: seats,
-    }))
-    .sort((a, b) => b.seats - a.seats);
+    doc: jsPDF,
+    calculationResult: CalculationResult,
+    currentY: number
+): { doc: jsPDF; currentY: number } {
 
-  doc.setLineWidth(boxLine);
-  const seatBoxX = marginLeft;
-  const seatBoxY = 70 + partysBoxHeight + parameterBoxHeight;
-  const seatBoxWidth = 190;
+    const seatDistribution = Object.entries(calculationResult.seats)
+        .map(([groupName, seats]) => ({ name: groupName, seats }))
+        .sort((a, b) => b.seats - a.seats);
 
-  // Calculation of maximum height before ratio box
-  const pageHeight = doc.internal.pageSize.height;
-  const bottomMargin = 25;
-  const maxY = pageHeight - bottomMargin;
-  const remainingHeight = maxY - (seatBoxY + 20);
+    const seatBoxX = marginLeft;
+    const seatBoxY = currentY;
+    const seatBoxWidth = 190;
 
-  const seatBoxHeight = Math.min(
-    seatDistribution.length * (lineHeight + 3),
-    remainingHeight
-  );
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 25;
+    const maxY = pageHeight - bottomMargin;
 
-  doc.rect(seatBoxX, seatBoxY, seatBoxWidth, seatBoxHeight + 10);
-  doc.setFontSize(headerSize);
-  doc.text("Sitzverteilung", seatBoxX + 2, seatBoxY + 8);
-  doc.setLineWidth(headerLine);
-  doc.line(seatBoxX + 2, seatBoxY + 10, seatBoxX + 188, seatBoxY + 10);
+    const seatBoxHeight = Math.min(
+        seatDistribution.length * (lineHeight + 3),
+        maxY - (seatBoxY + 20)
+    );
 
-  const seatBoxStartY = seatBoxY + 18;
-  const seatBoxHeightPerItem = lineHeight + 3;
+    doc.setLineWidth(boxLine);
+    doc.rect(seatBoxX, seatBoxY, seatBoxWidth, seatBoxHeight + 10);
+    doc.setFontSize(headerSize);
+    doc.text("Sitzverteilung", seatBoxX + 2, seatBoxY + 8);
+    doc.setLineWidth(headerLine);
+    doc.line(seatBoxX + 2, seatBoxY + 10, seatBoxX + 188, seatBoxY + 10);
 
-  currentY = seatBoxStartY;
-
-  seatDistribution.forEach((item) => {
-    // New page if space is not enough
-    if (currentY + seatBoxHeightPerItem > maxY) {
-      doc.addPage();
-      currentY = 20;
-
-      doc.setFontSize(boxLine);
-      doc.rect(seatBoxX, 5, seatBoxWidth, seatBoxHeight - 60);
-
-      doc.setFontSize(headerSize);
-      doc.text("Sitzverteilung (Fortsetzung)", marginLeft + 2, currentY - 10);
-    }
-
-    // Visual bar for seatDistribution
-    doc.setFontSize(dataTextSize);
-    doc.text(item.name, marginLeft + 2, currentY);
-    doc.text(String(item.seats), marginLeft + 55, currentY);
-
-    const barMaxWidth = seatBoxWidth - 65;
+    let y = seatBoxY + 18;
+    const seatBoxHeightPerItem = lineHeight + 3;
     const maxSeats = Math.max(...seatDistribution.map((s) => s.seats));
-    const barWidth = (item.seats / maxSeats) * barMaxWidth;
-    doc.setFillColor(150, 150, 150);
-    doc.rect(marginLeft + 60, currentY - 4, barWidth, 5, "F");
-    currentY += seatBoxHeightPerItem;
-  });
 
-  return doc;
+    seatDistribution.forEach((item) => {
+        if (y + seatBoxHeightPerItem > maxY) {
+            doc.addPage();
+            y = 20;
+            doc.setFontSize(headerSize);
+            doc.text("Sitzverteilung (Fortsetzung)", marginLeft + 2, y - 10);
+        }
+
+        doc.setFontSize(dataTextSize);
+        doc.text(item.name, marginLeft + 2, y);
+        doc.text(String(item.seats), marginLeft + 55, y);
+
+        const barMaxWidth = seatBoxWidth - 65;
+        const barWidth = (item.seats / maxSeats) * barMaxWidth;
+        doc.setFillColor(150, 150, 150);
+        doc.rect(marginLeft + 60, y - 4, barWidth, 5, "F");
+        y += seatBoxHeightPerItem;
+    });
+
+    return { doc, currentY: y };
 }
 
 function generateQuotientBox(
-  doc: jsPDF,
-  calculationResult: CalculationResult,
-  calculationMethod: CalculationMethod
-): jsPDF {
-  const methodResult = calculationResult.methods[calculationMethod];
+    doc: jsPDF,
+    calculationResult: CalculationResult,
+    calculationMethod: CalculationMethod,
+    currentY: number
+): { doc: jsPDF } {
 
-  if (!methodResult) {
-    doc.text(
-      "Keine Berechnung für dieses Verfahren gefunden.",
-      marginLeft + 2,
-      currentY + 15
-    );
-    return doc;
-  }
+    const methodResult = calculationResult.methods[calculationMethod];
+    if (!methodResult) {
+        doc.text("Keine Berechnung für dieses Verfahren gefunden.", marginLeft + 2, currentY + 15);
+        return { doc };
+    }
 
-  const seatCalculationX = marginLeft;
-  let seatCalculationY = currentY + 15; // Startposition nach Sitzverteilung
-  const seatCalculationWidth = 190;
+    const seatCalculationX = marginLeft;
+    let seatCalculationY = currentY + 15;
+    const seatCalculationWidth = 190;
+    const seatCalculationHeight = methodResult.order.length * lineHeight + boxPadding * 2 + 10;
 
-  // Dynamic height based off the amount of seats which have to be drawn
-  const seatCalculationHeight =
-    methodResult.order.length * lineHeight + boxPadding * 2 + 10;
+    const pageHeight = doc.internal.pageSize.height;
+    if (seatCalculationY + seatCalculationHeight > pageHeight - 15) {
+        doc.addPage();
+        seatCalculationY = 20;
+    }
 
-  // Check if enough space is on the page
-  const pageHeight = doc.internal.pageSize.height;
-  if (seatCalculationY + seatCalculationHeight > pageHeight - 15) {
-    doc.addPage();
-    seatCalculationY = 20;
-  }
+    doc.setDrawColor(0);
+    doc.setLineWidth(boxLine);
+    doc.rect(seatCalculationX, seatCalculationY, seatCalculationWidth, seatCalculationHeight);
+    doc.setFontSize(headerSize);
+    doc.text("Sitzreihung (Quotient)", seatCalculationX + 2, seatCalculationY + 8);
+    doc.setLineWidth(headerLine);
+    doc.line(seatCalculationX + 2, seatCalculationY + 10, seatCalculationX + 188, seatCalculationY + 10);
 
-  doc.setDrawColor(0);
-  doc.setLineWidth(boxLine);
-  doc.rect(
-    seatCalculationX,
-    seatCalculationY,
-    seatCalculationWidth,
-    seatCalculationHeight
-  );
-  doc.setFontSize(headerSize);
-  doc.text(
-    "Sitzreihung (Quotient)",
-    seatCalculationX + 2,
-    seatCalculationY + 8
-  );
-  doc.setLineWidth(headerLine);
-  doc.line(
-    seatCalculationX + 2,
-    seatCalculationY + 10,
-    seatCalculationX + 188,
-    seatCalculationY + 10
-  );
+    let y = seatCalculationY + 16;
+    doc.setFontSize(dataTextSize);
 
-  let currentYQuotient = seatCalculationY + 16;
-  doc.setFontSize(dataTextSize);
+    methodResult.order.forEach((item, index) => {
+        const seatNumber = index + 1;
+        doc.text(`${seatNumber}. Sitz: ${item.groupName} (${item.value.toFixed(3)})`, seatCalculationX + 2, y);
+        y += lineHeight;
+    });
 
-  // Full seatDistribution
-  methodResult.order.forEach((item, index) => {
-    const seatNumber = index + 1;
-    const groupName = item.groupName;
-    const value = item.value;
-
-    doc.text(
-      `${seatNumber}. Sitz: ${groupName} (${value.toFixed(3)})`,
-      seatCalculationX + 2,
-      currentYQuotient
-    );
-    currentYQuotient += lineHeight;
-  });
-
-  return doc;
+    return { doc };
 }

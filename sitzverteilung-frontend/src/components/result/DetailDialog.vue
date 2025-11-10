@@ -39,14 +39,13 @@
         <v-spacer />
         <v-btn
           text="PDF generieren"
+          :disabled="!currentBaseData || !calculationResult"
           @click="
-            useGeneratePDF(
-              <BaseData>currentBaseData,
-              <CalculationResult>calculationResult,
-              calculationMethod
-            )
-          "
-        />
+currentBaseData &&
+calculationResult &&
+ useGeneratePDF(currentBaseData, calculationResult, calculationMethod)
+"
+          />
         <v-btn
           text="Schließen"
           @click="isDialogShown = false"
