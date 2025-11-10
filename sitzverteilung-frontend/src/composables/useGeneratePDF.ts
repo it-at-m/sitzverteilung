@@ -79,8 +79,8 @@ export function useGeneratePDF(
     // save pdf
     const timestamp = new Date().toISOString().slice(0, 10);
     doc.save(`Sitzverteilung_${usedCalculationMethod}_${timestamp}.pdf`);
-  } catch {
-    throw new Error("Failed to generate PDF.");
+  } catch (error) {
+    throw new Error("Failed to generate PDF. Error:" + error);
   }
 }
 
