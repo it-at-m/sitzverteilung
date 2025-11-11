@@ -38,6 +38,18 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
+          text="PDF generieren"
+          :disabled="!calculationResult"
+          @click="
+            generatePDF(
+              targetSize,
+              committeeSize,
+              calculationResult!,
+              calculationMethod
+            )
+          "
+        />
+        <v-btn
           text="Schließen"
           @click="isDialogShown = false"
         />
@@ -54,6 +66,7 @@ import { mdiInformation } from "@mdi/js";
 import ResultTable from "@/components/result/ResultTable.vue";
 import SeatOrderTable from "@/components/result/SeatOrderTable.vue";
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import { generatePDF } from "@/utility/pdfGeneration.ts";
 
 const isDialogShown = defineModel<boolean>({ required: true });
 defineProps<{
