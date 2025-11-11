@@ -16,7 +16,7 @@ export function generatePDF(
   committeeSize: number | undefined,
   calculationResult: CalculationResult,
   usedCalculationMethod: CalculationMethod
-) {
+): void {
   try {
     const doc = new jsPDF({
       unit: "mm",
@@ -63,7 +63,7 @@ export function generatePDF(
   }
 }
 
-function generateHeader(doc: jsPDF, timestamp: Date) {
+function generateHeader(doc: jsPDF, timestamp: Date): void {
   doc.setFontSize(PDF_CONFIGURATIONS.timestampSize);
   doc.text(timestamp.toLocaleDateString("de-DE"), 200, 5, {
     align: "right",
@@ -111,7 +111,8 @@ function generateParameterBox(
     (committeeSize !== undefined ? committeeSize : "Kein Hauptorgan angegeben");
   doc.text(paramText, PDF_CONFIGURATIONS.marginLeft + 2, 43);
   doc.text(
-    "Ausschussgröße: " + targetSize,
+    "Ausschussgröße: " +
+      (targetSize !== undefined ? targetSize : "Keine Angabe"),
     PDF_CONFIGURATIONS.marginLeft + 2,
     48
   );
