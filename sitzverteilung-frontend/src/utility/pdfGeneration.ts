@@ -28,9 +28,6 @@ export function generatePDF(
     const timestamp = new Date();
     generateHeader(doc, timestamp);
 
-    // Parameter Box
-    doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-    doc.text("Berechnung", PDF_CONFIGURATIONS.marginLeft, 20);
     generateParameterBox(doc, committeeSize, targetSize, usedCalculationMethod);
 
     const [partysLeft, partysRight] = getAndSortGroups(calculationResult);
@@ -55,9 +52,10 @@ export function generatePDF(
       currentY
     );
 
-    doc.save(
-      `Sitzverteilung_${usedCalculationMethod}_${timestamp.toISOString().slice(0, 10)}.pdf`
-    );
+    const timeStampForExport = timestamp.toISOString().slice(0, 10);
+    const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
+
+    doc.save(exportFileName);
   } catch (error) {
     throw new Error("Failed to generate PDF. Error:" + error);
   }
@@ -77,6 +75,8 @@ function generateHeader(doc: jsPDF, timestamp: Date): void {
     PDF_CONFIGURATIONS.marginRight,
     25
   );
+  doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+  doc.text("Berechnung", PDF_CONFIGURATIONS.marginLeft, 20);
 }
 
 function generateParameterBox(
@@ -135,7 +135,7 @@ function getAndSortGroups(
     };
   });
 
-  const sortedGroups = [...groups].sort((a, b) => {
+  const sortedGroups = groups.sort((a, b) => {
     const aSeatsOrVotes = a.seatsOrVotes ?? 0;
     const bSeatsOrVotes = b.seatsOrVotes ?? 0;
     return aSeatsOrVotes - bSeatsOrVotes;
