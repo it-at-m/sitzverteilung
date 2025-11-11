@@ -44,7 +44,7 @@
             generatePDF(
               targetSize,
               committeeSize,
-              <CalculationResult>calculationResult,
+              calculationResult!,
               calculationMethod
             )
           "

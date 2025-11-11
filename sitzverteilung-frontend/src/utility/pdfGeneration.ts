@@ -17,48 +17,39 @@ export function generatePDF(
   calculationResult: CalculationResult,
   usedCalculationMethod: CalculationMethod
 ): void {
-  try {
-    const doc = new jsPDF({
-      unit: "mm",
-      format: "a4",
-      putOnlyUsedFonts: true,
-      compress: true,
-    });
+  const doc = new jsPDF({
+    unit: "mm",
+    format: "a4",
+    putOnlyUsedFonts: true,
+    compress: true,
+  });
 
-    const timestamp = new Date();
-    generateHeader(doc, timestamp);
+  const timestamp = new Date();
+  generateHeader(doc, timestamp);
 
-    generateParameterBox(doc, committeeSize, targetSize, usedCalculationMethod);
+  generateParameterBox(doc, committeeSize, targetSize, usedCalculationMethod);
 
-    const [partysLeft, partysRight] = getAndSortGroups(calculationResult);
+  const [partysLeft, partysRight] = getAndSortGroups(calculationResult);
 
-    // Calculate Party Box Height
-    const partysCount = Math.max(partysLeft.length, partysRight.length);
-    const partysBoxHeight =
-      partysCount * PDF_CONFIGURATIONS.lineHeight +
-      PDF_CONFIGURATIONS.boxPadding * 2 +
-      10;
+  // Calculate Party Box Height
+  const partysCount = Math.max(partysLeft.length, partysRight.length);
+  const partysBoxHeight =
+    partysCount * PDF_CONFIGURATIONS.lineHeight +
+    PDF_CONFIGURATIONS.boxPadding * 2 +
+    10;
 
-    generateLeftAndRightPartyBox(doc, partysLeft, partysRight, partysBoxHeight);
+  generateLeftAndRightPartyBox(doc, partysLeft, partysRight, partysBoxHeight);
 
-    let currentY = 70 + partysBoxHeight + PDF_CONFIGURATIONS.parameterBoxHeight;
+  let currentY = 70 + partysBoxHeight + PDF_CONFIGURATIONS.parameterBoxHeight;
 
-    currentY = generateSeatDistribution(doc, calculationResult, currentY);
+  currentY = generateSeatDistribution(doc, calculationResult, currentY);
 
-    generateQuotientBox(
-      doc,
-      calculationResult,
-      usedCalculationMethod,
-      currentY
-    );
+  generateQuotientBox(doc, calculationResult, usedCalculationMethod, currentY);
 
-    const timeStampForExport = timestamp.toISOString().slice(0, 10);
-    const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
+  const timeStampForExport = timestamp.toISOString().slice(0, 10);
+  const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
 
-    doc.save(exportFileName);
-  } catch (error) {
-    throw new Error("Failed to generate PDF. Error:" + error);
-  }
+  doc.save(exportFileName);
 }
 
 function generateHeader(doc: jsPDF, timestamp: Date): void {
@@ -135,7 +126,8 @@ function getAndSortGroups(
     };
   });
 
-  const sortedGroups = groups.sort((a, b) => {
+  // @ts-expect-error newer API is not picked up by TS compiler, but available in browser
+  const sortedGroups = groups.toSorted((a, b) => {
     const aSeatsOrVotes = a.seatsOrVotes ?? 0;
     const bSeatsOrVotes = b.seatsOrVotes ?? 0;
     return aSeatsOrVotes - bSeatsOrVotes;
