@@ -136,8 +136,8 @@ function getAndSortGroups(
   });
 
   const sortedGroups = [...groups].sort((a, b) => {
-    const aSeatsOrVotes = a.seatsOrVotes || 0;
-    const bSeatsOrVotes = b.seatsOrVotes || 0;
+    const aSeatsOrVotes = a.seatsOrVotes ?? 0;
+    const bSeatsOrVotes = b.seatsOrVotes ?? 0;
     return aSeatsOrVotes - bSeatsOrVotes;
   });
 
