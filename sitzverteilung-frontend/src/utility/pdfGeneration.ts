@@ -153,7 +153,7 @@ function getAndSortGroups(
       const entry: PartyEntry = {
         nr: i + 1,
         name: group.name,
-        votes: group.seatsOrVotes || 0,
+        votes: group.seatsOrVotes,
       };
 
       if (i < midIndex) {
