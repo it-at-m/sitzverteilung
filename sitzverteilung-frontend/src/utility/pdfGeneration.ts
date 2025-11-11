@@ -204,11 +204,20 @@ function generatePartyBoxText(
   let currentY = 85;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
 
+  const seatBoxHeightPerItem = PDF_CONFIGURATIONS.lineHeight;
+
   partys.forEach((p) => {
+    if (currentY + seatBoxHeightPerItem > doc.internal.pageSize.height - 25) {
+      doc.addPage();
+      currentY = 20;
+      doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+      doc.text("Parteien (Fortsetzung)", x + 2, currentY - 10);
+    }
+
     doc.text(String(p.nr), x + 2, currentY);
     doc.text(p.name, x + 10, currentY);
     doc.text(String(p.votes), x + 60, currentY);
-    currentY += PDF_CONFIGURATIONS.lineHeight;
+    currentY += seatBoxHeightPerItem;
   });
 }
 
