@@ -196,6 +196,11 @@ const headers = computed(() => [
     key: `${method}Title`,
     children: [
       {
+        title: "Zulässigkeit",
+        key: `${method}${ResultDataSuffix.validationSuffix}`,
+        width: !methodToDisplay ? 150 : undefined,
+      },
+      {
         title: "Sitze",
         key: `${method}${ResultDataSuffix.seatsSuffix}`,
       },
@@ -204,11 +209,6 @@ const headers = computed(() => [
         key: `${method}${ResultDataSuffix.staleSuffix}`,
         width: !methodToDisplay ? 50 : undefined,
         align: !methodToDisplay ? "center" : "left",
-      },
-      {
-        title: "Zulässigkeit",
-        key: `${method}${ResultDataSuffix.validationSuffix}`,
-        width: !methodToDisplay ? 150 : undefined,
       },
     ],
   })),
