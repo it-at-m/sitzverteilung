@@ -47,17 +47,17 @@
             column,
           }"
         >
-          <div
-            v-if="mappedResult.length"
-            class="d-flex flex-row justify-center align-center ga-2"
-          >
+          <div class="d-flex flex-row justify-center align-center ga-2">
             <span
-              :class="{ 'bg-error': !isMethodValid(method) }"
+              :class="{
+                'bg-error': mappedResult.length && !isMethodValid(method),
+              }"
               class="px-2 py-1 rounded-sm"
             >
               {{ column.title }}
             </span>
             <v-icon
+              v-if="mappedResult.length"
               :icon="isMethodValid(method) ? mdiCheck : mdiClose"
               :color="isMethodValid(method) ? 'success' : 'error'"
             />
