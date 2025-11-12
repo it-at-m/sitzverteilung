@@ -16,7 +16,7 @@
         class="px-2"
       >
         <template #prepend>
-          <p class="text-h6 font-weight-bold">{{ dataTableTitle }}</p>
+          <p class="text-subtitle-1 font-weight-bold">{{ dataTableTitle }}</p>
         </template>
       </v-toolbar>
     </template>

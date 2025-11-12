@@ -19,7 +19,7 @@
         class="px-2"
       >
         <template #prepend>
-          <p class="text-h6 font-weight-bold">
+          <p class="text-subtitle-1 font-weight-bold">
             Parteien / Gruppierungen / Einzelmitglieder
           </p>
         </template>
