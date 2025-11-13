@@ -6,7 +6,6 @@ import { PDF_CONFIGURATIONS } from "@/constants.ts";
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
 interface PartyEntry {
-  nr: number;
   name: string;
   votes: number;
 }
@@ -42,7 +41,20 @@ export function generatePDF(
 
   let currentY = 70 + partysBoxHeight + PDF_CONFIGURATIONS.parameterBoxHeight;
 
-  currentY = generateSeatDistribution(doc, calculationResult, currentY);
+  generateHeaderForCalculationResults(doc, currentY);
+
+  currentY = generateSeatDistribution(
+    doc,
+    calculationResult,
+    usedCalculationMethod,
+    currentY
+  );
+  generateSeatDistributionFooter(
+    doc,
+    calculationResult,
+    usedCalculationMethod,
+    currentY
+  );
 
   generateQuotientBox(doc, calculationResult, usedCalculationMethod, currentY);
 
@@ -67,7 +79,7 @@ function generateHeader(doc: jsPDF, timestamp: Date): void {
     25
   );
   doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-  doc.text("Berechnung", PDF_CONFIGURATIONS.marginLeft, 20);
+  doc.text("Berechnungsbasis", PDF_CONFIGURATIONS.marginLeft, 20);
 }
 
 function generateParameterBox(
@@ -98,7 +110,7 @@ function generateParameterBox(
   doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
 
   const paramText =
-    "Anzahl der Sitze: " +
+    "Größe des Hauptorgans: " +
     (committeeSize !== undefined ? committeeSize : "Kein Hauptorgan angegeben");
   doc.text(paramText, PDF_CONFIGURATIONS.marginLeft + 2, 43);
   doc.text(
@@ -130,7 +142,7 @@ function getAndSortGroups(
   const sortedGroups = groups.toSorted((a, b) => {
     const aSeatsOrVotes = a.seatsOrVotes ?? 0;
     const bSeatsOrVotes = b.seatsOrVotes ?? 0;
-    return aSeatsOrVotes - bSeatsOrVotes;
+    return bSeatsOrVotes - aSeatsOrVotes;
   });
 
   const partysLeft: PartyEntry[] = [];
@@ -143,7 +155,6 @@ function getAndSortGroups(
     const group = sortedGroups[i];
     if (group) {
       const entry: PartyEntry = {
-        nr: i + 1,
         name: group.name,
         votes: group.seatsOrVotes,
       };
@@ -187,11 +198,10 @@ function generatePartyBoxText(
   x: number
 ): void {
   doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-  doc.text("Nr.", x + 2, 75);
-  doc.text("Name", x + 10, 75);
+  doc.text("Name", x + 5, 75);
   doc.text("Stimmen/Sitze", x + 60, 75);
   doc.setLineWidth(0.1);
-  doc.line(x + 2, 77, x + 88, 77);
+  doc.line(x + 2, 77, x + 78, 77);
 
   let currentY = 85;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
@@ -205,72 +215,109 @@ function generatePartyBoxText(
       doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
       doc.text("Parteien (Fortsetzung)", x + 2, currentY - 10);
     }
-
-    doc.text(String(p.nr), x + 2, currentY);
-    doc.text(p.name, x + 10, currentY);
+    doc.text(p.name, x + 5, currentY);
     doc.text(String(p.votes), x + 60, currentY);
     currentY += seatBoxHeightPerItem;
   });
 }
 
+function generateHeaderForCalculationResults(doc: jsPDF, currentY: number) {
+  doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
+  doc.line(
+    PDF_CONFIGURATIONS.marginLeft,
+    currentY - 5,
+    PDF_CONFIGURATIONS.marginRight,
+    currentY - 5
+  );
+  doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+  doc.text("Berechnungsergebnis", PDF_CONFIGURATIONS.marginLeft, currentY - 10);
+}
+
 function generateSeatDistribution(
   doc: jsPDF,
   calculationResult: CalculationResult,
+  calculationMethod: CalculationMethod,
   currentY: number
 ): number {
-  const seatDistribution = Object.entries(calculationResult.seats)
-    .map(([groupName, seats]) => ({ name: groupName, seats }))
-    .sort((a, b) => b.seats - a.seats);
+  const methodResult = calculationResult.methods[calculationMethod];
+  if (methodResult) {
+    const seatDistribution = Object.entries(methodResult.distribution)
+      .map(([groupName, seats]) => ({ name: groupName, seats }))
+      .sort((a, b) => b.seats - a.seats);
 
-  const seatBoxX = PDF_CONFIGURATIONS.marginLeft;
-  const seatBoxY = currentY;
-  const seatBoxWidth = 190;
+    const seatBoxX = PDF_CONFIGURATIONS.marginLeft;
+    const seatBoxY = currentY;
+    const seatBoxWidth = 190;
 
-  const pageHeight = doc.internal.pageSize.height;
-  const bottomMargin = 25;
-  const maxY = pageHeight - bottomMargin;
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 25;
+    const maxY = pageHeight - bottomMargin;
 
-  const seatBoxHeight = Math.min(
-    seatDistribution.length * (PDF_CONFIGURATIONS.lineHeight + 3),
-    maxY - (seatBoxY + 20)
-  );
+    const seatBoxHeight = Math.min(
+      seatDistribution.length * (PDF_CONFIGURATIONS.lineHeight + 3),
+      maxY - (seatBoxY + 20)
+    );
 
-  doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
-  doc.rect(seatBoxX, seatBoxY, seatBoxWidth, seatBoxHeight + 10);
-  doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-  doc.text("Sitzverteilung", seatBoxX + 2, seatBoxY + 8);
-  doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
-  doc.line(seatBoxX + 2, seatBoxY + 10, seatBoxX + 188, seatBoxY + 10);
+    doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
+    doc.rect(seatBoxX, seatBoxY, seatBoxWidth, seatBoxHeight + 10);
+    doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+    doc.text("Sitzverteilung", seatBoxX + 2, seatBoxY + 8);
+    doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
+    doc.line(seatBoxX + 2, seatBoxY + 10, seatBoxX + 188, seatBoxY + 10);
 
-  let y = seatBoxY + 18;
-  const seatBoxHeightPerItem = PDF_CONFIGURATIONS.lineHeight + 3;
-  const maxSeats = Math.max(...seatDistribution.map((s) => s.seats));
-  const validMaxSeats = maxSeats > 0 ? maxSeats : 1;
+    let y = seatBoxY + 18;
+    const seatBoxHeightPerItem = PDF_CONFIGURATIONS.lineHeight + 3;
+    const maxSeats = Math.max(...seatDistribution.map((s) => s.seats));
+    const validMaxSeats = maxSeats > 0 ? maxSeats : 1;
 
-  seatDistribution.forEach((item) => {
-    if (y + seatBoxHeightPerItem > maxY) {
-      doc.addPage();
-      y = 20;
-      doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-      doc.text(
-        "Sitzverteilung (Fortsetzung)",
-        PDF_CONFIGURATIONS.marginLeft + 2,
-        y - 10
-      );
-    }
+    seatDistribution.forEach((item) => {
+      if (y + seatBoxHeightPerItem > maxY) {
+        doc.addPage();
+        y = 20;
+        doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+        doc.text(
+          "Sitzverteilung (Fortsetzung)",
+          PDF_CONFIGURATIONS.marginLeft + 2,
+          y - 10
+        );
+      }
 
-    doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
-    doc.text(item.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
-    doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 55, y);
+      doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
+      doc.text(item.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
+      doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 55, y);
 
-    const barMaxWidth = seatBoxWidth - 65;
-    const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
-    doc.setFillColor(150, 150, 150);
-    doc.rect(PDF_CONFIGURATIONS.marginLeft + 60, y - 4, barWidth, 5, "F");
-    y += seatBoxHeightPerItem;
-  });
+      const barMaxWidth = seatBoxWidth - 65;
+      const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
+      doc.setFillColor(150, 150, 150);
+      doc.rect(PDF_CONFIGURATIONS.marginLeft + 60, y - 4, barWidth, 5, "F");
+      y += seatBoxHeightPerItem;
+    });
+    return y;
+  } else {
+    return currentY;
+  }
+}
 
-  return y;
+function generateSeatDistributionFooter(
+  doc: jsPDF,
+  calculationResult: CalculationResult,
+  calculationMethod: CalculationMethod,
+  currentY: number
+): void {
+  if (calculationResult.methods[calculationMethod]?.stale) {
+    doc.setFontSize(PDF_CONFIGURATIONS.footerTextSize);
+    doc.setTextColor(255, 0, 0);
+    doc.text(
+      "Patt zwischen: " +
+        calculationResult.methods[calculationMethod]?.stale?.groupNames +
+        " bei " +
+        calculationResult.methods[calculationMethod]?.stale?.amountSeats +
+        " Sitzen",
+      PDF_CONFIGURATIONS.marginLeft + 2,
+      currentY - 2
+    );
+    doc.setTextColor(0, 0, 0);
+  }
 }
 
 function generateQuotientBox(
