@@ -1,4 +1,7 @@
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
+import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
+import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 
 import { jsPDF } from "jspdf";
 
@@ -43,20 +46,21 @@ export function generatePDF(
 
   generateHeaderForCalculationResults(doc, currentY);
 
-  currentY = generateSeatDistribution(
-    doc,
-    calculationResult,
-    usedCalculationMethod,
-    currentY
-  );
-  generateSeatDistributionFooter(
-    doc,
-    calculationResult,
-    usedCalculationMethod,
-    currentY
-  );
+  const seatDistribution =
+    calculationResult.methods[usedCalculationMethod]?.distribution;
+  if (seatDistribution) {
+    currentY = generateSeatDistribution(doc, seatDistribution, currentY);
+  }
 
-  generateQuotientBox(doc, calculationResult, usedCalculationMethod, currentY);
+  const stale = calculationResult.methods[usedCalculationMethod]?.stale;
+  if (stale) {
+    generateSeatDistributionFooter(doc, stale, currentY);
+  }
+
+  const seatOrder = calculationResult.methods[usedCalculationMethod]?.order;
+  if (seatOrder) {
+    generateQuotientBox(doc, seatOrder, currentY);
+  }
 
   const timeStampForExport = timestamp.toISOString().slice(0, 10);
   const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
@@ -114,7 +118,7 @@ function generateParameterBox(
     (committeeSize ? committeeSize : "Keine Angabe");
   doc.text(paramText, PDF_CONFIGURATIONS.marginLeft + 2, 43);
   doc.text(
-    "Ausschussgröße: " + (targetSize ? targetSize : "Keine Angabe"),
+    "Ausschussgröße: " + targetSize,
     PDF_CONFIGURATIONS.marginLeft + 2,
     48
   );
@@ -236,112 +240,92 @@ function generateHeaderForCalculationResults(doc: jsPDF, currentY: number) {
 
 function generateSeatDistribution(
   doc: jsPDF,
-  calculationResult: CalculationResult,
-  calculationMethod: CalculationMethod,
+  seatDistributionFromCalculation: CalculationSeatDistribution,
   currentY: number
 ): number {
-  const methodResult = calculationResult.methods[calculationMethod];
-  if (methodResult) {
-    const seatDistribution = Object.entries(methodResult.distribution)
-      .map(([groupName, seats]) => ({ name: groupName, seats }))
-      .sort((a, b) => b.seats - a.seats);
+  const seatDistribution = Object.entries(seatDistributionFromCalculation)
+    .map(([groupName, seats]) => ({ name: groupName, seats }))
+    .sort((a, b) => b.seats - a.seats);
 
-    const seatBoxX = PDF_CONFIGURATIONS.marginLeft;
-    const seatBoxY = currentY;
-    const seatBoxWidth = 190;
+  const seatBoxX = PDF_CONFIGURATIONS.marginLeft;
+  const seatBoxY = currentY;
+  const seatBoxWidth = 190;
 
-    const pageHeight = doc.internal.pageSize.height;
-    const bottomMargin = 25;
-    const maxY = pageHeight - bottomMargin;
+  const pageHeight = doc.internal.pageSize.height;
+  const bottomMargin = 25;
+  const maxY = pageHeight - bottomMargin;
 
-    const seatBoxHeight = Math.min(
-      seatDistribution.length * (PDF_CONFIGURATIONS.lineHeight + 3),
-      maxY - (seatBoxY + 20)
-    );
+  const seatBoxHeight = Math.min(
+    seatDistribution.length * (PDF_CONFIGURATIONS.lineHeight + 3),
+    maxY - (seatBoxY + 20)
+  );
 
-    doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
-    doc.rect(seatBoxX, seatBoxY, seatBoxWidth, seatBoxHeight + 10);
-    doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-    doc.text("Sitzverteilung", seatBoxX + 2, seatBoxY + 8);
-    doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
-    doc.line(seatBoxX + 2, seatBoxY + 10, seatBoxX + 188, seatBoxY + 10);
+  doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
+  doc.rect(seatBoxX, seatBoxY, seatBoxWidth, seatBoxHeight + 10);
+  doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+  doc.text("Sitzverteilung", seatBoxX + 2, seatBoxY + 8);
+  doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
+  doc.line(seatBoxX + 2, seatBoxY + 10, seatBoxX + 188, seatBoxY + 10);
 
-    let y = seatBoxY + 18;
-    const seatBoxHeightPerItem = PDF_CONFIGURATIONS.lineHeight + 3;
-    const maxSeats = Math.max(...seatDistribution.map((s) => s.seats));
-    const validMaxSeats = maxSeats > 0 ? maxSeats : 1;
+  let y = seatBoxY + 18;
+  const seatBoxHeightPerItem = PDF_CONFIGURATIONS.lineHeight + 3;
+  const maxSeats = Math.max(...seatDistribution.map((s) => s.seats));
+  const validMaxSeats = maxSeats > 0 ? maxSeats : 1;
 
-    seatDistribution.forEach((item) => {
-      if (y + seatBoxHeightPerItem > maxY) {
-        doc.addPage();
-        y = 20;
-        doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-        doc.text(
-          "Sitzverteilung (Fortsetzung)",
-          PDF_CONFIGURATIONS.marginLeft + 2,
-          y - 10
-        );
-      }
+  seatDistribution.forEach((item) => {
+    if (y + seatBoxHeightPerItem > maxY) {
+      doc.addPage();
+      y = 20;
+      doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+      doc.text(
+        "Sitzverteilung (Fortsetzung)",
+        PDF_CONFIGURATIONS.marginLeft + 2,
+        y - 10
+      );
+    }
 
-      doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
-      doc.text(item.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
-      doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 105, y);
+    doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
+    doc.text(item.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
+    doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 105, y);
 
-      const barMaxWidth = seatBoxWidth - 115;
-      const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
-      doc.setFillColor(150, 150, 150);
-      doc.rect(PDF_CONFIGURATIONS.marginLeft + 110, y - 4, barWidth, 5, "F");
-      y += seatBoxHeightPerItem;
-    });
-    return y;
-  } else {
-    return currentY;
-  }
+    const barMaxWidth = seatBoxWidth - 115;
+    const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
+    doc.setFillColor(150, 150, 150);
+    doc.rect(PDF_CONFIGURATIONS.marginLeft + 110, y - 4, barWidth, 5, "F");
+    y += seatBoxHeightPerItem;
+  });
+  return y;
 }
 
 function generateSeatDistributionFooter(
   doc: jsPDF,
-  calculationResult: CalculationResult,
-  calculationMethod: CalculationMethod,
+  stale: CalculationStale,
   currentY: number
 ): void {
-  if (calculationResult.methods[calculationMethod]?.stale) {
-    doc.setFontSize(PDF_CONFIGURATIONS.footerTextSize);
-    doc.setTextColor(255, 0, 0);
-    doc.text(
-      "Patt zwischen: " +
-        calculationResult.methods[calculationMethod]?.stale?.groupNames +
-        " bei " +
-        calculationResult.methods[calculationMethod]?.stale?.amountSeats +
-        " Sitzen",
-      PDF_CONFIGURATIONS.marginLeft + 2,
-      currentY - 2
-    );
-    doc.setTextColor(0, 0, 0);
-  }
+  doc.setFontSize(PDF_CONFIGURATIONS.footerTextSize);
+  doc.setTextColor(255, 0, 0);
+  doc.text(
+    "Patt zwischen: " +
+      stale.groupNames +
+      " bei " +
+      stale.amountSeats +
+      " Sitzen",
+    PDF_CONFIGURATIONS.marginLeft + 2,
+    currentY - 2
+  );
+  doc.setTextColor(0, 0, 0);
 }
 
 function generateQuotientBox(
   doc: jsPDF,
-  calculationResult: CalculationResult,
-  calculationMethod: CalculationMethod,
+  seatOrder: CalculationSeatOrder,
   currentY: number
 ): void {
-  const methodResult = calculationResult.methods[calculationMethod];
-  if (!methodResult) {
-    doc.text(
-      "Keine Berechnung für dieses Verfahren gefunden.",
-      PDF_CONFIGURATIONS.marginLeft + 2,
-      currentY + 15
-    );
-    return;
-  }
-
   const seatCalculationX = PDF_CONFIGURATIONS.marginLeft;
   let seatCalculationY = currentY + 15;
   const seatCalculationWidth = 190;
   const seatCalculationHeight =
-    methodResult.order.length * PDF_CONFIGURATIONS.lineHeight +
+    seatOrder.length * PDF_CONFIGURATIONS.lineHeight +
     PDF_CONFIGURATIONS.boxPadding * 2 +
     10;
 
@@ -380,7 +364,7 @@ function generateQuotientBox(
   let y = seatCalculationY + 16;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
 
-  if (methodResult.order.length === 0) {
+  if (seatOrder.length === 0) {
     doc.text(
       "Es konnte kein Sitz eindeutig vergeben werden.",
       seatCalculationX + 2,
@@ -389,7 +373,7 @@ function generateQuotientBox(
     return;
   }
 
-  methodResult.order.forEach((item, index) => {
+  seatOrder.forEach((item, index) => {
     if (y > maxY - 10) {
       doc.addPage();
       seatCalculationY = 20;
