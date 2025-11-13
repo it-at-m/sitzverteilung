@@ -1,6 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import { formatVisiblePrecision } from "../../src/utility/numberFormatter";
+import {
+  formatVisiblePrecision,
+  roundToExactDecimals,
+} from "../../src/utility/numberFormatter";
 
 describe("numberFormatter tests", () => {
   test("formatVisiblePrecision", () => {
@@ -18,6 +21,15 @@ describe("numberFormatter tests", () => {
     ];
 
     const result = formatVisiblePrecision(numbers);
+
+    expect(result).toEqual(expected);
+  });
+
+  test("roundToExactDecimals", () => {
+    const num = 1.4356;
+    const expected = "1,436";
+
+    const result = roundToExactDecimals(num, 3);
 
     expect(result).toEqual(expected);
   });
