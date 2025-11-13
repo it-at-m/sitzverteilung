@@ -1,4 +1,7 @@
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
+import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
+import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 
 import { jsPDF } from "jspdf";
 
@@ -6,7 +9,6 @@ import { PDF_CONFIGURATIONS } from "@/constants.ts";
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 
 interface PartyEntry {
-  nr: number;
   name: string;
   votes: number;
 }
@@ -42,9 +44,23 @@ export function generatePDF(
 
   let currentY = 70 + partysBoxHeight + PDF_CONFIGURATIONS.parameterBoxHeight;
 
-  currentY = generateSeatDistribution(doc, calculationResult, currentY);
+  generateHeaderForCalculationResults(doc, currentY);
 
-  generateQuotientBox(doc, calculationResult, usedCalculationMethod, currentY);
+  const seatDistribution =
+    calculationResult.methods[usedCalculationMethod]?.distribution;
+  if (seatDistribution) {
+    currentY = generateSeatDistribution(doc, seatDistribution, currentY);
+  }
+
+  const stale = calculationResult.methods[usedCalculationMethod]?.stale;
+  if (stale) {
+    generateSeatDistributionFooter(doc, stale, currentY);
+  }
+
+  const seatOrder = calculationResult.methods[usedCalculationMethod]?.order;
+  if (seatOrder) {
+    generateQuotientBox(doc, seatOrder, currentY);
+  }
 
   const timeStampForExport = timestamp.toISOString().slice(0, 10);
   const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
@@ -67,7 +83,7 @@ function generateHeader(doc: jsPDF, timestamp: Date): void {
     25
   );
   doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-  doc.text("Berechnung", PDF_CONFIGURATIONS.marginLeft, 20);
+  doc.text("Berechnungsbasis", PDF_CONFIGURATIONS.marginLeft, 20);
 }
 
 function generateParameterBox(
@@ -98,12 +114,11 @@ function generateParameterBox(
   doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
 
   const paramText =
-    "Anzahl der Sitze: " +
-    (committeeSize !== undefined ? committeeSize : "Kein Hauptorgan angegeben");
+    "Größe des Hauptorgans: " +
+    (committeeSize ? committeeSize : "Keine Angabe");
   doc.text(paramText, PDF_CONFIGURATIONS.marginLeft + 2, 43);
   doc.text(
-    "Ausschussgröße: " +
-      (targetSize !== undefined ? targetSize : "Keine Angabe"),
+    "Ausschussgröße: " + targetSize,
     PDF_CONFIGURATIONS.marginLeft + 2,
     48
   );
@@ -130,7 +145,7 @@ function getAndSortGroups(
   const sortedGroups = groups.toSorted((a, b) => {
     const aSeatsOrVotes = a.seatsOrVotes ?? 0;
     const bSeatsOrVotes = b.seatsOrVotes ?? 0;
-    return aSeatsOrVotes - bSeatsOrVotes;
+    return bSeatsOrVotes - aSeatsOrVotes;
   });
 
   const partysLeft: PartyEntry[] = [];
@@ -143,7 +158,6 @@ function getAndSortGroups(
     const group = sortedGroups[i];
     if (group) {
       const entry: PartyEntry = {
-        nr: i + 1,
         name: group.name,
         votes: group.seatsOrVotes,
       };
@@ -166,7 +180,9 @@ function generateLeftAndRightPartyBox(
   partysBoxHeight: number
 ): void {
   doc.setFontSize(12);
-  doc.text("Parteien", PDF_CONFIGURATIONS.marginLeft, 65, { align: "left" });
+  doc.text("Zusammensetzung", PDF_CONFIGURATIONS.marginLeft, 65, {
+    align: "left",
+  });
 
   const leftBoxX = PDF_CONFIGURATIONS.marginLeft;
   doc.setLineWidth(0.5);
@@ -187,11 +203,10 @@ function generatePartyBoxText(
   x: number
 ): void {
   doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
-  doc.text("Nr.", x + 2, 75);
-  doc.text("Name", x + 10, 75);
+  doc.text("Name", x + 5, 75);
   doc.text("Stimmen/Sitze", x + 60, 75);
   doc.setLineWidth(0.1);
-  doc.line(x + 2, 77, x + 88, 77);
+  doc.line(x + 2, 77, x + 78, 77);
 
   let currentY = 85;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
@@ -205,20 +220,30 @@ function generatePartyBoxText(
       doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
       doc.text("Parteien (Fortsetzung)", x + 2, currentY - 10);
     }
-
-    doc.text(String(p.nr), x + 2, currentY);
-    doc.text(p.name, x + 10, currentY);
+    doc.text(p.name, x + 5, currentY);
     doc.text(String(p.votes), x + 60, currentY);
     currentY += seatBoxHeightPerItem;
   });
 }
 
+function generateHeaderForCalculationResults(doc: jsPDF, currentY: number) {
+  doc.setLineWidth(PDF_CONFIGURATIONS.boxLine);
+  doc.line(
+    PDF_CONFIGURATIONS.marginLeft,
+    currentY - 5,
+    PDF_CONFIGURATIONS.marginRight,
+    currentY - 5
+  );
+  doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
+  doc.text("Berechnungsergebnis", PDF_CONFIGURATIONS.marginLeft, currentY - 10);
+}
+
 function generateSeatDistribution(
   doc: jsPDF,
-  calculationResult: CalculationResult,
+  seatDistributionFromCalculation: CalculationSeatDistribution,
   currentY: number
 ): number {
-  const seatDistribution = Object.entries(calculationResult.seats)
+  const seatDistribution = Object.entries(seatDistributionFromCalculation)
     .map(([groupName, seats]) => ({ name: groupName, seats }))
     .sort((a, b) => b.seats - a.seats);
 
@@ -261,39 +286,46 @@ function generateSeatDistribution(
 
     doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
     doc.text(item.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
-    doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 55, y);
+    doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 105, y);
 
-    const barMaxWidth = seatBoxWidth - 65;
+    const barMaxWidth = seatBoxWidth - 115;
     const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
     doc.setFillColor(150, 150, 150);
-    doc.rect(PDF_CONFIGURATIONS.marginLeft + 60, y - 4, barWidth, 5, "F");
+    doc.rect(PDF_CONFIGURATIONS.marginLeft + 110, y - 4, barWidth, 5, "F");
     y += seatBoxHeightPerItem;
   });
-
   return y;
+}
+
+function generateSeatDistributionFooter(
+  doc: jsPDF,
+  stale: CalculationStale,
+  currentY: number
+): void {
+  doc.setFontSize(PDF_CONFIGURATIONS.footerTextSize);
+  doc.setTextColor(255, 0, 0);
+  doc.text(
+    "Patt zwischen: " +
+      stale.groupNames +
+      " bei " +
+      stale.amountSeats +
+      " Sitzen",
+    PDF_CONFIGURATIONS.marginLeft + 2,
+    currentY - 2
+  );
+  doc.setTextColor(0, 0, 0);
 }
 
 function generateQuotientBox(
   doc: jsPDF,
-  calculationResult: CalculationResult,
-  calculationMethod: CalculationMethod,
+  seatOrder: CalculationSeatOrder,
   currentY: number
 ): void {
-  const methodResult = calculationResult.methods[calculationMethod];
-  if (!methodResult) {
-    doc.text(
-      "Keine Berechnung für dieses Verfahren gefunden.",
-      PDF_CONFIGURATIONS.marginLeft + 2,
-      currentY + 15
-    );
-    return;
-  }
-
   const seatCalculationX = PDF_CONFIGURATIONS.marginLeft;
   let seatCalculationY = currentY + 15;
   const seatCalculationWidth = 190;
   const seatCalculationHeight =
-    methodResult.order.length * PDF_CONFIGURATIONS.lineHeight +
+    seatOrder.length * PDF_CONFIGURATIONS.lineHeight +
     PDF_CONFIGURATIONS.boxPadding * 2 +
     10;
 
@@ -312,7 +344,7 @@ function generateQuotientBox(
     seatCalculationX,
     seatCalculationY,
     seatCalculationWidth,
-    seatCalculationHeight
+    seatCalculationHeight + 5
   );
 
   doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
@@ -332,7 +364,16 @@ function generateQuotientBox(
   let y = seatCalculationY + 16;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
 
-  methodResult.order.forEach((item, index) => {
+  if (seatOrder.length === 0) {
+    doc.text(
+      "Es konnte kein Sitz eindeutig vergeben werden.",
+      seatCalculationX + 2,
+      seatCalculationY + 15
+    );
+    return;
+  }
+
+  seatOrder.forEach((item, index) => {
     if (y > maxY - 10) {
       doc.addPage();
       seatCalculationY = 20;

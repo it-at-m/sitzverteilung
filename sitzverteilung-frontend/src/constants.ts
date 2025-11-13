@@ -17,6 +17,7 @@ export const PDF_CONFIGURATIONS = {
   sizeForBoxHeader: 11,
   headerFontSize: 16,
   dataTextSize: 9,
+  footerTextSize: 8,
   parameterBoxHeight: 25,
   boxLine: 0.5,
   timestampSize: 8,
