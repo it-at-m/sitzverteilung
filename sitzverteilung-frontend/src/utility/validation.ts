@@ -23,7 +23,9 @@ export function isValidBaseData(x: any): x is BaseData {
   return (
     x &&
     typeof x.name === "string" &&
-    typeof x.committeeSize === "number" &&
+    (x.committeeSize === undefined ||
+      x.committeeSize === null ||
+      typeof x.committeeSize === "number") &&
     Array.isArray(x.groups) &&
     Array.isArray(x.unions) &&
     x.groups.every((group: any) => group && typeof group.name === "string") &&
