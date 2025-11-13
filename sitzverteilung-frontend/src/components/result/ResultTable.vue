@@ -215,6 +215,7 @@ const headers = computed(() => [
   {
     title: "Proporz",
     key: "proportion",
+    width: 100,
   },
 ]);
 

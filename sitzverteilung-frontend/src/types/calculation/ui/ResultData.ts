@@ -3,6 +3,6 @@ import type { CalculationGroupName } from "@/types/calculation/CalculationGroup.
 export interface ResultData {
   name: CalculationGroupName;
   seatsOrVotes: number;
-  proportion: number;
+  proportion: string;
   [key: string]: number | boolean | string;
 }

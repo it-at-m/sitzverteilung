@@ -1,8 +1,17 @@
-export function numberFormatter(number: number): string {
+export function numberFormatter(num: number): string {
   const formatter = new Intl.NumberFormat("de-DE", {
     useGrouping: true,
   });
-  return formatter.format(number);
+  return formatter.format(num);
+}
+
+export function roundToExactDecimals(num: number, numDecimals: number) {
+  const formatter = new Intl.NumberFormat("de-DE", {
+    useGrouping: true,
+    minimumFractionDigits: numDecimals,
+    maximumFractionDigits: numDecimals,
+  });
+  return formatter.format(num);
 }
 
 /**
