@@ -11,6 +11,7 @@ import {
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
+import { roundToExactDecimals } from "@/utility/numberFormatter.ts";
 
 type Method = (typeof AVAILABLE_METHODS)[number];
 type ResultDataKeys = `${Method}${ResultDataSuffix}`;
@@ -25,7 +26,7 @@ export function mapCalculationResultToResultData(
     const resultData: ResultData = {
       name: groupName,
       seatsOrVotes: seatsOrVotes ?? 0,
-      proportion: formatToThreeDecimals(proportion ?? 0),
+      proportion: roundToExactDecimals(proportion ?? 0, 3),
     };
 
     AVAILABLE_METHODS.forEach((method) => {
@@ -105,9 +106,4 @@ function setMethodResultDataOfResultData(
       !validationData.overRounding &&
       !validationData.lostSafeSeat
     : false;
-}
-
-function formatToThreeDecimals(num?: number): number {
-  if (!Number.isFinite(num)) return 0;
-  return Math.round(((num as number) + Number.EPSILON) * 1000) / 1000;
 }
