@@ -111,11 +111,10 @@ function generateParameterBox(
 
   const paramText =
     "Größe des Hauptorgans: " +
-    (committeeSize !== undefined ? committeeSize : "Kein Hauptorgan angegeben");
+    (committeeSize ? committeeSize : "Keine Angabe");
   doc.text(paramText, PDF_CONFIGURATIONS.marginLeft + 2, 43);
   doc.text(
-    "Ausschussgröße: " +
-      (targetSize !== undefined ? targetSize : "Keine Angabe"),
+    "Ausschussgröße: " + (targetSize ? targetSize : "Keine Angabe"),
     PDF_CONFIGURATIONS.marginLeft + 2,
     48
   );
@@ -177,7 +176,9 @@ function generateLeftAndRightPartyBox(
   partysBoxHeight: number
 ): void {
   doc.setFontSize(12);
-  doc.text("Parteien", PDF_CONFIGURATIONS.marginLeft, 65, { align: "left" });
+  doc.text("Zusammensetzung", PDF_CONFIGURATIONS.marginLeft, 65, {
+    align: "left",
+  });
 
   const leftBoxX = PDF_CONFIGURATIONS.marginLeft;
   doc.setLineWidth(0.5);
@@ -284,12 +285,12 @@ function generateSeatDistribution(
 
       doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
       doc.text(item.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
-      doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 55, y);
+      doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 105, y);
 
-      const barMaxWidth = seatBoxWidth - 65;
+      const barMaxWidth = seatBoxWidth - 115;
       const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
       doc.setFillColor(150, 150, 150);
-      doc.rect(PDF_CONFIGURATIONS.marginLeft + 60, y - 4, barWidth, 5, "F");
+      doc.rect(PDF_CONFIGURATIONS.marginLeft + 110, y - 4, barWidth, 5, "F");
       y += seatBoxHeightPerItem;
     });
     return y;
@@ -359,7 +360,7 @@ function generateQuotientBox(
     seatCalculationX,
     seatCalculationY,
     seatCalculationWidth,
-    seatCalculationHeight
+    seatCalculationHeight + 5
   );
 
   doc.setFontSize(PDF_CONFIGURATIONS.sizeForBoxHeader);
@@ -378,6 +379,15 @@ function generateQuotientBox(
 
   let y = seatCalculationY + 16;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
+
+  if (methodResult.order.length === 0) {
+    doc.text(
+      "Es konnte kein Sitz eindeutig vergeben werden.",
+      seatCalculationX + 2,
+      seatCalculationY + 15
+    );
+    return;
+  }
 
   methodResult.order.forEach((item, index) => {
     if (y > maxY - 10) {
