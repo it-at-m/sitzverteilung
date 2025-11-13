@@ -70,6 +70,7 @@ export function useTemplateData() {
   );
 
   function reset() {
+    updateIsValid(false);
     baseDataFormRef.value?.reset();
     currentBaseData.value = getEmptyBaseData();
   }
