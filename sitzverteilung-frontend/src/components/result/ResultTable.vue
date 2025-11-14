@@ -152,7 +152,10 @@ import {
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
-import { mapCalculationResultToResultData } from "@/utility/resultMapping.ts";
+import {
+  mapCalculationResultToResultData,
+  stripUnionPrefix,
+} from "@/utility/resultMapping.ts";
 
 const { calculationResult, methodToDisplay, showSeats } = defineProps<{
   calculationResult?: CalculationResult;
@@ -184,6 +187,11 @@ const headers = computed(() => [
       {
         title: "Name",
         key: "name",
+        sort: (a: string, b: string) => {
+          const strippedA = stripUnionPrefix(a);
+          const strippedB = stripUnionPrefix(b);
+          return strippedA.localeCompare(strippedB);
+        },
       },
       {
         title: showSeats ? "Sitze" : "Stimmen",
@@ -194,6 +202,7 @@ const headers = computed(() => [
   ...methodsToDisplay.value.map((method) => ({
     title: `${method}`,
     key: `${method}Title`,
+    sortable: false,
     children: [
       {
         title: "Zulässigkeit",
