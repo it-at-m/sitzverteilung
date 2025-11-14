@@ -99,7 +99,6 @@ function generateParameter(
   );
 
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
-  doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
 
   const paramText =
     "Größe des Hauptorgans: " +
@@ -170,6 +169,8 @@ function generateLeftAndRightParties(
   doc.text("Zusammensetzung", PDF_CONFIGURATIONS.marginLeft, 65, {
     align: "left",
   });
+  doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
+  doc.line(PDF_CONFIGURATIONS.marginLeft, 68, PDF_CONFIGURATIONS.marginRight, 68)
 
   generateParties(doc, partysLeft, PDF_CONFIGURATIONS.marginLeft);
 
