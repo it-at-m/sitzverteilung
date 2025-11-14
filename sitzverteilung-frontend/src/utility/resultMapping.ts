@@ -6,6 +6,7 @@ import type {
 } from "@/types/calculation/ui/MergedSeatOrder.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
+import { UNION_TYPE_PREFIXES } from "@/types/basedata/Union.ts";
 import {
   AVAILABLE_METHODS,
   CalculationMethod,
@@ -79,6 +80,22 @@ export function mapToMergedSeatOrders(
       return acc;
     }, {})
   );
+}
+
+/**
+ * Method that strips away any union prefixes if existent.
+ * @param value to strip
+ */
+export function stripUnionPrefix(value: string): string {
+  const prefixes = Object.values(UNION_TYPE_PREFIXES);
+
+  for (const prefix of prefixes) {
+    if (value.startsWith(prefix)) {
+      return value.slice(prefix.length);
+    }
+  }
+
+  return value;
 }
 
 function setMethodResultDataOfResultData(
