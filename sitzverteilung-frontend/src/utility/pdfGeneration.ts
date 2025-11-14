@@ -38,7 +38,7 @@ export function generatePDF(
 
   generateLeftAndRightParties(doc, partysLeft, partysRight);
 
-  let currentY = 95 + partysHeight;
+  let currentY = PDF_CONFIGURATIONS.parameterHeight + partysHeight;
 
   generateHeaderForCalculationResults(doc, currentY);
 
@@ -186,18 +186,25 @@ function generateParties(doc: jsPDF, partys: PartyEntry[], x: number): void {
   let currentY = 85;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
 
-  const seatsHeightPerItem = PDF_CONFIGURATIONS.lineHeight;
+  const partysHeightPerItem = PDF_CONFIGURATIONS.lineHeight;
 
   partys.forEach((p) => {
-    if (currentY + seatsHeightPerItem > doc.internal.pageSize.height - 25) {
+    if (
+      currentY + partysHeightPerItem >
+      doc.internal.pageSize.height - PDF_CONFIGURATIONS.bottomMargin
+    ) {
       doc.addPage();
       currentY = 20;
       doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
-      doc.text("Parteien (Fortsetzung)", x + 2, currentY - 10);
+      doc.text(
+        "Parteien (Fortsetzung)",
+        x + 2,
+        currentY - PDF_CONFIGURATIONS.upperMargin
+      );
     }
     doc.text(p.name, x + 5, currentY);
     doc.text(String(p.votes), x + 60, currentY);
-    currentY += seatsHeightPerItem;
+    currentY += partysHeightPerItem;
   });
 }
 
@@ -210,7 +217,11 @@ function generateHeaderForCalculationResults(doc: jsPDF, currentY: number) {
     currentY - 5
   );
   doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
-  doc.text("Berechnungsergebnis", PDF_CONFIGURATIONS.marginLeft, currentY - 10);
+  doc.text(
+    "Berechnungsergebnis",
+    PDF_CONFIGURATIONS.marginLeft,
+    currentY - PDF_CONFIGURATIONS.upperMargin
+  );
 }
 
 function generateSeatDistribution(
@@ -248,7 +259,7 @@ function generateSeatDistribution(
       doc.text(
         "Sitzverteilung (Fortsetzung)",
         PDF_CONFIGURATIONS.marginLeft + 2,
-        y - 10
+        y - PDF_CONFIGURATIONS.upperMargin
       );
       doc.setLineWidth(PDF_CONFIGURATIONS.smallHeaderLine);
       doc.line(
@@ -319,9 +330,9 @@ function generateRatios(
   doc.setLineWidth(PDF_CONFIGURATIONS.smallHeaderLine);
   doc.line(
     seatCalculationX + 2,
-    seatCalculationY + 10,
+    seatCalculationY + PDF_CONFIGURATIONS.upperMargin,
     seatCalculationX + 188,
-    seatCalculationY + 10
+    seatCalculationY + PDF_CONFIGURATIONS.upperMargin
   );
 
   let y = seatCalculationY + 16;
@@ -351,9 +362,9 @@ function generateRatios(
       doc.setLineWidth(PDF_CONFIGURATIONS.smallHeaderLine);
       doc.line(
         seatCalculationX + 2,
-        seatCalculationY + 10,
+        seatCalculationY + PDF_CONFIGURATIONS.upperMargin,
         seatCalculationX + 188,
-        seatCalculationY + 10
+        seatCalculationY + PDF_CONFIGURATIONS.upperMargin
       );
       doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
     }
