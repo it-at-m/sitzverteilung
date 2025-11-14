@@ -10,15 +10,13 @@ export const enum STATUS_INDICATORS {
 export const PDF_CONFIGURATIONS = {
   marginLeft: 10,
   marginRight: 200,
-  boxPadding: 2,
   lineHeight: 7,
-  headerLine: 0.1,
+  smallHeaderLine: 0.1,
 
-  sizeForBoxHeader: 11,
+  sizeSmallHeader: 11,
   headerFontSize: 16,
   dataTextSize: 9,
   footerTextSize: 8,
-  parameterBoxHeight: 25,
-  boxLine: 0.5,
+  headerLine: 0.5,
   timestampSize: 8,
 };
