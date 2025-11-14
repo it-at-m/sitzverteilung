@@ -35,7 +35,7 @@
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.8.1",
     "blob-polyfill": "9.0.20240710",
-    "eslint": "9.38.0",
+    "eslint": "9.39.1",
     "eslint-plugin-vue": "10.5.1",
     "jsdom": "27.1.0",
     "prettier": "3.6.2",
