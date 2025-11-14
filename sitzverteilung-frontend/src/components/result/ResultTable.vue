@@ -202,6 +202,7 @@ const headers = computed(() => [
   ...methodsToDisplay.value.map((method) => ({
     title: `${method}`,
     key: `${method}Title`,
+    sortable: false,
     children: [
       {
         title: "Zulässigkeit",
