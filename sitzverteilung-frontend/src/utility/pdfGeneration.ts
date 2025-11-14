@@ -170,7 +170,12 @@ function generateLeftAndRightParties(
     align: "left",
   });
   doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
-  doc.line(PDF_CONFIGURATIONS.marginLeft, 68, PDF_CONFIGURATIONS.marginRight, 68)
+  doc.line(
+    PDF_CONFIGURATIONS.marginLeft,
+    68,
+    PDF_CONFIGURATIONS.marginRight,
+    68
+  );
 
   generateParties(doc, partysLeft, PDF_CONFIGURATIONS.marginLeft);
 
