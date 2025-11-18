@@ -26,34 +26,19 @@
 
 <script setup lang="ts">
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
-import type { SeatOrder } from "@/types/calculation/ui/MergedSeatOrder.ts";
 import type { DataTableHeader } from "vuetify/framework";
 
 import { mdiHandBackRight } from "@mdi/js";
 import { computed } from "vue";
 
-import { formatVisiblePrecision } from "@/utility/numberFormatter.ts";
-import { mapToMergedSeatOrders } from "@/utility/resultMapping.ts";
+import { mapSeatOrder } from "@/utility/resultMapping.ts";
 
 const { seatOrder } = defineProps<{
   seatOrder?: CalculationSeatOrder;
 }>();
 
 const mappedSeatOrder = computed(() => {
-  if (!seatOrder) {
-    return [];
-  }
-  const formattedRatios = formatVisiblePrecision(
-    seatOrder.map((order) => order.value)
-  );
-  const formattedSeatOrders = seatOrder.map((order, index) => {
-    return {
-      seatNumber: index + 1,
-      name: order.groupName,
-      ratio: formattedRatios[index],
-    } as SeatOrder;
-  });
-  return mapToMergedSeatOrders(formattedSeatOrders);
+  return mapSeatOrder(seatOrder, true);
 });
 
 const headers: DataTableHeader[] = [

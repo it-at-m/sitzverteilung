@@ -1,5 +1,6 @@
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type {
   MergedSeatOrder,
   SeatOrder,
@@ -12,7 +13,10 @@ import {
   CalculationMethod,
 } from "@/types/calculation/CalculationMethod.ts";
 import { ResultDataSuffix } from "@/types/calculation/ui/ResultDataSuffix.ts";
-import { roundToExactDecimals } from "@/utility/numberFormatter.ts";
+import {
+  formatVisiblePrecision,
+  roundToExactDecimals,
+} from "@/utility/numberFormatter.ts";
 
 type Method = (typeof AVAILABLE_METHODS)[number];
 type ResultDataKeys = `${Method}${ResultDataSuffix}`;
@@ -51,9 +55,11 @@ export function mapCalculationResultToResultData(
  * NOTE: seatOrders must be pre sorted by seatNumber!
  *
  * @param seatOrders seatOrders to merge
+ * @param isLineBreakNeeded determine wether ot not the seatOrders os seperated by a line break or comma
  */
 export function mapToMergedSeatOrders(
-  seatOrders: SeatOrder[]
+  seatOrders: SeatOrder[],
+  isLineBreakNeeded: boolean
 ): MergedSeatOrder[] {
   return Object.values(
     seatOrders.reduce<Record<string, MergedSeatOrder>>((acc, currentOrder) => {
@@ -74,7 +80,9 @@ export function mapToMergedSeatOrders(
         acc[key].seatNumber =
           `${acc[key].minIndex} - ${currentOrder.seatNumber}`;
         acc[key].maxIndex = currentOrder.seatNumber;
-        acc[key].name += `\n${currentOrder.name}`;
+        acc[key].name += isLineBreakNeeded
+          ? `\n${currentOrder.name}`
+          : `, ${currentOrder.name}`;
       }
 
       return acc;
@@ -123,4 +131,24 @@ function setMethodResultDataOfResultData(
       !validationData.overRounding &&
       !validationData.lostSafeSeat
     : false;
+}
+
+export function mapSeatOrder(
+  seatOrder: CalculationSeatOrder | undefined,
+  isLineBreakNeeded: boolean
+) {
+  if (!seatOrder) {
+    return [];
+  }
+  const formattedRatios = formatVisiblePrecision(
+    seatOrder.map((order) => order.value)
+  );
+  const formattedSeatOrders = seatOrder.map((order, index) => {
+    return {
+      seatNumber: index + 1,
+      name: order.groupName,
+      ratio: formattedRatios[index],
+    } as SeatOrder;
+  });
+  return mapToMergedSeatOrders(formattedSeatOrders, isLineBreakNeeded);
 }
