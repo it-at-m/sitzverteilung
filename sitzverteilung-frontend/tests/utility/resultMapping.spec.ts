@@ -71,7 +71,7 @@ describe("mapToMergedSeatOrders", () => {
       },
     ];
 
-    const result = mapToMergedSeatOrders(given);
+    const result = mapToMergedSeatOrders(given, true);
 
     const expected: MergedSeatOrder[] = [
       {
