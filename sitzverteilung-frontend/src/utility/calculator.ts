@@ -95,6 +95,16 @@ function extractCalculationGroups(
           return baseData.groups[groupIndex];
         })
         .reduce((sum, group) => sum + (group?.seatsOrVotes ?? 0), 0),
+      partiesInCommittee: union.groups.map((groupIndex) => {
+        if (groupIndex < 0 || groupIndex >= baseData.groups.length) {
+          throw new Error(
+            `Union "${union.name}" references invalid group index ${groupIndex}.`
+          );
+        }
+        groupIndexesInUnion.add(groupIndex);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return baseData.groups[groupIndex]!;
+      }),
     };
   });
   const singleCalculationGroups: CalculationGroup[] = baseData.groups
@@ -297,9 +307,11 @@ function calculateHareNiemeyer(
   const dHondtCalculationGroups: CalculationGroup[] = Object.entries(
     seatDistribution
   ).map(([groupName, value]) => {
+    const group = calculationGroups.find((g) => g.name === groupName);
     return {
       name: groupName,
       seatsOrVotes: value,
+      partiesInCommittee: group?.partiesInCommittee,
     };
   });
   const seatsInOrder = committeeSize - (stale?.amountSeats ?? 0);
