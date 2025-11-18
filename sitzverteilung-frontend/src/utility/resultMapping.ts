@@ -55,7 +55,7 @@ export function mapCalculationResultToResultData(
  * NOTE: seatOrders must be pre sorted by seatNumber!
  *
  * @param seatOrders seatOrders to merge
- * @param isLineBreakNeeded determine wether ot not the seatOrders os seperated by a line break or comma
+ * @param isLineBreakNeeded determine whether ot not the seatOrders os seperated by a line break or comma
  */
 export function mapToMergedSeatOrders(
   seatOrders: SeatOrder[],
