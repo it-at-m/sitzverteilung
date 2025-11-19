@@ -2,6 +2,7 @@ import type { CalculationResult } from "@/types/calculation/internal/Calculation
 import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
+import type { ValidationData } from "@/types/calculation/internal/CalculationValidation.ts";
 
 import { jsPDF } from "jspdf";
 
@@ -30,16 +31,32 @@ export function generatePDF(
   const timestamp = new Date();
   generateHeader(doc, timestamp);
 
-  generateParameter(doc, committeeSize, targetSize, usedCalculationMethod);
+  const validationOfGroups =
+    calculationResult.methods[usedCalculationMethod]?.validation;
+  let isMethodValid = true;
+  if (validationOfGroups) {
+    isMethodValid = Object.values<ValidationData>(validationOfGroups).every(
+      (entry) =>
+        !entry.overRounding &&
+        !entry.lostSafeSeat &&
+        entry.committeeInvalid.length === 0
+    );
+  }
+  generateParameter(
+    doc,
+    committeeSize,
+    targetSize,
+    usedCalculationMethod,
+    isMethodValid
+  );
 
   const [partysLeft, partysRight] = getAndSortGroups(calculationResult);
 
   const partysCount = Math.max(partysLeft.length, partysRight.length);
   const partysHeight = partysCount * PDF_CONFIGURATIONS.lineHeight + 10;
-
-  generateLeftAndRightParties(doc, partysLeft, partysRight);
-
   let currentY = PDF_CONFIGURATIONS.parameterHeight + partysHeight;
+
+  generateLeftAndRightParties(doc, partysLeft, partysRight, committeeSize);
 
   generateHeaderForCalculationResults(doc, currentY);
 
@@ -87,7 +104,8 @@ function generateParameter(
   doc: jsPDF,
   committeeSize: number | undefined,
   targetSize: number | undefined,
-  usedCalculationMethod: CalculationMethod
+  usedCalculationMethod: CalculationMethod,
+  isCalculationMethodValid: boolean
 ): void {
   doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
   doc.text("Parameter", PDF_CONFIGURATIONS.marginLeft + 2, 35);
@@ -112,9 +130,21 @@ function generateParameter(
   );
   doc.text(
     "Berechnungsverfahren: " + usedCalculationMethod,
-    PDF_CONFIGURATIONS.marginLeft + 2,
-    53
+    PDF_CONFIGURATIONS.marginLeft + 50,
+    43
   );
+  doc.text("Zulässigkeit:", PDF_CONFIGURATIONS.marginLeft + 50, 48);
+  doc.setTextColor(
+    isCalculationMethodValid ? 0 : 255,
+    isCalculationMethodValid ? 255 : 0,
+    0
+  );
+  doc.text(
+    isCalculationMethodValid ? "zulässig" : "unzulässig",
+    PDF_CONFIGURATIONS.marginLeft + 69,
+    48
+  );
+  doc.setTextColor(0, 0, 0);
 }
 
 function getAndSortGroups(
@@ -164,7 +194,8 @@ function getAndSortGroups(
 function generateLeftAndRightParties(
   doc: jsPDF,
   partysLeft: PartyEntry[],
-  partysRight: PartyEntry[]
+  partysRight: PartyEntry[],
+  committeeSize: number | undefined
 ): void {
   doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
   doc.text("Zusammensetzung", PDF_CONFIGURATIONS.marginLeft, 64, {
@@ -178,15 +209,34 @@ function generateLeftAndRightParties(
     67
   );
 
-  generateParties(doc, partysLeft, PDF_CONFIGURATIONS.marginLeft);
+  generateParties(
+    doc,
+    partysLeft,
+    PDF_CONFIGURATIONS.marginLeft,
+    committeeSize
+  );
 
-  generateParties(doc, partysRight, PDF_CONFIGURATIONS.marginLeft + 100);
+  generateParties(
+    doc,
+    partysRight,
+    PDF_CONFIGURATIONS.marginLeft + 100,
+    committeeSize
+  );
 }
 
-function generateParties(doc: jsPDF, partys: PartyEntry[], x: number): void {
+function generateParties(
+  doc: jsPDF,
+  partys: PartyEntry[],
+  x: number,
+  committeeSize: number | undefined
+): void {
   doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
   doc.text("Name", x + 2, 75);
-  doc.text("Stimmen/Sitze", x + 65, 75);
+  doc.text(
+    typeof committeeSize == "number" && committeeSize > 0 ? "Sitze" : "Stimmen",
+    x + 80,
+    75
+  );
   doc.setLineWidth(0.1);
   doc.line(x + 2, 77, x + 90, 77);
 
@@ -210,7 +260,7 @@ function generateParties(doc: jsPDF, partys: PartyEntry[], x: number): void {
       );
     }
     doc.text(p.name, x + 2, currentY);
-    doc.text(String(p.votes), x + 70, currentY);
+    doc.text(String(p.votes), x + 80, currentY);
     currentY += partysHeightPerItem;
   });
 }
@@ -275,12 +325,12 @@ function generateSeatDistribution(
 
     doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
     doc.text(item.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
-    doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 105, y);
+    doc.text(String(item.seats), PDF_CONFIGURATIONS.marginLeft + 101, y);
 
-    const barMaxWidth = seatsWidth - 115;
+    const barMaxWidth = seatsWidth - 114;
     const barWidth = (item.seats / validMaxSeats) * barMaxWidth;
     doc.setFillColor(150, 150, 150);
-    doc.rect(PDF_CONFIGURATIONS.marginLeft + 110, y - 4, barWidth, 5, "F");
+    doc.rect(PDF_CONFIGURATIONS.marginLeft + 106, y - 4, barWidth, 5, "F");
     y += seatsHeightPerItem;
   });
   return y;
@@ -371,7 +421,6 @@ function generateRatios(
     }
 
     const splittedSeatOrders = item.name.split(",").map((s) => s.trim());
-    doc.text(item.ratio, seatCalculationX + 105, y);
 
     if (splittedSeatOrders.length === 1) {
       doc.text(
@@ -379,11 +428,16 @@ function generateRatios(
         seatCalculationX + 2,
         y
       );
+      doc.text(item.ratio, seatCalculationX + 105, y);
       y += PDF_CONFIGURATIONS.lineHeight;
     } else {
-      doc.text(`${item.seatNumber}. Sitz: `, seatCalculationX + 2, y);
       splittedSeatOrders.forEach((partyInOrder) => {
-        doc.text(`- ${partyInOrder}`, seatCalculationX + 22, y);
+        doc.text(
+          `${item.seatNumber}. Sitz: ${partyInOrder}`,
+          seatCalculationX + 2,
+          y
+        );
+        doc.text(item.ratio, seatCalculationX + 105, y);
         y += PDF_CONFIGURATIONS.lineHeight;
       });
     }
