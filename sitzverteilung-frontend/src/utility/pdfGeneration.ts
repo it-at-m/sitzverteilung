@@ -33,7 +33,7 @@ export function generatePDF(
 
   const validationOfGroups =
     calculationResult.methods[usedCalculationMethod]?.validation;
-  let isMethodValid = true;
+  let isMethodValid = false;
   if (validationOfGroups) {
     isMethodValid = Object.values<ValidationData>(validationOfGroups).every(
       (entry) =>
