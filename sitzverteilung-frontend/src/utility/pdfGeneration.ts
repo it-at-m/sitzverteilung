@@ -370,7 +370,7 @@ function generateRatios(
       doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
     }
 
-    const splittedSeatOrders = item.name.split(",");
+    const splittedSeatOrders = item.name.split(",").map((s) => s.trim());
     doc.text(item.ratio, seatCalculationX + 105, y);
 
     if (splittedSeatOrders.length === 1) {

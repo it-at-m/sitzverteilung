@@ -90,4 +90,15 @@ describe("mapToMergedSeatOrders", () => {
 
     expect(result).toEqual(expected);
   });
+
+  test("seats are merged with comma when isLineBreakNeeded is false", () => {
+    const given: CalculationSeatOrder = [
+      { groupName: "A", seatsOrVotes: 2, value: 0.999 },
+      { groupName: "B", seatsOrVotes: 2, value: 0.999 },
+    ];
+
+    const result = mapSeatOrder(given, false);
+
+    expect(result[0]?.name).toBe("A, B");
+  });
 });
