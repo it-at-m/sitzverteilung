@@ -1,9 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
-import {
-  MergedSeatOrder,
-} from "../../src/types/calculation/ui/MergedSeatOrder";
+import { MergedSeatOrder } from "../../src/types/calculation/ui/MergedSeatOrder";
 import {
   mapCalculationResultToResultData,
   mapSeatOrder,
