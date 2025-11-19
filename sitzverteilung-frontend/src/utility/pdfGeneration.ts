@@ -370,8 +370,22 @@ function generateRatios(
       doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
     }
 
-    doc.text(`${item.seatNumber}. Sitz: ${item.name}`, seatCalculationX + 2, y);
+    const splittedSeatOrders = item.name.split(",");
     doc.text(item.ratio, seatCalculationX + 105, y);
-    y += PDF_CONFIGURATIONS.lineHeight;
+
+    if (splittedSeatOrders.length === 1) {
+      doc.text(
+        `${item.seatNumber}. Sitz: ${item.name}`,
+        seatCalculationX + 2,
+        y
+      );
+      y += PDF_CONFIGURATIONS.lineHeight;
+    } else {
+      doc.text(`${item.seatNumber}. Sitz: `, seatCalculationX + 2, y);
+      splittedSeatOrders.forEach((partyInOrder) => {
+        doc.text(`- ${partyInOrder}`, seatCalculationX + 22, y);
+        y += PDF_CONFIGURATIONS.lineHeight;
+      });
+    }
   });
 }
