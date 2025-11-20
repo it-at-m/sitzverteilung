@@ -1043,14 +1043,17 @@ describe("Proportional seats calculation tests", () => {
       {
         name: "Test 1",
         seatsOrVotes: 14,
+        partiesInCommittee: [],
       },
       {
         name: "Test 2",
         seatsOrVotes: 23,
+        partiesInCommittee: [],
       },
       {
         name: "Test 3",
         seatsOrVotes: 7,
+        partiesInCommittee: [],
       },
     ];
     const committeeSize = 10;
@@ -1072,14 +1075,17 @@ describe("Proportional seats calculation tests", () => {
       {
         name: "Test 1",
         seatsOrVotes: 14,
+        partiesInCommittee: [],
       },
       {
         name: "Test 2",
         seatsOrVotes: 23,
+        partiesInCommittee: [],
       },
       {
         name: "Test 3",
         seatsOrVotes: 7,
+        partiesInCommittee: [],
       },
     ];
     const committeeSize = 100;
@@ -1105,14 +1111,17 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 1",
         seatsOrVotes: 10,
+        partiesInCommittee: [],
       },
       {
         name: "Testgroup 2",
         seatsOrVotes: 20,
+        partiesInCommittee: [],
       },
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
+        partiesInCommittee: [],
       },
     ];
 
@@ -1128,14 +1137,17 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
+        partiesInCommittee: [],
       },
       {
         name: "FG: Example fraction union",
         seatsOrVotes: 30,
+        partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
       },
       {
         name: "AG: Example committee union",
         seatsOrVotes: 30,
+        partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
       },
     ];
 
@@ -1151,10 +1163,12 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
+        partiesInCommittee: [],
       },
       {
         name: "FG: Example fraction union",
         seatsOrVotes: 30,
+        partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
       },
     ];
 
@@ -1173,18 +1187,22 @@ test("Extract calculation groups no include committees with partial overlap", ()
     {
       name: "Testgroup 1",
       seatsOrVotes: 10,
+      partiesInCommittee: [],
     },
     {
       name: "Testgroup 4",
       seatsOrVotes: 30,
+      partiesInCommittee: [],
     },
     {
       name: "Testgroup 5",
       seatsOrVotes: 30,
+      partiesInCommittee: [],
     },
     {
       name: "FG: Fraction 1",
       seatsOrVotes: 50,
+      partiesInCommittee: ["Testgroup 2", "Testgroup 3"],
     },
   ];
 
@@ -1202,18 +1220,22 @@ test("Extract calculation groups no include committees with no overlap", () => {
     {
       name: "Testgroup 3",
       seatsOrVotes: 30,
+      partiesInCommittee: [],
     },
     {
       name: "Testgroup 4",
       seatsOrVotes: 30,
+      partiesInCommittee: [],
     },
     {
       name: "Testgroup 5",
       seatsOrVotes: 30,
+      partiesInCommittee: [],
     },
     {
       name: "FG: Fraction 1",
       seatsOrVotes: 30,
+      partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
     },
   ];
 

@@ -30,6 +30,7 @@ export function calculate(baseData: BaseData): CalculationResult {
     throw new Error("Invalid or missing target size. Must be positive.");
   }
   const calculationGroups = extractCalculationGroups(baseData);
+  console.debug(calculationGroups);
   const seats = calculationGroups.reduce(
     (acc, group) => {
       acc[group.name] = group.seatsOrVotes;
@@ -75,35 +76,37 @@ function extractCalculationGroups(
   baseData: BaseData,
   includeCommitteeUnions = true
 ): CalculationGroup[] {
-  const groupIndexesInUnion = new Set<GroupIndex>();
   const unions = includeCommitteeUnions
     ? baseData.unions
     : baseData.unions.filter(
         (union) => union.unionType !== UnionType.COMMITTEE
       );
+
+  const groupIndexesInUnion = new Set<GroupIndex>(
+    unions.flatMap((union) => union.groups)
+  );
   const unionCalculationGroups: CalculationGroup[] = unions.map((union) => {
     return {
       name: `${UNION_TYPE_PREFIXES[union.unionType]}${union.name}`,
       seatsOrVotes: union.groups
         .map((groupIndex) => {
-          if (groupIndex < 0 || groupIndex >= baseData.groups.length) {
+          const group = baseData.groups[groupIndex];
+          if (!group) {
             throw new Error(
               `Union "${union.name}" references invalid group index ${groupIndex}.`
             );
           }
-          groupIndexesInUnion.add(groupIndex);
           return baseData.groups[groupIndex];
         })
         .reduce((sum, group) => sum + (group?.seatsOrVotes ?? 0), 0),
       partiesInCommittee: union.groups.map((groupIndex) => {
-        if (groupIndex < 0 || groupIndex >= baseData.groups.length) {
+        const group = baseData.groups[groupIndex];
+        if (!group) {
           throw new Error(
             `Union "${union.name}" references invalid group index ${groupIndex}.`
           );
         }
-        groupIndexesInUnion.add(groupIndex);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return baseData.groups[groupIndex]!;
+        return group.name;
       }),
     };
   });
@@ -113,6 +116,7 @@ function extractCalculationGroups(
       return {
         name: singleGroup.name,
         seatsOrVotes: singleGroup.seatsOrVotes,
+        partiesInCommittee: [],
       } as CalculationGroup;
     });
   const calculationGroups = [
@@ -311,7 +315,7 @@ function calculateHareNiemeyer(
     return {
       name: groupName,
       seatsOrVotes: value,
-      partiesInCommittee: group?.partiesInCommittee,
+      partiesInCommittee: group?.partiesInCommittee ?? [],
     };
   });
   const seatsInOrder = committeeSize - (stale?.amountSeats ?? 0);
