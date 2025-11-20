@@ -1,12 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  MergedSeatOrder,
-  SeatOrder,
-} from "../../src/types/calculation/ui/MergedSeatOrder";
+import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
+import { MergedSeatOrder } from "../../src/types/calculation/ui/MergedSeatOrder";
 import {
   mapCalculationResultToResultData,
-  mapToMergedSeatOrders,
+  mapSeatOrder,
 } from "../../src/utility/resultMapping";
 import { getTestCalculationResult } from "../TestData";
 
@@ -53,25 +51,25 @@ describe("mapCalculationResultToResultData", () => {
 
 describe("mapToMergedSeatOrders", () => {
   test("seats are merged correctly", () => {
-    const given: SeatOrder[] = [
+    const given: CalculationSeatOrder = [
       {
-        name: "A",
-        seatNumber: 1,
-        ratio: "0,999",
+        groupName: "A",
+        seatsOrVotes: 2,
+        value: 0.999,
       },
       {
-        name: "B",
-        seatNumber: 2,
-        ratio: "0,999",
+        groupName: "B",
+        seatsOrVotes: 2,
+        value: 0.999,
       },
       {
-        name: "C",
-        seatNumber: 3,
-        ratio: "0,998",
+        groupName: "C",
+        seatsOrVotes: 3,
+        value: 0.998,
       },
     ];
 
-    const result = mapToMergedSeatOrders(given);
+    const result = mapSeatOrder(given, true);
 
     const expected: MergedSeatOrder[] = [
       {
@@ -91,5 +89,16 @@ describe("mapToMergedSeatOrders", () => {
     ];
 
     expect(result).toEqual(expected);
+  });
+
+  test("seats are merged with comma when isLineBreakNeeded is false", () => {
+    const given: CalculationSeatOrder = [
+      { groupName: "A", seatsOrVotes: 2, value: 0.999 },
+      { groupName: "B", seatsOrVotes: 2, value: 0.999 },
+    ];
+
+    const result = mapSeatOrder(given, false);
+
+    expect(result[0]?.name).toBe("A, B");
   });
 });

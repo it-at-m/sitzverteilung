@@ -269,7 +269,7 @@ function calculateHareNiemeyer(
   }
   const remainders: CalculationGroupRatio[] = [];
   calculationGroups.forEach((group) => {
-    const exactQuota = (group.seatsOrVotes * committeeSize) / totalSeatsOrVotes;
+    const exactQuota = (committeeSize * group.seatsOrVotes) / totalSeatsOrVotes;
     const seats = Math.floor(exactQuota);
     seatDistribution[group.name] = seats;
     remainders.push({
@@ -412,29 +412,17 @@ function handleStaleSituation(
       ratio: ratioValue,
     };
 
-    let toRemove = unresolvedSeats;
+    const affectedGroupNames = topRatios
+      .filter((r) => r.value === ratioValue)
+      .map((r) => r.groupName);
+    for (const groupName of affectedGroupNames) {
+      if (seatDistribution[groupName] !== undefined) {
+        seatDistribution[groupName]--;
+      }
+    }
     if (seatOrder) {
-      for (let i = seatOrder.length - 1; i >= 0 && toRemove > 0; i--) {
-        const order = seatOrder[i];
-        if (order && order.value === ratioValue) {
-          const groupName = order.groupName;
-          if (seatDistribution[groupName] !== undefined) {
-            seatDistribution[groupName]--;
-          }
-          seatOrder.splice(i, 1);
-          toRemove--;
-        }
-      }
-    } else {
-      for (const item of [...topRatios].reverse()) {
-        if (item.value === ratioValue && toRemove > 0) {
-          const groupName = item.groupName;
-          if (seatDistribution[groupName] !== undefined) {
-            seatDistribution[groupName]--;
-          }
-          toRemove--;
-        }
-      }
+      const firstOrder = seatOrder.findIndex((r) => r.value === ratioValue);
+      seatOrder.splice(firstOrder, stale.amountSeats);
     }
   }
 
