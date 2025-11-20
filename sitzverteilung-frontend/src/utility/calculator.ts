@@ -563,10 +563,12 @@ function checkCommitteeInvalid(
   distributionWithoutCommittees: CalculationSeatDistribution
 ): string[] {
   if (partiesInCommittee.length === 0) return [];
-  const safeSeats = Object.entries(distributionWithoutCommittees)
-    .filter(([, value]) => value >= 1)
-    .map(([key]) => key);
-  return partiesInCommittee.filter((value) => safeSeats.includes(value));
+  const safeSeats = new Set(
+    Object.entries(distributionWithoutCommittees)
+      .filter(([, value]) => value >= 1)
+      .map(([key]) => key)
+  );
+  return partiesInCommittee.filter((value) => safeSeats.has(value));
 }
 
 export const exportForTesting = {
