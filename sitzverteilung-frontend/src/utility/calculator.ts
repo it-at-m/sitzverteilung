@@ -30,7 +30,6 @@ export function calculate(baseData: BaseData): CalculationResult {
     throw new Error("Invalid or missing target size. Must be positive.");
   }
   const calculationGroups = extractCalculationGroups(baseData);
-  console.debug(calculationGroups);
   const seats = calculationGroups.reduce(
     (acc, group) => {
       acc[group.name] = group.seatsOrVotes;
@@ -46,7 +45,6 @@ export function calculate(baseData: BaseData): CalculationResult {
     baseData,
     false
   );
-
   const methods: Partial<Record<CalculationMethod, CalculationMethodResult>> =
     {};
   AVAILABLE_METHODS.forEach((method) => {
@@ -99,15 +97,18 @@ function extractCalculationGroups(
           return baseData.groups[groupIndex];
         })
         .reduce((sum, group) => sum + (group?.seatsOrVotes ?? 0), 0),
-      partiesInCommittee: union.groups.map((groupIndex) => {
-        const group = baseData.groups[groupIndex];
-        if (!group) {
-          throw new Error(
-            `Union "${union.name}" references invalid group index ${groupIndex}.`
-          );
-        }
-        return group.name;
-      }),
+      partiesInCommittee:
+        union.unionType === UnionType.COMMITTEE
+          ? union.groups.map((groupIndex) => {
+              const group = baseData.groups[groupIndex];
+              if (!group) {
+                throw new Error(
+                  `Union "${union.name}" references invalid group index ${groupIndex}.`
+                );
+              }
+              return group.name;
+            })
+          : [],
     };
   });
   const singleCalculationGroups: CalculationGroup[] = baseData.groups
@@ -502,7 +503,10 @@ function calculateMethodValidity(
           distributedSeats,
           distributedSeatsWithoutCommittees
         ),
-        committeeInvalid: [], // TODO will be done in a later PR
+        committeeInvalid: checkCommitteeInvalid(
+          currentObj.partiesInCommittee,
+          distributionWithoutCommittees
+        ),
       };
       return validation;
     },
@@ -538,14 +542,31 @@ function checkOverroundingForGroup(
  * Checks whether the safe seat was lost to a committee union during the calculation of a method.
  * This is the case when at least one seat was distributed when calculated without committees, but no seat is distributed with them.
  *
- * @param distributedSeats
- * @param distributedSeatsWithoutCommittees
+ * @param distributedSeats seats distributed to the specified group
+ * @param distributedSeatsWithoutCommittees seats distributed to the specified group without committees
  */
 function checkLostSafeSeatForGroup(
   distributedSeats: number,
   distributedSeatsWithoutCommittees: number
 ) {
   return distributedSeatsWithoutCommittees > 0 && distributedSeats === 0;
+}
+
+/**
+ * Checks whether a committee was formed with a party in its members that has a seat even when the committee is not formed.
+ *
+ * @param partiesInCommittee Parties of the committee to check
+ * @param distributionWithoutCommittees distribution without committees
+ */
+function checkCommitteeInvalid(
+  partiesInCommittee: string[],
+  distributionWithoutCommittees: CalculationSeatDistribution
+): string[] {
+  if (partiesInCommittee.length === 0) return [];
+  const safeSeats = Object.entries(distributionWithoutCommittees)
+    .filter(([, value]) => value >= 1)
+    .map(([key]) => key);
+  return partiesInCommittee.filter((value) => safeSeats.includes(value));
 }
 
 export const exportForTesting = {
