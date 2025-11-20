@@ -84,30 +84,24 @@ function extractCalculationGroups(
     unions.flatMap((union) => union.groups)
   );
   const unionCalculationGroups: CalculationGroup[] = unions.map((union) => {
+    const groups = union.groups.map((groupIndex) => {
+      const group = baseData.groups[groupIndex];
+      if (!group) {
+        throw new Error(
+          `Union "${union.name}" references invalid group index ${groupIndex}.`
+        );
+      }
+      return group;
+    });
     return {
       name: `${UNION_TYPE_PREFIXES[union.unionType]}${union.name}`,
-      seatsOrVotes: union.groups
-        .map((groupIndex) => {
-          const group = baseData.groups[groupIndex];
-          if (!group) {
-            throw new Error(
-              `Union "${union.name}" references invalid group index ${groupIndex}.`
-            );
-          }
-          return baseData.groups[groupIndex];
-        })
-        .reduce((sum, group) => sum + (group?.seatsOrVotes ?? 0), 0),
+      seatsOrVotes: groups.reduce(
+        (sum, group) => sum + (group?.seatsOrVotes ?? 0),
+        0
+      ),
       partiesInCommittee:
         union.unionType === UnionType.COMMITTEE
-          ? union.groups.map((groupIndex) => {
-              const group = baseData.groups[groupIndex];
-              if (!group) {
-                throw new Error(
-                  `Union "${union.name}" references invalid group index ${groupIndex}.`
-                );
-              }
-              return group.name;
-            })
+          ? groups.map((group) => group.name)
           : [],
     };
   });
