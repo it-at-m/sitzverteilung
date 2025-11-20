@@ -759,7 +759,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: [], // TODO ["Group 4"]
+              committeeInvalid: ["Group 4"],
             },
           },
         } as CalculationMethodResult,
@@ -873,7 +873,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: [], // TODO ["Group 4"]
+              committeeInvalid: ["Group 4"],
             },
           },
         } as CalculationMethodResult,
@@ -1142,7 +1142,7 @@ describe("Extract calculation groups tests", () => {
       {
         name: "FG: Example fraction union",
         seatsOrVotes: 30,
-        partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
+        partiesInCommittee: [],
       },
       {
         name: "AG: Example committee union",
@@ -1168,7 +1168,7 @@ describe("Extract calculation groups tests", () => {
       {
         name: "FG: Example fraction union",
         seatsOrVotes: 30,
-        partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
+        partiesInCommittee: [],
       },
     ];
 
@@ -1202,7 +1202,7 @@ test("Extract calculation groups no include committees with partial overlap", ()
     {
       name: "FG: Fraction 1",
       seatsOrVotes: 50,
-      partiesInCommittee: ["Testgroup 2", "Testgroup 3"],
+      partiesInCommittee: [],
     },
   ];
 
@@ -1235,7 +1235,7 @@ test("Extract calculation groups no include committees with no overlap", () => {
     {
       name: "FG: Fraction 1",
       seatsOrVotes: 30,
-      partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
+      partiesInCommittee: [],
     },
   ];
 
