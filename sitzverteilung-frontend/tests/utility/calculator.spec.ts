@@ -1179,72 +1179,72 @@ describe("Extract calculation groups tests", () => {
 
     expect(calculationGroups).toEqual(expected);
   });
-});
 
-test("Extract calculation groups no include committees with partial overlap", () => {
-  const baseData = getTestBaseDataWithOverlapCommitteeFraction();
-  const expected: CalculationGroup[] = [
-    {
-      name: "Testgroup 1",
-      seatsOrVotes: 10,
-      partiesInCommittee: [],
-    },
-    {
-      name: "Testgroup 4",
-      seatsOrVotes: 30,
-      partiesInCommittee: [],
-    },
-    {
-      name: "Testgroup 5",
-      seatsOrVotes: 30,
-      partiesInCommittee: [],
-    },
-    {
-      name: "FG: Fraction 1",
-      seatsOrVotes: 50,
-      partiesInCommittee: [],
-    },
-  ];
+  test("Extract calculation groups no include committees with partial overlap", () => {
+    const baseData = getTestBaseDataWithOverlapCommitteeFraction();
+    const expected: CalculationGroup[] = [
+      {
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+        partiesInCommittee: [],
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+      {
+        name: "Testgroup 5",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+      {
+        name: "FG: Fraction 1",
+        seatsOrVotes: 50,
+        partiesInCommittee: [],
+      },
+    ];
 
-  const calculationGroups = exportForTesting.extractCalculationGroups(
-    baseData,
-    false
-  );
+    const calculationGroups = exportForTesting.extractCalculationGroups(
+      baseData,
+      false
+    );
 
-  expect(calculationGroups).toEqual(expected);
-});
+    expect(calculationGroups).toEqual(expected);
+  });
 
-test("Extract calculation groups no include committees with no overlap", () => {
-  const baseData = getTestBaseDataWithNoOverlap();
-  const expected: CalculationGroup[] = [
-    {
-      name: "Testgroup 3",
-      seatsOrVotes: 30,
-      partiesInCommittee: [],
-    },
-    {
-      name: "Testgroup 4",
-      seatsOrVotes: 30,
-      partiesInCommittee: [],
-    },
-    {
-      name: "Testgroup 5",
-      seatsOrVotes: 30,
-      partiesInCommittee: [],
-    },
-    {
-      name: "FG: Fraction 1",
-      seatsOrVotes: 30,
-      partiesInCommittee: [],
-    },
-  ];
+  test("Extract calculation groups no include committees with no overlap", () => {
+    const baseData = getTestBaseDataWithNoOverlap();
+    const expected: CalculationGroup[] = [
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+      {
+        name: "Testgroup 5",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+      {
+        name: "FG: Fraction 1",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+    ];
 
-  const calculationGroups = exportForTesting.extractCalculationGroups(
-    baseData,
-    false
-  );
+    const calculationGroups = exportForTesting.extractCalculationGroups(
+      baseData,
+      false
+    );
 
-  expect(calculationGroups).toEqual(expected);
+    expect(calculationGroups).toEqual(expected);
+  });
 });
 
 function getComparableMethodResult(
