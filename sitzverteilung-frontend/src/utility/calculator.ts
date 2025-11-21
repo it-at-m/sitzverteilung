@@ -80,28 +80,59 @@ function extractCalculationGroups(
         (union) => union.unionType !== UnionType.COMMITTEE
       );
 
+  const fractions = baseData.unions.filter(
+    (union) => union.unionType === UnionType.FRACTION
+  );
+  const committees = baseData.unions.filter(
+    (union) => union.unionType === UnionType.COMMITTEE
+  );
+
+  const groupIndexesInFraction = new Set<GroupIndex>(
+    fractions.flatMap((fraction) => fraction.groups)
+  );
+  const groupIndexesInCommittee = new Set<GroupIndex>(
+    committees.flatMap((committee) => committee.groups)
+  );
+
   const groupIndexesInUnion = new Set<GroupIndex>(
     unions.flatMap((union) => union.groups)
   );
   const unionCalculationGroups: CalculationGroup[] = unions.map((union) => {
-    const groups = union.groups.map((groupIndex) => {
-      const group = baseData.groups[groupIndex];
-      if (!group) {
-        throw new Error(
-          `Union "${union.name}" references invalid group index ${groupIndex}.`
-        );
-      }
-      return group;
-    });
     return {
       name: `${UNION_TYPE_PREFIXES[union.unionType]}${union.name}`,
-      seatsOrVotes: groups.reduce(
-        (sum, group) => sum + (group?.seatsOrVotes ?? 0),
-        0
-      ),
+      seatsOrVotes: union.groups.reduce((sum, groupIndex) => {
+        const group = baseData.groups[groupIndex];
+        if (!group) {
+          throw new Error(
+            `Union "${union.name}" references invalid group index ${groupIndex}.`
+          );
+        }
+        const isGroupInFraction = groupIndexesInFraction.has(groupIndex);
+        const isGroupInCommittee = groupIndexesInCommittee.has(groupIndex);
+
+        //groups which are in a fraction and in a committee as well, should only be counted in the committee
+        if (
+          includeCommitteeUnions &&
+          isGroupInFraction &&
+          isGroupInCommittee &&
+          union.unionType === UnionType.FRACTION
+        ) {
+          return sum;
+        } else {
+          return sum + (group?.seatsOrVotes ?? 0);
+        }
+      }, 0),
       partiesInCommittee:
         union.unionType === UnionType.COMMITTEE
-          ? groups.map((group) => group.name)
+          ? union.groups.map((groupIndex) => {
+              const group = baseData.groups[groupIndex];
+              if (!group) {
+                throw new Error(
+                  `Union "${union.name}" references invalid group index ${groupIndex}.`
+                );
+              }
+              return group.name;
+            })
           : [],
     };
   });

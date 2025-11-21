@@ -1193,7 +1193,7 @@ describe("Extract calculation groups tests", () => {
       },
       {
         name: "FG: Example fraction union",
-        seatsOrVotes: 30,
+        seatsOrVotes: 0,
         partiesInCommittee: [],
       },
       {
