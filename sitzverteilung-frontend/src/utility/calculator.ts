@@ -80,6 +80,20 @@ function extractCalculationGroups(
         (union) => union.unionType !== UnionType.COMMITTEE
       );
 
+  const fractions = baseData.unions.filter(
+    (union) => union.unionType == UnionType.FRACTION
+  );
+  const committees = baseData.unions.filter(
+    (union) => union.unionType == UnionType.COMMITTEE
+  );
+
+  const groupIndexesInFraction = new Set<GroupIndex>(
+    fractions.flatMap((fraction) => fraction.groups)
+  );
+  const groupIndexesInCommittee = new Set<GroupIndex>(
+    committees.flatMap((fraction) => fraction.groups)
+  );
+
   const groupIndexesInUnion = new Set<GroupIndex>(
     unions.flatMap((union) => union.groups)
   );
@@ -93,12 +107,29 @@ function extractCalculationGroups(
       }
       return group;
     });
+
     return {
       name: `${UNION_TYPE_PREFIXES[union.unionType]}${union.name}`,
-      seatsOrVotes: groups.reduce(
-        (sum, group) => sum + (group?.seatsOrVotes ?? 0),
-        0
-      ),
+      seatsOrVotes: groups.reduce((sum, group) => {
+        const isGroupInFraction = groupIndexesInFraction.has(
+          baseData.groups.findIndex((grp) => grp.name.includes(group.name))
+        );
+        const isGroupInCommittee = groupIndexesInCommittee.has(
+          baseData.groups.findIndex((grp) => grp.name.includes(group.name))
+        );
+
+        //groups which are in a fraction and in a committee as well, should only be counted in the committee
+        if (
+          includeCommitteeUnions &&
+          isGroupInFraction &&
+          isGroupInCommittee &&
+          union.unionType === UnionType.FRACTION
+        ) {
+          return sum;
+        } else {
+          return sum + (group?.seatsOrVotes ?? 0);
+        }
+      }, 0),
       partiesInCommittee:
         union.unionType === UnionType.COMMITTEE
           ? groups.map((group) => group.name)
