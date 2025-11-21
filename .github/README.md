@@ -22,12 +22,12 @@ The `Sitzverteilung` is a [Vue][vuejs]-based Progressive Web App developed by it
 
 - Creation of reusable templates
 - Forming of factions and committees
-- Calculation of seat distribution and order for different formulas: 
+- Calculation of seat distribution and order for different formulas:
   - [Hare/Niemayer](https://www.bundeswahlleiterin.de/en/service/glossar/h/hare-niemeyer.html)
   - [Sainte-Lague/Schepers](https://www.bundeswahlleiterin.de/en/service/glossar/s/sainte-lague-schepers.html)
   - [D'Hondt](https://www.bundeswahlleiterin.de/en/service/glossar/d/d-hondtsche-sitzverteilung.html)
 - Detection of stale situations
-- Various validation checks to detect improper constellations 
+- Various validation checks to detect improper constellations
 - Link-based sharing functionality for templates and individual calculations
 - PDF export of calculation results
 
