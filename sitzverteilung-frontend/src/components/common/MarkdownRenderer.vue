@@ -1,20 +1,17 @@
 <template>
-  <div v-html="htmlContent" />
+  <div
+    class="markdown"
+    v-html="htmlContent"
+  />
 </template>
 
 <script setup lang="ts">
 import { Marked } from "marked";
-import markedAlert from "marked-alert";
 import { computed, ref, watch } from "vue";
 
 const marked = new Marked({
   breaks: true,
-}).use(
-  markedAlert({
-    className:
-      "v-alert v-theme--light v-alert--density-default v-alert--variant-flat v-alert__content",
-  })
-);
+});
 
 const markdownContent = ref("");
 const htmlContent = computed(() => marked.parse(markdownContent.value));
@@ -36,3 +33,23 @@ watch(
   { immediate: true }
 );
 </script>
+
+<style>
+.markdown > p {
+  margin-bottom: 10px;
+}
+
+.markdown > h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 15px;
+}
+
+.markdown > ul {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+</style>
