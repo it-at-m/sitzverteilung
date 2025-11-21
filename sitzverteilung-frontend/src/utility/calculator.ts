@@ -45,7 +45,6 @@ export function calculate(baseData: BaseData): CalculationResult {
     baseData,
     false
   );
-
   const methods: Partial<Record<CalculationMethod, CalculationMethodResult>> =
     {};
   AVAILABLE_METHODS.forEach((method) => {
@@ -75,26 +74,35 @@ function extractCalculationGroups(
   baseData: BaseData,
   includeCommitteeUnions = true
 ): CalculationGroup[] {
-  const groupIndexesInUnion = new Set<GroupIndex>();
   const unions = includeCommitteeUnions
     ? baseData.unions
     : baseData.unions.filter(
         (union) => union.unionType !== UnionType.COMMITTEE
       );
+
+  const groupIndexesInUnion = new Set<GroupIndex>(
+    unions.flatMap((union) => union.groups)
+  );
   const unionCalculationGroups: CalculationGroup[] = unions.map((union) => {
+    const groups = union.groups.map((groupIndex) => {
+      const group = baseData.groups[groupIndex];
+      if (!group) {
+        throw new Error(
+          `Union "${union.name}" references invalid group index ${groupIndex}.`
+        );
+      }
+      return group;
+    });
     return {
       name: `${UNION_TYPE_PREFIXES[union.unionType]}${union.name}`,
-      seatsOrVotes: union.groups
-        .map((groupIndex) => {
-          if (groupIndex < 0 || groupIndex >= baseData.groups.length) {
-            throw new Error(
-              `Union "${union.name}" references invalid group index ${groupIndex}.`
-            );
-          }
-          groupIndexesInUnion.add(groupIndex);
-          return baseData.groups[groupIndex];
-        })
-        .reduce((sum, group) => sum + (group?.seatsOrVotes ?? 0), 0),
+      seatsOrVotes: groups.reduce(
+        (sum, group) => sum + (group?.seatsOrVotes ?? 0),
+        0
+      ),
+      partiesInCommittee:
+        union.unionType === UnionType.COMMITTEE
+          ? groups.map((group) => group.name)
+          : [],
     };
   });
   const singleCalculationGroups: CalculationGroup[] = baseData.groups
@@ -103,6 +111,7 @@ function extractCalculationGroups(
       return {
         name: singleGroup.name,
         seatsOrVotes: singleGroup.seatsOrVotes,
+        partiesInCommittee: [],
       } as CalculationGroup;
     });
   const calculationGroups = [
@@ -297,9 +306,11 @@ function calculateHareNiemeyer(
   const dHondtCalculationGroups: CalculationGroup[] = Object.entries(
     seatDistribution
   ).map(([groupName, value]) => {
+    const group = calculationGroups.find((g) => g.name === groupName);
     return {
       name: groupName,
       seatsOrVotes: value,
+      partiesInCommittee: group?.partiesInCommittee ?? [],
     };
   });
   const seatsInOrder = committeeSize - (stale?.amountSeats ?? 0);
@@ -486,7 +497,10 @@ function calculateMethodValidity(
           distributedSeats,
           distributedSeatsWithoutCommittees
         ),
-        committeeInvalid: [], // TODO will be done in a later PR
+        committeeInvalid: checkCommitteeInvalid(
+          currentObj.partiesInCommittee,
+          distributionWithoutCommittees
+        ),
       };
       return validation;
     },
@@ -522,8 +536,8 @@ function checkOverroundingForGroup(
  * Checks whether the safe seat was lost to a committee union during the calculation of a method.
  * This is the case when at least one seat was distributed when calculated without committees, but no seat is distributed with them.
  *
- * @param distributedSeats
- * @param distributedSeatsWithoutCommittees
+ * @param distributedSeats seats distributed to the specified group
+ * @param distributedSeatsWithoutCommittees seats distributed to the specified group without committees
  */
 function checkLostSafeSeatForGroup(
   distributedSeats: number,
@@ -532,12 +546,32 @@ function checkLostSafeSeatForGroup(
   return distributedSeatsWithoutCommittees > 0 && distributedSeats === 0;
 }
 
+/**
+ * Checks whether a committee was formed with a party in its members that has a seat even when the committee is not formed.
+ *
+ * @param partiesInCommittee Parties of the committee to check
+ * @param distributionWithoutCommittees distribution without committees
+ */
+function checkCommitteeInvalid(
+  partiesInCommittee: string[],
+  distributionWithoutCommittees: CalculationSeatDistribution
+): string[] {
+  if (partiesInCommittee.length === 0) return [];
+  const safeSeats = new Set(
+    Object.entries(distributionWithoutCommittees)
+      .filter(([, value]) => value >= 1)
+      .map(([key]) => key)
+  );
+  return partiesInCommittee.filter((value) => safeSeats.has(value));
+}
+
 export const exportForTesting = {
   calculateDHondt,
   calculateHareNiemeyer,
   calculateSainteLagueSchepers,
   checkOverroundingForGroup,
   checkLostSafeSeatForGroup,
+  checkCommitteeInvalid,
   calculateProportions,
   extractCalculationGroups,
 };
