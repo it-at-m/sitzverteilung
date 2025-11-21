@@ -252,7 +252,7 @@ function generateValidationText(
     ...(validationData.lostSafeSeat ? ["Verlust letzter sicherer Sitz"] : []),
     ...((validationData.committeeInvalid?.length ?? 0) > 0
       ? [
-          `Konstellation ungültig, wegen: ${validationData.committeeInvalid.join(", ")}`,
+          `Sicherer Sitz: ${validationData.committeeInvalid.join(", ")}`,
         ]
       : []),
   ];
