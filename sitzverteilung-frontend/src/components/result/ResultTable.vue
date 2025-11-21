@@ -251,9 +251,7 @@ function generateValidationText(
     ...(validationData.overRounding ? ["Überaufrundung"] : []),
     ...(validationData.lostSafeSeat ? ["Verlust letzter sicherer Sitz"] : []),
     ...((validationData.committeeInvalid?.length ?? 0) > 0
-      ? [
-          `Sicherer Sitz: ${validationData.committeeInvalid.join(", ")}`,
-        ]
+      ? [`Sicherer Sitz: ${validationData.committeeInvalid.join(", ")}`]
       : []),
   ];
 
