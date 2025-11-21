@@ -1055,7 +1055,7 @@ describe("Method validity committee invalid tests", () => {
     expect(result).toEqual(expected);
   });
 
-  test("Check committee invalid when seat when overlapping", () => {
+  test("Check committee invalid when seats overlap", () => {
     const seatDistributionWithoutCommittee: CalculationSeatDistribution = {
       "Group 1": 0,
       "Group 2": 1,
@@ -1071,7 +1071,7 @@ describe("Method validity committee invalid tests", () => {
     expect(result).toEqual(expected);
   });
 
-  test("Check committee invalid when seat not overlapping", () => {
+  test("Check committee invalid when seats do not overlap", () => {
     const seatDistributionWithoutCommittee: CalculationSeatDistribution = {
       "Group 1": 0,
       "Group 2": 1,
