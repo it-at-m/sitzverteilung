@@ -10,8 +10,8 @@
     "dev": "vite",
     "test": "vitest run",
     "build": "vue-tsc --build --noCheck && pwa-assets-generator && vite build",
-    "lint": "prettier . --check && eslint . && vue-tsc --build --noEmit",
-    "fix": "prettier . --write && eslint . --fix"
+    "lint": "prettier . --check && eslint . && markdownlint . && vue-tsc --build --noEmit",
+    "fix": "prettier . --write && eslint . --fix && markdownlint -f ."
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.8",
@@ -39,6 +39,7 @@
     "eslint": "9.39.1",
     "eslint-plugin-vue": "10.5.1",
     "jsdom": "27.1.0",
+    "markdownlint-cli": "0.46.0",
     "prettier": "3.6.2",
     "typescript": "5.9.3",
     "unplugin-fonts": "1.4.0",
