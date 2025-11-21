@@ -21,8 +21,13 @@ const { markdownFileName } = defineProps<{
 }>();
 
 const importMarkdown = async (path: string) => {
-  const markdownFile = await import(`@/assets/${path}.md?raw`);
-  markdownContent.value = markdownFile.default;
+  try {
+    const markdownFile = await import(`@/assets/${path}.md?raw`);
+    markdownContent.value = markdownFile.default;
+  } catch (error) {
+    console.debug(`Failed to load markdown file: ${path}.md`, error);
+    markdownContent.value = `Error loading content: ${path}.md`;
+  }
 };
 
 watch(
