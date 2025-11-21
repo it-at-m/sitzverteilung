@@ -5,8 +5,7 @@ In dieser Ansicht wird die Verwaltung der Vorlagen geregelt, bestehend aus:
 - Parteien / Gruppierungen / Einzelmitglieder und zugehörige Informationen
 - Bilden von Fraktionsgemeinschaften und Ausschussgemeinschaften
 
-> [!NOTE] Speicherung der Daten
-> Die angelegten Vorlagen werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Vorlagen als Link (über die 'Teilen'-Funktion) extern abgelegt werden.
+**ACHTUNG**: Die angelegten Vorlagen werden nur im Browser gespeichert. Je nach Einstellung können dadurch nach dem Schließen des Browsers angelegte Daten verloren gehen. In solchen Fällen sollten die Vorlagen als Link (über die 'Teilen'-Funktion) extern abgelegt werden.
 
 ## Vorlagenansicht
 
