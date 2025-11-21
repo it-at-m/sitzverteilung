@@ -40,11 +40,11 @@ watch(
 }
 
 .markdown > h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.markdown > h2,
+.markdown > h3,
+.markdown > h4,
+.markdown > h5,
+.markdown > h6 {
   margin-bottom: 15px;
 }
 
