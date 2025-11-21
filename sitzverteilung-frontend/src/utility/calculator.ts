@@ -571,6 +571,7 @@ export const exportForTesting = {
   calculateSainteLagueSchepers,
   checkOverroundingForGroup,
   checkLostSafeSeatForGroup,
+  checkCommitteeInvalid,
   calculateProportions,
   extractCalculationGroups,
 };

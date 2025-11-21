@@ -13,6 +13,7 @@ import { UnionType } from "../../src/types/basedata/Union";
 import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
 import { CalculationProportions } from "../../src/types/calculation/internal/CalculationProportions";
 import { CalculationResult } from "../../src/types/calculation/internal/CalculationResult";
+import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { calculate, exportForTesting } from "../../src/utility/calculator";
 import {
   getTestBaseDataWithNoOverlap,
@@ -1034,6 +1035,57 @@ describe("Method validity lost safe seat tests", () => {
     );
 
     expect(result).toBeFalsy();
+  });
+});
+
+describe("Method validity committee invalid tests", () => {
+  test("Check committee invalid when no committee is checked", () => {
+    const seatDistributionWithoutCommittee: CalculationSeatDistribution = {
+      "Group 1": 0,
+      "Group 2": 1,
+    };
+    const partiesInCommittee = [];
+    const expected = [];
+
+    const result = exportForTesting.checkCommitteeInvalid(
+      partiesInCommittee,
+      seatDistributionWithoutCommittee
+    );
+
+    expect(result).toEqual(expected);
+  });
+
+  test("Check committee invalid when seat when overlapping", () => {
+    const seatDistributionWithoutCommittee: CalculationSeatDistribution = {
+      "Group 1": 0,
+      "Group 2": 1,
+    };
+    const partiesInCommittee = ["Group 1", "Group 2"];
+    const expected = ["Group 2"];
+
+    const result = exportForTesting.checkCommitteeInvalid(
+      partiesInCommittee,
+      seatDistributionWithoutCommittee
+    );
+
+    expect(result).toEqual(expected);
+  });
+
+  test("Check committee invalid when seat not overlapping", () => {
+    const seatDistributionWithoutCommittee: CalculationSeatDistribution = {
+      "Group 1": 0,
+      "Group 2": 1,
+      "Group 3": 0,
+    };
+    const partiesInCommittee = ["Group 1", "Group 3"];
+    const expected = [];
+
+    const result = exportForTesting.checkCommitteeInvalid(
+      partiesInCommittee,
+      seatDistributionWithoutCommittee
+    );
+
+    expect(result).toEqual(expected);
   });
 });
 
