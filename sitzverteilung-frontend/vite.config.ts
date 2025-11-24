@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           cleanupOutdatedCaches: true,
-          globPatterns: ["**/*.{js,css,html,png,ico}"],
+          globPatterns: ["**/*.{js,css,html,png,ico,md}"],
         },
         devOptions: {
           enabled: isDevelopment,

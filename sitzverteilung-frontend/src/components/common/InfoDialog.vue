@@ -13,7 +13,7 @@
       scrollable
     >
       <v-card>
-        <v-card-text>
+        <v-card-text class="pa-10">
           <slot name="dialog-text" />
         </v-card-text>
         <v-card-actions>
