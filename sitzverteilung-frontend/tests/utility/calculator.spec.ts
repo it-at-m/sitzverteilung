@@ -1046,7 +1046,20 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInCommittee = [];
     const expected = [];
-    const allGroups = ["Group 1", "Group 2"];
+    const allGroups: CalculationGroup[] = [
+      {
+        name: "Group 1",
+        seatsOrVotes: 0,
+        partiesInCommittee: [],
+        partiesInFraction: [],
+      },
+      {
+        name: "Group 2",
+        seatsOrVotes: 1,
+        partiesInCommittee: [],
+        partiesInFraction: [],
+      },
+    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInCommittee,

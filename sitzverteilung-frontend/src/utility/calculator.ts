@@ -618,19 +618,19 @@ function checkCommitteeInvalid(
     }
   });
 
-  const invalidParties: string[] = [];
+  const invalidParties = new Set<string>();
 
   partiesInCommittee.forEach((party) => {
     if (safeSeats.has(party)) {
-      invalidParties.push(party);
+      invalidParties.add(party);
     }
 
     const fractions = partyToFractions.get(party);
     if (fractions && fractions.some((fraction) => safeSeats.has(fraction))) {
-      invalidParties.push(party);
+      invalidParties.add(party);
     }
   });
-  return invalidParties;
+  return Array.from(invalidParties);
 }
 
 export const exportForTesting = {
