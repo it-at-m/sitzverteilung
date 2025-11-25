@@ -98,6 +98,16 @@ function extractCalculationGroups(
     unions.flatMap((union) => union.groups)
   );
   const unionCalculationGroups: CalculationGroup[] = unions.map((union) => {
+    const memberParties = union.groups.map((groupIndex) => {
+      const group = baseData.groups[groupIndex];
+      if (!group) {
+        throw new Error(
+          `Union "${union.name}" references invalid group index ${groupIndex}.`
+        );
+      }
+      return group.name;
+    });
+
     return {
       name: `${UNION_TYPE_PREFIXES[union.unionType]}${union.name}`,
       seatsOrVotes: union.groups.reduce((sum, groupIndex) => {
@@ -107,6 +117,7 @@ function extractCalculationGroups(
             `Union "${union.name}" references invalid group index ${groupIndex}.`
           );
         }
+
         const isGroupInFraction = groupIndexesInFraction.has(groupIndex);
         const isGroupInCommittee = groupIndexesInCommittee.has(groupIndex);
 
@@ -118,24 +129,19 @@ function extractCalculationGroups(
           union.unionType === UnionType.FRACTION
         ) {
           return sum;
-        } else {
-          return sum + (group?.seatsOrVotes ?? 0);
         }
+
+        return sum + (group?.seatsOrVotes ?? 0);
       }, 0),
+
       partiesInCommittee:
-        union.unionType === UnionType.COMMITTEE
-          ? union.groups.map((groupIndex) => {
-              const group = baseData.groups[groupIndex];
-              if (!group) {
-                throw new Error(
-                  `Union "${union.name}" references invalid group index ${groupIndex}.`
-                );
-              }
-              return group.name;
-            })
-          : [],
+        union.unionType === UnionType.COMMITTEE ? memberParties : [],
+
+      partiesInFraction:
+        union.unionType === UnionType.FRACTION ? memberParties : [],
     };
   });
+
   const singleCalculationGroups: CalculationGroup[] = baseData.groups
     .filter((_, index) => !groupIndexesInUnion.has(index))
     .map((singleGroup) => {
@@ -143,6 +149,7 @@ function extractCalculationGroups(
         name: singleGroup.name,
         seatsOrVotes: singleGroup.seatsOrVotes,
         partiesInCommittee: [],
+        partiesInFraction: [],
       } as CalculationGroup;
     });
   const calculationGroups = [
@@ -342,6 +349,7 @@ function calculateHareNiemeyer(
       name: groupName,
       seatsOrVotes: value,
       partiesInCommittee: group?.partiesInCommittee ?? [],
+      partiesInFraction: group?.partiesInFraction ?? [],
     };
   });
   const seatsInOrder = committeeSize - (stale?.amountSeats ?? 0);
@@ -530,7 +538,8 @@ function calculateMethodValidity(
         ),
         committeeInvalid: checkCommitteeInvalid(
           currentObj.partiesInCommittee,
-          distributionWithoutCommittees
+          distributionWithoutCommittees,
+          calculationGroups
         ),
       };
       return validation;
@@ -582,18 +591,46 @@ function checkLostSafeSeatForGroup(
  *
  * @param partiesInCommittee Parties of the committee to check
  * @param distributionWithoutCommittees distribution without committees
+ * @param allGroups All CalculationGroups
  */
 function checkCommitteeInvalid(
   partiesInCommittee: string[],
-  distributionWithoutCommittees: CalculationSeatDistribution
+  distributionWithoutCommittees: CalculationSeatDistribution,
+  allGroups: CalculationGroup[]
 ): string[] {
   if (partiesInCommittee.length === 0) return [];
+
   const safeSeats = new Set(
     Object.entries(distributionWithoutCommittees)
-      .filter(([, value]) => value >= 1)
-      .map(([key]) => key)
+      .filter(([, seats]) => seats >= 1)
+      .map(([groupName]) => groupName)
   );
-  return partiesInCommittee.filter((value) => safeSeats.has(value));
+
+  const partyToFractions = new Map<string, string[]>();
+  allGroups.forEach((group) => {
+    if (group.name.startsWith("FG:")) {
+      for (const party of group.partiesInFraction) {
+        if (!partyToFractions.has(party)) {
+          partyToFractions.set(party, []);
+        }
+        partyToFractions.get(party)?.push(group.name);
+      }
+    }
+  });
+
+  const invalidParties: string[] = [];
+
+  partiesInCommittee.forEach((party) => {
+    if (safeSeats.has(party)) {
+      invalidParties.push(party);
+    }
+
+    const fractions = partyToFractions.get(party);
+    if (fractions && fractions.some((fraction) => safeSeats.has(fraction))) {
+      invalidParties.push(party);
+    }
+  });
+  return invalidParties;
 }
 
 export const exportForTesting = {
