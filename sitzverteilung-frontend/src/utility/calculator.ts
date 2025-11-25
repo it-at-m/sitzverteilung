@@ -609,12 +609,12 @@ function checkCommitteeInvalid(
   const partyToFractions = new Map<string, string[]>();
   allGroups.forEach((group) => {
     if (group.name.startsWith("FG:")) {
-      for (const party of group.partiesInFraction) {
+      group.partiesInFraction.forEach((party) => {
         if (!partyToFractions.has(party)) {
           partyToFractions.set(party, []);
         }
         partyToFractions.get(party)?.push(group.name);
-      }
+      });
     }
   });
 
