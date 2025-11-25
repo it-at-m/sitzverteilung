@@ -16,10 +16,11 @@ import { CalculationResult } from "../../src/types/calculation/internal/Calculat
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { calculate, exportForTesting } from "../../src/utility/calculator";
 import {
-  getTestBaseDataWithNoOverlap,
-  getTestBaseDataWithoutUnion,
-  getTestBaseDataWithOverlapCommitteeFraction,
-  getTestBaseDataWithUnion,
+    getTestBaseDataPartyInBothCommitteeAndFraction,
+    getTestBaseDataWithNoOverlap,
+    getTestBaseDataWithoutUnion,
+    getTestBaseDataWithOverlapCommitteeFraction,
+    getTestBaseDataWithUnion,
 } from "../TestData";
 
 interface CalculationTestData {
@@ -1297,6 +1298,44 @@ describe("Extract calculation groups tests", () => {
 
     expect(calculationGroups).toEqual(expected);
   });
+
+    test("Extract calculation groups don't count committeeVotes for group in both", () => {
+        const baseData = getTestBaseDataPartyInBothCommitteeAndFraction();
+        const expected: CalculationGroup[] = [
+            {
+                name: "Testgroup 3",
+                seatsOrVotes: 30,
+                partiesInCommittee: [],
+            },
+            {
+                name: "Testgroup 4",
+                seatsOrVotes: 30,
+                partiesInCommittee: [],
+            },
+            {
+                name: "Testgroup 5",
+                seatsOrVotes: 30,
+                partiesInCommittee: [],
+            },
+            {
+                name: "FG: Fraction 1",
+                seatsOrVotes: 30,
+                partiesInCommittee: ["Testgroup 1, Testgroup 2"],
+            },
+            {
+                name: "AG: Fraction 1",
+                seatsOrVotes: 30,
+                partiesInCommittee: ["Testgroup 1, Testgroup 3"],
+            },
+        ];
+
+        const calculationGroups = exportForTesting.extractCalculationGroups(
+            baseData,
+            true
+        );
+
+        expect(calculationGroups).toEqual(expected);
+    });
 });
 
 function getComparableMethodResult(
