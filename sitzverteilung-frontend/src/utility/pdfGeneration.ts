@@ -234,7 +234,7 @@ function generateParties(
   doc.text("Name", x + 2, 75);
 
   const isCommitteeSizeGiven =
-    typeof committeeSize == "number" && committeeSize > 0;
+    typeof committeeSize === "number" && committeeSize > 0;
   doc.text(
     isCommitteeSizeGiven ? "Sitze" : "Stimmen",
     x + (isCommitteeSizeGiven ? 80 : 74),
