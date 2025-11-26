@@ -50,11 +50,16 @@ watch(
 .markdown > h4,
 .markdown > h5,
 .markdown > h6 {
+  margin-top: 30px;
   margin-bottom: 15px;
 }
 
 .markdown > ul {
   margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.markdown > pre {
   margin-bottom: 15px;
 }
 </style>

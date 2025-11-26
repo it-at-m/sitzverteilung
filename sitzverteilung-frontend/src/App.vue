@@ -2,7 +2,7 @@
   <v-app>
     <the-snackbar />
     <the-navigation />
-    <v-main>
+    <v-main class="flex-grow-1">
       <v-container fluid>
         <router-view v-slot="{ Component }">
           <v-fade-transition mode="out-in">
@@ -11,10 +11,12 @@
         </router-view>
       </v-container>
     </v-main>
+    <the-footer class="flex-grow-0" />
   </v-app>
 </template>
 
 <script setup lang="ts">
+import TheFooter from "@/components/TheFooter.vue";
 import TheNavigation from "@/components/TheNavigation.vue";
 import TheSnackbar from "@/components/TheSnackbar.vue";
 import { usePWA } from "@/composables/usePWA";
