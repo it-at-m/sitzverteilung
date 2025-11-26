@@ -130,10 +130,10 @@ function generateParameter(
   );
   doc.text(
     "Berechnungsverfahren: " + usedCalculationMethod,
-    PDF_CONFIGURATIONS.marginLeft + 65,
+    PDF_CONFIGURATIONS.marginLeft + 102,
     43
   );
-  doc.text("Zulässigkeit:", PDF_CONFIGURATIONS.marginLeft + 65, 48);
+  doc.text("Zulässigkeit:", PDF_CONFIGURATIONS.marginLeft + 102, 48);
   doc.setTextColor(
     isCalculationMethodValid ? 0 : 255,
     isCalculationMethodValid ? 170 : 0,
@@ -141,7 +141,7 @@ function generateParameter(
   );
   doc.text(
     isCalculationMethodValid ? "zulässig" : "unzulässig",
-    PDF_CONFIGURATIONS.marginLeft + 84,
+    PDF_CONFIGURATIONS.marginLeft + 121,
     48
   );
   doc.setTextColor(0, 0, 0);
