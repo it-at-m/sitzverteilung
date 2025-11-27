@@ -130,18 +130,18 @@ function generateParameter(
   );
   doc.text(
     "Berechnungsverfahren: " + usedCalculationMethod,
-    PDF_CONFIGURATIONS.marginLeft + 50,
+    PDF_CONFIGURATIONS.marginLeft + 102,
     43
   );
-  doc.text("Zulässigkeit:", PDF_CONFIGURATIONS.marginLeft + 50, 48);
+  doc.text("Zulässigkeit:", PDF_CONFIGURATIONS.marginLeft + 102, 48);
   doc.setTextColor(
     isCalculationMethodValid ? 0 : 255,
-    isCalculationMethodValid ? 255 : 0,
+    isCalculationMethodValid ? 170 : 0,
     0
   );
   doc.text(
     isCalculationMethodValid ? "zulässig" : "unzulässig",
-    PDF_CONFIGURATIONS.marginLeft + 69,
+    PDF_CONFIGURATIONS.marginLeft + 121,
     48
   );
   doc.setTextColor(0, 0, 0);
@@ -232,9 +232,12 @@ function generateParties(
 ): void {
   doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
   doc.text("Name", x + 2, 75);
+
+  const isCommitteeSizeGiven =
+    typeof committeeSize === "number" && committeeSize > 0;
   doc.text(
-    typeof committeeSize == "number" && committeeSize > 0 ? "Sitze" : "Stimmen",
-    x + 80,
+    isCommitteeSizeGiven ? "Sitze" : "Stimmen",
+    x + (isCommitteeSizeGiven ? 80 : 74),
     75
   );
   doc.setLineWidth(0.1);

@@ -232,6 +232,48 @@ export function getTestBaseDataNotEnoughSeats(): BaseData {
   };
 }
 
+export function getTestBaseDataPartyInBothCommitteeAndFraction(): BaseData {
+  return {
+    name: "TestData one party in both",
+    committeeSize: 120,
+    targetSize: 10,
+    groups: [
+      {
+        name: "Testgroup 1",
+        seatsOrVotes: 10,
+      },
+      {
+        name: "Testgroup 2",
+        seatsOrVotes: 20,
+      },
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+      },
+      {
+        name: "Testgroup 5",
+        seatsOrVotes: 30,
+      },
+    ],
+    unions: [
+      {
+        name: "Fraction 1",
+        unionType: UnionType.FRACTION,
+        groups: [0, 1],
+      },
+      {
+        name: "Committee 1",
+        unionType: UnionType.COMMITTEE,
+        groups: [1, 4],
+      },
+    ],
+  };
+}
+
 export function getTestBaseDataInputLimit(): BaseData {
   return {
     name: generateUniqueString(LimitConfiguration.limitName),
