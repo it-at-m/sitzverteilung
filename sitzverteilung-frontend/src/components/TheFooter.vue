@@ -4,7 +4,7 @@
     color="surface-light"
   >
     <v-btn
-      text="Impressum"
+      text="Impressum und Datenschutz"
       variant="text"
       to="/impress"
     />
