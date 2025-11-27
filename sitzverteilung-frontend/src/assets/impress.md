@@ -38,7 +38,7 @@ Verantwortlich im Sinne der DSGVO ist:
     E-Mail: rathaus@muenchen.de
     Telefon: (089) 233-00
 
-Unsere Datenschutzbeauftragten erreichen sie unter:
+Unsere Datenschutzbeauftragten erreichen Sie unter:
 
     Landeshauptstadt München
     Datenschutzbeauftragter
@@ -57,11 +57,11 @@ Wir werden die Daten löschen, sobald die Speicherung nicht mehr erforderlich is
 
 ### Betroffenenrechte
 
-Sie haben als betroffene Person, das Recht auf Auskunft, das Recht auf Berichtigung oder Löschung, das Recht auf Einschränkung der Verarbeitung und das Recht auf Widerspruch gegen die Verarbeitung deiner Daten.
+Sie haben als betroffene Person, das Recht auf Auskunft, das Recht auf Berichtigung oder Löschung, das Recht auf Einschränkung der Verarbeitung und das Recht auf Widerspruch gegen die Verarbeitung Ihrer Daten.
 
 Bitte richten Sie Ihren Widerspruch formlos an oben genannte Adresse.
 
-Darüber hinaus haben sie das Recht auf Datenübertragbarkeit. Sie haben weiter das Recht, sich bei einer Aufsichtsbehörde über die Verarbeitung zu beschweren. Eine Liste der entsprechenden Behörden finden sie unter: <https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html>.
+Darüber hinaus haben Sie das Recht auf Datenübertragbarkeit. Sie haben weiter das Recht, sich bei einer Aufsichtsbehörde über die Verarbeitung zu beschweren. Eine Liste der entsprechenden Behörden finden Sie unter: <https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html>.
 
 ### Hosting
 
