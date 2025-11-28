@@ -1045,11 +1045,11 @@ describe("Method validity committee invalid tests", () => {
       "Group 1": 0,
       "Group 2": 1,
     };
-    const partiesInCommittee = [];
+    const partiesInUnion = [];
     const expected = [];
 
     const result = exportForTesting.checkCommitteeInvalid(
-      partiesInCommittee,
+      partiesInUnion,
       seatDistributionWithoutCommittee
     );
 
@@ -1061,11 +1061,11 @@ describe("Method validity committee invalid tests", () => {
       "Group 1": 0,
       "Group 2": 1,
     };
-    const partiesInCommittee = ["Group 1", "Group 2"];
+    const partiesInUnion = ["Group 1", "Group 2"];
     const expected = ["Group 1", "Group 2"];
 
     const result = exportForTesting.checkCommitteeInvalid(
-      partiesInCommittee,
+      partiesInUnion,
       seatDistributionWithoutCommittee
     );
 
@@ -1078,11 +1078,11 @@ describe("Method validity committee invalid tests", () => {
       "Group 2": 1,
       "Group 3": 0,
     };
-    const partiesInCommittee = [];
+    const partiesInUnion = [];
     const expected = [];
 
     const result = exportForTesting.checkCommitteeInvalid(
-      partiesInCommittee,
+      partiesInUnion,
       seatDistributionWithoutCommittee
     );
 
@@ -1098,12 +1098,12 @@ describe("Method validity committee invalid tests", () => {
       F: 13,
       "FG: B und G": 68,
     };
-    const partiesInCommittee = ["E", "G"];
+    const partiesInUnion = ["E", "G"];
 
     const expected = ["E", "G"];
 
     const result = exportForTesting.checkCommitteeInvalid(
-      partiesInCommittee,
+      partiesInUnion,
       seatDistributionWithoutCommittee
     );
 
@@ -1326,22 +1326,22 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
+        partiesInUnion: [],
       },
       {
         name: "Testgroup 4",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
+        partiesInUnion: [],
       },
       {
         name: "FG: Fraction 1",
         seatsOrVotes: 10,
-        partiesInCommittee: [],
+        partiesInUnion: [],
       },
       {
         name: "AG: Committee 1",
         seatsOrVotes: 50,
-        partiesInCommittee: ["Testgroup 2", "Testgroup 5"],
+        partiesInUnion: ["Testgroup 2", "Testgroup 5"],
       },
     ];
 

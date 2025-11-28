@@ -582,24 +582,24 @@ function checkLostSafeSeatForGroup(
 /**
  * Checks whether a committee was formed with a party in its members that has a seat even when the committee is not formed.
  *
- * @param partiesInCommittee Parties of the committee to check
+ * @param partiesInUnion Parties of the union to check
  * @param distributionWithoutCommittees distribution without committees
  */
 function checkCommitteeInvalid(
-  partiesInCommittee: string[],
+  partiesInUnion: string[],
   distributionWithoutCommittees: CalculationSeatDistribution
 ): string[] {
-  if (partiesInCommittee.length === 0) return [];
+  if (partiesInUnion.length === 0) return [];
 
   const safeSeats = Object.entries(distributionWithoutCommittees)
     .filter(([, seats]) => seats >= 1)
     .flatMap(([groupName]) => {
       return groupName.startsWith(UNION_TYPE_PREFIXES["0"])
         ? groupName
-        : partiesInCommittee;
+        : partiesInUnion;
     });
 
-  return partiesInCommittee.filter((value) => safeSeats.includes(value));
+  return partiesInUnion.filter((value) => safeSeats.includes(value));
 }
 
 export const exportForTesting = {
