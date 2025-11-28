@@ -533,7 +533,9 @@ function calculateMethodValidity(
           distributedSeats,
           distributedSeatsWithoutCommittees
         ),
-        committeeInvalid: groupName.startsWith(UNION_TYPE_PREFIXES[UnionType.COMMITTEE])
+        committeeInvalid: groupName.startsWith(
+          UNION_TYPE_PREFIXES[UnionType.COMMITTEE]
+        )
           ? checkCommitteeInvalid(
               currentObj.partiesInUnion,
               distributionWithoutCommittees
