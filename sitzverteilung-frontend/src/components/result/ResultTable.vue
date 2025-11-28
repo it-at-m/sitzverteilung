@@ -9,7 +9,11 @@
         density="compact"
         no-data-text=""
         :items-per-page="-1"
-        :sort-by="[{ key: 'seatsOrVotes', order: 'desc' }]"
+        :sort-by="[
+          { key: 'seatsOrVotes', order: 'desc' },
+          { key: 'name', order: 'asc' },
+        ]"
+        multi-sort
       >
         <template v-slot:[`header.constellation`]="{ column }">
           <div class="d-flex align-center justify-space-between">
@@ -231,6 +235,7 @@ const headers = computed(() => [
         title: "Zulässigkeit",
         key: `${method}${ResultDataSuffix.validationSuffix}`,
         width: !methodToDisplay ? 150 : undefined,
+        sortable: false,
       },
       {
         title: "Sitze",
@@ -241,6 +246,7 @@ const headers = computed(() => [
         key: `${method}${ResultDataSuffix.staleSuffix}`,
         width: !methodToDisplay ? 50 : undefined,
         align: !methodToDisplay ? "center" : "left",
+        sortable: false,
       },
     ],
   })),

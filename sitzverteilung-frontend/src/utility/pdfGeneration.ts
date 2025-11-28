@@ -72,8 +72,9 @@ export function generatePDF(
   }
 
   const seatOrder = calculationResult.methods[usedCalculationMethod]?.order;
-  if (seatOrder) {
-    generateRatios(doc, seatOrder, currentY);
+  const seats = calculationResult.seats;
+  if (seatOrder && seats) {
+    generateRatios(doc, seatOrder, seats, currentY);
   }
 
   const timeStampForExport = timestamp.toISOString().slice(0, 10);
@@ -361,6 +362,7 @@ function generateSeatDistributionFooter(
 function generateRatios(
   doc: jsPDF,
   seatOrder: CalculationSeatOrder,
+  seats: CalculationSeatDistribution,
   currentY: number
 ): void {
   const seatCalculationX = PDF_CONFIGURATIONS.marginLeft;
@@ -400,7 +402,7 @@ function generateRatios(
     return;
   }
 
-  const sortedSeatOrder = mapSeatOrder(seatOrder, false);
+  const sortedSeatOrder = mapSeatOrder(seatOrder, seats, false);
   sortedSeatOrder.forEach((item) => {
     if (y > maxY - 10) {
       doc.addPage();
