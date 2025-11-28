@@ -180,7 +180,6 @@ function calculateMethod(
     throw new Error("calculationGroups cannot be empty");
   }
   if (calculationGroups.some((group) => group.seatsOrVotes < 0)) {
-      console.debug(calculationGroups)
     throw new Error("All groups must have positive seatsOrVotes");
   }
   if (committeeSize <= 0) {
