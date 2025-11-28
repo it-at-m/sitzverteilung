@@ -74,7 +74,11 @@ export function generatePDF(
   const seatOrder = calculationResult.methods[usedCalculationMethod]?.order;
   const seats = calculationResult.seats;
   if (seatOrder && seats) {
-    generateRatios(doc, seatOrder, seats, currentY);
+    currentY = generateSeatOrder(doc, seatOrder, seats, currentY);
+
+    if (stale) {
+      generateSeatOrderFooter(doc, currentY);
+    }
   }
 
   const timeStampForExport = timestamp.toISOString().slice(0, 10);
@@ -359,12 +363,12 @@ function generateSeatDistributionFooter(
   doc.setTextColor(0, 0, 0);
 }
 
-function generateRatios(
+function generateSeatOrder(
   doc: jsPDF,
   seatOrder: CalculationSeatOrder,
   seats: CalculationSeatDistribution,
   currentY: number
-): void {
+): number {
   const seatCalculationX = PDF_CONFIGURATIONS.marginLeft;
   let seatCalculationY = currentY + 15;
   const seatCalculationHeight =
@@ -390,7 +394,7 @@ function generateRatios(
     seatCalculationY + PDF_CONFIGURATIONS.upperMargin
   );
 
-  let y = seatCalculationY + 16;
+  currentY = seatCalculationY + 16;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
 
   if (seatOrder.length === 0) {
@@ -399,15 +403,15 @@ function generateRatios(
       seatCalculationX + 2,
       seatCalculationY + 15
     );
-    return;
+    return 0;
   }
 
   const sortedSeatOrder = mapSeatOrder(seatOrder, seats, false);
   sortedSeatOrder.forEach((item) => {
-    if (y > maxY - 10) {
+    if (currentY > maxY - 10) {
       doc.addPage();
       seatCalculationY = 20;
-      y = seatCalculationY + 16;
+      currentY = seatCalculationY + 16;
 
       doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
       doc.text(
@@ -431,20 +435,33 @@ function generateRatios(
       doc.text(
         `${item.seatNumber}. Sitz: ${item.name}`,
         seatCalculationX + 2,
-        y
+        currentY
       );
-      doc.text(item.ratio, seatCalculationX + 105, y);
-      y += PDF_CONFIGURATIONS.lineHeight;
+      doc.text(item.ratio, seatCalculationX + 105, currentY);
+      currentY += PDF_CONFIGURATIONS.lineHeight;
     } else {
       splittedSeatOrders.forEach((partyInOrder) => {
         doc.text(
           `${item.seatNumber}. Sitz: ${partyInOrder}`,
           seatCalculationX + 2,
-          y
+          currentY
         );
-        doc.text(item.ratio, seatCalculationX + 105, y);
-        y += PDF_CONFIGURATIONS.lineHeight;
+        doc.text(item.ratio, seatCalculationX + 105, currentY);
+        currentY += PDF_CONFIGURATIONS.lineHeight;
       });
     }
   });
+
+  return currentY;
+}
+
+function generateSeatOrderFooter(doc: jsPDF, currentY: number): void {
+  doc.setFontSize(PDF_CONFIGURATIONS.footerTextSize);
+  doc.setTextColor(255, 0, 0);
+  doc.text(
+    "Aufgrund eines Patts bei der Sitzverteilung enthält die Sitzreihung nicht die vollständige Anzahl an Sitzen entsprechend der eingegebenen Ausschussgröße.",
+    PDF_CONFIGURATIONS.marginLeft + 2,
+    currentY
+  );
+  doc.setTextColor(0, 0, 0);
 }
