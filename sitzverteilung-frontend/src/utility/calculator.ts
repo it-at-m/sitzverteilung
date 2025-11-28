@@ -13,6 +13,8 @@ import type { CalculationSeatOrder } from "@/types/calculation/internal/Calculat
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 import type { CalculationValidation } from "@/types/calculation/internal/CalculationValidation.ts";
 
+import Big from "big.js";
+
 import { UNION_TYPE_PREFIXES, UnionType } from "@/types/basedata/Union.ts";
 import {
   AVAILABLE_METHODS,
@@ -299,12 +301,15 @@ function calculateHareNiemeyer(
   }
   const remainders: CalculationGroupRatio[] = [];
   calculationGroups.forEach((group) => {
-    const exactQuota = (committeeSize * group.seatsOrVotes) / totalSeatsOrVotes;
-    const seats = Math.floor(exactQuota);
+    const exactQuota = new Big(committeeSize)
+      .mul(group.seatsOrVotes)
+      .div(totalSeatsOrVotes);
+    const seats = Math.floor(exactQuota.toNumber());
     seatDistribution[group.name] = seats;
+
     remainders.push({
       groupName: group.name,
-      value: exactQuota - seats,
+      value: exactQuota.minus(seats).toNumber(),
     });
   });
 
@@ -385,7 +390,7 @@ function calculateDivisorMethod(
     for (let i = 0; i < committeeSize; i++) {
       ratios.push({
         groupName: group.name,
-        value: group.seatsOrVotes / divisorFn(i),
+        value: new Big(group.seatsOrVotes).div(divisorFn(i)).toNumber(),
       });
     }
   });
@@ -485,10 +490,10 @@ function calculateProportions(
       "totalSeatsOrVotes must be positive to compute proportions"
     );
   }
-  const divisor = totalSeatsOrVotes / committeeSize;
+  const divisor = new Big(totalSeatsOrVotes).div(committeeSize);
   return calculationGroups.reduce(
     (obj: CalculationProportions, group: CalculationGroup) => {
-      obj[group.name] = group.seatsOrVotes / divisor;
+      obj[group.name] = new Big(group.seatsOrVotes).div(divisor).toNumber();
       return obj;
     },
     {}
@@ -560,7 +565,7 @@ function checkOverroundingForGroup(
   if (proportion === undefined) {
     throw new Error("Missing proportion, cannot check for overrounding.");
   }
-  return Math.abs(proportion - seats) > 0.99;
+  return Math.abs(new Big(proportion).minus(seats).toNumber()) > 0.99;
 }
 
 /**
