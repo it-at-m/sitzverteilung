@@ -433,8 +433,7 @@ function handleStaleSituation(
 ): CalculationStale | undefined {
   let stale: CalculationStale | undefined = undefined;
 
-  const ratioValue =
-    topRatios[new Big(topRatios.length).minus(1).toNumber()]?.value;
+  const ratioValue = topRatios[topRatios.length - 1]?.value;
   if (ratioValue === undefined) return stale;
 
   const potentialStales = sortedRatios.filter((r) => r.value === ratioValue);
