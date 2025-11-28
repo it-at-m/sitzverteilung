@@ -75,9 +75,10 @@ export function generatePDF(
   const seats = calculationResult.seats;
   if (seatOrder && seats) {
     currentY = generateSeatOrder(doc, seatOrder, seats, currentY);
-  }
-  if (stale) {
-    generateSeatOrderFooter(doc, currentY);
+
+    if (stale) {
+      generateSeatOrderFooter(doc, currentY);
+    }
   }
 
   const timeStampForExport = timestamp.toISOString().slice(0, 10);
