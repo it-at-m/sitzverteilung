@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { DataTableHeader } from "vuetify/framework";
 
@@ -33,12 +34,13 @@ import { computed } from "vue";
 
 import { mapSeatOrder } from "@/utility/resultMapping.ts";
 
-const { seatOrder } = defineProps<{
+const { seatOrder, seats } = defineProps<{
   seatOrder?: CalculationSeatOrder;
+  seats?: CalculationSeatDistribution;
 }>();
 
 const mappedSeatOrder = computed(() => {
-  return mapSeatOrder(seatOrder, true);
+  return mapSeatOrder(seatOrder, seats, true);
 });
 
 const headers: DataTableHeader[] = [

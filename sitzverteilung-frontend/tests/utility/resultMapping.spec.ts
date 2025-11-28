@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
 import { MergedSeatOrder } from "../../src/types/calculation/ui/MergedSeatOrder";
 import {
@@ -53,6 +54,11 @@ describe("mapToMergedSeatOrders", () => {
   test("seats are merged correctly", () => {
     const given: CalculationSeatOrder = [
       {
+        groupName: "Z",
+        seatsOrVotes: 2,
+        value: 0.999,
+      },
+      {
         groupName: "A",
         seatsOrVotes: 2,
         value: 0.999,
@@ -69,22 +75,29 @@ describe("mapToMergedSeatOrders", () => {
       },
     ];
 
-    const result = mapSeatOrder(given, true);
+    const seats: CalculationSeatDistribution = {
+      A: 10,
+      B: 13,
+      C: 5,
+      Z: 10,
+    };
+
+    const result = mapSeatOrder(given, seats, true);
 
     const expected: MergedSeatOrder[] = [
       {
-        seatNumber: "1 - 2",
+        seatNumber: "1 - 3",
         ratio: "0,999",
-        name: "A\nB",
+        name: "B\nA\nZ",
         minIndex: 1,
-        maxIndex: 2,
+        maxIndex: 3,
       },
       {
-        seatNumber: "3",
+        seatNumber: "4",
         ratio: "0,998",
         name: "C",
-        minIndex: 3,
-        maxIndex: 3,
+        minIndex: 4,
+        maxIndex: 4,
       },
     ];
 
@@ -96,9 +109,13 @@ describe("mapToMergedSeatOrders", () => {
       { groupName: "A", seatsOrVotes: 2, value: 0.999 },
       { groupName: "B", seatsOrVotes: 2, value: 0.999 },
     ];
+    const seats = {
+      A: 12,
+      B: 13,
+    };
 
-    const result = mapSeatOrder(given, false);
+    const result = mapSeatOrder(given, seats, false);
 
-    expect(result[0]?.name).toBe("A, B");
+    expect(result[0]?.name).toBe("B, A");
   });
 });

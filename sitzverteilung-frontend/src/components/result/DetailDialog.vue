@@ -20,7 +20,7 @@
           :calculation-result="calculationResult"
           :method-to-display="calculationMethod"
         />
-        <p>
+        <p class="mb-3">
           <b
             >Sitzreihung
             {{
@@ -30,15 +30,23 @@
             }}</b
           >
         </p>
+        <v-alert
+          v-if="calculationResult?.methods[calculationMethod]?.stale"
+          text="Aufgrund eines Patts bei der Sitzverteilung enthält die Sitzreihung nicht die vollständige Anzahl an Sitzen entsprechend der eingegebenen Ausschussgröße."
+          type="info"
+          variant="tonal"
+        />
         <seat-order-table
           class="my-2"
+          :seats="calculationResult?.seats"
           :seat-order="calculationResult?.methods[calculationMethod]?.order"
         />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
-          text="PDF generieren"
+          :prepend-icon="mdiDownload"
+          text="PDF herunterladen"
           :disabled="!calculationResult"
           @click="
             generatePDF(
@@ -61,7 +69,7 @@
 <script setup lang="ts">
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 
-import { mdiInformation } from "@mdi/js";
+import { mdiDownload, mdiInformation } from "@mdi/js";
 
 import ResultTable from "@/components/result/ResultTable.vue";
 import SeatOrderTable from "@/components/result/SeatOrderTable.vue";
