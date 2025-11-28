@@ -15,6 +15,21 @@
         ]"
         multi-sort
       >
+        <template v-slot:[`header.constellation`]="{ column }">
+          <div class="d-flex align-center justify-space-between">
+            <p>{{ column.title }}</p>
+            <v-btn
+              v-if="!methodToDisplay"
+              :prepend-icon="mdiDownload"
+              text="PDFs herunterladen"
+              class="my-3"
+              :disabled="!calculationResult"
+              variant="flat"
+              color="primary"
+              @click="emit('clickedDownloadAllPdfs')"
+            />
+          </div>
+        </template>
         <template
           v-for="method in methodsToDisplay"
           :key="method"
@@ -148,7 +163,13 @@
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 import type { ResultData } from "@/types/calculation/ui/ResultData.ts";
 
-import { mdiCheck, mdiClose, mdiHandBackRight, mdiInformation } from "@mdi/js";
+import {
+  mdiCheck,
+  mdiClose,
+  mdiDownload,
+  mdiHandBackRight,
+  mdiInformation,
+} from "@mdi/js";
 import { computed } from "vue";
 
 import {
@@ -187,6 +208,8 @@ function isMethodValid(method: CalculationMethod): boolean | null {
 const headers = computed(() => [
   {
     title: "Zusammensetzung",
+    key: "constellation",
+    sortable: false,
     children: [
       {
         title: "Name",
@@ -264,5 +287,6 @@ function generateValidationText(
 
 const emit = defineEmits<{
   clickedCalculationMethod: [calculationMethod: CalculationMethod];
+  clickedDownloadAllPdfs: [];
 }>();
 </script>

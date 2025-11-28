@@ -39,7 +39,8 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
-          text="PDF generieren"
+          :prepend-icon="mdiDownload"
+          text="PDF herunterladen"
           :disabled="!calculationResult"
           @click="
             generatePDF(
@@ -62,7 +63,7 @@
 <script setup lang="ts">
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
 
-import { mdiInformation } from "@mdi/js";
+import { mdiDownload, mdiInformation } from "@mdi/js";
 
 import ResultTable from "@/components/result/ResultTable.vue";
 import SeatOrderTable from "@/components/result/SeatOrderTable.vue";
