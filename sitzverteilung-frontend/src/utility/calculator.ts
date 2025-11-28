@@ -179,8 +179,8 @@ function calculateMethod(
   if (calculationGroups.length === 0) {
     throw new Error("calculationGroups cannot be empty");
   }
-  if (calculationGroups.some((group) => group.seatsOrVotes <= 0)) {
-    throw new Error("All groups must have positive seatsOrVotes");
+  if (calculationGroups.some((group) => group.seatsOrVotes < 0)) {
+    throw new Error("All groups must have non-negative seatsOrVotes");
   }
   if (committeeSize <= 0) {
     throw new Error("committeeSize must be positive");
