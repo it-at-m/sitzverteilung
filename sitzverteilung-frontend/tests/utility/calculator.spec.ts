@@ -1336,7 +1336,7 @@ describe("Extract calculation groups tests", () => {
       {
         name: "FG: Fraction 1",
         seatsOrVotes: 10,
-        partiesInUnion: [],
+        partiesInUnion: ["Testgroup 1", "Testgroup 2"],
       },
       {
         name: "AG: Committee 1",
