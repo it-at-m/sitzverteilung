@@ -86,9 +86,6 @@ function mapToMergedSeatOrders(
           `${acc[key].minIndex} - ${currentOrder.seatNumber}`;
         acc[key].maxIndex = currentOrder.seatNumber;
         acc[key].names.push(currentOrder.name);
-        // acc[key].name += isLineBreakNeeded
-        //   ? `\n${currentOrder.name}`
-        //   : `, ${currentOrder.name}`;
       }
 
       return acc;
@@ -101,7 +98,9 @@ function mapToMergedSeatOrders(
         if (seats1 !== seats2) {
           return seats2 - seats1;
         } else {
-          return name1.localeCompare(name2);
+          const strippedName1 = stripUnionPrefix(name1);
+          const strippedName2 = stripUnionPrefix(name2);
+          return strippedName1.localeCompare(strippedName2);
         }
       })
       .join(isLineBreakNeeded ? "\n" : ", ");

@@ -9,7 +9,11 @@
         density="compact"
         no-data-text=""
         :items-per-page="-1"
-        :sort-by="[{ key: 'seatsOrVotes', order: 'desc' }]"
+        :sort-by="[
+          { key: 'seatsOrVotes', order: 'desc' },
+          { key: 'name', order: 'asc' },
+        ]"
+        multi-sort
       >
         <template
           v-for="method in methodsToDisplay"
