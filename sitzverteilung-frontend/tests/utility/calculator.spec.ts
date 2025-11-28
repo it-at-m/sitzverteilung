@@ -90,8 +90,8 @@ describe("Full calculation tests", () => {
         "Group 9": 1,
       },
       proportions: {
-        "Group 1": 4.0249999999999995,
-        "Group 2": 4.0249999999999995,
+        "Group 1": 4.025,
+        "Group 2": 4.025,
         "Group 3": 2.975,
         "Group 4": 0.7,
         "Group 5": 0.7,
@@ -1133,7 +1133,7 @@ describe("Proportional seats calculation tests", () => {
     const committeeSize = 10;
     const expected = {
       "Test 1": 3.1818181818181817,
-      "Test 2": 5.227272727272727,
+      "Test 2": 5.2272727272727275,
       "Test 3": 1.5909090909090908,
     };
 
