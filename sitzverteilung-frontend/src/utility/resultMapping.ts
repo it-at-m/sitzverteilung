@@ -56,6 +56,7 @@ export function mapCalculationResultToResultData(
  * NOTE: seatOrders must be pre sorted by seatNumber!
  *
  * @param seatOrders seatOrders to merge
+ * @param seats input seats
  * @param isLineBreakNeeded determine whether ot not the seatOrders os seperated by a line break or comma
  */
 function mapToMergedSeatOrders(
@@ -93,7 +94,6 @@ function mapToMergedSeatOrders(
       return acc;
     }, {})
   ).map((tempMergedOrder) => {
-    console.log(tempMergedOrder);
     const sortedNames = tempMergedOrder.names
       .sort((name1, name2) => {
         const seats1 = seats[name1] || 0;
