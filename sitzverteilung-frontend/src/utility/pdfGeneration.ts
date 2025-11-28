@@ -73,7 +73,7 @@ export function generatePDF(
 
   const seatOrder = calculationResult.methods[usedCalculationMethod]?.order;
   const seats = calculationResult.seats;
-  if (seatOrder) {
+  if (seatOrder && seats) {
     generateRatios(doc, seatOrder, seats, currentY);
   }
 
