@@ -15,6 +15,7 @@
           <div class="d-flex align-center justify-space-between">
             <p>{{ column.title }}</p>
             <v-btn
+              v-if="!methodToDisplay"
               :prepend-icon="mdiDownload"
               text="PDFs herunterladen"
               class="my-3"
