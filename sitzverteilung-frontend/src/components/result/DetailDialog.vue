@@ -20,7 +20,7 @@
           :calculation-result="calculationResult"
           :method-to-display="calculationMethod"
         />
-        <p>
+        <p class="mb-3">
           <b
             >Sitzreihung
             {{
@@ -30,6 +30,12 @@
             }}</b
           >
         </p>
+        <v-alert
+          v-if="calculationResult?.methods[calculationMethod]?.stale"
+          text="Aufgrund eines Patts bei der Sitzverteilung enthält die Sitzreihung nicht die vollständige Anzahl an Sitzen entsprechend der eingegebenen Ausschussgröße."
+          type="info"
+          variant="tonal"
+        />
         <seat-order-table
           class="my-2"
           :seats="calculationResult?.seats"
