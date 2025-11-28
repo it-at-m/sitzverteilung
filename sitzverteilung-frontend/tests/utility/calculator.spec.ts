@@ -16,6 +16,7 @@ import { CalculationResult } from "../../src/types/calculation/internal/Calculat
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { calculate, exportForTesting } from "../../src/utility/calculator";
 import {
+  getTestBaseDataPartyInBothCommitteeAndFraction,
   getTestBaseDataWithNoOverlap,
   getTestBaseDataWithoutUnion,
   getTestBaseDataWithOverlapCommitteeFraction,
@@ -1314,6 +1315,39 @@ describe("Extract calculation groups tests", () => {
     const calculationGroups = exportForTesting.extractCalculationGroups(
       baseData,
       false
+    );
+
+    expect(calculationGroups).toEqual(expected);
+  });
+
+  test("Extract calculation groups don't count committeeVotes for group in both", () => {
+    const baseData = getTestBaseDataPartyInBothCommitteeAndFraction();
+    const expected: CalculationGroup[] = [
+      {
+        name: "Testgroup 3",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+      {
+        name: "Testgroup 4",
+        seatsOrVotes: 30,
+        partiesInCommittee: [],
+      },
+      {
+        name: "FG: Fraction 1",
+        seatsOrVotes: 10,
+        partiesInCommittee: [],
+      },
+      {
+        name: "AG: Committee 1",
+        seatsOrVotes: 50,
+        partiesInCommittee: ["Testgroup 2", "Testgroup 5"],
+      },
+    ];
+
+    const calculationGroups = exportForTesting.extractCalculationGroups(
+      baseData,
+      true
     );
 
     expect(calculationGroups).toEqual(expected);
