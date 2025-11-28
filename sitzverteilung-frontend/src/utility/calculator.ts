@@ -533,7 +533,7 @@ function calculateMethodValidity(
           distributedSeats,
           distributedSeatsWithoutCommittees
         ),
-        committeeInvalid: groupName.startsWith(UNION_TYPE_PREFIXES["0"])
+        committeeInvalid: groupName.startsWith(UNION_TYPE_PREFIXES[UnionType.COMMITTEE])
           ? checkCommitteeInvalid(
               currentObj.partiesInUnion,
               distributionWithoutCommittees
@@ -599,7 +599,7 @@ function checkCommitteeInvalid(
   const safeSeats = Object.entries(distributionWithoutCommittees)
     .filter(([, seats]) => seats >= 1)
     .flatMap(([groupName]) => {
-      return groupName.startsWith(UNION_TYPE_PREFIXES["0"])
+      return groupName.startsWith(UNION_TYPE_PREFIXES[UnionType.FRACTION])
         ? groupName
         : partiesInUnion;
     });
