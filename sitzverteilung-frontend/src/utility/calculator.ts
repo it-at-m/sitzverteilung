@@ -124,7 +124,7 @@ function extractCalculationGroups(
         return sum + (group?.seatsOrVotes ?? 0);
       }, 0),
 
-      partiesInUnions: union.groups.map((groupIndex) => {
+      partiesInUnion: union.groups.map((groupIndex) => {
         const group = baseData.groups[groupIndex];
         if (!group) {
           throw new Error(
@@ -142,7 +142,7 @@ function extractCalculationGroups(
       return {
         name: singleGroup.name,
         seatsOrVotes: singleGroup.seatsOrVotes,
-        partiesInUnions: [],
+        partiesInUnion: [],
       } as CalculationGroup;
     });
   const calculationGroups = [
@@ -341,7 +341,7 @@ function calculateHareNiemeyer(
     return {
       name: groupName,
       seatsOrVotes: value,
-      partiesInUnions: group?.partiesInUnions ?? [],
+      partiesInUnion: group?.partiesInUnion ?? [],
     };
   });
   const seatsInOrder = committeeSize - (stale?.amountSeats ?? 0);
@@ -528,10 +528,12 @@ function calculateMethodValidity(
           distributedSeats,
           distributedSeatsWithoutCommittees
         ),
-        committeeInvalid: checkCommitteeInvalid(
-          currentObj.partiesInUnions,
-          distributionWithoutCommittees
-        ),
+        committeeInvalid: groupName.startsWith(UNION_TYPE_PREFIXES["0"])
+          ? checkCommitteeInvalid(
+              currentObj.partiesInUnion,
+              distributionWithoutCommittees
+            )
+          : [],
       };
       return validation;
     },
@@ -589,21 +591,14 @@ function checkCommitteeInvalid(
 ): string[] {
   if (partiesInCommittee.length === 0) return [];
 
-  let membersOfFraction: string[] = [];
   const safeSeats = Object.entries(distributionWithoutCommittees)
-    .filter(([groupName, seats]) => {
-      if (groupName.startsWith("FG:")) {
-        membersOfFraction = partiesInCommittee;
-        return seats >= 1;
-      } else {
-        return seats >= 1;
-      }
-    })
-    .flatMap(([groupName]) => groupName);
+    .filter(([, seats]) => seats >= 1)
+    .flatMap(([groupName]) => {
+      return groupName.startsWith(UNION_TYPE_PREFIXES["0"])
+        ? groupName
+        : partiesInCommittee;
+    });
 
-  if (membersOfFraction.length !== 0) {
-    return membersOfFraction;
-  }
   return partiesInCommittee.filter((value) => safeSeats.includes(value));
 }
 

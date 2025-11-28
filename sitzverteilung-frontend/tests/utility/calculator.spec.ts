@@ -646,7 +646,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: [],
+              committeeInvalid: ["Group 4", "Group 8", "Group 9", "Group 10"],
             },
           },
         } as CalculationMethodResult,
@@ -760,7 +760,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: ["Group 4"],
+              committeeInvalid: ["Group 4", "Group 8", "Group 9", "Group 10"],
             },
           },
         } as CalculationMethodResult,
@@ -874,7 +874,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: ["Group 4"],
+              committeeInvalid: ["Group 4", "Group 8", "Group 9", "Group 10"],
             },
           },
         } as CalculationMethodResult,
@@ -1046,25 +1046,10 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInCommittee = [];
     const expected = [];
-    const allGroups: CalculationGroup[] = [
-      {
-        name: "Group 1",
-        seatsOrVotes: 0,
-        partiesInCommittee: [],
-        partiesInFraction: [],
-      },
-      {
-        name: "Group 2",
-        seatsOrVotes: 1,
-        partiesInCommittee: [],
-        partiesInFraction: [],
-      },
-    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInCommittee,
-      seatDistributionWithoutCommittee,
-      allGroups
+      seatDistributionWithoutCommittee
     );
 
     expect(result).toEqual(expected);
@@ -1076,28 +1061,11 @@ describe("Method validity committee invalid tests", () => {
       "Group 2": 1,
     };
     const partiesInCommittee = ["Group 1", "Group 2"];
-    const expected = ["Group 2"];
-
-    const group1: CalculationGroup = {
-      name: "Group 1",
-      seatsOrVotes: 10,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const group2: CalculationGroup = {
-      name: "Group 2",
-      seatsOrVotes: 12,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const allGroups = [group1, group2];
+    const expected = ["Group 1", "Group 2"];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInCommittee,
-      seatDistributionWithoutCommittee,
-      allGroups
+      seatDistributionWithoutCommittee
     );
 
     expect(result).toEqual(expected);
@@ -1109,36 +1077,12 @@ describe("Method validity committee invalid tests", () => {
       "Group 2": 1,
       "Group 3": 0,
     };
-    const partiesInCommittee = ["Group 1", "Group 3"];
+    const partiesInCommittee = [];
     const expected = [];
-
-    const group1: CalculationGroup = {
-      name: "Group 1",
-      seatsOrVotes: 10,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const group2: CalculationGroup = {
-      name: "Group 2",
-      seatsOrVotes: 12,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const group3: CalculationGroup = {
-      name: "Group 3",
-      seatsOrVotes: 14,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const allGroups = [group1, group2, group3];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInCommittee,
-      seatDistributionWithoutCommittee,
-      allGroups
+      seatDistributionWithoutCommittee
     );
 
     expect(result).toEqual(expected);
@@ -1155,56 +1099,11 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInCommittee = ["E", "G"];
 
-    const group1: CalculationGroup = {
-      name: "A",
-      seatsOrVotes: 24,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const group2: CalculationGroup = {
-      name: "C",
-      seatsOrVotes: 19,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const group3: CalculationGroup = {
-      name: "D",
-      seatsOrVotes: 6,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const group4: CalculationGroup = {
-      name: "F",
-      seatsOrVotes: 4,
-      partiesInCommittee: [],
-      partiesInFraction: [],
-    };
-
-    const group5: CalculationGroup = {
-      name: "AG: E und G",
-      seatsOrVotes: 5,
-      partiesInCommittee: ["E", "G"],
-      partiesInFraction: [],
-    };
-
-    const group6: CalculationGroup = {
-      name: "FG: B und G",
-      seatsOrVotes: 20,
-      partiesInCommittee: [],
-      partiesInFraction: ["B", "G"],
-    };
-
-    const allGroups = [group1, group2, group3, group4, group5, group6];
-
     const expected = ["E", "G"];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInCommittee,
-      seatDistributionWithoutCommittee,
-      allGroups
+      seatDistributionWithoutCommittee
     );
 
     expect(result).toEqual(expected);
@@ -1217,20 +1116,17 @@ describe("Proportional seats calculation tests", () => {
       {
         name: "Test 1",
         seatsOrVotes: 14,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Test 2",
         seatsOrVotes: 23,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Test 3",
         seatsOrVotes: 7,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
     ];
     const committeeSize = 10;
@@ -1252,20 +1148,17 @@ describe("Proportional seats calculation tests", () => {
       {
         name: "Test 1",
         seatsOrVotes: 14,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Test 2",
         seatsOrVotes: 23,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Test 3",
         seatsOrVotes: 7,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
     ];
     const committeeSize = 100;
@@ -1291,20 +1184,17 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 1",
         seatsOrVotes: 10,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Testgroup 2",
         seatsOrVotes: 20,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
     ];
 
@@ -1320,20 +1210,17 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "FG: Example fraction union",
         seatsOrVotes: 0,
-        partiesInCommittee: [],
-        partiesInFraction: ["Testgroup 1", "Testgroup 2"],
+        partiesInUnion: ["Testgroup 1", "Testgroup 2"],
       },
       {
         name: "AG: Example committee union",
         seatsOrVotes: 30,
-        partiesInCommittee: ["Testgroup 1", "Testgroup 2"],
-        partiesInFraction: [],
+        partiesInUnion: ["Testgroup 1", "Testgroup 2"],
       },
     ];
 
@@ -1349,14 +1236,12 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "FG: Example fraction union",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: ["Testgroup 1", "Testgroup 2"],
+        partiesInUnion: ["Testgroup 1", "Testgroup 2"],
       },
     ];
 
@@ -1374,26 +1259,22 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 1",
         seatsOrVotes: 10,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Testgroup 4",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Testgroup 5",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "FG: Fraction 1",
         seatsOrVotes: 50,
-        partiesInCommittee: [],
-        partiesInFraction: ["Testgroup 2", "Testgroup 3"],
+        partiesInUnion: ["Testgroup 2", "Testgroup 3"],
       },
     ];
 
@@ -1411,26 +1292,22 @@ describe("Extract calculation groups tests", () => {
       {
         name: "Testgroup 3",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Testgroup 4",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "Testgroup 5",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: [],
+        partiesInUnion: [],
       },
       {
         name: "FG: Fraction 1",
         seatsOrVotes: 30,
-        partiesInCommittee: [],
-        partiesInFraction: ["Testgroup 1", "Testgroup 2"],
+        partiesInUnion: ["Testgroup 1", "Testgroup 2"],
       },
     ];
 
