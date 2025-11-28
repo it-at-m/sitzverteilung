@@ -1,5 +1,6 @@
 import type { CalculationMethodResult } from "@/types/calculation/internal/CalculationMethodResult.ts";
 import type { CalculationResult } from "@/types/calculation/internal/CalculationResult.ts";
+import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type {
   MergedSeatOrder,
@@ -59,10 +60,13 @@ export function mapCalculationResultToResultData(
  */
 function mapToMergedSeatOrders(
   seatOrders: SeatOrder[],
+  seats: CalculationSeatDistribution,
   isLineBreakNeeded: boolean
 ): MergedSeatOrder[] {
   return Object.values(
-    seatOrders.reduce<Record<string, MergedSeatOrder>>((acc, currentOrder) => {
+    seatOrders.reduce<
+      Record<string, Omit<MergedSeatOrder, "name"> & { names: string[] }>
+    >((acc, currentOrder) => {
       const key = currentOrder.ratio;
       if (!key) {
         return acc;
@@ -72,7 +76,7 @@ function mapToMergedSeatOrders(
         acc[key] = {
           ratio: key,
           seatNumber: `${currentOrder.seatNumber}`,
-          name: currentOrder.name,
+          names: [currentOrder.name],
           minIndex: currentOrder.seatNumber,
           maxIndex: currentOrder.seatNumber,
         };
@@ -80,14 +84,34 @@ function mapToMergedSeatOrders(
         acc[key].seatNumber =
           `${acc[key].minIndex} - ${currentOrder.seatNumber}`;
         acc[key].maxIndex = currentOrder.seatNumber;
-        acc[key].name += isLineBreakNeeded
-          ? `\n${currentOrder.name}`
-          : `, ${currentOrder.name}`;
+        acc[key].names.push(currentOrder.name);
+        // acc[key].name += isLineBreakNeeded
+        //   ? `\n${currentOrder.name}`
+        //   : `, ${currentOrder.name}`;
       }
 
       return acc;
     }, {})
-  );
+  ).map((tempMergedOrder) => {
+    console.log(tempMergedOrder);
+    const sortedNames = tempMergedOrder.names
+      .sort((name1, name2) => {
+        const seats1 = seats[name1] || 0;
+        const seats2 = seats[name2] || 0;
+        if (seats1 !== seats2) {
+          return seats2 - seats1;
+        } else {
+          return name1.localeCompare(name2);
+        }
+      })
+      .join(isLineBreakNeeded ? "\n" : ", ");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { names, ...finalItem } = tempMergedOrder;
+    return {
+      ...finalItem,
+      name: sortedNames,
+    };
+  });
 }
 
 /**
@@ -135,9 +159,10 @@ function setMethodResultDataOfResultData(
 
 export function mapSeatOrder(
   seatOrder: CalculationSeatOrder | undefined,
+  seats: CalculationSeatDistribution | undefined,
   isLineBreakNeeded: boolean
 ) {
-  if (!seatOrder) {
+  if (!seatOrder || !seats) {
     return [];
   }
   const formattedRatios = formatVisiblePrecision(
@@ -150,5 +175,5 @@ export function mapSeatOrder(
       ratio: formattedRatios[index],
     } as SeatOrder;
   });
-  return mapToMergedSeatOrders(formattedSeatOrders, isLineBreakNeeded);
+  return mapToMergedSeatOrders(formattedSeatOrders, seats, isLineBreakNeeded);
 }

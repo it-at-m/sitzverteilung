@@ -32,6 +32,7 @@
         </p>
         <seat-order-table
           class="my-2"
+          :seats="calculationResult?.seats"
           :seat-order="calculationResult?.methods[calculationMethod]?.order"
         />
       </v-card-text>
