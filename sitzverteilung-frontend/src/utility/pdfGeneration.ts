@@ -367,7 +367,7 @@ function generateSeatOrder(
   seatOrder: CalculationSeatOrder,
   seats: CalculationSeatDistribution,
   currentY: number
-): void {
+): number {
   const seatCalculationX = PDF_CONFIGURATIONS.marginLeft;
   let seatCalculationY = currentY + 15;
   const seatCalculationHeight =
@@ -393,7 +393,7 @@ function generateSeatOrder(
     seatCalculationY + PDF_CONFIGURATIONS.upperMargin
   );
 
-  let y = seatCalculationY + 16;
+  currentY = seatCalculationY + 16;
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
 
   if (seatOrder.length === 0) {
@@ -402,15 +402,15 @@ function generateSeatOrder(
       seatCalculationX + 2,
       seatCalculationY + 15
     );
-    return;
+    return 0;
   }
 
   const sortedSeatOrder = mapSeatOrder(seatOrder, seats, false);
   sortedSeatOrder.forEach((item) => {
-    if (y > maxY - 10) {
+    if (currentY > maxY - 10) {
       doc.addPage();
       seatCalculationY = 20;
-      y = seatCalculationY + 16;
+      currentY = seatCalculationY + 16;
 
       doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
       doc.text(
@@ -434,22 +434,24 @@ function generateSeatOrder(
       doc.text(
         `${item.seatNumber}. Sitz: ${item.name}`,
         seatCalculationX + 2,
-        y
+        currentY
       );
-      doc.text(item.ratio, seatCalculationX + 105, y);
-      y += PDF_CONFIGURATIONS.lineHeight;
+      doc.text(item.ratio, seatCalculationX + 105, currentY);
+      currentY += PDF_CONFIGURATIONS.lineHeight;
     } else {
       splittedSeatOrders.forEach((partyInOrder) => {
         doc.text(
           `${item.seatNumber}. Sitz: ${partyInOrder}`,
           seatCalculationX + 2,
-          y
+          currentY
         );
-        doc.text(item.ratio, seatCalculationX + 105, y);
-        y += PDF_CONFIGURATIONS.lineHeight;
+        doc.text(item.ratio, seatCalculationX + 105, currentY);
+        currentY += PDF_CONFIGURATIONS.lineHeight;
       });
     }
   });
+
+  return currentY;
 }
 
 function generateSeatOrderFooter(doc: jsPDF, currentY: number): void {
@@ -458,7 +460,7 @@ function generateSeatOrderFooter(doc: jsPDF, currentY: number): void {
   doc.text(
     "Aufgrund eines Patts bei der Sitzverteilung enthält die Sitzreihung nicht die vollständige Anzahl an Sitzen entsprechend der eingegebenen Ausschussgröße.",
     PDF_CONFIGURATIONS.marginLeft + 2,
-    currentY - 2
+    currentY
   );
   doc.setTextColor(0, 0, 0);
 }
