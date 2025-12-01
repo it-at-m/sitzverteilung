@@ -590,9 +590,9 @@ function checkLostSafeSeatForGroup(
 /**
  * Checks whether a committee was formed with a party in its members that has a seat even when the committee is not formed.
  *
- * @param partiesInCommittee Parties of the union to check
+ * @param partiesInCommittee Parties of the committee to check
  * @param distributionWithoutCommittees distribution without committees
- * @param calculationGroups
+ * @param calculationGroups All calculation groups for fraction membership lookup
  */
 function checkCommitteeInvalid(
   partiesInCommittee: string[],
@@ -606,7 +606,7 @@ function checkCommitteeInvalid(
     .flatMap(([groupName]) => {
       return groupName.startsWith(UNION_TYPE_PREFIXES[UnionType.FRACTION])
         ? calculationGroups.find((group) => group.name === groupName)
-            ?.partiesInUnion
+            ?.partiesInUnion ?? []
         : groupName;
     });
 
