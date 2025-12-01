@@ -647,7 +647,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: ["Group 4", "Group 8", "Group 9", "Group 10"],
+              committeeInvalid: [],
             },
           },
         } as CalculationMethodResult,
@@ -761,7 +761,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: ["Group 4", "Group 8", "Group 9", "Group 10"],
+              committeeInvalid: ["Group 4"],
             },
           },
         } as CalculationMethodResult,
@@ -875,7 +875,7 @@ describe("Full calculation tests", () => {
             "AG: Test": {
               overRounding: false,
               lostSafeSeat: false,
-              committeeInvalid: ["Group 4", "Group 8", "Group 9", "Group 10"],
+              committeeInvalid: ["Group 4"],
             },
           },
         } as CalculationMethodResult,
@@ -1062,7 +1062,7 @@ describe("Method validity committee invalid tests", () => {
       "Group 2": 1,
     };
     const partiesInUnion = ["Group 1", "Group 2"];
-    const expected = ["Group 1", "Group 2"];
+    const expected = ["Group 2"];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
