@@ -109,6 +109,7 @@ function extractCalculationGroups(
             `Union "${union.name}" references invalid group index ${groupIndex}.`
           );
         }
+
         const isGroupInFraction = groupIndexesInFraction.has(groupIndex);
         const isGroupInCommittee = groupIndexesInCommittee.has(groupIndex);
 
@@ -120,31 +121,30 @@ function extractCalculationGroups(
           union.unionType === UnionType.FRACTION
         ) {
           return sum;
-        } else {
-          return sum + (group?.seatsOrVotes ?? 0);
         }
+
+        return sum + (group?.seatsOrVotes ?? 0);
       }, 0),
-      partiesInCommittee:
-        union.unionType === UnionType.COMMITTEE
-          ? union.groups.map((groupIndex) => {
-              const group = baseData.groups[groupIndex];
-              if (!group) {
-                throw new Error(
-                  `Union "${union.name}" references invalid group index ${groupIndex}.`
-                );
-              }
-              return group.name;
-            })
-          : [],
+
+      partiesInUnion: union.groups.map((groupIndex) => {
+        const group = baseData.groups[groupIndex];
+        if (!group) {
+          throw new Error(
+            `Union "${union.name}" references invalid group index ${groupIndex}.`
+          );
+        }
+        return group.name;
+      }),
     };
   });
+
   const singleCalculationGroups: CalculationGroup[] = baseData.groups
     .filter((_, index) => !groupIndexesInUnion.has(index))
     .map((singleGroup) => {
       return {
         name: singleGroup.name,
         seatsOrVotes: singleGroup.seatsOrVotes,
-        partiesInCommittee: [],
+        partiesInUnion: [],
       } as CalculationGroup;
     });
   const calculationGroups = [
@@ -346,7 +346,7 @@ function calculateHareNiemeyer(
     return {
       name: groupName,
       seatsOrVotes: value,
-      partiesInCommittee: group?.partiesInCommittee ?? [],
+      partiesInUnion: group?.partiesInUnion ?? [],
     };
   });
   const seatsInOrder = committeeSize - (stale?.amountSeats ?? 0);
@@ -533,10 +533,15 @@ function calculateMethodValidity(
           distributedSeats,
           distributedSeatsWithoutCommittees
         ),
-        committeeInvalid: checkCommitteeInvalid(
-          currentObj.partiesInCommittee,
-          distributionWithoutCommittees
-        ),
+        committeeInvalid: groupName.startsWith(
+          UNION_TYPE_PREFIXES[UnionType.COMMITTEE]
+        )
+          ? checkCommitteeInvalid(
+              currentObj.partiesInUnion,
+              distributionWithoutCommittees,
+              calculationGroups
+            )
+          : [],
       };
       return validation;
     },
@@ -587,18 +592,25 @@ function checkLostSafeSeatForGroup(
  *
  * @param partiesInCommittee Parties of the committee to check
  * @param distributionWithoutCommittees distribution without committees
+ * @param calculationGroups All calculation groups for fraction membership lookup
  */
 function checkCommitteeInvalid(
   partiesInCommittee: string[],
-  distributionWithoutCommittees: CalculationSeatDistribution
+  distributionWithoutCommittees: CalculationSeatDistribution,
+  calculationGroups: CalculationGroup[]
 ): string[] {
   if (partiesInCommittee.length === 0) return [];
-  const safeSeats = new Set(
-    Object.entries(distributionWithoutCommittees)
-      .filter(([, value]) => value >= 1)
-      .map(([key]) => key)
-  );
-  return partiesInCommittee.filter((value) => safeSeats.has(value));
+
+  const safeSeats = Object.entries(distributionWithoutCommittees)
+    .filter(([, seats]) => seats >= 1)
+    .flatMap(([groupName]) => {
+      return groupName.startsWith(UNION_TYPE_PREFIXES[UnionType.FRACTION])
+        ? (calculationGroups.find((group) => group.name === groupName)
+            ?.partiesInUnion ?? [])
+        : groupName;
+    });
+
+  return partiesInCommittee.filter((value) => safeSeats.includes(value));
 }
 
 export const exportForTesting = {
