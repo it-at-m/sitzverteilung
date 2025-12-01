@@ -538,7 +538,8 @@ function calculateMethodValidity(
         )
           ? checkCommitteeInvalid(
               currentObj.partiesInUnion,
-              distributionWithoutCommittees
+              distributionWithoutCommittees,
+              calculationGroups
             )
           : [],
       };
@@ -589,24 +590,27 @@ function checkLostSafeSeatForGroup(
 /**
  * Checks whether a committee was formed with a party in its members that has a seat even when the committee is not formed.
  *
- * @param partiesInUnion Parties of the union to check
+ * @param partiesInCommittee Parties of the union to check
  * @param distributionWithoutCommittees distribution without committees
+ * @param calculationGroups
  */
 function checkCommitteeInvalid(
-  partiesInUnion: string[],
-  distributionWithoutCommittees: CalculationSeatDistribution
+  partiesInCommittee: string[],
+  distributionWithoutCommittees: CalculationSeatDistribution,
+  calculationGroups: CalculationGroup[]
 ): string[] {
-  if (partiesInUnion.length === 0) return [];
+  if (partiesInCommittee.length === 0) return [];
 
   const safeSeats = Object.entries(distributionWithoutCommittees)
     .filter(([, seats]) => seats >= 1)
     .flatMap(([groupName]) => {
       return groupName.startsWith(UNION_TYPE_PREFIXES[UnionType.FRACTION])
-        ? partiesInUnion
+        ? calculationGroups.find((group) => group.name === groupName)
+            ?.partiesInUnion
         : groupName;
     });
 
-  return partiesInUnion.filter((value) => safeSeats.includes(value));
+  return partiesInCommittee.filter((value) => safeSeats.includes(value));
 }
 
 export const exportForTesting = {

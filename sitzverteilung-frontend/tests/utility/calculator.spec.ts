@@ -1098,13 +1098,46 @@ describe("Method validity committee invalid tests", () => {
       F: 13,
       "FG: B und G": 68,
     };
-    const partiesInUnion = ["E", "G"];
+    const partiesInUnion = ["B", "E", "G"];
+    const calculationGroups: CalculationGroup[] = [
+      {
+        name: "A",
+        seatsOrVotes: 78,
+        partiesInUnion: [],
+      },
+      {
+        name: "C",
+        seatsOrVotes: 61,
+        partiesInUnion: [],
+      },
+      {
+        name: "D",
+        seatsOrVotes: 19,
+        partiesInUnion: [],
+      },
+      {
+        name: "E",
+        seatsOrVotes: 13,
+        partiesInUnion: [],
+      },
+      {
+        name: "F",
+        seatsOrVotes: 13,
+        partiesInUnion: [],
+      },
+      {
+        name: "FG: B und G",
+        seatsOrVotes: 68,
+        partiesInUnion: [],
+      },
+    ];
 
-    const expected = ["E", "G"];
+    const expected = ["E"];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
-      seatDistributionWithoutCommittee
+      seatDistributionWithoutCommittee,
+      calculationGroups
     );
 
     expect(result).toEqual(expected);
