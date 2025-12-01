@@ -605,8 +605,8 @@ function checkCommitteeInvalid(
     .filter(([, seats]) => seats >= 1)
     .flatMap(([groupName]) => {
       return groupName.startsWith(UNION_TYPE_PREFIXES[UnionType.FRACTION])
-        ? calculationGroups.find((group) => group.name === groupName)
-            ?.partiesInUnion ?? []
+        ? (calculationGroups.find((group) => group.name === groupName)
+            ?.partiesInUnion ?? [])
         : groupName;
     });
 
