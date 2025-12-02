@@ -141,7 +141,7 @@ function generateParameter(
   doc.text("Zulässigkeit:", PDF_CONFIGURATIONS.marginLeft + 102, 48);
   doc.setTextColor(
     isCalculationMethodValid ? 0 : 255,
-    isCalculationMethodValid ? 170 : 0,
+    isCalculationMethodValid ? 140 : 0,
     0
   );
   doc.text(
@@ -349,14 +349,14 @@ function generateSeatDistributionFooter(
   stale: CalculationStale,
   currentY: number
 ): void {
-  doc.setFontSize(PDF_CONFIGURATIONS.footerTextSize);
+  doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
   doc.setTextColor(255, 0, 0);
   doc.text(
     "Patt zwischen: " +
       stale.groupNames +
       " bei " +
       stale.amountSeats +
-      (stale.amountSeats === 1 ? " Sitz" : " Sitzen"),
+      (stale.amountSeats === 1 ? " Sitz" : " Sitzen") + " (Quotient: " + stale.ratio + ")",
     PDF_CONFIGURATIONS.marginLeft + 2,
     currentY - 2
   );
@@ -440,13 +440,18 @@ function generateSeatOrder(
       doc.text(item.ratio, seatCalculationX + 105, currentY);
       currentY += PDF_CONFIGURATIONS.lineHeight;
     } else {
-      splittedSeatOrders.forEach((partyInOrder) => {
         doc.text(
-          `${item.seatNumber}. Sitz: ${partyInOrder}`,
-          seatCalculationX + 2,
-          currentY
+            `${item.seatNumber}. Sitz:`,
+            seatCalculationX + 2,
+            currentY
         );
         doc.text(item.ratio, seatCalculationX + 105, currentY);
+      splittedSeatOrders.forEach((partyInOrder) => {
+        doc.text(
+          ` - ${partyInOrder}`,
+          seatCalculationX + 22,
+          currentY
+        );
         currentY += PDF_CONFIGURATIONS.lineHeight;
       });
     }
@@ -456,12 +461,17 @@ function generateSeatOrder(
 }
 
 function generateSeatOrderFooter(doc: jsPDF, currentY: number): void {
-  doc.setFontSize(PDF_CONFIGURATIONS.footerTextSize);
+  doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
   doc.setTextColor(255, 0, 0);
   doc.text(
-    "Aufgrund eines Patts bei der Sitzverteilung enthält die Sitzreihung nicht die vollständige Anzahl an Sitzen entsprechend der eingegebenen Ausschussgröße.",
+    "Aufgrund eines Patts bei der Sitzverteilung enthält die Sitzreihung nicht die vollständige Anzahl",
     PDF_CONFIGURATIONS.marginLeft + 2,
     currentY
   );
+    doc.text(
+        "an Sitzen entsprechend der eingegebenen Ausschussgröße.",
+        PDF_CONFIGURATIONS.marginLeft + 2,
+        currentY + 5
+    );
   doc.setTextColor(0, 0, 0);
 }
