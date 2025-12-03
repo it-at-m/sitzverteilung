@@ -356,7 +356,10 @@ function generateSeatDistributionFooter(
       stale.groupNames +
       " bei " +
       stale.amountSeats +
-      (stale.amountSeats === 1 ? " Sitz" : " Sitzen") + " (Quotient: " + stale.ratio + ")",
+      (stale.amountSeats === 1 ? " Sitz" : " Sitzen") +
+      " (Quotient: " +
+      stale.ratio +
+      ")",
     PDF_CONFIGURATIONS.marginLeft + 2,
     currentY - 2
   );
@@ -440,18 +443,10 @@ function generateSeatOrder(
       doc.text(item.ratio, seatCalculationX + 105, currentY);
       currentY += PDF_CONFIGURATIONS.lineHeight;
     } else {
-        doc.text(
-            `${item.seatNumber}. Sitz:`,
-            seatCalculationX + 2,
-            currentY
-        );
-        doc.text(item.ratio, seatCalculationX + 105, currentY);
+      doc.text(`${item.seatNumber}. Sitz:`, seatCalculationX + 2, currentY);
+      doc.text(item.ratio, seatCalculationX + 105, currentY);
       splittedSeatOrders.forEach((partyInOrder) => {
-        doc.text(
-          ` - ${partyInOrder}`,
-          seatCalculationX + 22,
-          currentY
-        );
+        doc.text(` - ${partyInOrder}`, seatCalculationX + 22, currentY);
         currentY += PDF_CONFIGURATIONS.lineHeight;
       });
     }
@@ -468,10 +463,10 @@ function generateSeatOrderFooter(doc: jsPDF, currentY: number): void {
     PDF_CONFIGURATIONS.marginLeft + 2,
     currentY
   );
-    doc.text(
-        "an Sitzen entsprechend der eingegebenen Ausschussgröße.",
-        PDF_CONFIGURATIONS.marginLeft + 2,
-        currentY + 5
-    );
+  doc.text(
+    "an Sitzen entsprechend der eingegebenen Ausschussgröße.",
+    PDF_CONFIGURATIONS.marginLeft + 2,
+    currentY + 5
+  );
   doc.setTextColor(0, 0, 0);
 }
