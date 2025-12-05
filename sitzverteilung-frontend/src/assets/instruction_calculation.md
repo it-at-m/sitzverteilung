@@ -12,10 +12,10 @@ Auf Basis der Daten aus den Vorlagen wird die Berechnung der Sitze nach d'Hondt,
 Mit einem Klick auf die einzelnen Verfahren öffnet sich eine detaillierte Ansicht der jeweiligen Berechnung.
 
 Die meisten Spalten der Ergebnisse sind sortierbar, sowohl aufsteigend als auch absteigend, mit Ausnahme der Zulässigkeit und des Patts.
-Es können auch mehrere Kritierien zum Sortieren ausgewählt werden. Standardmäßig wird nach Stimmen/Sitzen und Namen sortiert.
+Es können auch mehrere Kriterien zum Sortieren ausgewählt werden. Standardmäßig wird nach Stimmen/Sitzen und Namen sortiert.
 
 Sollte keine Berechnung möglich sein, weil die Daten invalide sind, so wird ein entsprechender Hinweistext angezeigt.
-DIes tritt auf, wenn entweder weniger als zwei Parteien eingegeben wurden oder wenn die Ausschussgröße fehlt.
+Dies tritt auf, wenn entweder weniger als zwei Parteien eingegeben wurden oder wenn die Ausschussgröße fehlt.
 
 ## Auswahl der Vorlagen
 
@@ -26,7 +26,7 @@ Wie auch in der Vorlagenansicht besteht hier eine Funktion zum Teilen der Berech
 ## Detailansicht
 
 In der Detailansicht werden für das betreffende Verfahren zunächst die gleichen Ergebnisse wie in der Berechnungsansicht dargestellt.
-Desweiteren stellt die Ansicht die detaillierte Aufschlüsselung der Sitzreihung dar.
+Des Weiteren stellt die Ansicht die detaillierte Aufschlüsselung der Sitzreihung dar.
 Hier kann eingesehen werden, wie jeder einzelne Sitz verteilt wurde.
 Wie auch in der Berechnungsansicht ist die Zusammensetzung sortierbar, die Sitzreihung ist jedoch NICHT sortierbar und zeigt immer die Sitze nach Reihenfolge an.
 
