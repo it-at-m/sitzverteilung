@@ -9,8 +9,13 @@
       :committee-size="currentBaseData.committeeSize"
     />
     <v-row>
-      <v-col>
-        <h1>Berechnung der Sitze</h1>
+      <v-col class="d-flex align-center">
+        <h1 class="mr-5">Berechnung der Sitze</h1>
+        <info-dialog>
+          <template #dialog-text>
+            <markdown-renderer markdown-file-name="instruction_calculation" />
+          </template>
+        </info-dialog>
       </v-col>
     </v-row>
     <v-toolbar class="my-6 py-2 px-3 bg-primary">
@@ -95,6 +100,8 @@ import { computed, nextTick, onMounted, ref, watch } from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
+import InfoDialog from "@/components/common/InfoDialog.vue";
+import MarkdownRenderer from "@/components/common/MarkdownRenderer.vue";
 import DetailDialog from "@/components/result/DetailDialog.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useShareData } from "@/composables/useShareData.ts";
