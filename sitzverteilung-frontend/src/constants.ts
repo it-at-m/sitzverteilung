@@ -21,6 +21,5 @@ export const PDF_CONFIGURATIONS = {
   sizeSmallHeader: 11,
   headerFontSize: 16,
   dataTextSize: 9,
-  footerTextSize: 8,
   timestampSize: 8,
 };
