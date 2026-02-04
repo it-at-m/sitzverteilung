@@ -39,7 +39,7 @@
     "@vue/tsconfig": "0.8.1",
     "blob-polyfill": "9.0.20240710",
     "eslint": "9.39.2",
-    "eslint-plugin-vue": "10.6.2",
+    "eslint-plugin-vue": "10.7.0",
     "jsdom": "27.2.0",
     "markdownlint-cli": "0.46.0",
     "prettier": "3.6.2",
