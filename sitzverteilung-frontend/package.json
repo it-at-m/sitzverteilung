@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.9",
-    "@vueuse/core": "14.0.0",
+    "@vueuse/core": "14.2.0",
     "big.js": "7.0.1",
     "jspdf": "4.1.0",
     "marked": "17.0.1",
