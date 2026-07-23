@@ -35,7 +35,7 @@
     "@vitejs/plugin-vue": "6.0.3",
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-typescript": "14.9.0",
-    "@vue/test-utils": "2.4.6",
+    "@vue/test-utils": "2.4.11",
     "@vue/tsconfig": "0.8.1",
     "blob-polyfill": "9.0.20240710",
     "eslint": "9.39.5",
