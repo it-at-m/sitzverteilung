@@ -27,6 +27,18 @@
             :base-data-list="storedBaseData"
           />
           <v-btn
+              variant="flat"
+              color="green"
+              size="large"
+              class="ml-5"
+              :prepend-icon="mdiContentSave"
+              :disabled="
+              !isExpanded
+            "
+              @click="createBaseData"
+              text="Anlegen"
+          />
+          <v-btn
             @click="toggleExpansion()"
             :color="isExpanded ? 'red' : 'green'"
             variant="flat"
@@ -92,11 +104,11 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseData } from "@/types/basedata/BaseData.ts";
+import type {BaseData} from "@/types/basedata/BaseData.ts";
 
-import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
-import { useToggle } from "@vueuse/core";
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import {mdiClose, mdiContentSave, mdiContentSaveEdit, mdiShare} from "@mdi/js";
+import {useToggle} from "@vueuse/core";
+import {computed, nextTick, onMounted, ref, watch} from "vue";
 
 import BaseDataForm from "@/components/basedata/BaseDataForm.vue";
 import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomplete.vue";
@@ -104,18 +116,13 @@ import InfoDialog from "@/components/common/InfoDialog.vue";
 import MarkdownRenderer from "@/components/common/MarkdownRenderer.vue";
 import DetailDialog from "@/components/result/DetailDialog.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
-import { useShareData } from "@/composables/useShareData.ts";
-import { useTemplateData } from "@/composables/useTemplateData.ts";
-import {
-  AVAILABLE_METHODS,
-  CalculationMethod,
-} from "@/types/calculation/CalculationMethod.ts";
-import { calculate } from "@/utility/calculator.ts";
-import { generatePDF } from "@/utility/pdfGeneration.ts";
-import {
-  isValidCalculationData,
-  LimitConfiguration,
-} from "@/utility/validation.ts";
+import {useShareData} from "@/composables/useShareData.ts";
+import {useTemplateData} from "@/composables/useTemplateData.ts";
+import {AVAILABLE_METHODS, CalculationMethod,} from "@/types/calculation/CalculationMethod.ts";
+import {calculate} from "@/utility/calculator.ts";
+import {generatePDF} from "@/utility/pdfGeneration.ts";
+import {isValidCalculationData, LimitConfiguration,} from "@/utility/validation.ts";
+import {useTemplateDataStore} from "@/stores/templatedata.ts";
 
 const [isExpanded, toggleExpansion] = useToggle();
 
@@ -200,5 +207,16 @@ function generateAllPdfs() {
       );
     }
   });
+}
+
+const store = useTemplateDataStore();
+
+function createBaseData() {
+  if (currentBaseData.value) {
+    currentBaseData.value.name = currentBaseData.value.name + " " + "(Kopie)";
+    const copy = JSON.parse(JSON.stringify(currentBaseData.value));
+    store.addBaseData(copy);
+    selectedBaseData.value = copy;
+  }
 }
 </script>
