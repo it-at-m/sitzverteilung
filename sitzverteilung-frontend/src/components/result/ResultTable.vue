@@ -21,7 +21,7 @@
             <v-btn
               v-if="!methodToDisplay"
               :prepend-icon="mdiDownload"
-              text="PDFs herunterladen"
+              text="Ergebnis herunterladen"
               class="my-3"
               :disabled="!calculationResult"
               variant="flat"

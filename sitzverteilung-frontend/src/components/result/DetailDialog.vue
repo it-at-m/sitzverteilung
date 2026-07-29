@@ -49,7 +49,7 @@
           text="PDF herunterladen"
           :disabled="!calculationResult"
           @click="
-            generatePDF(
+            generateDetailPDF(
               targetSize,
               committeeSize,
               calculationResult!,
@@ -74,7 +74,7 @@ import { mdiDownload, mdiInformation } from "@mdi/js";
 import ResultTable from "@/components/result/ResultTable.vue";
 import SeatOrderTable from "@/components/result/SeatOrderTable.vue";
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
-import { generatePDF } from "@/utility/pdfGeneration.ts";
+import { generateDetailPDF } from "@/utility/pdfGeneration.ts";
 
 const isDialogShown = defineModel<boolean>({ required: true });
 defineProps<{
