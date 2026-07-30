@@ -89,7 +89,7 @@
                   @click="deleteGroups"
                   :prepend-icon="mdiDelete"
                   variant="tonal"
-                  color="error"
+                  color="red-darken-4"
                   size="small"
                   class="mx-2"
                   text="Zeilen löschen"
