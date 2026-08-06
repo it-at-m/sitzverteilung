@@ -32,7 +32,7 @@
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
-            :disabled="!isExpanded"
+            :disabled="!isExpanded || !isValid"
             @click="createBaseData"
             text="Anlegen"
           />
@@ -221,11 +221,31 @@ function generateAllPdfs() {
 const store = useTemplateDataStore();
 
 function createBaseData() {
-  if (currentBaseData.value) {
-    currentBaseData.value.name = currentBaseData.value.name + " " + "(Kopie)";
-    const copy = JSON.parse(JSON.stringify(currentBaseData.value));
-    store.addBaseData(copy);
-    selectedBaseData.value = copy;
+  if (!currentBaseData.value) {
+    return;
   }
+
+  const originalName = currentBaseData.value.name;
+  const existingNames = new Set(
+      storedBaseData.value.map((baseData) => baseData.name)
+  );
+
+  let copyNumber = 1;
+  let copyName = `${originalName} (Kopie)`;
+
+  while (existingNames.has(copyName)) {
+    copyNumber++;
+    copyName = `${originalName} (Kopie ${copyNumber})`;
+  }
+
+  const copy: BaseData = JSON.parse(
+      JSON.stringify({
+        ...currentBaseData.value,
+        name: copyName,
+      })
+  );
+
+  store.addBaseData(copy);
+  selectedBaseData.value = copy;
 }
 </script>
