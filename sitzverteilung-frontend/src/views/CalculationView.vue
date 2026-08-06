@@ -227,7 +227,7 @@ function createBaseData() {
 
   const originalName = currentBaseData.value.name;
   const existingNames = new Set(
-      storedBaseData.value.map((baseData) => baseData.name)
+    storedBaseData.value.map((baseData) => baseData.name)
   );
 
   let copyNumber = 1;
@@ -239,10 +239,10 @@ function createBaseData() {
   }
 
   const copy: BaseData = JSON.parse(
-      JSON.stringify({
-        ...currentBaseData.value,
-        name: copyName,
-      })
+    JSON.stringify({
+      ...currentBaseData.value,
+      name: copyName,
+    })
   );
 
   store.addBaseData(copy);
