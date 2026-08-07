@@ -38,7 +38,7 @@
           />
           <v-btn
             @click="toggleExpansion()"
-            :color="isExpanded ? 'red' : 'green'"
+            :color="isExpanded ? 'red-darken-2' : 'green-darken-3'"
             variant="flat"
             size="large"
             class="ml-5"
@@ -54,7 +54,7 @@
               <v-btn
                 v-bind="props"
                 variant="flat"
-                color="blue"
+                color="light-blue-darken-3"
                 size="large"
                 class="mx-5"
                 :prepend-icon="mdiShare"
