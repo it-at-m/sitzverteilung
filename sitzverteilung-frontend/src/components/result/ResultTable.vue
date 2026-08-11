@@ -69,7 +69,8 @@
           <div class="d-flex flex-row justify-center align-center ga-2">
             <span
               :class="{
-                'bg-error': mappedResult.length && !isMethodValid(method),
+                'bg-red-darken-3':
+                  mappedResult.length && !isMethodValid(method),
               }"
               class="px-2 py-1 rounded-sm"
             >

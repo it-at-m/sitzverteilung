@@ -27,8 +27,18 @@
             :base-data-list="storedBaseData"
           />
           <v-btn
+            variant="flat"
+            color="green"
+            size="large"
+            class="ml-5"
+            :prepend-icon="mdiContentSave"
+            :disabled="!isExpanded || !isValid"
+            @click="createBaseData"
+            text="Anlegen"
+          />
+          <v-btn
             @click="toggleExpansion()"
-            :color="isExpanded ? 'red' : 'green'"
+            :color="isExpanded ? 'red-darken-2' : 'green-darken-3'"
             variant="flat"
             size="large"
             class="ml-5"
@@ -44,7 +54,7 @@
               <v-btn
                 v-bind="props"
                 variant="flat"
-                color="blue"
+                color="light-blue-darken-3"
                 size="large"
                 class="mx-5"
                 :prepend-icon="mdiShare"
@@ -94,7 +104,12 @@
 <script setup lang="ts">
 import type { BaseData } from "@/types/basedata/BaseData.ts";
 
-import { mdiClose, mdiContentSaveEdit, mdiShare } from "@mdi/js";
+import {
+  mdiClose,
+  mdiContentSave,
+  mdiContentSaveEdit,
+  mdiShare,
+} from "@mdi/js";
 import { useToggle } from "@vueuse/core";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 
@@ -107,6 +122,11 @@ import ResultTable from "@/components/result/ResultTable.vue";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import { useTemplateDataStore } from "@/stores/templatedata.ts";
+import {
+  AVAILABLE_METHODS,
+  CalculationMethod,
+} from "@/types/calculation/CalculationMethod.ts";
 import { calculate } from "@/utility/calculator.ts";
 import { generateCalculationiewPDF } from "@/utility/pdfGeneration.ts";
 import {
@@ -194,5 +214,36 @@ function generateAllPdfs() {
       calculationResult.value
     );
   }
+}
+
+const store = useTemplateDataStore();
+
+function createBaseData() {
+  if (!currentBaseData.value) {
+    return;
+  }
+
+  const originalName = currentBaseData.value.name;
+  const existingNames = new Set(
+    storedBaseData.value.map((baseData) => baseData.name)
+  );
+
+  let copyNumber = 1;
+  let copyName = `${originalName} (Kopie)`;
+
+  while (existingNames.has(copyName)) {
+    copyNumber++;
+    copyName = `${originalName} (Kopie ${copyNumber})`;
+  }
+
+  const copy: BaseData = JSON.parse(
+    JSON.stringify({
+      ...currentBaseData.value,
+      name: copyName,
+    })
+  );
+
+  store.addBaseData(copy);
+  selectedBaseData.value = copy;
 }
 </script>

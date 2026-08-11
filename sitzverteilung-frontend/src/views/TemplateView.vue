@@ -39,7 +39,7 @@
           />
           <v-btn
             variant="flat"
-            color="green"
+            color="green-darken-3"
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSave"
@@ -53,7 +53,7 @@
           />
           <v-btn
             variant="flat"
-            color="green"
+            color="green-darken-3"
             size="large"
             class="ml-5"
             :prepend-icon="mdiContentSaveEdit"
@@ -63,7 +63,7 @@
           />
           <v-btn
             variant="flat"
-            color="red"
+            color="red-darken-2"
             size="large"
             class="ml-5"
             :prepend-icon="mdiDelete"
@@ -80,7 +80,7 @@
               <v-btn
                 v-bind="props"
                 variant="flat"
-                color="blue"
+                color="light-blue-darken-3"
                 size="large"
                 class="mx-5"
                 :prepend-icon="mdiShare"
