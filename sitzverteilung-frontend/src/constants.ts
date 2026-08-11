@@ -13,6 +13,9 @@ export const PDF_CONFIGURATIONS = {
   bottomMargin: 25,
   upperMargin: 10,
   parameterHeight: 95,
+  dHondtMargin: 0,
+  hareNiemayerMargin: 40,
+  sainteLagueSchepersMargin: 80,
 
   lineHeight: 7,
   smallHeaderLine: 0.1,
@@ -22,4 +25,6 @@ export const PDF_CONFIGURATIONS = {
   headerFontSize: 16,
   dataTextSize: 9,
   timestampSize: 8,
+  methodCalculationHeaderSize: 7,
+  methodCalculationSize: 6,
 };
