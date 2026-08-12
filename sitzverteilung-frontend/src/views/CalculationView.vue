@@ -96,7 +96,7 @@
       :calculation-result="calculationResult"
       :show-seats="isCommitteeSizeEntered"
       @clicked-calculation-method="openDetailDialog"
-      @clicked-download-all-pdfs="generateAllPdfs"
+      @clicked-download-result-pdf="downloadResultPdf"
     />
   </v-container>
 </template>
@@ -121,14 +121,10 @@ import DetailDialog from "@/components/result/DetailDialog.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
-import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
-import {
-  AVAILABLE_METHODS,
-  CalculationMethod,
-} from "@/types/calculation/CalculationMethod.ts";
+import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import { calculate } from "@/utility/calculator.ts";
-import { generateCalculationiewPDF } from "@/utility/pdfGeneration.ts";
+import { generateCalculationViewPDF } from "@/utility/pdfGeneration.ts";
 import {
   isValidCalculationData,
   LimitConfiguration,
@@ -206,9 +202,9 @@ watch(showDetailDialog, (isShown) => {
   }
 });
 
-function generateAllPdfs() {
+function downloadResultPdf() {
   if (calculationResult.value) {
-    generateCalculationiewPDF(
+    generateCalculationViewPDF(
       currentBaseData.value.targetSize,
       currentBaseData.value.committeeSize,
       calculationResult.value

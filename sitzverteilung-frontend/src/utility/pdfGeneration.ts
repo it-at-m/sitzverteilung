@@ -9,7 +9,7 @@ import type {
 
 import { jsPDF } from "jspdf";
 
-import { PDF_CONFIGURATIONS } from "@/constants.ts";
+import { methodMargins, PDF_CONFIGURATIONS } from "@/constants.ts";
 import {
   AVAILABLE_METHODS,
   CalculationMethod,
@@ -93,7 +93,7 @@ export function generateDetailPDF(
   doc.save(exportFileName);
 }
 
-export function generateCalculationiewPDF(
+export function generateCalculationViewPDF(
   targetSize: number | undefined,
   committeeSize: number | undefined,
   calculationResult: CalculationResult
@@ -129,68 +129,37 @@ export function generateCalculationiewPDF(
   doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationHeaderSize);
   doc.text("Partei", PDF_CONFIGURATIONS.marginLeft + 2, currentY + 8);
 
-  let footerY = currentY + 5 + partysHeight * 2;
+  const distributions: Partial<
+    Record<CalculationMethod, CalculationSeatDistribution>
+  > = {};
+
+  const stales: Partial<
+    Record<CalculationMethod, CalculationStale | undefined>
+  > = {};
+
+  const validations: Partial<Record<CalculationMethod, CalculationValidation>> =
+    {};
 
   AVAILABLE_METHODS.forEach((method: CalculationMethod) => {
-    const distributionForMethod =
-      calculationResult.methods[method]?.distribution;
-    const staleForMethod = calculationResult.methods[method]?.stale;
-    const validationForMethod = calculationResult.methods[method]?.validation;
+    const methodResult = calculationResult.methods[method];
 
-    let methodMargin = PDF_CONFIGURATIONS.dHondtMargin;
-
-    if (method == CalculationMethod.HARE_NIEMEYER) {
-      methodMargin = PDF_CONFIGURATIONS.hareNiemayerMargin;
-    } else {
-      if (method == CalculationMethod.SAINTE_LAGUE_SCHEPERS) {
-        methodMargin = PDF_CONFIGURATIONS.sainteLagueSchepersMargin;
-      }
-    }
-
-    if (distributionForMethod && validationForMethod) {
-      doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
-      doc.text(
-        method,
-        PDF_CONFIGURATIONS.marginLeft + 70 + methodMargin,
-        currentY
-      );
-      doc.setLineWidth(PDF_CONFIGURATIONS.headerLine);
-      doc.line(
-        PDF_CONFIGURATIONS.marginLeft,
-        currentY + 2,
-        PDF_CONFIGURATIONS.marginRight,
-        currentY + 2
-      );
-      doc.setLineWidth(PDF_CONFIGURATIONS.smallHeaderLine);
-      doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
-
-      doc.line(
-        PDF_CONFIGURATIONS.marginLeft + 108 + methodMargin,
-        currentY + 3,
-        PDF_CONFIGURATIONS.marginLeft + 108 + methodMargin,
-        currentY - 10 + partysHeight * 2
-      );
-
-      generateMethodResultsCalculationview(
-        doc,
-        currentY,
-        distributionForMethod,
-        staleForMethod,
-        validationForMethod,
-        method,
-        sortedGroups
-      );
-      if (staleForMethod) {
-        generateStaleFooterCalculationPDF(
-          doc,
-          staleForMethod,
-          footerY - 10,
-          method
-        );
-        footerY += 5;
-      }
+    if (methodResult?.distribution && methodResult.validation) {
+      distributions[method] = methodResult.distribution;
+      stales[method] = methodResult.stale;
+      validations[method] = methodResult.validation;
     }
   });
+
+  const footerY = generateMethodResultsPerParty(
+    doc,
+    currentY,
+    distributions,
+    stales,
+    validations,
+    sortedGroups
+  );
+
+  generateStaleFooterCalculationPDF(doc, stales, footerY);
 
   const timeStampForExport = timestamp.toISOString().slice(0, 10);
   const exportFileName = `Sitzverteilung_${timeStampForExport}.pdf`;
@@ -400,13 +369,14 @@ function generateHeaderForCalculationResults(doc: jsPDF, currentY: number) {
   doc.text("Berechnungsergebnis", PDF_CONFIGURATIONS.marginLeft, currentY - 3);
 }
 
-function generateMethodResultsCalculationview(
+function generateMethodResultsPerParty(
   doc: jsPDF,
   currentY: number,
-  distribution: CalculationSeatDistribution,
-  stale: CalculationStale | undefined,
-  validation: CalculationValidation,
-  method: CalculationMethod,
+  distributions: Partial<
+    Record<CalculationMethod, CalculationSeatDistribution>
+  >,
+  stales: Partial<Record<CalculationMethod, CalculationStale | undefined>>,
+  validations: Partial<Record<CalculationMethod, CalculationValidation>>,
   sortedGroups: PartyEntry[]
 ) {
   const seatsX = PDF_CONFIGURATIONS.marginLeft;
@@ -416,112 +386,112 @@ function generateMethodResultsCalculationview(
   const bottomMargin = 25;
   const maxY = pageHeight - bottomMargin;
 
+  const availableMethods = AVAILABLE_METHODS.filter(
+    (method) => distributions[method] && validations[method]
+  );
+
   doc.setFontSize(PDF_CONFIGURATIONS.sizeSmallHeader);
   doc.line(seatsX + 2, seatsY + 10, seatsX + 190, seatsY + 10);
 
-  let methodMargin = PDF_CONFIGURATIONS.dHondtMargin;
-
-  if (method == CalculationMethod.HARE_NIEMEYER) {
-    methodMargin = PDF_CONFIGURATIONS.hareNiemayerMargin;
-  } else {
-    if (method == CalculationMethod.SAINTE_LAGUE_SCHEPERS) {
-      methodMargin = PDF_CONFIGURATIONS.sainteLagueSchepersMargin;
-    }
-  }
-
-  const sortedGroupNames = sortedGroups.map((group) => ({
-    group,
-    seatsForMethod: distribution[group.name],
-    validationForMethod: validation[group.name],
-  }));
-
   doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationHeaderSize);
-  doc.text(
-    "Sitze",
-    PDF_CONFIGURATIONS.marginLeft + 70 + methodMargin,
-    currentY + 8
-  );
-  doc.text(
-    "Zulässigkeit",
-    PDF_CONFIGURATIONS.marginLeft + 85 + methodMargin,
-    currentY + 8
-  );
+
+  doc.text("Partei", PDF_CONFIGURATIONS.marginLeft + 2, currentY + 8);
+
+  availableMethods.forEach((method) => {
+    const methodX = PDF_CONFIGURATIONS.marginLeft + methodMargins[method];
+
+    doc.text(method, methodX + 70, currentY + 8);
+
+    doc.text("Sitze", methodX + 70, currentY + 16);
+
+    doc.text("Zulässigkeit", methodX + 85, currentY + 16);
+  });
 
   doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationSize);
 
-  let y = seatsY + 18;
+  let y = seatsY + 26;
   const seatsHeightPerItem = PDF_CONFIGURATIONS.lineHeight;
 
-  sortedGroupNames.forEach((item) => {
+  sortedGroups.forEach((group) => {
     if (y + seatsHeightPerItem > maxY) {
       doc.addPage();
       y = 20;
+
       doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationHeaderSize);
       doc.text(
-        method + " (Fortsetzung)",
+        "Berechnungsverfahren (Fortsetzung)",
         PDF_CONFIGURATIONS.marginLeft + 2,
-        y - PDF_CONFIGURATIONS.upperMargin
+        y
       );
+
       doc.setLineWidth(PDF_CONFIGURATIONS.smallHeaderLine);
       doc.line(
         PDF_CONFIGURATIONS.marginLeft + 2,
-        y - 8,
+        y + 2,
         PDF_CONFIGURATIONS.marginRight,
-        y - 8
+        y + 2
       );
+
+      y += 12;
+
+      doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationSize);
     }
 
-    doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationSize);
+    doc.text(group.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
 
-    const lostSafeSeat = item.validationForMethod.lostSafeSeat;
-    const overrounding = item.validationForMethod.overRounding;
-    const committeeInvalid = item.validationForMethod.committeeInvalid;
+    availableMethods.forEach((method) => {
+      const distribution = distributions[method];
+      const validation = validations[method];
+      const stale = stales[method];
 
-    if (method == CalculationMethod.D_HONDT) {
-      doc.text(item.group.name, PDF_CONFIGURATIONS.marginLeft + 2, y);
-    }
-
-    if (!lostSafeSeat && !overrounding && committeeInvalid.length == 0) {
-      doc.text(
-        "zulässig",
-        PDF_CONFIGURATIONS.marginLeft + 85 + methodMargin,
-        y
-      );
-    } else {
-      if (overrounding) {
-        doc.text(
-          overrounding ? "Überaufrundung" : "",
-          PDF_CONFIGURATIONS.marginLeft + 85 + methodMargin,
-          y
-        );
+      if (!distribution || !validation) {
+        return;
       }
-      if (lostSafeSeat) {
-        doc.text(
-          lostSafeSeat ? "Verlust sicherer Sitz" : "",
-          PDF_CONFIGURATIONS.marginLeft + 85 + methodMargin,
-          y
-        );
+
+      const seats = distribution[group.name];
+      const validationForGroup = validation[group.name];
+
+      const lostSafeSeat = validationForGroup.lostSafeSeat;
+      const overrounding = validationForGroup.overRounding;
+      const committeeInvalid = validationForGroup.committeeInvalid;
+
+      const staleReasons: string[] = [];
+
+      if (!lostSafeSeat && !overrounding && committeeInvalid.length === 0) {
+        staleReasons.push("zulässig");
+      } else {
+        if (overrounding) {
+          staleReasons.push("Überaufrundung");
+        }
+
+        if (lostSafeSeat) {
+          staleReasons.push("Verlust sicherer Sitz");
+        }
+
+        if (committeeInvalid.length !== 0) {
+          committeeInvalid.forEach((committee) => {
+            staleReasons.push(committee);
+          });
+        }
       }
-      if (committeeInvalid.length != 0) {
-        doc.text(
-          "Ungültig wegen:" + committeeInvalid,
-          PDF_CONFIGURATIONS.marginLeft + 85 + methodMargin,
-          y
-        );
+
+      const methodX = PDF_CONFIGURATIONS.marginLeft + methodMargins[method];
+
+      if (stale?.groupNames.includes(group.name)) {
+        doc.setTextColor(255, 0, 0);
       }
-    }
-    if (stale?.groupNames.includes(item.group.name)) {
-      doc.setTextColor(255, 0, 0);
-    }
-    doc.text(
-      String(item.seatsForMethod),
-      PDF_CONFIGURATIONS.marginLeft + 70 + methodMargin,
-      y
-    );
-    doc.setTextColor(0, 0, 0);
+
+      doc.text(String(seats), methodX + 70, y);
+
+      doc.setTextColor(0, 0, 0);
+
+      doc.text(staleReasons, methodX + 85, y);
+    });
 
     y += seatsHeightPerItem;
   });
+
+  return y;
 }
 
 function generateSeatDistribution(
@@ -607,26 +577,31 @@ function generateSeatDistributionFooter(
 
 function generateStaleFooterCalculationPDF(
   doc: jsPDF,
-  stale: CalculationStale,
-  currentY: number,
-  method: CalculationMethod
+  stales: Partial<Record<CalculationMethod, CalculationStale | undefined>>,
+  currentY: number
 ): void {
-  doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationSize);
-  doc.setTextColor(255, 0, 0);
-  doc.text(
-    method +
-      ": Patt zwischen: " +
-      stale.groupNames +
-      " bei " +
-      stale.amountSeats +
-      (stale.amountSeats === 1 ? " Sitz" : " Sitzen") +
-      " (Quotient: " +
-      stale.ratio +
-      ")",
-    PDF_CONFIGURATIONS.marginLeft + 2,
-    currentY - 2
-  );
-  doc.setTextColor(0, 0, 0);
+  AVAILABLE_METHODS.forEach((method) => {
+    const stale = stales[method];
+    if (stale) {
+      doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationSize);
+      doc.setTextColor(255, 0, 0);
+      doc.text(
+        method +
+          ": Patt zwischen: " +
+          stale.groupNames +
+          " bei " +
+          stale.amountSeats +
+          (stale.amountSeats === 1 ? " Sitz" : " Sitzen") +
+          " (Quotient: " +
+          stale.ratio +
+          ")",
+        PDF_CONFIGURATIONS.marginLeft + 2,
+        currentY - 2
+      );
+      doc.setTextColor(0, 0, 0);
+      currentY += 5;
+    }
+  });
 }
 
 function generateSeatOrder(

@@ -28,3 +28,9 @@ export const PDF_CONFIGURATIONS = {
   methodCalculationHeaderSize: 7,
   methodCalculationSize: 6,
 };
+
+export const methodMargins: Record<string, number> = {
+  "D'Hondt": 0,
+  "Hare/Niemeyer": 40,
+  "Sainte-Laguë/Schepers": 80,
+};

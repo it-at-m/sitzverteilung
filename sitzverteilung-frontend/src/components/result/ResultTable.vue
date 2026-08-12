@@ -26,7 +26,7 @@
               :disabled="!calculationResult"
               variant="flat"
               color="primary"
-              @click="emit('clickedDownloadAllPdfs')"
+              @click="emit('clickedDownloadResultPdf')"
             />
           </div>
         </template>
@@ -290,6 +290,6 @@ function generateValidationText(
 
 const emit = defineEmits<{
   clickedCalculationMethod: [calculationMethod: CalculationMethod];
-  clickedDownloadAllPdfs: [];
+  clickedDownloadResultPdf: [];
 }>();
 </script>
