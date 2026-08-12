@@ -1,3 +1,5 @@
+import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+
 export const SNACKBAR_DEFAULT_TIMEOUT = 5000;
 
 export const enum STATUS_INDICATORS {
@@ -13,6 +15,9 @@ export const PDF_CONFIGURATIONS = {
   bottomMargin: 25,
   upperMargin: 10,
   parameterHeight: 95,
+  dHondtMargin: 0,
+  hareNiemayerMargin: 40,
+  sainteLagueSchepersMargin: 80,
 
   lineHeight: 7,
   smallHeaderLine: 0.1,
@@ -22,4 +27,12 @@ export const PDF_CONFIGURATIONS = {
   headerFontSize: 16,
   dataTextSize: 9,
   timestampSize: 8,
+  methodCalculationHeaderSize: 7,
+  methodCalculationSize: 6,
+};
+
+export const methodMargins: Record<CalculationMethod, number> = {
+  [CalculationMethod.D_HONDT]: 0,
+  [CalculationMethod.HARE_NIEMEYER]: 40,
+  [CalculationMethod.SAINTE_LAGUE_SCHEPERS]: 80,
 };

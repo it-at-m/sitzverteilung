@@ -21,12 +21,12 @@
             <v-btn
               v-if="!methodToDisplay"
               :prepend-icon="mdiDownload"
-              text="PDFs herunterladen"
+              text="Ergebnis herunterladen"
               class="my-3"
               :disabled="!calculationResult"
               variant="flat"
               color="primary"
-              @click="emit('clickedDownloadAllPdfs')"
+              @click="emit('clickedDownloadResultPdf')"
             />
           </div>
         </template>
@@ -290,6 +290,6 @@ function generateValidationText(
 
 const emit = defineEmits<{
   clickedCalculationMethod: [calculationMethod: CalculationMethod];
-  clickedDownloadAllPdfs: [];
+  clickedDownloadResultPdf: [];
 }>();
 </script>
