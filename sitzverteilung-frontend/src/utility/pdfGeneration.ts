@@ -126,9 +126,6 @@ export function generateCalculationViewPDF(
     currentY
   );
 
-  doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationHeaderSize);
-  doc.text("Partei", PDF_CONFIGURATIONS.marginLeft + 2, currentY + 8);
-
   const distributions: Partial<
     Record<CalculationMethod, CalculationSeatDistribution>
   > = {};
@@ -417,6 +414,16 @@ function generateMethodResultsPerParty(
       doc.addPage();
       y = 20;
 
+      availableMethods.forEach((method) => {
+        const methodX = PDF_CONFIGURATIONS.marginLeft + methodMargins[method];
+
+        doc.text(method, methodX + 70, y);
+
+        doc.text("Sitze", methodX + 70, y + 8);
+
+        doc.text("Zulässigkeit", methodX + 85, y + 8);
+      });
+
       doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationHeaderSize);
       doc.text(
         "Berechnungsverfahren (Fortsetzung)",
@@ -432,7 +439,7 @@ function generateMethodResultsPerParty(
         y + 2
       );
 
-      y += 12;
+      y += 17;
 
       doc.setFontSize(PDF_CONFIGURATIONS.methodCalculationSize);
     }
@@ -455,26 +462,15 @@ function generateMethodResultsPerParty(
       const overrounding = validationForGroup.overRounding;
       const committeeInvalid = validationForGroup.committeeInvalid;
 
-      const staleReasons: string[] = [];
+      const validationReasons = [
+        ...(overrounding ? ["Überaufrundung"] : []),
+        ...(lostSafeSeat ? ["Verlust sicherer Sitz"] : []),
+        ...committeeInvalid,
+      ];
 
-      if (!lostSafeSeat && !overrounding && committeeInvalid.length === 0) {
-        staleReasons.push("zulässig");
-      } else {
-        if (overrounding) {
-          staleReasons.push("Überaufrundung");
-        }
-
-        if (lostSafeSeat) {
-          staleReasons.push("Verlust sicherer Sitz");
-        }
-
-        if (committeeInvalid.length !== 0) {
-          committeeInvalid.forEach((committee) => {
-            staleReasons.push(committee);
-          });
-        }
+      if (validationReasons.length === 0) {
+        validationReasons.push("zulässig");
       }
-
       const methodX = PDF_CONFIGURATIONS.marginLeft + methodMargins[method];
 
       if (stale?.groupNames.includes(group.name)) {
@@ -485,7 +481,7 @@ function generateMethodResultsPerParty(
 
       doc.setTextColor(0, 0, 0);
 
-      doc.text(staleReasons, methodX + 85, y);
+      doc.text(validationReasons, methodX + 85, y);
     });
 
     y += seatsHeightPerItem;
@@ -558,6 +554,16 @@ function generateSeatDistributionFooter(
   stale: CalculationStale,
   currentY: number
 ): void {
+  const pageHeight = doc.internal.pageSize.height;
+  const bottomMargin = 25;
+  const maxY = pageHeight - bottomMargin;
+  const seatsHeightPerItem = PDF_CONFIGURATIONS.lineHeight + 2;
+
+  if (currentY + seatsHeightPerItem > maxY) {
+    doc.addPage();
+    currentY = 20;
+  }
+
   doc.setFontSize(PDF_CONFIGURATIONS.dataTextSize);
   doc.setTextColor(255, 0, 0);
   doc.text(
