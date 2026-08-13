@@ -127,6 +127,7 @@ import TemplateDataAutocomplete from "@/components/basedata/TemplateDataAutocomp
 import InfoDialog from "@/components/common/InfoDialog.vue";
 import MarkdownRenderer from "@/components/common/MarkdownRenderer.vue";
 import YesNoDialog from "@/components/common/YesNoDialog.vue";
+import { useArrowNavigation } from "@/composables/useArrowNavigation.ts";
 import { useSaveLeave } from "@/composables/useSaveLeave.ts";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
@@ -201,4 +202,6 @@ const { share } = useShareData<BaseData>(
   currentBaseData,
   "Die Daten wurden aus dem Link übertragen. ACHTUNG: Erst nach dem Klick auf 'Anlegen' werden diese permanent gespeichert."
 );
+
+useArrowNavigation();
 </script>

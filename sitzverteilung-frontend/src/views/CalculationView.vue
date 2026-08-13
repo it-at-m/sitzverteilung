@@ -119,6 +119,7 @@ import InfoDialog from "@/components/common/InfoDialog.vue";
 import MarkdownRenderer from "@/components/common/MarkdownRenderer.vue";
 import DetailDialog from "@/components/result/DetailDialog.vue";
 import ResultTable from "@/components/result/ResultTable.vue";
+import { useArrowNavigation } from "@/composables/useArrowNavigation.ts";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
@@ -242,4 +243,6 @@ function createBaseData() {
   store.addBaseData(copy);
   selectedBaseData.value = copy;
 }
+
+useArrowNavigation();
 </script>
