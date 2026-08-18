@@ -227,7 +227,8 @@ function calculateMethod(
     proportionsWithoutCommittees,
     result.distribution,
     resultWithoutCommittees.distribution,
-    result.stale
+    result.stale,
+    resultWithoutCommittees.stale
   );
 
   return result;
@@ -519,6 +520,7 @@ function calculateProportions(
  * @param distribution seat distribution returned by the specific calculation method
  * @param distributionWithoutCommittees seat distribution returned by the specific calculation method when calculating without committee unions
  * @param stale optional stale to respect when calculating the over rounding
+ * @param staleWithoutCommittees optional stale to respect when calculating the over rounding without any committees in it
  */
 function calculateMethodValidity(
   calculationGroups: CalculationGroup[],
@@ -527,7 +529,8 @@ function calculateMethodValidity(
   proportionsWithoutCommittees: CalculationProportions,
   distribution: CalculationSeatDistribution,
   distributionWithoutCommittees: CalculationSeatDistribution,
-  stale?: CalculationStale
+  stale?: CalculationStale,
+  staleWithoutCommittees?: CalculationStale
 ): CalculationValidation {
   return calculationGroups.reduce(
     (validation: CalculationValidation, currentObj: CalculationGroup) => {
@@ -555,7 +558,8 @@ function calculateMethodValidity(
             checkOverroundingForGroup(
               groupWithoutCommittee.name,
               proportionsWithoutCommittees,
-              distributionWithoutCommittees[groupWithoutCommittee.name] ?? 0
+              distributionWithoutCommittees[groupWithoutCommittee.name] ?? 0,
+              staleWithoutCommittees
             );
         });
       } else {
@@ -563,7 +567,8 @@ function calculateMethodValidity(
           checkOverroundingForGroup(
             groupName,
             proportionsWithoutCommittees,
-            distributionWithoutCommittees[groupName] ?? 0
+            distributionWithoutCommittees[groupName] ?? 0,
+            staleWithoutCommittees
           );
       }
 

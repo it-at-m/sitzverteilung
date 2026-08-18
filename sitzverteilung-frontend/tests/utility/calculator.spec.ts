@@ -1047,10 +1047,21 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInUnion = [];
     const expected = [];
+    const groups = [
+      {
+        name: "Group 1",
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Group 2",
+        seatsOrVotes: 1,
+      },
+    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
-      seatDistributionWithoutCommittee
+      seatDistributionWithoutCommittee,
+      groups
     );
 
     expect(result).toEqual(expected);
@@ -1063,10 +1074,25 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInUnion = ["Group 1", "Group 2"];
     const expected = ["Group 2"];
+    const groups = [
+      {
+        name: "Group 1",
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Group 2",
+        seatsOrVotes: 1,
+      },
+      {
+        name: "Group 3",
+        seatsOrVotes: 0,
+      },
+    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
-      seatDistributionWithoutCommittee
+      seatDistributionWithoutCommittee,
+      groups
     );
 
     expect(result).toEqual(expected);
@@ -1080,10 +1106,25 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInUnion = [];
     const expected = [];
+    const groups = [
+      {
+        name: "Group 1",
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Group 2",
+        seatsOrVotes: 1,
+      },
+      {
+        name: "Group 3",
+        seatsOrVotes: 0,
+      },
+    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
-      seatDistributionWithoutCommittee
+      seatDistributionWithoutCommittee,
+      groups
     );
 
     expect(result).toEqual(expected);
