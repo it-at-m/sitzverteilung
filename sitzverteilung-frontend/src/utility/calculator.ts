@@ -554,22 +554,28 @@ function calculateMethodValidity(
             );
           }
 
-          overRoundingWithoutCommitteesByParty[partyName] =
-            checkOverroundingForGroup(
-              groupWithoutCommittee.name,
-              proportionsWithoutCommittees,
-              distributionWithoutCommittees[groupWithoutCommittee.name] ?? 0,
-              staleWithoutCommittees
-            );
-        });
-      } else {
-        overRoundingWithoutCommitteesByParty[groupName] =
-          checkOverroundingForGroup(
-            groupName,
+          const overRoundingWithoutCommittees = checkOverroundingForGroup(
+            groupWithoutCommittee.name,
             proportionsWithoutCommittees,
-            distributionWithoutCommittees[groupName] ?? 0,
+            distributionWithoutCommittees[groupWithoutCommittee.name] ?? 0,
             staleWithoutCommittees
           );
+
+          if (overRoundingWithoutCommittees) {
+            overRoundingWithoutCommitteesByParty[partyName] = true;
+          }
+        });
+      } else {
+        const overRoundingWithoutCommittees = checkOverroundingForGroup(
+          groupName,
+          proportionsWithoutCommittees,
+          distributedSeatsWithoutCommittees,
+          staleWithoutCommittees
+        );
+
+        if (overRoundingWithoutCommittees) {
+          overRoundingWithoutCommitteesByParty[groupName] = true;
+        }
       }
 
       validation[groupName] = {
