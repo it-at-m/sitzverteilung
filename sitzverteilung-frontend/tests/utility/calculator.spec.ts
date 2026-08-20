@@ -938,6 +938,44 @@ describe("Full calculation tests", () => {
   });
 });
 
+test("reports over-rounding without committees for a committee member", () => {
+  const baseData: BaseData = {
+    name: "Committee-free over-rounding",
+    targetSize: 14,
+    committeeSize: 80,
+    groups: [
+      { name: "Group 1", seatsOrVotes: 23 },
+      { name: "Group 2", seatsOrVotes: 23 },
+      { name: "Group 3", seatsOrVotes: 17 },
+      { name: "Group 4", seatsOrVotes: 4 },
+      { name: "Group 5", seatsOrVotes: 4 },
+      { name: "Group 6", seatsOrVotes: 4 },
+      { name: "Group 7", seatsOrVotes: 3 },
+      { name: "Group 8", seatsOrVotes: 1 },
+      { name: "Group 9", seatsOrVotes: 1 },
+    ],
+    unions: [
+      {
+        name: "Committee",
+        unionType: UnionType.COMMITTEE,
+        groups: [2, 3],
+      },
+    ],
+  };
+
+  const validation =
+    calculate(baseData).methods[CalculationMethod.D_HONDT]?.validation?.[
+      "AG: Committee"
+    ];
+
+  expect(validation).toMatchObject({
+    overRounding: false,
+    overRoundingWithoutCommittees: {
+      "Group 3": true,
+    },
+  });
+});
+
 describe("D'Hondt calculation test", () => {
   test.each(
     loadJsonFiles<CalculationTestData>(
