@@ -279,7 +279,15 @@ function generateValidationText(
 
   const reasons = [
     ...(validationData.overRounding ? ["Überaufrundung"] : []),
+
+    ...(!validationData.overRounding
+      ? Object.entries(validationData.overRoundingWithoutCommittees)
+          .filter(([, value]) => value)
+          .map(([partyName]) => `Überaufrundung ohne AG: ${partyName}`)
+      : []),
+
     ...(validationData.lostSafeSeat ? ["Verlust letzter sicherer Sitz"] : []),
+
     ...((validationData.committeeInvalid?.length ?? 0) > 0
       ? [`Sicherer Sitz: ${validationData.committeeInvalid.join(", ")}`]
       : []),
