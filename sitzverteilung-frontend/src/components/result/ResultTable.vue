@@ -280,7 +280,11 @@ function generateValidationText(
   const reasons = [
     ...(validationData.overRounding ? ["Überaufrundung"] : []),
 
-    ...(!validationData.overRounding
+    ...(validationData.overRoundingStale
+      ? ["Überaufrundung bei Pattauflösung"]
+      : []),
+
+    ...(!validationData.overRounding && !validationData.overRoundingStale
       ? Object.entries(validationData.overRoundingWithoutCommittees)
           .filter(([, value]) => value)
           .map(([partyName]) => `Überaufrundung ohne AG: ${partyName}`)
@@ -292,7 +296,6 @@ function generateValidationText(
       ? [`Sicherer Sitz: ${validationData.committeeInvalid.join(", ")}`]
       : []),
   ];
-
   return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
 
