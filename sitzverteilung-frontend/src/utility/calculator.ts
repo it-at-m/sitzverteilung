@@ -554,37 +554,41 @@ function calculateMethodValidity(
             );
           }
 
-          const overRoundingWithoutCommittees = checkOverroundingForGroup(
-            groupWithoutCommittee.name,
-            proportionsWithoutCommittees,
-            distributionWithoutCommittees[groupWithoutCommittee.name] ?? 0,
-            staleWithoutCommittees
-          );
+          const overRoundingWithoutCommittees =
+            checkOverroundingWithoutCommittees(
+              groupWithoutCommittee.name,
+              proportionsWithoutCommittees,
+              distributionWithoutCommittees[groupWithoutCommittee.name] ?? 0,
+              staleWithoutCommittees
+            );
 
           if (overRoundingWithoutCommittees) {
             overRoundingWithoutCommitteesByParty[partyName] = true;
           }
         });
       } else {
-        const overRoundingWithoutCommittees = checkOverroundingForGroup(
-          groupName,
-          proportionsWithoutCommittees,
-          distributedSeatsWithoutCommittees,
-          staleWithoutCommittees
-        );
+        const overRoundingWithoutCommittees =
+          checkOverroundingWithoutCommittees(
+            groupName,
+            proportionsWithoutCommittees,
+            distributedSeatsWithoutCommittees,
+            staleWithoutCommittees
+          );
 
         if (overRoundingWithoutCommittees) {
           overRoundingWithoutCommitteesByParty[groupName] = true;
         }
       }
 
+      const overRoundingResult = checkOverroundingForGroup(
+        groupName,
+        proportions,
+        distributedSeats,
+        stale
+      );
       validation[groupName] = {
-        overRounding: checkOverroundingForGroup(
-          groupName,
-          proportions,
-          distributedSeats,
-          stale
-        ),
+        overRounding: overRoundingResult.overRounding,
+        overRoundingStale: overRoundingResult.overRoundingStale,
         lostSafeSeat: checkLostSafeSeatForGroup(
           distributedSeats,
           distributedSeatsWithoutCommittees
@@ -617,6 +621,46 @@ function calculateMethodValidity(
  * @param stale optional stale to consider for checking
  */
 function checkOverroundingForGroup(
+  groupName: CalculationGroupName,
+  proportions: CalculationProportions,
+  distributedSeats: number,
+  stale?: CalculationStale
+): {
+  overRounding: boolean;
+  overRoundingStale: boolean;
+} {
+  const proportion = proportions[groupName];
+  if (proportion === undefined) {
+    throw new Error("Missing proportion, cannot check for overrounding.");
+  }
+  const staleSeats = stale?.groupNames.includes(groupName) ? 1 : 0;
+
+  const checkOverrounding =
+    Math.abs(new Big(proportion).minus(distributedSeats).toNumber()) > 0.99;
+
+  const checkStaleOverRounding =
+    !checkOverrounding &&
+    staleSeats > 0 &&
+    Math.abs(
+      new Big(proportion).minus(distributedSeats + staleSeats).toNumber()
+    ) > 0.99;
+
+  return {
+    overRounding: checkOverrounding,
+    overRoundingStale: checkStaleOverRounding,
+  };
+}
+
+/**
+ * Checks whether overrounding happened during the calculation of a method.
+ * This is the case, when the difference between distributed seats (plus pending seats by stale situations) and proportional seats is less than 1.
+ *
+ * @param groupName groupName to check
+ * @param proportions proportions pre-calculated for given calculation groups
+ * @param distributedSeats seats distributed to the specified group
+ * @param stale optional stale to consider for checking
+ */
+function checkOverroundingWithoutCommittees(
   groupName: CalculationGroupName,
   proportions: CalculationProportions,
   distributedSeats: number,

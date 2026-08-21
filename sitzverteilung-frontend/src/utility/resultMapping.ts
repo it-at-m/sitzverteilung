@@ -153,6 +153,7 @@ function setMethodResultDataOfResultData(
     ? !validationData.committeeInvalid.length &&
       !determineOverrounding(
         validationData.overRounding,
+        validationData.overRoundingStale,
         validationData.overRoundingWithoutCommittees
       ) &&
       !validationData.lostSafeSeat
@@ -161,10 +162,12 @@ function setMethodResultDataOfResultData(
 
 function determineOverrounding(
   overRounding: boolean,
+  overRoundingStale: boolean,
   overRoundingWithoutCommittees: Record<string, boolean>
 ): boolean {
   return (
     overRounding ||
+    overRoundingStale ||
     Object.values(overRoundingWithoutCommittees ?? {}).some(Boolean)
   );
 }
