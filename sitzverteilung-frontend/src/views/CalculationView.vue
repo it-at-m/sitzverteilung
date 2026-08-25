@@ -97,6 +97,7 @@
       :show-seats="isCommitteeSizeEntered"
       @clicked-calculation-method="openDetailDialog"
       @clicked-download-result-pdf="downloadResultPdf"
+      @clicked-download-all-pdfs="downloadAllPdfs"
     />
   </v-container>
 </template>
@@ -122,9 +123,15 @@ import ResultTable from "@/components/result/ResultTable.vue";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
-import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import {
+  AVAILABLE_METHODS,
+  CalculationMethod,
+} from "@/types/calculation/CalculationMethod.ts";
 import { calculate } from "@/utility/calculator.ts";
-import { generateCalculationViewPDF } from "@/utility/pdfGeneration.ts";
+import {
+  generateCalculationViewPDF,
+  generateDetailPDF,
+} from "@/utility/pdfGeneration.ts";
 import {
   isValidCalculationData,
   LimitConfiguration,
@@ -210,6 +217,19 @@ function downloadResultPdf() {
       calculationResult.value
     );
   }
+}
+
+function downloadAllPdfs() {
+  AVAILABLE_METHODS.forEach((method: CalculationMethod) => {
+    if (calculationResult.value) {
+      generateDetailPDF(
+        currentBaseData.value.targetSize,
+        currentBaseData.value.committeeSize,
+        calculationResult.value,
+        method
+      );
+    }
+  });
 }
 
 const store = useTemplateDataStore();
