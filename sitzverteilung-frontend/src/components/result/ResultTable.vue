@@ -33,7 +33,7 @@
                 size="small"
                 v-if="!methodToDisplay"
                 :prepend-icon="mdiDownload"
-                text="Einzel-PDFs"
+                text="Alle-PDFs"
                 class="my-1"
                 :disabled="!calculationResult"
                 variant="flat"
