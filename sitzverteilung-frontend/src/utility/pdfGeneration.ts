@@ -2,19 +2,18 @@ import type { CalculationResult } from "@/types/calculation/internal/Calculation
 import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
-import type {
-  CalculationValidation,
-  ValidationData,
-} from "@/types/calculation/internal/CalculationValidation.ts";
+import type { CalculationValidation, ValidationData } from "@/types/calculation/internal/CalculationValidation.ts";
+
+
 
 import { jsPDF } from "jspdf";
 
+
+
 import { methodMargins, PDF_CONFIGURATIONS } from "@/constants.ts";
-import {
-  AVAILABLE_METHODS,
-  CalculationMethod,
-} from "@/types/calculation/CalculationMethod.ts";
+import { AVAILABLE_METHODS, CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import { mapSeatOrder } from "@/utility/resultMapping.ts";
+
 
 interface PartyEntry {
   name: string;
@@ -46,7 +45,20 @@ export function generateAllPdfs(
       method
     );
   });
-  const timestamp = new Date().toISOString().replace(/T/, '_').replace(/:/g, '-').slice(0, 19);
+
+  const timestamp = new Date()
+    .toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(/\./g, "-")
+    .replace(/, /, "_")
+    .replace(/:/g, "-");
+
   const filename = `Sitzverteilung_gesamt_${timestamp}.pdf`;
   combinedDoc.save(filename);
 }
