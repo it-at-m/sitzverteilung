@@ -46,9 +46,8 @@ export function generateAllPdfs(
       method
     );
   });
-
-  const timestamp = new Date();
-  const filename = `Sitzverteilung_gesamt_${timestamp.toISOString().slice(0, 10)}.pdf`;
+  const timestamp = new Date().toISOString().replace(/T/, '_').replace(/:/g, '-').slice(0, 19);
+  const filename = `Sitzverteilung_gesamt_${timestamp}.pdf`;
   combinedDoc.save(filename);
 }
 
