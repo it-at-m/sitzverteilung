@@ -227,8 +227,19 @@ export function generateCalculationViewPDF(
 
   generateStaleFooterCalculationPDF(doc, stales, footerY);
 
-  const timeStampForExport = timestamp.toISOString().slice(0, 10);
-  const exportFileName = `Sitzverteilung_${timeStampForExport}.pdf`;
+  const timestampForName = new Date()
+    .toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(/\./g, "-")
+    .replace(/, /, "_")
+    .replace(/:/g, "-");
+  const exportFileName = `Sitzverteilung_Uebersicht_${timestampForName}.pdf`;
 
   doc.save(exportFileName);
 }
