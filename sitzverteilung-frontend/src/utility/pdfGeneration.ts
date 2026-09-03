@@ -21,7 +21,50 @@ interface PartyEntry {
   votes: number;
 }
 
-export function generateDetailPDF(
+export function generateAllPdfs(
+  targetSize: number | undefined,
+  committeeSize: number | undefined,
+  calculationResult: CalculationResult,
+  calcMmethods: CalculationMethod[]
+) {
+  const combinedDoc = new jsPDF({
+    unit: "mm",
+    format: "a4",
+    putOnlyUsedFonts: true,
+    compress: true,
+  });
+
+  calcMmethods.forEach((method: CalculationMethod, index: number) => {
+    if (index > 0) {
+      combinedDoc.addPage();
+    }
+    generateDetailPDF(
+      combinedDoc,
+      targetSize,
+      committeeSize,
+      calculationResult,
+      method
+    );
+  });
+
+  const timestamp = new Date()
+    .toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(/\./g, "-")
+    .replace(/, /, "_")
+    .replace(/:/g, "-");
+
+  const filename = `Sitzverteilung_gesamt_${timestamp}.pdf`;
+  combinedDoc.save(filename);
+}
+
+export function generateOnePdf(
   targetSize: number | undefined,
   committeeSize: number | undefined,
   calculationResult: CalculationResult,
@@ -34,6 +77,37 @@ export function generateDetailPDF(
     compress: true,
   });
 
+  generateDetailPDF(
+    doc,
+    targetSize,
+    committeeSize,
+    calculationResult,
+    usedCalculationMethod
+  );
+  const timestamp = new Date()
+    .toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(/\./g, "-")
+    .replace(/, /, "_")
+    .replace(/:/g, "-");
+  const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timestamp}.pdf`;
+
+  doc.save(exportFileName);
+}
+
+export function generateDetailPDF(
+  doc: jsPDF,
+  targetSize: number | undefined,
+  committeeSize: number | undefined,
+  calculationResult: CalculationResult,
+  usedCalculationMethod: CalculationMethod
+): void {
   const timestamp = new Date();
   generateHeader(doc, timestamp);
 
@@ -86,11 +160,6 @@ export function generateDetailPDF(
       generateSeatOrderFooter(doc, currentY);
     }
   }
-
-  const timeStampForExport = timestamp.toISOString().slice(0, 10);
-  const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
-
-  doc.save(exportFileName);
 }
 
 export function generateCalculationViewPDF(
@@ -158,8 +227,19 @@ export function generateCalculationViewPDF(
 
   generateStaleFooterCalculationPDF(doc, stales, footerY);
 
-  const timeStampForExport = timestamp.toISOString().slice(0, 10);
-  const exportFileName = `Sitzverteilung_${timeStampForExport}.pdf`;
+  const timestampForName = new Date()
+    .toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(/\./g, "-")
+    .replace(/, /, "_")
+    .replace(/:/g, "-");
+  const exportFileName = `Sitzverteilung_Uebersicht_${timestampForName}.pdf`;
 
   doc.save(exportFileName);
 }

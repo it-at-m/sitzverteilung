@@ -174,48 +174,68 @@ describe("Full calculation tests", () => {
           validation: {
             "Group 1": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 2": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 3": {
               overRounding: true,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {
+                "Group 3": true,
+              },
             },
             "Group 4": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 5": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 6": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 7": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 8": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 9": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
           },
         } as CalculationMethodResult,
@@ -292,48 +312,66 @@ describe("Full calculation tests", () => {
           validation: {
             "Group 1": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 2": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 3": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 4": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 5": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 6": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 7": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 8": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 9": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
           },
         } as CalculationMethodResult,
@@ -410,48 +448,66 @@ describe("Full calculation tests", () => {
           validation: {
             "Group 1": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 2": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 3": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 4": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 5": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 6": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 7": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 8": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 9": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
           },
         } as CalculationMethodResult,
@@ -616,38 +672,52 @@ describe("Full calculation tests", () => {
           validation: {
             "Group 1": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 2": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 3": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 5": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 6": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 7": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: true,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "AG: Test": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
           },
         } as CalculationMethodResult,
@@ -730,38 +800,52 @@ describe("Full calculation tests", () => {
           validation: {
             "Group 1": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 2": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 3": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 5": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 6": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 7": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "AG: Test": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: ["Group 4"],
+              overRoundingWithoutCommittees: {},
             },
           },
         } as CalculationMethodResult,
@@ -844,38 +928,52 @@ describe("Full calculation tests", () => {
           validation: {
             "Group 1": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 2": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 3": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 5": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 6": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "Group 7": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: [],
+              overRoundingWithoutCommittees: {},
             },
             "AG: Test": {
               overRounding: false,
+              overRoundingStale: false,
               lostSafeSeat: false,
               committeeInvalid: ["Group 4"],
+              overRoundingWithoutCommittees: {},
             },
           },
         } as CalculationMethodResult,
@@ -885,6 +983,45 @@ describe("Full calculation tests", () => {
     const calculationResult = calculate(baseData);
 
     expect(calculationResult).toEqual(expected);
+  });
+});
+
+test("reports over-rounding without committees for a committee member", () => {
+  const baseData: BaseData = {
+    name: "Committee-free over-rounding",
+    targetSize: 14,
+    committeeSize: 80,
+    groups: [
+      { name: "Group 1", seatsOrVotes: 23 },
+      { name: "Group 2", seatsOrVotes: 23 },
+      { name: "Group 3", seatsOrVotes: 17 },
+      { name: "Group 4", seatsOrVotes: 4 },
+      { name: "Group 5", seatsOrVotes: 4 },
+      { name: "Group 6", seatsOrVotes: 4 },
+      { name: "Group 7", seatsOrVotes: 3 },
+      { name: "Group 8", seatsOrVotes: 1 },
+      { name: "Group 9", seatsOrVotes: 1 },
+    ],
+    unions: [
+      {
+        name: "Committee",
+        unionType: UnionType.COMMITTEE,
+        groups: [2, 3],
+      },
+    ],
+  };
+
+  const validation =
+    calculate(baseData).methods[CalculationMethod.D_HONDT]?.validation?.[
+      "AG: Committee"
+    ];
+
+  expect(validation).toMatchObject({
+    overRounding: false,
+    overRoundingStale: false,
+    overRoundingWithoutCommittees: {
+      "Group 3": true,
+    },
   });
 });
 
@@ -958,7 +1095,12 @@ describe("Method validity overrounding tests", () => {
       distributedSeats
     );
 
-    expect(result).toBeFalsy();
+    const expected = {
+      overRounding: false,
+      overRoundingStale: false,
+    };
+
+    expect(result).toEqual(expected);
   });
 
   test("Calculate overrounding positive", () => {
@@ -976,7 +1118,12 @@ describe("Method validity overrounding tests", () => {
       distributedSeats
     );
 
-    expect(result).toBeTruthy();
+    const expected = {
+      overRounding: true,
+      overRoundingStale: false,
+    };
+
+    expect(result).toEqual(expected);
   });
 
   test("Calculate overrounding with stale situation", () => {
@@ -999,7 +1146,12 @@ describe("Method validity overrounding tests", () => {
       stale
     );
 
-    expect(result).toBeTruthy();
+    const expected = {
+      overRounding: false,
+      overRoundingStale: true,
+    };
+
+    expect(result).toEqual(expected);
   });
 });
 
@@ -1047,10 +1199,21 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInUnion = [];
     const expected = [];
+    const groups = [
+      {
+        name: "Group 1",
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Group 2",
+        seatsOrVotes: 1,
+      },
+    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
-      seatDistributionWithoutCommittee
+      seatDistributionWithoutCommittee,
+      groups
     );
 
     expect(result).toEqual(expected);
@@ -1063,10 +1226,25 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInUnion = ["Group 1", "Group 2"];
     const expected = ["Group 2"];
+    const groups = [
+      {
+        name: "Group 1",
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Group 2",
+        seatsOrVotes: 1,
+      },
+      {
+        name: "Group 3",
+        seatsOrVotes: 0,
+      },
+    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
-      seatDistributionWithoutCommittee
+      seatDistributionWithoutCommittee,
+      groups
     );
 
     expect(result).toEqual(expected);
@@ -1080,10 +1258,25 @@ describe("Method validity committee invalid tests", () => {
     };
     const partiesInUnion = [];
     const expected = [];
+    const groups = [
+      {
+        name: "Group 1",
+        seatsOrVotes: 0,
+      },
+      {
+        name: "Group 2",
+        seatsOrVotes: 1,
+      },
+      {
+        name: "Group 3",
+        seatsOrVotes: 0,
+      },
+    ];
 
     const result = exportForTesting.checkCommitteeInvalid(
       partiesInUnion,
-      seatDistributionWithoutCommittee
+      seatDistributionWithoutCommittee,
+      groups
     );
 
     expect(result).toEqual(expected);

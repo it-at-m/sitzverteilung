@@ -97,6 +97,7 @@
       :show-seats="isCommitteeSizeEntered"
       @clicked-calculation-method="openDetailDialog"
       @clicked-download-result-pdf="downloadResultPdf"
+      @clicked-download-all-pdfs="downloadAllPdfs"
     />
   </v-container>
 </template>
@@ -123,9 +124,15 @@ import { useArrowNavigation } from "@/composables/useArrowNavigation.ts";
 import { useShareData } from "@/composables/useShareData.ts";
 import { useTemplateData } from "@/composables/useTemplateData.ts";
 import { useTemplateDataStore } from "@/stores/templatedata.ts";
-import { CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import {
+  AVAILABLE_METHODS,
+  CalculationMethod,
+} from "@/types/calculation/CalculationMethod.ts";
 import { calculate } from "@/utility/calculator.ts";
-import { generateCalculationViewPDF } from "@/utility/pdfGeneration.ts";
+import {
+  generateAllPdfs,
+  generateCalculationViewPDF,
+} from "@/utility/pdfGeneration.ts";
 import {
   isValidCalculationData,
   LimitConfiguration,
@@ -209,6 +216,17 @@ function downloadResultPdf() {
       currentBaseData.value.targetSize,
       currentBaseData.value.committeeSize,
       calculationResult.value
+    );
+  }
+}
+
+function downloadAllPdfs() {
+  if (calculationResult.value) {
+    generateAllPdfs(
+      currentBaseData.value.targetSize,
+      currentBaseData.value.committeeSize,
+      calculationResult.value,
+      AVAILABLE_METHODS
     );
   }
 }

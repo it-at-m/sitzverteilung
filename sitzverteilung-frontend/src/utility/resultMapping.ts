@@ -151,9 +151,25 @@ function setMethodResultDataOfResultData(
   const validationData = validation?.[groupName];
   resultData[validationKey as keyof ResultData] = validationData
     ? !validationData.committeeInvalid.length &&
-      !validationData.overRounding &&
+      !determineOverrounding(
+        validationData.overRounding,
+        validationData.overRoundingStale,
+        validationData.overRoundingWithoutCommittees
+      ) &&
       !validationData.lostSafeSeat
     : false;
+}
+
+function determineOverrounding(
+  overRounding: boolean,
+  overRoundingStale: boolean,
+  overRoundingWithoutCommittees: Record<string, boolean>
+): boolean {
+  return (
+    overRounding ||
+    overRoundingStale ||
+    Object.values(overRoundingWithoutCommittees ?? {}).some(Boolean)
+  );
 }
 
 export function mapSeatOrder(

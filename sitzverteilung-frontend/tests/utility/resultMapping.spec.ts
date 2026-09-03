@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { CalculationMethod } from "../../src/types/calculation/CalculationMethod";
 import { CalculationSeatDistribution } from "../../src/types/calculation/internal/CalculationSeatDistribution";
 import { CalculationSeatOrder } from "../../src/types/calculation/internal/CalculationSeatOrder";
 import { MergedSeatOrder } from "../../src/types/calculation/ui/MergedSeatOrder";
@@ -48,6 +49,28 @@ describe("mapCalculationResultToResultData", () => {
     const result = mapCalculationResultToResultData(invalidInput);
     expect(result.length).toBe(0);
   });
+});
+
+test("marks a method invalid for over-rounding without committees", () => {
+  const calculationResult = getTestCalculationResult();
+  const validation =
+    calculationResult.methods[CalculationMethod.D_HONDT]?.validation?.[
+      "Testgroup 1"
+    ];
+
+  if (validation === undefined) {
+    throw new Error("Missing validation data for Testgroup 1");
+  }
+
+  validation.overRoundingWithoutCommittees = {
+    "Affected party": true,
+  };
+
+  const group = mapCalculationResultToResultData(calculationResult).find(
+    (result) => result.name === "Testgroup 1"
+  );
+
+  expect(group?.["D'Hondt-validation"]).toBe(false);
 });
 
 describe("mapToMergedSeatOrders", () => {

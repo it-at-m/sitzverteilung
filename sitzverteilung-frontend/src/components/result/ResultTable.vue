@@ -15,19 +15,32 @@
         ]"
         multi-sort
       >
-        <template v-slot:[`header.constellation`]="{ column }">
+        <template v-slot:[`header.constellation`]>
           <div class="d-flex align-center justify-space-between">
-            <p>{{ column.title }}</p>
-            <v-btn
-              v-if="!methodToDisplay"
-              :prepend-icon="mdiDownload"
-              text="Ergebnis herunterladen"
-              class="my-3"
-              :disabled="!calculationResult"
-              variant="flat"
-              color="primary"
-              @click="emit('clickedDownloadResultPdf')"
-            />
+            <div>
+              <v-btn
+                size="small"
+                v-if="!methodToDisplay"
+                :prepend-icon="mdiDownload"
+                text="Übersicht"
+                class="my-1"
+                :disabled="!calculationResult"
+                variant="flat"
+                color="primary"
+                @click="emit('clickedDownloadResultPdf')"
+              />
+              <v-btn
+                size="small"
+                v-if="!methodToDisplay"
+                :prepend-icon="mdiDownload"
+                text="Alle-PDFs"
+                class="my-1"
+                :disabled="!calculationResult"
+                variant="flat"
+                color="primary"
+                @click="emit('clickedDownloadAllPdfs')"
+              />
+            </div>
           </div>
         </template>
         <template
@@ -279,17 +292,29 @@ function generateValidationText(
 
   const reasons = [
     ...(validationData.overRounding ? ["Überaufrundung"] : []),
+
+    ...(validationData.overRoundingStale
+      ? ["Überaufrundung bei Pattauflösung"]
+      : []),
+
+    ...(!validationData.overRounding && !validationData.overRoundingStale
+      ? Object.entries(validationData.overRoundingWithoutCommittees)
+          .filter(([, value]) => value)
+          .map(([partyName]) => `Überaufrundung ohne AG: ${partyName}`)
+      : []),
+
     ...(validationData.lostSafeSeat ? ["Verlust letzter sicherer Sitz"] : []),
+
     ...((validationData.committeeInvalid?.length ?? 0) > 0
       ? [`Sicherer Sitz: ${validationData.committeeInvalid.join(", ")}`]
       : []),
   ];
-
   return `Nicht zulässig wegen:\n- ${reasons.join("\n- ")}`;
 }
 
 const emit = defineEmits<{
   clickedCalculationMethod: [calculationMethod: CalculationMethod];
   clickedDownloadResultPdf: [];
+  clickedDownloadAllPdfs: [];
 }>();
 </script>

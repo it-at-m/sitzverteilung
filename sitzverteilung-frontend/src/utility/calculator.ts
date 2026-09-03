@@ -47,6 +47,10 @@ export function calculate(baseData: BaseData): CalculationResult {
     baseData,
     false
   );
+  const proportionsWithoutCommittees = calculateProportions(
+    calculationGroupsWithoutCommittees,
+    targetCommitteeSize
+  );
   const methods: Partial<Record<CalculationMethod, CalculationMethodResult>> =
     {};
   AVAILABLE_METHODS.forEach((method) => {
@@ -55,6 +59,7 @@ export function calculate(baseData: BaseData): CalculationResult {
       calculationGroups,
       calculationGroupsWithoutCommittees,
       proportions,
+      proportionsWithoutCommittees,
       targetCommitteeSize
     );
   });
@@ -167,6 +172,7 @@ function extractCalculationGroups(
  * @param calculationGroups calculation input data
  * @param calculationGroupsWithoutCommittees calculation input data used to calculate validations dependent on committee unions
  * @param proportions pre-calculated proportions for the calculation groups
+ * @param proportionsWithoutCommittees pre-calculated proportions for calculation groups without any committees in it
  * @param committeeSize target committee size
  */
 function calculateMethod(
@@ -174,6 +180,7 @@ function calculateMethod(
   calculationGroups: CalculationGroup[],
   calculationGroupsWithoutCommittees: CalculationGroup[],
   proportions: CalculationProportions,
+  proportionsWithoutCommittees: CalculationProportions,
   committeeSize: number
 ): CalculationMethodResult {
   if (calculationGroups.length === 0) {
@@ -215,10 +222,13 @@ function calculateMethod(
 
   result.validation = calculateMethodValidity(
     calculationGroups,
+    calculationGroupsWithoutCommittees,
     proportions,
+    proportionsWithoutCommittees,
     result.distribution,
     resultWithoutCommittees.distribution,
-    result.stale
+    result.stale,
+    resultWithoutCommittees.stale
   );
 
   return result;
@@ -504,17 +514,23 @@ function calculateProportions(
  * Checks whether the calculation of a method is valid.
  *
  * @param calculationGroups calculation data used to calculate the specific method
+ * @param calculationGroupsWithoutCommittees calculation data used to calculate the specific method without any committees in it
  * @param proportions pre-calculated proportions for the calculation groups
+ * @param proportionsWithoutCommittees pre-calculated proportions for calculation groups without any committees in it
  * @param distribution seat distribution returned by the specific calculation method
  * @param distributionWithoutCommittees seat distribution returned by the specific calculation method when calculating without committee unions
  * @param stale optional stale to respect when calculating the over rounding
+ * @param staleWithoutCommittees optional stale to respect when calculating the over rounding without any committees in it
  */
 function calculateMethodValidity(
   calculationGroups: CalculationGroup[],
+  calculationGroupsWithoutCommittees: CalculationGroup[],
   proportions: CalculationProportions,
+  proportionsWithoutCommittees: CalculationProportions,
   distribution: CalculationSeatDistribution,
   distributionWithoutCommittees: CalculationSeatDistribution,
-  stale?: CalculationStale
+  stale?: CalculationStale,
+  staleWithoutCommittees?: CalculationStale
 ): CalculationValidation {
   return calculationGroups.reduce(
     (validation: CalculationValidation, currentObj: CalculationGroup) => {
@@ -522,13 +538,57 @@ function calculateMethodValidity(
       const distributedSeats = distribution[groupName] ?? 0;
       const distributedSeatsWithoutCommittees =
         distributionWithoutCommittees[groupName] ?? 0;
+
+      const overRoundingWithoutCommitteesByParty: Record<string, boolean> = {};
+
+      if (currentObj.partiesInUnion.length > 0) {
+        currentObj.partiesInUnion.forEach((partyName) => {
+          const groupWithoutCommittee = findGroupWithoutCommitteeForParty(
+            partyName,
+            calculationGroupsWithoutCommittees
+          );
+
+          if (!groupWithoutCommittee) {
+            throw new Error(
+              `Could not find calculation group without committee for party "${partyName}".`
+            );
+          }
+
+          const overRoundingWithoutCommittees =
+            checkOverroundingWithoutCommittees(
+              groupWithoutCommittee.name,
+              proportionsWithoutCommittees,
+              distributionWithoutCommittees[groupWithoutCommittee.name] ?? 0,
+              staleWithoutCommittees
+            );
+
+          if (overRoundingWithoutCommittees) {
+            overRoundingWithoutCommitteesByParty[partyName] = true;
+          }
+        });
+      } else {
+        const overRoundingWithoutCommittees =
+          checkOverroundingWithoutCommittees(
+            groupName,
+            proportionsWithoutCommittees,
+            distributedSeatsWithoutCommittees,
+            staleWithoutCommittees
+          );
+
+        if (overRoundingWithoutCommittees) {
+          overRoundingWithoutCommitteesByParty[groupName] = true;
+        }
+      }
+
+      const overRoundingResult = checkOverroundingForGroup(
+        groupName,
+        proportions,
+        distributedSeats,
+        stale
+      );
       validation[groupName] = {
-        overRounding: checkOverroundingForGroup(
-          groupName,
-          proportions,
-          distributedSeats,
-          stale
-        ),
+        overRounding: overRoundingResult.overRounding,
+        overRoundingStale: overRoundingResult.overRoundingStale,
         lostSafeSeat: checkLostSafeSeatForGroup(
           distributedSeats,
           distributedSeatsWithoutCommittees
@@ -542,7 +602,9 @@ function calculateMethodValidity(
               calculationGroups
             )
           : [],
+        overRoundingWithoutCommittees: overRoundingWithoutCommitteesByParty,
       };
+
       return validation;
     },
     {}
@@ -563,6 +625,46 @@ function checkOverroundingForGroup(
   proportions: CalculationProportions,
   distributedSeats: number,
   stale?: CalculationStale
+): {
+  overRounding: boolean;
+  overRoundingStale: boolean;
+} {
+  const proportion = proportions[groupName];
+  if (proportion === undefined) {
+    throw new Error("Missing proportion, cannot check for overrounding.");
+  }
+  const staleSeats = stale?.groupNames.includes(groupName) ? 1 : 0;
+
+  const checkOverrounding =
+    Math.abs(new Big(proportion).minus(distributedSeats).toNumber()) > 0.99;
+
+  const checkStaleOverRounding =
+    !checkOverrounding &&
+    staleSeats > 0 &&
+    Math.abs(
+      new Big(proportion).minus(distributedSeats + staleSeats).toNumber()
+    ) > 0.99;
+
+  return {
+    overRounding: checkOverrounding,
+    overRoundingStale: checkStaleOverRounding,
+  };
+}
+
+/**
+ * Checks whether overrounding happened during the calculation of a method.
+ * This is the case, when the difference between distributed seats (plus pending seats by stale situations) and proportional seats is less than 1.
+ *
+ * @param groupName groupName to check
+ * @param proportions proportions pre-calculated for given calculation groups
+ * @param distributedSeats seats distributed to the specified group
+ * @param stale optional stale to consider for checking
+ */
+function checkOverroundingWithoutCommittees(
+  groupName: CalculationGroupName,
+  proportions: CalculationProportions,
+  distributedSeats: number,
+  stale?: CalculationStale
 ): boolean {
   const staleSeats = stale?.groupNames.includes(groupName) ? 1 : 0;
   const seats = distributedSeats + staleSeats;
@@ -571,6 +673,16 @@ function checkOverroundingForGroup(
     throw new Error("Missing proportion, cannot check for overrounding.");
   }
   return Math.abs(new Big(proportion).minus(seats).toNumber()) > 0.99;
+}
+
+function findGroupWithoutCommitteeForParty(
+  partyName: string,
+  calculationGroupsWithoutCommittees: CalculationGroup[]
+): CalculationGroup | undefined {
+  return calculationGroupsWithoutCommittees.find(
+    (group) =>
+      group.name === partyName || group.partiesInUnion.includes(partyName)
+  );
 }
 
 /**
