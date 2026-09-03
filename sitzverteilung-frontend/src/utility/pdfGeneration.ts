@@ -2,37 +2,62 @@ import type { CalculationResult } from "@/types/calculation/internal/Calculation
 import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
-import type {
-  CalculationValidation,
-  ValidationData,
-} from "@/types/calculation/internal/CalculationValidation.ts";
+import type { CalculationValidation, ValidationData } from "@/types/calculation/internal/CalculationValidation.ts";
+
+
 
 import { jsPDF } from "jspdf";
 
+
+
 import { methodMargins, PDF_CONFIGURATIONS } from "@/constants.ts";
-import {
-  AVAILABLE_METHODS,
-  CalculationMethod,
-} from "@/types/calculation/CalculationMethod.ts";
+import { AVAILABLE_METHODS, CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import { mapSeatOrder } from "@/utility/resultMapping.ts";
+
 
 interface PartyEntry {
   name: string;
   votes: number;
 }
 
-export function generateDetailPDF(
-  targetSize: number | undefined,
-  committeeSize: number | undefined,
-  calculationResult: CalculationResult,
-  usedCalculationMethod: CalculationMethod
-): void {
-  const doc = new jsPDF({
+export function generateAllPdfs(
+    targetSize: number | undefined,
+    committeeSize: number | undefined,
+    calculationResult: CalculationResult,
+    calcMmethods: CalculationMethod[]
+){
+  const combinedDoc = new jsPDF({
     unit: "mm",
     format: "a4",
     putOnlyUsedFonts: true,
     compress: true,
   });
+
+  calcMmethods.forEach((method: CalculationMethod, index: number) => {
+    if (index > 0) {
+      combinedDoc.addPage();
+    }
+    generateDetailPDF(
+      combinedDoc,
+      targetSize,
+      committeeSize,
+      calculationResult,
+      method
+    );
+  });
+
+  const timestamp = new Date();
+  const filename = `Sitzverteilung_gesamt_${timestamp.toISOString().slice(0, 10)}.pdf`;
+  combinedDoc.save(filename);
+}
+
+export function generateDetailPDF(
+  doc: jsPDF,
+  targetSize: number | undefined,
+  committeeSize: number | undefined,
+  calculationResult: CalculationResult,
+  usedCalculationMethod: CalculationMethod
+): void {
 
   const timestamp = new Date();
   generateHeader(doc, timestamp);
@@ -86,11 +111,6 @@ export function generateDetailPDF(
       generateSeatOrderFooter(doc, currentY);
     }
   }
-
-  const timeStampForExport = timestamp.toISOString().slice(0, 10);
-  const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
-
-  doc.save(exportFileName);
 }
 
 export function generateCalculationViewPDF(
