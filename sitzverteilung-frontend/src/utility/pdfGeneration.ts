@@ -52,6 +52,33 @@ export function generateAllPdfs(
   combinedDoc.save(filename);
 }
 
+export function generateOnePdf(
+  targetSize: number | undefined,
+  committeeSize: number | undefined,
+  calculationResult: CalculationResult,
+  usedCalculationMethod: CalculationMethod
+): void {
+  const doc = new jsPDF({
+    unit: "mm",
+    format: "a4",
+    putOnlyUsedFonts: true,
+    compress: true,
+  });
+
+  generateDetailPDF(
+    doc,
+    targetSize,
+    committeeSize,
+    calculationResult,
+    usedCalculationMethod
+  );
+  const timestamp = new Date();
+  const timeStampForExport = timestamp.toISOString().slice(0, 10);
+  const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
+
+  doc.save(exportFileName);
+}
+
 export function generateDetailPDF(
   doc: jsPDF,
   targetSize: number | undefined,

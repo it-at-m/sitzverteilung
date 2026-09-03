@@ -129,8 +129,8 @@ import {
 } from "@/types/calculation/CalculationMethod.ts";
 import { calculate } from "@/utility/calculator.ts";
 import {
+  generateAllPdfs,
   generateCalculationViewPDF,
-  generateDetailPDF,
 } from "@/utility/pdfGeneration.ts";
 import {
   isValidCalculationData,
@@ -220,16 +220,14 @@ function downloadResultPdf() {
 }
 
 function downloadAllPdfs() {
-  AVAILABLE_METHODS.forEach((method: CalculationMethod) => {
-    if (calculationResult.value) {
-      generateDetailPDF(
-        currentBaseData.value.targetSize,
-        currentBaseData.value.committeeSize,
-        calculationResult.value,
-        method
-      );
-    }
-  });
+  if (calculationResult.value) {
+    generateAllPdfs(
+      currentBaseData.value.targetSize,
+      currentBaseData.value.committeeSize,
+      calculationResult.value,
+      AVAILABLE_METHODS
+    );
+  }
 }
 
 const store = useTemplateDataStore();
