@@ -2,18 +2,19 @@ import type { CalculationResult } from "@/types/calculation/internal/Calculation
 import type { CalculationSeatDistribution } from "@/types/calculation/internal/CalculationSeatDistribution.ts";
 import type { CalculationSeatOrder } from "@/types/calculation/internal/CalculationSeatOrder.ts";
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
-import type { CalculationValidation, ValidationData } from "@/types/calculation/internal/CalculationValidation.ts";
-
-
+import type {
+  CalculationValidation,
+  ValidationData,
+} from "@/types/calculation/internal/CalculationValidation.ts";
 
 import { jsPDF } from "jspdf";
 
-
-
 import { methodMargins, PDF_CONFIGURATIONS } from "@/constants.ts";
-import { AVAILABLE_METHODS, CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
+import {
+  AVAILABLE_METHODS,
+  CalculationMethod,
+} from "@/types/calculation/CalculationMethod.ts";
 import { mapSeatOrder } from "@/utility/resultMapping.ts";
-
 
 interface PartyEntry {
   name: string;
@@ -21,11 +22,11 @@ interface PartyEntry {
 }
 
 export function generateAllPdfs(
-    targetSize: number | undefined,
-    committeeSize: number | undefined,
-    calculationResult: CalculationResult,
-    calcMmethods: CalculationMethod[]
-){
+  targetSize: number | undefined,
+  committeeSize: number | undefined,
+  calculationResult: CalculationResult,
+  calcMmethods: CalculationMethod[]
+) {
   const combinedDoc = new jsPDF({
     unit: "mm",
     format: "a4",
@@ -58,7 +59,6 @@ export function generateDetailPDF(
   calculationResult: CalculationResult,
   usedCalculationMethod: CalculationMethod
 ): void {
-
   const timestamp = new Date();
   generateHeader(doc, timestamp);
 
