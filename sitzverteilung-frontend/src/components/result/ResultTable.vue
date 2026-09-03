@@ -15,19 +15,32 @@
         ]"
         multi-sort
       >
-        <template v-slot:[`header.constellation`]="{ column }">
+        <template v-slot:[`header.constellation`]>
           <div class="d-flex align-center justify-space-between">
-            <p>{{ column.title }}</p>
-            <v-btn
-              v-if="!methodToDisplay"
-              :prepend-icon="mdiDownload"
-              text="Ergebnis herunterladen"
-              class="my-3"
-              :disabled="!calculationResult"
-              variant="flat"
-              color="primary"
-              @click="emit('clickedDownloadResultPdf')"
-            />
+            <div>
+              <v-btn
+                size="small"
+                v-if="!methodToDisplay"
+                :prepend-icon="mdiDownload"
+                text="Übersicht"
+                class="my-1"
+                :disabled="!calculationResult"
+                variant="flat"
+                color="primary"
+                @click="emit('clickedDownloadResultPdf')"
+              />
+              <v-btn
+                size="small"
+                v-if="!methodToDisplay"
+                :prepend-icon="mdiDownload"
+                text="Alle-PDFs"
+                class="my-1"
+                :disabled="!calculationResult"
+                variant="flat"
+                color="primary"
+                @click="emit('clickedDownloadAllPdfs')"
+              />
+            </div>
           </div>
         </template>
         <template
@@ -302,5 +315,6 @@ function generateValidationText(
 const emit = defineEmits<{
   clickedCalculationMethod: [calculationMethod: CalculationMethod];
   clickedDownloadResultPdf: [];
+  clickedDownloadAllPdfs: [];
 }>();
 </script>

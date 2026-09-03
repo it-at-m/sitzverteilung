@@ -32,9 +32,10 @@ Wie auch in der Berechnungsansicht ist die Zusammensetzung sortierbar, die Sitzr
 
 ## Herunterladen von PDFs
 
-Die Ergebnisse aus der Berechnung können als PDF über zwei verschiedene Wege heruntergeladen werden:
+Die Ergebnisse aus der Berechnung können als PDF über drei verschiedene Wege heruntergeladen werden:
 
-- Alle Ergebnisse (in der Berechnungsansicht)
+- Die Ergebnisse der Übersicht (in der Berechnungsansicht)
+- Alle drei Ergebnisse der Detailansicht (in der Berechnungsansicht)
 - Die Ergebnisse der einzelnen Verfahren (in der Detailansicht)
 
 ## Sonstige Informationen zur Berechnung
