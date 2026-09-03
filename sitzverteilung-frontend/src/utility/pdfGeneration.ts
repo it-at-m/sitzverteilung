@@ -84,9 +84,19 @@ export function generateOnePdf(
     calculationResult,
     usedCalculationMethod
   );
-  const timestamp = new Date();
-  const timeStampForExport = timestamp.toISOString().slice(0, 10);
-  const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timeStampForExport}.pdf`;
+  const timestamp = new Date()
+    .toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(/\./g, "-")
+    .replace(/, /, "_")
+    .replace(/:/g, "-");
+  const exportFileName = `Sitzverteilung_${usedCalculationMethod}_${timestamp}.pdf`;
 
   doc.save(exportFileName);
 }
