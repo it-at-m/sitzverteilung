@@ -4,16 +4,11 @@ import type { CalculationSeatOrder } from "@/types/calculation/internal/Calculat
 import type { CalculationStale } from "@/types/calculation/internal/CalculationStale.ts";
 import type { CalculationValidation, ValidationData } from "@/types/calculation/internal/CalculationValidation.ts";
 
-
-
 import { jsPDF } from "jspdf";
-
-
 
 import { methodMargins, PDF_CONFIGURATIONS } from "@/constants.ts";
 import { AVAILABLE_METHODS, CalculationMethod } from "@/types/calculation/CalculationMethod.ts";
 import { mapSeatOrder } from "@/utility/resultMapping.ts";
-
 
 interface PartyEntry {
   name: string;
