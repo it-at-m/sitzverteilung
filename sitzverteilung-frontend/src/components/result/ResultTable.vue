@@ -17,12 +17,12 @@
       >
         <template v-slot:[`header.constellation`]>
           <div class="d-flex align-center justify-space-between">
-            <div>
+            <div class="d-flex flex-column">
               <v-btn
                 size="small"
                 v-if="!methodToDisplay"
                 :prepend-icon="mdiDownload"
-                text="Übersicht"
+                text="Übersicht-PDF"
                 class="my-1"
                 :disabled="!calculationResult"
                 variant="flat"
@@ -33,7 +33,7 @@
                 size="small"
                 v-if="!methodToDisplay"
                 :prepend-icon="mdiDownload"
-                text="Alle-PDFs"
+                text="Detail-PDFs"
                 class="my-1"
                 :disabled="!calculationResult"
                 variant="flat"
