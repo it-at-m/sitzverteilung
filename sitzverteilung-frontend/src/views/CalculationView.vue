@@ -242,12 +242,10 @@ function createBaseData() {
     storedBaseData.value.map((baseData) => baseData.name)
   );
 
-  let copyNumber = 1;
-  let copyName = `${originalName} (Kopie)`;
+  let copyName = `${originalName}`;
 
   while (existingNames.has(copyName)) {
-    copyNumber++;
-    copyName = `${originalName} (Kopie ${copyNumber})`;
+    copyName = `${originalName} (Kopie)`;
   }
 
   const copy: BaseData = JSON.parse(
