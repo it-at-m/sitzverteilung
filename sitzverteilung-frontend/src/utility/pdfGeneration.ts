@@ -114,12 +114,14 @@ export function generateDetailPDF(
   const validationOfGroups =
     calculationResult.methods[usedCalculationMethod]?.validation;
   let isMethodValid = false;
+
   if (validationOfGroups) {
     isMethodValid = Object.values<ValidationData>(validationOfGroups).every(
       (entry) =>
         !entry.overRounding &&
-        !entry.lostSafeSeat &&
-        entry.committeeInvalid.length === 0
+        !entry.overRoundingStale &&
+        entry.committeeInvalid.length === 0 &&
+        !Object.values(entry.overRoundingWithoutCommittees).some(Boolean)
     );
   }
   generateParameter(
@@ -463,6 +465,8 @@ function generateMethodResultsPerParty(
   const bottomMargin = 25;
   const maxY = pageHeight - bottomMargin;
 
+  const validationFooterText: string[] = [];
+
   const availableMethods = AVAILABLE_METHODS.filter(
     (method) => distributions[method] && validations[method]
   );
@@ -540,13 +544,32 @@ function generateMethodResultsPerParty(
 
       const lostSafeSeat = validationForGroup.lostSafeSeat;
       const overrounding = validationForGroup.overRounding;
+      const overRoundingStale = validationForGroup.overRoundingStale;
       const committeeInvalid = validationForGroup.committeeInvalid;
+      const overRoundingWithoutCommittees =
+        validationForGroup.overRoundingWithoutCommittees;
 
       const validationReasons = [
         ...(overrounding ? ["Überaufrundung"] : []),
+        ...(overRoundingStale ? ["Überaufrundung Pattaufl."] : []),
         ...(lostSafeSeat ? ["Verlust sicherer Sitz"] : []),
+        ...(!overrounding && !overRoundingStale
+          ? Object.keys(overRoundingWithoutCommittees).length > 0
+            ? ["Überaufr. o. AG"]
+            : []
+          : []),
         ...committeeInvalid,
       ];
+
+      if (!overrounding && !overRoundingStale) {
+        validationFooterText.push(
+          ...Object.entries(overRoundingWithoutCommittees)
+            .filter(([, value]) => value)
+            .map(
+              ([partyName]) => `${method}: Überaufrundung ohne AG: ${partyName}`
+            )
+        );
+      }
 
       if (validationReasons.length === 0) {
         validationReasons.push("zulässig");
@@ -566,6 +589,8 @@ function generateMethodResultsPerParty(
 
     y += seatsHeightPerItem;
   });
+
+  y = generateOverRoundingWithoutCommitteeFooter(doc, validationFooterText, y);
 
   return y;
 }
@@ -793,4 +818,16 @@ function generateSeatOrderFooter(doc: jsPDF, currentY: number): void {
     currentY + 5
   );
   doc.setTextColor(0, 0, 0);
+}
+
+function generateOverRoundingWithoutCommitteeFooter(
+  doc: jsPDF,
+  validationText: string[],
+  currentY: number
+): number {
+  validationText.forEach((validation) => {
+    doc.text(validation, PDF_CONFIGURATIONS.marginLeft + 2, currentY);
+    currentY += 5;
+  });
+  return currentY;
 }
