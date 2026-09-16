@@ -465,7 +465,7 @@ function generateMethodResultsPerParty(
   const bottomMargin = 25;
   const maxY = pageHeight - bottomMargin;
 
-  const validationFooterText: string[][] = [];
+  const validationFooterText: string[] = [];
 
   const availableMethods = AVAILABLE_METHODS.filter(
     (method) => distributions[method] && validations[method]
@@ -561,16 +561,15 @@ function generateMethodResultsPerParty(
         ...committeeInvalid,
       ];
 
-      validationFooterText.push(
-        !overrounding && !overRoundingStale
-          ? Object.entries(overRoundingWithoutCommittees)
-              .filter(([, value]) => value)
-              .map(
-                ([partyName]) =>
-                  `${method}: Überaufrundung ohne AG: ${partyName}`
-              )
-          : []
-      );
+      if (!overrounding && !overRoundingStale) {
+        validationFooterText.push(
+          ...Object.entries(overRoundingWithoutCommittees)
+            .filter(([, value]) => value)
+            .map(
+              ([partyName]) => `${method}: Überaufrundung ohne AG: ${partyName}`
+            )
+        );
+      }
 
       if (validationReasons.length === 0) {
         validationReasons.push("zulässig");
@@ -591,7 +590,7 @@ function generateMethodResultsPerParty(
     y += seatsHeightPerItem;
   });
 
-  generateOverRoundingWithoutCommitteeFooter(doc, validationFooterText, y);
+  y = generateOverRoundingWithoutCommitteeFooter(doc, validationFooterText, y);
 
   return y;
 }
@@ -823,7 +822,7 @@ function generateSeatOrderFooter(doc: jsPDF, currentY: number): void {
 
 function generateOverRoundingWithoutCommitteeFooter(
   doc: jsPDF,
-  validationText: string[][],
+  validationText: string[],
   currentY: number
 ): number {
   validationText.forEach((validation) => {
