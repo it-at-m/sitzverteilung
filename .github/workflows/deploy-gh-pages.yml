@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build pages
-        uses: it-at-m/lhm_actions/action-templates/actions/action-build-docs@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
+        uses: it-at-m/lhm_actions/action-templates/actions/action-build-docs@54b32c7d11363cad45838c9a3d8a8560b93f0e8c # v1.5.4
         with:
           docs-path: "sitzverteilung-frontend"
           dist-path: "dist"
       - name: Deploy pages
-        uses: it-at-m/lhm_actions/action-templates/actions/action-deploy-docs@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
+        uses: it-at-m/lhm_actions/action-templates/actions/action-deploy-docs@54b32c7d11363cad45838c9a3d8a8560b93f0e8c # v1.5.4
